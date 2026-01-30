@@ -28,7 +28,14 @@ body {
     overflow-x: hidden;
 }
 
-/* 3. CORE TEXT WRAPPING LOGIC */
+/* 3. CORE TEXT WRAPPING & HEADER LOGIC */
+header {
+    text-align: center;
+    border-bottom: 2px dashed #5c3d2e;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+}
+
 header h1, 
 .blog-post h1, 
 .blog-post p, 
@@ -39,21 +46,27 @@ footer p {
     line-height: 1.4;
 }
 
-/* Fix for PERSONAL_VAULT_OTD awkward break */
 header h1 {
     text-align: center;
-    font-size: clamp(1.1rem, 6vw, 1.8rem);
+    font-size: clamp(1.2rem, 7vw, 2rem); 
     padding: 0 10px;
-    letter-spacing: 2px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0 10px; /* Provides a "hinge" for the text to wrap at the space */
+    letter-spacing: 3px;
+    line-height: 1.1;
+    display: block; /* Changed to block to respect the <br> in HTML */
 }
 
-/* Keep title segments whole */
 header h1 span {
+    display: inline-block;
     white-space: nowrap;
+    text-transform: uppercase;
+}
+
+/* Specific styling for OTD to make it look like a system ID */
+header h1 .sub-header {
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
+    color: rgba(255, 176, 0, 0.7); 
+    letter-spacing: 8px; 
+    margin-top: 5px;
 }
 
 .warning-banner {
@@ -108,7 +121,6 @@ header h1 span {
     border: 1px solid rgba(255, 176, 0, 0.3);
     width: 85%;
     text-align: center;
-    /* Shadow added to ensure text is readable over the image */
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 1), 0px 0px 5px rgba(0, 0, 0, 0.8);
 }
 
