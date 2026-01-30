@@ -11,24 +11,42 @@ body {
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 20px; /* Reduced for mobile comfort */
     line-height: 1.6;
 }
 
-/* 2. THE CHASSIS (Page Container) */
+/* 2. THE CHASSIS - Updated for Responsiveness */
 .container {
     width: 100%;
-    max-width: 650px; 
+    max-width: 1000px; /* Increased to allow sidebar room on desktop */
     border: 2px solid #5c3d2e;
-    padding: 30px;
+    padding: 20px;
     background: rgba(0, 0, 0, 0.95);
     box-shadow: 0 0 20px rgba(255, 176, 0, 0.1);
     position: relative;
     z-index: 5;
-    overflow: hidden;
 }
 
-/* 3. HEADER & LOGO */
+/* 3. VAULT LAYOUT (The Flexbox Engine) */
+.vault-layout {
+    display: flex;
+    flex-direction: row; /* Side-by-side on desktop */
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.log-display {
+    flex: 2; /* Content gets more room */
+    min-width: 0; /* Prevents text overflow */
+}
+
+.log-directory {
+    flex: 1; /* Sidebar takes 1/3 space */
+    border-left: 1px dashed #5c3d2e;
+    padding-left: 20px;
+}
+
+/* 4. HEADER & HERO */
 header {
     text-align: center;
     border-bottom: 2px dashed #5c3d2e;
@@ -36,171 +54,37 @@ header {
     padding-bottom: 20px;
 }
 
-.logo-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.main-logo {
-    max-width: 100% !important;
-    height: auto !important;
-    display: block;
-    border: 3px solid #5c3d2e;
-    filter: none !important;
-    opacity: 1 !important;
-}
-
-/* 4. NAVIGATION */
-.system-nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px dashed #5c3d2e;
-}
-
-.system-nav a {
-    color: #ffb000;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 5px 10px;
-    font-size: 0.9rem;
-    transition: 0.3s;
-}
-
-.system-nav a:hover {
-    background: #ffb000;
-    color: #000;
-}
-
-/* 5. TYPOGRAPHY & TABLES */
-h1 { letter-spacing: 5px; margin: 10px 0; font-size: 1.8rem; text-align: center; }
-h2 {
-    color: #8e441d;
-    font-size: 1.1rem;
-    background: #2a1a12;
-    padding: 5px 10px;
-    margin: 20px 0 10px 0;
-}
-
-h3 { color: #ffb000; margin-bottom: 10px; }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-td, th {
-    padding: 10px;
-    border-bottom: 1px solid #333;
-    font-size: 0.9rem;
-    text-align: left;
-}
-
-td:first-child {
-    font-weight: bold;
-    color: #d4a373;
-    width: 40%;
-}
-
-/* 6. BUSINESS & SERVICE ELEMENTS */
-.service-tier {
-    margin-top: 30px;
-    border: 1px dashed #00ff00;
-    padding: 15px;
-}
-
-.terminal-list {
-    list-style: none;
-    padding-left: 10px;
-}
-
-.terminal-list li::before {
-    content: "> ";
-    color: #00ff00;
-}
-
-.pricing-note {
-    font-family: 'Courier New', monospace;
-    border-top: 1px solid #333;
-    padding-top: 10px;
-    font-size: 0.85rem;
-    color: #ffaa00;
-}
-
-/* 7. CONTACT FORM */
-.retro-form, .vintage-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-input, textarea, .retro-select {
-    background: #000;
-    border: 1px solid #5c3d2e;
-    color: #ffb000;
-    padding: 10px;
-    font-family: 'Courier New', monospace;
-}
-
-.submit-btn, .transmit-btn {
-    background: #5c3d2e;
-    color: #fff;
-    border: none;
-    padding: 15px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.submit-btn:hover { background: #8e441d; }
-
-/* 8. THE OBSERVATION DECK (Blog Identity) */
 #personal-identity .hero-container {
     position: relative;
     width: 100%;
-    max-width: 650px;
-    margin: 0 auto;
-    overflow: hidden;
-    line-height: 0;
+    margin-bottom: 20px;
     border: 2px solid #5c3d2e;
+    overflow: hidden;
+}
+
+.hero-container img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 #personal-identity .text-overlay {
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.7);
-    padding: 15px 20px;
+    padding: 15px;
     border: 1px solid rgba(255, 176, 0, 0.3);
-    width: 90%;
+    width: 80%;
     text-align: center;
-    line-height: 1.2;
 }
 
-#personal-identity .text-overlay h1 {
-    color: #fff;
-    font-family: 'Georgia', serif;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-}
-
-/* 9. VAULT FILTERS & DIRECTORY */
+/* 5. VAULT FILTERS */
 .vault-filters {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap; /* Allows buttons to wrap on small screens */
     gap: 10px;
     margin: 20px 0;
 }
@@ -208,38 +92,69 @@ input, textarea, .retro-select {
 .filter-btn {
     background: none;
     border: 1px solid #00ff00;
-    color: #00ff00; /* Neon Green */
+    color: #00ff00;
     padding: 8px 12px;
     cursor: pointer;
     font-family: 'Courier New', monospace;
     text-shadow: 0 0 5px #00ff00;
-    transition: 0.3s;
+    white-space: nowrap; /* Keeps button text on one line */
 }
 
-.filter-btn:hover {
-    background: #00ff00;
-    color: #000;
-    box-shadow: 0 0 10px #00ff00;
-}
-
+/* 6. DIRECTORY LIST & NO-WRAP FIX */
 .file-list {
     list-style: none;
     padding: 0;
 }
 
-.file-list li { margin: 10px 0; }
-
-.file-list a {
-    color: #00eeff; /* Cyan */
+.log-link {
+    color: #00eeff;
     text-decoration: none;
+    display: inline-block;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds ... if name is too long for the box */
+    max-width: 100%;
 }
 
-.file-list a:hover {
+.log-link::before { content: "[ "; }
+.log-link::after { content: " ]"; }
+
+.log-link:hover {
     background-color: #ffb000;
     color: #1a1a1a;
 }
 
-/* 10. SYSTEM VISUAL EFFECTS */
+/* 7. MOBILE MEDIA QUERY - The Scaling Logic */
+@media (max-width: 850px) {
+    .vault-layout {
+        flex-direction: column; /* Stack vertically on mobile */
+    }
+
+    .log-directory {
+        width: 100%;
+        border-left: none;
+        border-top: 1px dashed #5c3d2e;
+        padding-left: 0;
+        padding-top: 20px;
+        order: 2; /* Directory goes to the bottom */
+    }
+
+    .log-display {
+        width: 100%;
+        order: 1; /* Content stays at the top */
+    }
+
+    #personal-identity .text-overlay h1 {
+        font-size: 1.2rem;
+    }
+
+    .filter-btn {
+        flex: 1 1 calc(50% - 10px); /* 2 buttons per row on phones */
+        font-size: 0.8rem;
+    }
+}
+
+/* 8. SYSTEM EFFECTS */
 .blink { animation: blinker 1.5s linear infinite; }
 @keyframes blinker { 50% { opacity: 0; } }
 
@@ -251,12 +166,4 @@ input, textarea, .retro-select {
     background-size: 100% 3px, 3px 100%;
     pointer-events: none;
     z-index: 100;
-}
-
-footer {
-    margin-top: 40px;
-    text-align: center;
-    font-size: 0.8rem;
-    border-top: 1px solid #333;
-    padding-top: 20px;
 }
