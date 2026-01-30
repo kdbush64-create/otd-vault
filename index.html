@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage64 | Personal Vault</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body id="personal-identity">    
+    <div class="terminal-overlay"></div>
+    <div class="container">
+        <header>
+            <div class="warning-banner">!! WARNING: UNFILTERED_OPINIONS_AHEAD !!</div>
+            <h1>PERSONAL_VAULT_OTD</h1>
+        </header>
+
+        <section class="hero-container">
+            <img src="telescope-clean.jpg" alt="The Observation Deck">
+            <div class="text-overlay">
+                <h1>The Observation Deck</h1>
+                <span class="by-line">by</span>
+                <h1>Old Texas Dude&trade;</h1>
+            </div>
+        </section>
+
+        <main class="vault-layout">
+            <section class="log-display">
+                <article id="content" class="blog-post">
+                    <p>> INITIALIZING_DATA_STREAM...</p>
+                </article>
+            </section>
+
+            <aside class="log-directory">
+                <h3>> LOG_DIRECTORY</h3>
+                <ul class="file-list">
+                    <li><a href="#" onclick="loadPost('2026-01-30-bloat.md')">[ 2026.01.30_BLOAT ]</a></li>
+                    <li><a href="#" onclick="loadPost('2026-01-15-steakhouse.md')">[ 2026.01.15_STEAK ]</a></li>
+                </ul>
+            </aside>
+        </main>
+
+        <footer>
+            <p>PERSONAL_THOUGHTS_V1.0 // <a href="../contact/index.html">[ SEND_FEEDBACK ]</a></p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        async function loadPost(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) throw new Error('File not found');
+                const markdown = await response.text();
+                document.getElementById('content').innerHTML = marked.parse(markdown);
+            } catch (err) {
+                document.getElementById('content').innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG</p>";
+            }
+        }
+
+        // Automatically loads the most recent post on page load
+        loadPost('2026-01-30-bloat.md');
+    </script>
+</body>
+</html>
