@@ -28,22 +28,12 @@ body {
     overflow-x: hidden;
 }
 
-/* 3. CORE TEXT WRAPPING & HEADER LOGIC */
+/* 3. HEADER & WARNING BANNER */
 header {
     text-align: center;
     border-bottom: 2px dashed #5c3d2e;
     margin-bottom: 30px;
     padding-bottom: 20px;
-}
-
-header h1, 
-.blog-post h1, 
-.blog-post p, 
-.warning-banner,
-footer p {
-    overflow-wrap: anywhere; 
-    word-break: normal; 
-    line-height: 1.4;
 }
 
 header h1 {
@@ -61,7 +51,6 @@ header h1 span {
     text-transform: uppercase;
 }
 
-/* Specific styling for OTD to make it look like a system ID */
 header h1 .sub-header {
     font-size: clamp(0.9rem, 4vw, 1.2rem);
     color: rgba(255, 176, 0, 0.7); 
@@ -75,28 +64,10 @@ header h1 .sub-header {
     text-align: center;
     border-bottom: 2px dashed #5c3d2e;
     margin-bottom: 20px;
+    overflow-wrap: anywhere;
 }
 
-/* 4. VAULT LAYOUT */
-.vault-layout {
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    align-items: flex-start;
-}
-
-.log-display {
-    flex: 2;
-    min-width: 0;
-}
-
-.log-directory {
-    flex: 1;
-    border-left: 1px dashed #5c3d2e;
-    padding-left: 20px;
-}
-
-/* 5. HERO & FILTERS */
+/* 4. HERO SECTION (THE OBSERVATION DECK FIX) */
 #personal-identity .hero-container {
     position: relative;
     width: 100%;
@@ -116,15 +87,35 @@ header h1 .sub-header {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: transparent; /* FULL TRANSPARENCY */
-    padding: 15px;
+    background-color: transparent; 
+    padding: 10px;
     border: 1px solid rgba(255, 176, 0, 0.3);
-    width: 85%;
+    width: 90%; 
     text-align: center;
-    /* Added strong shadow to keep text readable on clear background */
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 1), 0px 0px 5px rgba(0, 0, 0, 0.8);
+    
+    /* Centering logic for wrapped text */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
+#personal-identity .text-overlay h1 {
+    font-size: clamp(1rem, 5.2vw, 2.2rem); 
+    line-height: 1.1;
+    margin: 5px 0;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
+}
+
+#personal-identity .text-overlay .by-line {
+    font-size: 0.8rem;
+    display: block;
+    margin: 2px 0;
+}
+
+/* 5. VAULT FILTERS (AMBER UPGRADE) */
 .vault-filters {
     display: flex;
     justify-content: center;
@@ -135,15 +126,40 @@ header h1 .sub-header {
 
 .filter-btn {
     background: none;
-    border: 1px solid #00ff00;
-    color: #00ff00;
+    border: 1px solid #ffb000; /* Amber instead of Green */
+    color: #ffb000;
     padding: 8px 12px;
     cursor: pointer;
     font-family: 'Courier New', monospace;
-    text-shadow: 0 0 5px #00ff00;
+    text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
+    transition: all 0.2s ease;
 }
 
-/* 6. DIRECTORY LINKS */
+.filter-btn:hover {
+    background-color: #ffb000;
+    color: #1a1a1a;
+    box-shadow: 0 0 10px #ffb000;
+}
+
+/* 6. VAULT LAYOUT */
+.vault-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.log-display {
+    flex: 2;
+    min-width: 0;
+}
+
+.log-directory {
+    flex: 1;
+    border-left: 1px dashed #5c3d2e;
+    padding-left: 20px;
+}
+
 .file-list {
     list-style: none;
     padding: 0;
