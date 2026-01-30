@@ -15,7 +15,7 @@ body {
     line-height: 1.6;
 }
 
-/* 2. CONTAINER */
+/* 2. THE CHASSIS */
 .container {
     width: 100%;
     max-width: 1000px;
@@ -27,7 +27,7 @@ body {
     overflow-x: hidden;
 }
 
-/* 3. HEADER & WARNING */
+/* 3. HEADER LOGIC (VAULT // OTD) */
 header {
     text-align: center;
     border-bottom: 2px dashed #5c3d2e;
@@ -36,7 +36,7 @@ header {
 }
 
 header h1 {
-    font-size: clamp(1.2rem, 6vw, 2rem); 
+    font-size: clamp(1.1rem, 6vw, 2rem); 
     letter-spacing: 2px;
     line-height: 1.2;
 }
@@ -54,69 +54,54 @@ header h1 .sub-header {
     margin-top: 5px;
 }
 
-.warning-banner {
-    font-size: 0.75rem;
-    padding: 10px;
-    text-align: center;
-    border-bottom: 2px dashed #5c3d2e;
-    margin-bottom: 15px;
-}
-
-/* 4. HERO SECTION - THE SMART FIX */
+/* 4. THE HERO SECTION - BACKGROUND METHOD */
+/* This is the most stable way to overlay text on mobile */
 #personal-identity .hero-container {
-    position: relative;
     width: 100%;
     margin-bottom: 25px;
     border: 2px solid #5c3d2e;
+    
+    /* We use the image as a background instead of an <img> tag */
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('telescope-clean.jpg');
+    background-size: cover;
+    background-position: center;
+    
+    /* This ensures the box is tall enough on mobile but expands if text wraps */
+    min-height: 250px; 
     display: flex;
-    flex-direction: column; /* Stack image and text on mobile */
-    background: #000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
+/* Hide the old <img> tag since we are using background-image now */
 .hero-container img {
-    width: 100%;
-    height: auto;
-    display: block;
+    display: none;
 }
 
 #personal-identity .text-overlay {
     width: 100%;
-    padding: 20px 10px;
+    max-width: 400px; /* Keeps text from getting too wide */
+    border: 1px solid rgba(255, 176, 0, 0.3);
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4); /* Subtle backing to make text pop */
     text-align: center;
-    background: rgba(0, 0, 0, 0.8); /* Solid dark background for text on mobile */
 }
 
 #personal-identity .text-overlay h1 {
-    font-size: clamp(1rem, 5vw, 1.8rem);
-    line-height: 1.2;
+    font-size: clamp(0.9rem, 5vw, 1.8rem);
+    line-height: 1.1;
     text-transform: uppercase;
-    color: #ffb000;
+    text-shadow: 2px 2px 4px #000;
 }
 
 #personal-identity .text-overlay .by-line {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     display: block;
     margin: 5px 0;
 }
 
-/* DESKTOP OVERRIDE: Put text back on top of image for larger screens */
-@media (min-width: 768px) {
-    #personal-identity .text-overlay {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: transparent;
-        width: 85%;
-        text-shadow: 2px 2px 8px #000;
-    }
-    
-    .hero-container img {
-        opacity: 0.5; /* Dim image on desktop for readability */
-    }
-}
-
-/* 5. FILTERS */
+/* 5. AMBER FILTERS */
 .vault-filters {
     display: flex;
     justify-content: center;
@@ -135,7 +120,7 @@ header h1 .sub-header {
     cursor: pointer;
 }
 
-/* 6. LAYOUT */
+/* 6. VAULT LAYOUT */
 .vault-layout {
     display: flex;
     flex-direction: column;
@@ -146,13 +131,14 @@ header h1 .sub-header {
     .vault-layout {
         flex-direction: row;
     }
-}
-
-.log-display { flex: 2; min-width: 0; }
-.log-directory { flex: 1; border-top: 1px dashed #5c3d2e; padding-top: 20px; }
-
-@media (min-width: 850px) {
-    .log-directory { border-top: none; border-left: 1px dashed #5c3d2e; padding-left: 20px; padding-top: 0; }
+    .log-directory {
+        border-left: 1px dashed #5c3d2e;
+        padding-left: 20px;
+        flex: 1;
+    }
+    .log-display {
+        flex: 2;
+    }
 }
 
 .log-link {
@@ -161,6 +147,15 @@ header h1 .sub-header {
     font-size: 0.9rem;
     display: block;
     margin-bottom: 10px;
+}
+
+.terminal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 3px;
+    pointer-events: none;
+    z-index: 100;
 }
 
 footer {
