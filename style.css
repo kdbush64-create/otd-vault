@@ -52,7 +52,7 @@ header h1 {
     padding: 0 10px;
     letter-spacing: 3px;
     line-height: 1.1;
-    display: block; /* Changed to block to respect the <br> in HTML */
+    display: block; 
 }
 
 header h1 span {
@@ -121,6 +121,7 @@ header h1 .sub-header {
     border: 1px solid rgba(255, 176, 0, 0.3);
     width: 85%;
     text-align: center;
+    /* Added strong shadow to keep text readable on clear background */
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 1), 0px 0px 5px rgba(0, 0, 0, 0.8);
 }
 
