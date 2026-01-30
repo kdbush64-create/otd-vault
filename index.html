@@ -42,42 +42,46 @@
     const list = document.getElementById('log-list');
     
     try {
+      // 1. Get the list of files
       const response = await fetch(`https://api.github.com/repos/${repo}/contents/`);
       const files = await response.json();
 
-      // 1. Only grab .md files, ignore template and readme
+      // 2. Filter for .md files
       const logFiles = files.filter(file => 
         file.name.endsWith('.md') && 
         !file.name.includes('template') && 
         !file.name.includes('README')
       );
 
-      // 2. SORT: B comes before A (Reverses alphabetical order)
-      // This puts 2026-01-30 above 2026-01-15
-      logFiles.sort((a, b) => b.name.localeCompare(a.name));
+      // 3. Get the "Last Modified" date for each file (Work Smarter!)
+      const filesWithDates = await Promise.all(logFiles.map(async (file) => {
+        const commitRes = await fetch(`https://api.github.com/repos/${repo}/commits?path=${file.path}&page=1&per_page=1`);
+        const commitData = await commitRes.json();
+        return {
+          ...file,
+          lastModified: new Date(commitData[0].commit.committer.date)
+        };
+      }));
+
+      // 4. SORT by actual date/time (Newest first)
+      filesWithDates.sort((a, b) => b.lastModified - a.lastModified);
 
       list.innerHTML = ''; 
-      logFiles.forEach(file => {
+      filesWithDates.forEach(file => {
         const li = document.createElement('li');
         
-        // 3. FORMAT: Convert "2026-01-30-railhead.md" to "2026.01.30 - RAILHEAD"
-        let displayName = file.name.replace('.md', '').toUpperCase();
-        displayName = displayName.replace(/-/g, '.'); // Swap dashes for dots
+        // Format the date for the display: YYYY.MM.DD
+        const d = file.lastModified;
+        const dateStr = `${d.getFullYear()}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getDate().toString().padStart(2,'0')}`;
         
-        // Find the first three dots (the date) and put a dash after them
-        // Example: 2026.01.30.RAILHEAD -> 2026.01.30 - RAILHEAD
-        const parts = displayName.split('.');
-        if(parts.length > 3) {
-           const datePart = parts.slice(0,3).join('.');
-           const namePart = parts.slice(3).join(' ');
-           displayName = `${datePart} - ${namePart}`;
-        }
-
-        li.innerHTML = `<a href="#" onclick="loadPost('${file.name}')">[ ${displayName} ]</a>`;
+        // Clean up name: remove date from filename if it exists, and the .md
+        let cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
+        
+        li.innerHTML = `<a href="#" onclick="loadPost('${file.name}')">[ ${dateStr} - ${cleanName} ]</a>`;
         list.appendChild(li);
       });
     } catch (error) {
-      list.innerHTML = "<li>[ ERROR: VAULT_OFFLINE ]</li>";
+      list.innerHTML = "<li>[ ERROR: VAULT_CHRONOLOGY_FAILED ]</li>";
     }
   }
   loadLogs();
@@ -109,6 +113,7 @@
 </body>
 
 </html>
+
 
 
 
