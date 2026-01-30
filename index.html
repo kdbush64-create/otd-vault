@@ -15,17 +15,17 @@
     <meta name="author" content="DeWayne Bush">
 
     <title>Vintage64 | Personal Vault</title>
+    
     <link rel="stylesheet" href="style.css">
-
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+
 <body id="personal-identity">    
     <div class="terminal-overlay"></div>
     <div class="container">
         <header>
             <div class="warning-banner">!! WARNING: UNFILTERED_OPINIONS_AHEAD !!</div>
             <h1>PERSONAL_VAULT_OTD</h1>
-            
         </header>
 
         <section class="hero-container">
@@ -38,12 +38,12 @@
         </section>
 
         <nav class="vault-filters">
-    <button onclick="loadLogs('all')" class="filter-btn">ALL_LOGS</button>
-    <button onclick="loadLogs('chow')" class="filter-btn">CHOW_REVIEWS</button>
-    <button onclick="loadLogs('coord')" class="filter-btn">COORD_REVIEWS</button>
-    <button onclick="loadLogs('gear')" class="filter-btn">GEAR_RECON</button>
-    <button onclick="loadLogs('rant')" class="filter-btn">SYSTEM_RANTS</button>
-</nav>
+            <button onclick="loadLogs('all')" class="filter-btn">ALL_LOGS</button>
+            <button onclick="loadLogs('chow')" class="filter-btn">CHOW_REVIEWS</button>
+            <button onclick="loadLogs('coord')" class="filter-btn">COORD_REVIEWS</button>
+            <button onclick="loadLogs('gear')" class="filter-btn">GEAR_RECON</button>
+            <button onclick="loadLogs('rant')" class="filter-btn">SYSTEM_RANTS</button>
+        </nav>
 
         <main class="vault-layout">
             <section class="log-display">
@@ -65,7 +65,6 @@
         </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         const repo = "kdbush64-create/otd-vault";
 
@@ -80,15 +79,16 @@
                 // Filter for .md and ignore templates/readmes
                 let logFiles = files.filter(file => 
                     file.name.endsWith('.md') && 
-                    !file.name.includes('template') && 
-                    !file.name.includes('README')
+                    !file.name.toLowerCase().includes('template') && 
+                    !file.name.toLowerCase().includes('readme')
                 );
 
-                // APPLY CATEGORY FILTER based on filename prefix
+                // Apply category filter based on filename prefix
                 if (filter !== 'all') {
                     logFiles = logFiles.filter(file => file.name.startsWith(filter));
                 }
 
+                // Fetch commit dates for sorting
                 const filesWithDates = await Promise.all(logFiles.map(async (file) => {
                     const commitRes = await fetch(`https://api.github.com/repos/${repo}/commits?path=${file.path}&page=1&per_page=1`);
                     const commitData = await commitRes.json();
@@ -98,6 +98,7 @@
                     };
                 }));
 
+                // Sort Newest First
                 filesWithDates.sort((a, b) => b.lastModified - a.lastModified);
 
                 list.innerHTML = ''; 
@@ -106,10 +107,11 @@
                     const d = file.lastModified;
                     const dateStr = `${d.getFullYear()}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getDate().toString().padStart(2,'0')}`;
                     
-                    // Display cleaning
+                    // Display cleaning (e.g., gear-resmed-mask -> GEAR RESMED MASK)
                     let cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     
-                    li.innerHTML = `<a href="#" onclick="loadPost('${file.download_url}')">[ ${dateStr} - ${cleanName} ]</a>`;
+                    // The class "log-link" handles the [ ] brackets via CSS to prevent text wrapping issues
+                    li.innerHTML = `<a href="#" class="log-link" onclick="loadPost('${file.download_url}')">${dateStr} // ${cleanName}</a>`;
                     list.appendChild(li);
                 });
             } catch (error) {
@@ -121,20 +123,6 @@
             try {
                 const response = await fetch(url);
                 const markdown = await response.text();
-                document.getElementById('content').innerHTML = marked.parse(markdown);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (err) {
-                document.getElementById('content').innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG</p>";
-            }
-        }
-
-        // Initial Load
-        loadLogs();
-    </script>
-</body>
-</html>
-
-
-
-
-
+                // Check if marked is loaded
+                if (typeof marked !== 'undefined') {
+                    document.getElementById('content').innerHTML = marked.parse(markdown);
