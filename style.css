@@ -263,8 +263,23 @@ footer {
     text-decoration: none;
     font-family: 'Courier New', monospace;
 }
+.filter-btn {
+    background: none;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    transition: 0.3s;
+}
+.filter-btn:hover {
+    background: #00ff00;
+    color: #000;
+}
 
 .file-list a:hover {
     background-color: #ffb000;
     color: #1a1a1a;
+
 }
