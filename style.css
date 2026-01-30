@@ -200,4 +200,56 @@ footer p {
 .container {
     overflow-x: hidden; /* Prevents the whole page from sliding sideways */
 }
+/* RESPONSIVE TABLE STACKING */
+@media (max-width: 600px) {
+    /* Force table to not behave like a table */
+    table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+
+    /* Hide table headers (optional, but keeps it clean) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid #5c3d2e;
+        margin-bottom: 15px;
+        padding: 10px;
+        background: rgba(42, 26, 18, 0.4);
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 0;
+        text-align: left;
+    }
+
+    /* Style the Metric (First item) */
+    td:first-child {
+        font-size: 1.1rem;
+        color: #ffb000; /* Amber Gold */
+        border-bottom: 1px solid #333;
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+        width: 100% !important; /* Overrides your 40% rule */
+    }
+
+    /* Style the Score and Observation */
+    td:nth-child(2) {
+        font-weight: bold;
+        color: #00ff00; /* Neon Green */
+    }
+
+    td:last-child {
+        margin-top: 8px;
+        color: #d4a373; /* Muted tan for the notes */
+        font-style: italic;
+    }
+}
+
 
