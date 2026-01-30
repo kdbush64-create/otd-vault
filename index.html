@@ -25,7 +25,7 @@
     <div class="container">
         <header>
             <div class="warning-banner">!! WARNING: UNFILTERED_OPINIONS_AHEAD !!</div>
-            <h1>PERSONAL_VAULT_OTD</h1>
+            <h1>PERSONAL_VAULT // OTD</h1>
         </header>
 
         <section class="hero-container">
@@ -105,7 +105,14 @@
                     const li = document.createElement('li');
                     const d = file.lastModified;
                     const dateStr = `${d.getFullYear()}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getDate().toString().padStart(2,'0')}`;
+                    
+                    // Display cleaning: Replace dashes with spaces, Uppercase everything
                     let cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
+                    
+                    // THE INVISIBLE BREAK FIX: 
+                    // Insert a Zero-Width Space (\u200B) after every underscore.
+                    // This allows mobile browsers to wrap at the underscore without adding a space.
+                    cleanName = cleanName.split('_').join('_\u200B');
                     
                     li.innerHTML = `<a href="#" class="log-link" onclick="loadPost('${file.download_url}')">${dateStr} // ${cleanName}</a>`;
                     list.appendChild(li);
