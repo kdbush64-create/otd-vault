@@ -167,3 +167,37 @@ header {
     pointer-events: none;
     z-index: 100;
 }
+/* 1. FORCE WRAPPING ON LONG UNDERSCORED STRINGS */
+header h1, 
+.warning-banner, 
+article p, 
+footer p {
+    overflow-wrap: break-word; /* Standards-compliant wrap */
+    word-break: break-all;      /* Forces the break even without spaces */
+    hyphens: none;              /* Prevents accidental hyphens in your code-style text */
+}
+
+/* 2. FLUID TEXT SCALING */
+header h1 {
+    font-size: clamp(1.1rem, 6vw, 1.8rem); /* Shrinks header text dynamically */
+    line-height: 1.2;
+    padding: 0 10px;
+}
+
+.warning-banner {
+    font-size: 0.8rem;
+    padding: 10px;
+    text-align: center;
+}
+
+/* 3. FOOTER CLEANUP */
+footer p {
+    font-size: 0.75rem;
+    line-height: 2; /* Gives links more vertical breathing room on touch screens */
+}
+
+/* 4. CONTAINER OVERFLOW PROTECTION */
+.container {
+    overflow-x: hidden; /* Prevents the whole page from sliding sideways */
+}
+
