@@ -8,6 +8,8 @@
 ### > DATA_ENTRY_01: INITIAL_OBSERVATIONS
 [What was the vibe? Was the smoke rolling? Did the screen door slap shut? Type your raw thoughts here.]
 
+![IMAGE_DESCRIPTION_HERE](IMAGE_FILENAME_HERE.jpg)
+
 ### > DATA_ENTRY_02: THE_STUFF
 * **PRIMARY:** [The main order]
 * **SIDES:** [The fixins]
