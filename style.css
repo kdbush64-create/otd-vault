@@ -11,49 +11,70 @@ body {
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
-    padding: 20px; /* Reduced for mobile comfort */
+    padding: 20px;
     line-height: 1.6;
 }
 
-/* 2. THE CHASSIS - Updated for Responsiveness */
+/* 2. THE CHASSIS */
 .container {
     width: 100%;
-    max-width: 1000px; /* Increased to allow sidebar room on desktop */
+    max-width: 1000px;
     border: 2px solid #5c3d2e;
     padding: 20px;
     background: rgba(0, 0, 0, 0.95);
     box-shadow: 0 0 20px rgba(255, 176, 0, 0.1);
     position: relative;
     z-index: 5;
+    overflow-x: hidden; /* Critical for mobile overflow */
 }
 
-/* 3. VAULT LAYOUT (The Flexbox Engine) */
+/* 3. CORE TEXT WRAPPING LOGIC */
+/* This allows underscores to act as break points without cutting words in half */
+header h1, 
+.blog-post h1, 
+.blog-post p, 
+.warning-banner,
+footer p {
+    overflow-wrap: anywhere; 
+    word-break: normal; 
+    line-height: 1.4;
+}
+
+header h1 {
+    text-align: center;
+    font-size: clamp(1.1rem, 6vw, 1.8rem);
+    padding: 0 10px;
+    letter-spacing: 2px;
+}
+
+.warning-banner {
+    font-size: 0.8rem;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px dashed #5c3d2e;
+    margin-bottom: 20px;
+}
+
+/* 4. VAULT LAYOUT */
 .vault-layout {
     display: flex;
-    flex-direction: row; /* Side-by-side on desktop */
+    flex-direction: row;
     gap: 30px;
     align-items: flex-start;
 }
 
 .log-display {
-    flex: 2; /* Content gets more room */
-    min-width: 0; /* Prevents text overflow */
+    flex: 2;
+    min-width: 0;
 }
 
 .log-directory {
-    flex: 1; /* Sidebar takes 1/3 space */
+    flex: 1;
     border-left: 1px dashed #5c3d2e;
     padding-left: 20px;
 }
 
-/* 4. HEADER & HERO */
-header {
-    text-align: center;
-    border-bottom: 2px dashed #5c3d2e;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-}
-
+/* 5. HERO & FILTERS */
 #personal-identity .hero-container {
     position: relative;
     width: 100%;
@@ -76,15 +97,14 @@ header {
     background-color: rgba(0, 0, 0, 0.7);
     padding: 15px;
     border: 1px solid rgba(255, 176, 0, 0.3);
-    width: 80%;
+    width: 85%;
     text-align: center;
 }
 
-/* 5. VAULT FILTERS */
 .vault-filters {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* Allows buttons to wrap on small screens */
+    flex-wrap: wrap;
     gap: 10px;
     margin: 20px 0;
 }
@@ -97,10 +117,9 @@ header {
     cursor: pointer;
     font-family: 'Courier New', monospace;
     text-shadow: 0 0 5px #00ff00;
-    white-space: nowrap; /* Keeps button text on one line */
 }
 
-/* 6. DIRECTORY LIST & NO-WRAP FIX */
+/* 6. DIRECTORY LINKS */
 .file-list {
     list-style: none;
     padding: 0;
@@ -110,10 +129,8 @@ header {
     color: #00eeff;
     text-decoration: none;
     display: inline-block;
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adds ... if name is too long for the box */
-    max-width: 100%;
+    padding: 5px 0;
+    overflow-wrap: anywhere; /* Ensures long filenames wrap at underscores */
 }
 
 .log-link::before { content: "[ "; }
@@ -124,91 +141,13 @@ header {
     color: #1a1a1a;
 }
 
-/* 7. MOBILE MEDIA QUERY - The Scaling Logic */
-@media (max-width: 850px) {
-    .vault-layout {
-        flex-direction: column; /* Stack vertically on mobile */
-    }
-
-    .log-directory {
-        width: 100%;
-        border-left: none;
-        border-top: 1px dashed #5c3d2e;
-        padding-left: 0;
-        padding-top: 20px;
-        order: 2; /* Directory goes to the bottom */
-    }
-
-    .log-display {
-        width: 100%;
-        order: 1; /* Content stays at the top */
-    }
-
-    #personal-identity .text-overlay h1 {
-        font-size: 1.2rem;
-    }
-
-    .filter-btn {
-        flex: 1 1 calc(50% - 10px); /* 2 buttons per row on phones */
-        font-size: 0.8rem;
-    }
-}
-
-/* 8. SYSTEM EFFECTS */
-.blink { animation: blinker 1.5s linear infinite; }
-@keyframes blinker { 50% { opacity: 0; } }
-
-.terminal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-    background-size: 100% 3px, 3px 100%;
-    pointer-events: none;
-    z-index: 100;
-}
-/* 1. FORCE WRAPPING ON LONG UNDERSCORED STRINGS */
-header h1, 
-.warning-banner, 
-article p, 
-footer p {
-    overflow-wrap: break-word; /* Standards-compliant wrap */
-    word-break: break-all;      /* Forces the break even without spaces */
-    hyphens: none;              /* Prevents accidental hyphens in your code-style text */
-}
-
-/* 2. FLUID TEXT SCALING */
-header h1 {
-    font-size: clamp(1.1rem, 6vw, 1.8rem); /* Shrinks header text dynamically */
-    line-height: 1.2;
-    padding: 0 10px;
-}
-
-.warning-banner {
-    font-size: 0.8rem;
-    padding: 10px;
-    text-align: center;
-}
-
-/* 3. FOOTER CLEANUP */
-footer p {
-    font-size: 0.75rem;
-    line-height: 2; /* Gives links more vertical breathing room on touch screens */
-}
-
-/* 4. CONTAINER OVERFLOW PROTECTION */
-.container {
-    overflow-x: hidden; /* Prevents the whole page from sliding sideways */
-}
-/* RESPONSIVE TABLE STACKING */
-@media (max-width: 600px) {
-    /* Force table to not behave like a table */
+/* 7. RESPONSIVE TABLE STACKING */
+@media (max-width: 768px) {
     table, thead, tbody, th, td, tr {
         display: block;
         width: 100%;
     }
 
-    /* Hide table headers (optional, but keeps it clean) */
     thead tr {
         position: absolute;
         top: -9999px;
@@ -224,32 +163,73 @@ footer p {
 
     td {
         border: none;
-        position: relative;
-        padding-left: 0;
+        padding: 5px 0;
         text-align: left;
     }
 
-    /* Style the Metric (First item) */
     td:first-child {
         font-size: 1.1rem;
-        color: #ffb000; /* Amber Gold */
+        color: #ffb000;
         border-bottom: 1px solid #333;
         margin-bottom: 5px;
-        padding-bottom: 5px;
-        width: 100% !important; /* Overrides your 40% rule */
     }
 
-    /* Style the Score and Observation */
     td:nth-child(2) {
         font-weight: bold;
-        color: #00ff00; /* Neon Green */
+        color: #00ff00;
     }
 
     td:last-child {
         margin-top: 8px;
-        color: #d4a373; /* Muted tan for the notes */
+        color: #d4a373;
         font-style: italic;
     }
 }
 
+/* 8. MOBILE LAYOUT SCALING */
+@media (max-width: 850px) {
+    .vault-layout {
+        flex-direction: column;
+    }
 
+    .log-directory {
+        width: 100%;
+        border-left: none;
+        border-top: 1px dashed #5c3d2e;
+        padding-left: 0;
+        padding-top: 20px;
+        order: 2;
+    }
+
+    .log-display {
+        width: 100%;
+        order: 1;
+    }
+
+    .filter-btn {
+        flex: 1 1 calc(50% - 10px);
+        font-size: 0.8rem;
+    }
+}
+
+/* 9. SYSTEM EFFECTS */
+.blink { animation: blinker 1.5s linear infinite; }
+@keyframes blinker { 50% { opacity: 0; } }
+
+.terminal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.75rem;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
