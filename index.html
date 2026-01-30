@@ -61,7 +61,12 @@
         </main>
 
         <footer>
-            <p>PERSONAL_THOUGHTS_V1.1 // <a href="../contact/index.html">[ SEND_FEEDBACK ]</a></p>
+            <p>PERSONAL_THOUGHTS_V1.1 // 
+        <a href="#" onclick="loadPost('https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/gear-policy.md')">[ REVIEW_POLICY ]</a> // 
+        <a href="../contact/index.html">[ SEND_FEEDBACK ]</a>
+    </p>
+            
+    </footer>
         </footer>
     </div>
 
@@ -126,3 +131,4 @@
                 // Check if marked is loaded
                 if (typeof marked !== 'undefined') {
                     document.getElementById('content').innerHTML = marked.parse(markdown);
+
