@@ -1,4 +1,3 @@
-<style>
 /* 1. THEME VARIABLES & ADA DEFAULTS */
 :root {
     --bg: #1a1a1a;
@@ -11,6 +10,7 @@
     --shadow: rgba(0, 0, 0, 0.8);
 }
 
+/* DARK MODE IS DEFAULT - LIGHT MODE OVERRIDE */
 [data-theme="light"] {
     --bg: #f4f4f4;
     --container-bg: #ffffff;
@@ -20,18 +20,6 @@
     --accent: #008522;
     --border: #a3a3a3;
     --shadow: rgba(0, 0, 0, 0.1);
-}
-
-/* REDUCED MOTION */
-@media (prefers-reduced-motion: reduce) {
-    *, ::before, ::after {
-        animation-delay: -1ms !important;
-        animation-duration: 1ms !important;
-        animation-iteration-count: 1 !important;
-        background-attachment: initial !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0s !important;
-    }
 }
 
 /* 2. GLOBAL RESET */
@@ -47,7 +35,6 @@ body {
     padding: 15px;
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow-x: hidden;
 }
 
 /* 3. THE CHASSIS */
@@ -60,7 +47,6 @@ body {
     position: relative;
     z-index: 5;
     box-shadow: 0 10px 30px var(--shadow);
-    overflow: hidden; 
 }
 
 /* 4. THEME TOGGLE */
@@ -101,7 +87,7 @@ body {
     opacity: 0.5;
 }
 
-/* 6. HEADER & WARNING */
+/* 6. HEADER */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -112,26 +98,7 @@ header {
 header h1 {
     font-size: clamp(1.1rem, 6vw, 2rem);
     letter-spacing: 3px;
-    line-height: 1.6;
-}
-
-header h1 span.typewriter {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: .15em solid var(--primary);
     text-transform: uppercase;
-    width: 0; 
-    vertical-align: bottom;
-}
-
-header h1 span.typewriter:first-child {
-    animation: typing 1s steps(10, end) forwards, blink-caret .75s step-end infinite;
-}
-
-header h1 span.delay-type {
-    animation: typing 2s steps(20, end) forwards, blink-caret .75s step-end infinite;
-    animation-delay: 1.2s; 
 }
 
 .warning-banner {
@@ -140,15 +107,14 @@ header h1 span.delay-type {
     text-align: center;
     border-bottom: 2px dashed var(--border);
     margin-bottom: 15px;
-    animation: glitch 5s infinite;
 }
 
-/* 7. VAULT LAYOUT & DIRECTORY COLOR FIX */
+/* 7. VAULT LAYOUT & DIRECTORY FIXES */
 .vault-layout { display: flex; flex-direction: column; gap: 20px; }
 
-/* FIXED: Target .md links and directory anchors specifically */
+/* FIX: Ensure links (.md files) are visible and follow theme */
 .log-directory a, 
-.log-directory .log-link {
+.log-link {
     color: var(--secondary) !important;
     text-decoration: none;
     display: block;
@@ -158,19 +124,12 @@ header h1 span.delay-type {
 @media (min-width: 850px) {
     .vault-layout { flex-direction: row; }
     .log-display { flex: 2; }
-    .log-directory { flex: 1; border-top: none; border-left: 1px dashed var(--border); padding-left: 20px; padding-top: 0; }
+    .log-directory { flex: 1; border-left: 1px dashed var(--border); padding-left: 20px; }
 }
 
 /* 8. ANIMATIONS */
-@keyframes typing { from { width: 0; } to { width: 100%; } }
-@keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--primary); } }
-@keyframes glitch {
-    0%, 98%, 100% { opacity: 1; transform: skew(0deg); }
-    2%, 99% { opacity: 0.8; transform: skew(5deg); }
-}
-
 @keyframes rec-pulse {
-    0%, 100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 2px var(--accent)); }
+    0%, 100% { opacity: 1; filter: brightness(1.2); }
     50% { opacity: 0.3; filter: brightness(0.7); }
 }
 
@@ -194,16 +153,7 @@ header h1 span.delay-type {
     overflow: visible; 
 }
 
-.comment-module::before {
-    content: "> FEEDBACK_UPLINK_ACTIVE: MODERATION_ENABLED";
-    display: block;
-    font-size: 0.7rem;
-    color: var(--primary-dim);
-    margin-bottom: 15px;
-    letter-spacing: 1px;
-}
-
-/* FIXED: Moved inside container for visibility on all devices */
+/* FIX: SECURE_UPLINK_READY position and color */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
@@ -212,15 +162,45 @@ header h1 span.delay-type {
     font-size: 0.65rem;
     font-weight: bold;
     color: var(--accent);
-    animation: rec-pulse 2s ease-in-out infinite !important;
-    text-shadow: 0 0 5px var(--accent);
+    animation: rec-pulse 2s ease-in-out infinite;
 }
 
-/* 11 UTTERANCES MOBILE FIXES */
+/* 11. UTTERANCES MOBILE FIXES */
 .utterances { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
 
 @media (max-width: 420px) {
     .comment-module { padding: 45px 10px 15px 10px; }
     .utterances-frame {
         transform: scale(0.92);
-        transform-origin:
+        transform-origin: top center;
+    }
+}
+
+/* 12. SURVEILLANCE FEED & BUTTON THEME FIX */
+.surveillance-wrapper {
+    margin-top: 30px;
+    border: 1px solid var(--border);
+    padding: 10px;
+}
+
+/* FIX: Buttons follow amber theme strictly */
+.submit-btn, .filter-btn {
+    background-color: var(--primary) !important;
+    color: #000 !important;
+    border: 1px solid var(--primary) !important;
+    padding: 5px 10px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.blink {
+    color: var(--accent) !important;
+    animation: rec-pulse 2s ease-in-out infinite;
+}
+
+.feed-container {
+    border: 1px solid var(--primary-dim);
+    filter: grayscale(100%);
+}
