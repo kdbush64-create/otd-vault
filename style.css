@@ -151,7 +151,7 @@ header h1 span.delay-type {
     .log-directory { flex: 1; border-top: none; border-left: 1px dashed var(--border); padding-left: 20px; padding-top: 0; }
 }
 
-/* 9. ANIMATIONS */
+/* 8. ANIMATIONS */
 @keyframes typing { from { width: 0; } to { width: 100%; } }
 @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--primary); } }
 @keyframes glitch {
@@ -165,7 +165,7 @@ header h1 span.delay-type {
     50% { opacity: 0.3; filter: brightness(0.7); }
 }
 
-/* 10. TERMINAL OVERLAY */
+/* 9. TERMINAL OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -175,7 +175,7 @@ header h1 span.delay-type {
     z-index: 100;
 }
 
-/* 11. FEEDBACK & COMMENTS */
+/* 10. FEEDBACK & COMMENTS */
 .comment-module {
     margin-top: 50px;
     padding: 25px 20px;
@@ -209,7 +209,7 @@ header h1 span.delay-type {
     text-shadow: 0 0 5px var(--accent);
 }
 
-/* 11.5 UTTERANCES MOBILE FIXES */
+/* 11 UTTERANCES MOBILE FIXES */
 .utterances { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
 
 @media (max-width: 420px) {
@@ -261,3 +261,4 @@ header h1 span.delay-type {
     filter: grayscale(100%) contrast(1.2);
     border: 1px solid var(--accent);
 }
+
