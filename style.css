@@ -2,10 +2,10 @@
 :root {
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
-    --primary: #ffb000;
+    --primary: #ffb000;         /* Amber */
     --primary-dim: rgba(255, 176, 0, 0.7);
-    --secondary: #00eeff;
-    --accent: #00ff41;
+    --secondary: #00eeff;       /* Blue links */
+    --accent: #00ff41;          /* Neon Green */
     --border: #5c3d2e;
     --shadow: rgba(0, 0, 0, 0.8);
 }
@@ -19,6 +19,17 @@
     --accent: #008522;
     --border: #a3a3a3;
     --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+    }
 }
 
 /* 2. GLOBAL RESET */
@@ -61,7 +72,7 @@ body {
     background: transparent;
     border: 1px solid var(--accent);
     color: var(--accent);
-    padding: 8px 14px;
+    padding: 6px 12px;
     cursor: pointer;
     font-family: inherit;
     font-size: 0.8rem;
@@ -70,57 +81,9 @@ body {
     box-shadow: 0 0 5px var(--accent);
 }
 
-/* 5. HERO SECTION */
-.hero-container {
-    position: relative;
-    width: 100%;
-    margin-bottom: 25px;
-    border: 2px solid var(--border);
-    overflow: hidden; 
-    background: #000;
-}
-
-.hero-container img {
-    display: block;
-    width: 100%;
-    height: auto;
-    opacity: 0.5;
-}
-
-/* 6. HEADER & WARNING */
-header {
-    text-align: center;
-    border-bottom: 2px dashed var(--border);
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-}
-
-header h1 {
-    font-size: clamp(1.1rem, 6vw, 2rem);
-    letter-spacing: 3px;
-    line-height: 1.6;
-}
-
-header h1 span.typewriter {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: .15em solid var(--primary);
-    text-transform: uppercase;
-    width: 0; 
-    vertical-align: bottom;
-}
-
-/* 7. VAULT LAYOUT */
-.vault-layout { display: flex; flex-direction: column; gap: 20px; }
-
-@media (min-width: 850px) {
-    .vault-layout { flex-direction: row; }
-}
-
-/* 8. LOG LINKS & VAULT FILTERS */
+/* 8. LOG LINKS & VAULT FILTERS (Restored Colors) */
 .log-link {
-    color: var(--secondary) !important;
+    color: var(--secondary) !important; 
     text-decoration: none;
     display: block;
     padding: 8px 0;
@@ -129,47 +92,32 @@ header h1 span.typewriter {
 .log-link::before { content: "[ "; }
 .log-link::after { content: " ]"; }
 
-.vault-filters .submit-btn, button.submit-btn {
-    display: inline-block;
+.vault-filters .submit-btn {
     background-color: var(--primary) !important;
-    color: #000000 !important;
+    color: #000 !important;
     border: 1px solid var(--primary);
-    padding: 6px 12px;
+    padding: 4px 10px;
     font-family: inherit;
     font-size: 0.75rem;
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-    border-radius: 0;
+    margin-right: 5px;
 }
 
 /* 9. ANIMATIONS */
-@keyframes typing { from { width: 0; } to { width: 100%; } }
 @keyframes rec-pulse {
     0%, 100% { opacity: 1; filter: brightness(1.2); }
     50% { opacity: 0.3; filter: brightness(0.8); }
 }
 
-/* 10. TERMINAL SCANLINE OVERLAY */
-.terminal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
-    background-size: 100% 3px;
-    pointer-events: none;
-    z-index: 1000;
-}
-
 /* 11. FEEDBACK & COMMENTS */
 .comment-module {
     margin-top: 50px;
-    padding: 25px 20px;
+    padding: 35px 20px 20px 20px; /* Extra top padding for the internal label */
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow: visible;
 }
 
 .comment-module::before {
@@ -180,13 +128,12 @@ header h1 span.typewriter {
     margin-bottom: 15px;
 }
 
+/* THE BLINKING HEADER - NOW INTERNAL */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
     top: 10px;
     right: 15px;
-    background: var(--bg);
-    padding: 0 10px;
     font-size: 0.65rem;
     font-weight: bold;
     color: var(--accent);
@@ -194,11 +141,29 @@ header h1 span.typewriter {
     text-shadow: 0 0 5px var(--accent);
 }
 
-/* 11.5 UTTERANCES MOBILE FIXES */
-.utterances { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
+/* 11.5 MOBILE RESPONSIVE SCALING */
+.utterances { 
+    max-width: 100% !important; 
+    width: 100% !important; 
+    margin: 0 !important; 
+}
 
 @media (max-width: 480px) {
-    header img, .logo { max-width: 180px !important; }
-    .comment-module { padding: 35px 10px 15px 10px; }
-    .comment-module::after { top: 15px; }
+    .comment-module {
+        padding: 35px 10px 15px 10px; /* Slimmer padding for mobile */
+    }
+    
     .utterances-frame {
+        transform: scale(0.9);
+        transform-origin: top center;
+        width: 111% !important;
+        margin-left: -5.5% !important;
+    }
+}
+
+/* 12. SURVEILLANCE FEED (Restored REC Blink) */
+.blink {
+    color: var(--accent) !important;
+    animation: rec-pulse 2s ease-in-out infinite !important;
+    display: inline-block;
+}
