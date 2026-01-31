@@ -21,17 +21,6 @@
     --shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* REDUCED MOTION */
-@media (prefers-reduced-motion: reduce) {
-    *, ::before, ::after {
-        animation-delay: -1ms !important;
-        animation-duration: 1ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0s !important;
-    }
-}
-
 /* 2. GLOBAL RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -81,51 +70,93 @@ body {
     box-shadow: 0 0 5px var(--accent);
 }
 
-/* 5. HERO / LOG LINKS & VAULT FILTERS */
+/* 5. LOGO & HERO MANAGEMENT */
+header img, .logo {
+    max-width: 250px; /* Limits logo size on Desktop */
+    width: 100%;
+    height: auto;
+    margin: 0 auto 15px auto;
+    display: block;
+}
+
+.hero-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+    border: 2px solid var(--border);
+    overflow: hidden; 
+    background: #000;
+}
+
+.hero-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0.5;
+}
+
+@media (max-width: 480px) {
+    header img, .logo { max-width: 180px; } /* Reins in logo on Mobile */
+}
+
+/* 6. HEADER & WARNING (Typewriter) */
+header {
+    text-align: center;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+header h1 { font-size: clamp(1.1rem, 6vw, 2rem); letter-spacing: 3px; }
+
+header h1 span.typewriter {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: .15em solid var(--primary);
+    width: 0; 
+    vertical-align: bottom;
+}
+
+/* 7. VAULT LAYOUT */
+.vault-layout { display: flex; flex-direction: column; gap: 20px; }
+
+@media (min-width: 850px) {
+    .vault-layout { flex-direction: row; }
+}
+
+/* 8. LOG LINKS & VAULT FILTERS */
 .log-link {
     color: var(--secondary) !important;
     text-decoration: none;
     display: block;
     padding: 8px 0;
-    font-size: 0.95rem;
 }
-.log-link::before { content: "[ "; }
-.log-link::after { content: " ]"; }
 
-.vault-filters .submit-btn, 
-button.submit-btn {
+.vault-filters .submit-btn, button.submit-btn {
     display: inline-block;
     background-color: var(--primary) !important;
-    color: #000000 !important;
+    color: #000 !important;
     border: 1px solid var(--primary);
     padding: 6px 12px;
-    font-family: inherit;
     font-size: 0.75rem;
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
-    margin-right: 5px;
-    margin-bottom: 5px;
     -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
-    border-radius: 0; 
-    box-shadow: none;
+    border-radius: 0;
 }
 
-.vault-filters .submit-btn:hover {
-    background-color: var(--bg) !important;
-    color: var(--primary) !important;
-    box-shadow: 0 0 10px var(--primary);
-}
-
-/* 6. ANIMATIONS */
+/* 9. ANIMATIONS */
 @keyframes rec-pulse {
     0%, 100% { opacity: 1; filter: brightness(1.2); }
     50% { opacity: 0.3; filter: brightness(0.8); }
 }
 
-/* 7. TERMINAL SCANLINE OVERLAY */
+@keyframes typing { from { width: 0; } to { width: 100%; } }
+
+/* 10. TERMINAL SCANLINE OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -135,56 +166,29 @@ button.submit-btn {
     pointer-events: none;
     z-index: 1000;
 }
-[data-theme="light"] .terminal-overlay { opacity: 0.3; }
 
-/* 8. FEEDBACK & COMMENTS */
+/* 11. FEEDBACK & COMMENTS (Mobile Scaling Fix) */
 .comment-module {
     margin-top: 50px;
-    padding: 40px 20px 20px 20px; /* Increased top padding for mobile safety */
+    padding: 40px 20px 20px 20px; 
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow: visible;
 }
 
-.comment-module::before {
-    content: "> FEEDBACK_UPLINK_ACTIVE: MODERATION_ENABLED";
-    display: block;
-    font-size: 0.7rem;
-    color: var(--primary-dim);
-    margin-bottom: 15px;
-}
-
-/* THE BLINKING HEADER */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
-    top: 10px; /* Desktop position */
-    right: 15px;
+    top: 10px; right: 15px;
     font-size: 0.65rem;
     font-weight: bold;
     color: var(--accent);
     animation: rec-pulse 2s ease-in-out infinite !important;
-    text-shadow: 0 0 5px var(--accent);
-}
-
-/* 9. UTTERANCES / MOBILE FIXES */
-.utterances { 
-    max-width: 100% !important; 
-    width: 100% !important; 
-    margin: 0 !important; 
 }
 
 @media (max-width: 480px) {
-    .comment-module {
-        padding: 45px 10px 15px 10px; /* Added room for internal label nudge */
-    }
-    
-    .comment-module::after {
-        top: 18px; /* Nudged down further for mobile browsers */
-        right: 12px;
-    }
-    
+    .comment-module { padding-top: 45px; }
+    .comment-module::after { top: 18px; } /* Mobile Nudge */
     .utterances-frame {
         transform: scale(0.9);
         transform-origin: top center;
@@ -193,9 +197,15 @@ button.submit-btn {
     }
 }
 
-/* 10. SURVEILLANCE FEED */
+/* 12. SURVEILLANCE FEED */
 .blink {
     color: var(--accent) !important;
     animation: rec-pulse 2s ease-in-out infinite !important;
     display: inline-block;
+}
+
+.utterances .avatar {
+    filter: grayscale(100%) contrast(1.2);
+    border: 1px solid var(--accent);
+    border-radius: 2px !important;
 }
