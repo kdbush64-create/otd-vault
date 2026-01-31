@@ -63,10 +63,10 @@ body {
     text-transform: uppercase;
 }
 
-/* 5. LOGO & HERO */
+/* 5. LOGO & HERO MANAGEMENT */
 header img, .logo {
-    max-width: 250px; /* Reined in for Desktop */
-    width: 100%;
+    max-width: 250px; 
+    width: auto; /* Changed from 100% to auto to prevent "Crazy" stretching */
     height: auto;
     margin: 0 auto 15px auto;
     display: block;
@@ -87,7 +87,7 @@ header img, .logo {
     opacity: 0.5;
 }
 
-/* 6. HEADER & TYPEWRITER */
+/* 6. HEADER & WARNING (Typewriter) */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -122,21 +122,19 @@ header h1 span.typewriter {
     padding: 8px 0;
 }
 
-/* Specifically fixing the white buttons from your 1st image */
+/* Force Amber style to persist on Mobile */
 .vault-filters .submit-btn, 
 button.submit-btn {
-    display: inline-block;
+    display: inline-block !important;
     background-color: var(--primary) !important;
     color: #000000 !important;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--primary) !important;
     padding: 6px 12px;
     font-family: inherit;
-    font-size: 0.75rem;
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
     -webkit-appearance: none;
-    appearance: none;
     border-radius: 0;
 }
 
@@ -148,7 +146,7 @@ button.submit-btn {
 
 @keyframes typing { from { width: 0; } to { width: 100%; } }
 
-/* 10. SCANLINE OVERLAY */
+/* 10. TERMINAL SCANLINE OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -165,10 +163,9 @@ button.submit-btn {
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow: visible; /* Prevents clipping the blinking label */
 }
 
-/* The label: Positioned for Desktop (inside the box) */
+/* Blinking text - Locked to Desktop position */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
@@ -178,39 +175,30 @@ button.submit-btn {
     font-weight: bold;
     color: var(--accent);
     animation: rec-pulse 2s ease-in-out infinite !important;
-    text-shadow: 0 0 5px var(--accent);
 }
 
-.utterances { max-width: 100% !important; width: 100% !important; }
+.utterances { width: 100% !important; max-width: 100% !important; }
 
-/* --- SPECIFIC MOBILE OVERRIDES --- */
-@media (max-width: 600px) {
-    header img, .logo { max-width: 180px; } /* Rein in logo */
-    
-    .comment-module { padding-top: 40px; } /* Make room for label */
-    
-    .comment-module::after {
-        top: 15px !important; /* The Mobile Nudge: Pulls it down off the border */
-        right: 10px;
-    }
-
-    .utterances-frame {
-        transform: scale(0.9);
-        transform-origin: top center;
-        width: 111% !important;
-        margin-left: -5.5% !important;
-    }
-}
-
-/* 12. SURVEILLANCE FEED */
+/* 12. SURVEILLANCE FEED & MOBILE OVERRIDES */
 .blink {
     color: var(--accent) !important;
     animation: rec-pulse 2s ease-in-out infinite !important;
     display: inline-block;
 }
 
-.utterances .avatar {
-    filter: grayscale(100%);
-    border: 1px solid var(--accent);
-    border-radius: 2px !important;
+/* SURGICAL MOBILE ONLY FIXES */
+@media (max-width: 600px) {
+    header img, .logo { max-width: 160px; } /* Logo constraint */
+    
+    .comment-module { padding-top: 45px; } /* Create space */
+    
+    .comment-module::after {
+        top: 20px !important; /* Forces text DOWN on mobile only */
+        right: 12px !important;
+    }
+
+    .utterances-frame {
+        transform: scale(0.88); /* Shrinks login button slightly for narrow screens */
+        transform-origin: top center;
+    }
 }
