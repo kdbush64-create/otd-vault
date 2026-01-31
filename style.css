@@ -187,14 +187,6 @@ header h1 {
 /* 11. UTTERANCES MOBILE FIXES */
 .utterances { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
 
-@media (max-width: 420px) {
-    .comment-module { padding: 45px 10px 15px 10px; }
-    .utterances-frame {
-        transform: scale(0.92);
-        transform-origin: top center;
-    }
-}
-
 /* 12. SURVEILLANCE FEED (VISUAL UPLINK) */
 .surveillance-wrapper {
     margin-top: 30px;
@@ -203,19 +195,17 @@ header h1 {
     background: rgba(0, 0, 0, 0.2);
 }
 
-/* Header container for REC and Stardate */
 .feed-header {
     display: flex;
-    justify-content: space-between; /* This pushes REC left and Clock right */
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
     font-weight: bold;
     font-size: 0.85rem;
 }
 
-/* Force the Clock to match the Neon Green REC button */
 #stardate {
-    color: var(--accent) !important; 
+    color: var(--accent) !important;
     text-shadow: 0 0 5px var(--accent);
 }
 
@@ -225,122 +215,25 @@ header h1 {
     text-shadow: 0 0 5px var(--accent);
 }
 
-.feed-container {
-    border: 1px solid var(--primary-dim);
-    filter: grayscale(100%) contrast(1.1);
-    transition: all 0.4s ease-in-out;
-}
-
-.feed-container:hover {
-    filter: grayscale(0%) contrast(1);
-    box-shadow: 0 0 20px var(--accent);
-    border-color: var(--accent);
-}
-
-/* 13. BUTTON THEME ENFORCEMENT */
-.submit-btn, .filter-btn {
-    background-color: var(--primary) !important;
-    color: #000 !important;
-    border: 1px solid var(--primary) !important;
-    padding: 5px 10px;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-
-/* 14. MOBILE OPTIMIZATIONS */
-@media (max-width: 768px) {
-    body {
-        -webkit-tap-highlight-color: transparent;
-    }
-
-    /* FORCED FLEX: This ensures the container actually uses space-between */
-    .surveillance-wrapper .feed-header {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        width: 100% !important;
-        padding: 0 5px !important;
-    }
-
-    /* FORCED COLOR: Target the spans directly for the green glow */
-    .feed-header span.blink, 
-    .feed-header #stardate {
-        color: var(--accent) !important;
-        text-shadow: 0 0 5px var(--accent) !important;
-        font-size: 0.8rem !important;
-        display: inline-block !important;
-    }
-
-    /* Ensure the timestamp doesn't wrap to a new line */
-    #stardate {
-        text-align: right !important;
-        white-space: nowrap !important;
-    }
-
-    /* Mobile-optimized buttons */
-    .submit-btn, .filter-btn {
-        padding: 12px 15px !important;
-        font-size: 0.85rem !important;
-        flex: 1 1 40% !important;
-        margin: 4px !important;
-    }
-
-    /* Maintain the Uplink visibility */
-    .comment-module::after {
-        font-size: 0.6rem !important;
-        top: 12px !important;
-        right: 10px !important;
-    }
-}
-
-/* --- DESKTOP LOG CONTENT FIXES --- */
-
-/* 1. Prevent Text Overflow */
+/* 13. LOG CONTENT FIXES (DESKTOP) */
 .blog-post, #content {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    max-width: 100%;
+    max-width: 100%; /* Fixes the horizontal overflow */
 }
 
-/* 2. Restore Bold Titles */
-.blog-post strong, 
-.blog-post b {
-    color: var(--primary); /* Keep titles amber */
+.blog-post strong, .blog-post b {
+    color: var(--primary); /* Keeps titles Amber by default */
     font-weight: 900 !important;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
-/* 3. Neon Green Scoring & Status */
-/* Targets lines starting with STATUS, SUMMARY, or THE_VERDICT */
-.blog-post p {
-    margin-bottom: 1.2rem;
-}
-
-/* This targets the specific "Neon Green" look for your ratings */
-.blog-post strong:contains("STATUS"),
-.blog-post strong:contains("SUMMARY"),
-.blog-post strong:contains("VERDICT"),
-.blog-post strong:contains("PROPOSED_PATCH") {
-    color: var(--accent) !important;
-    text-shadow: 0 0 5px var(--accent);
-}
-
-/* 4. Horizontal Rule Fix (The line under the verdict) */
 .blog-post hr {
     border: none;
     border-top: 1px solid var(--border);
     margin: 20px 0;
 }
 
-/* 5. List Indentation (Bullet points) */
-.blog-post ul, .blog-post ol {
+.blog-post ul {
     padding-left: 20px;
-    margin-bottom: 15px;
-}
-
-.blog-post li {
-    margin-bottom: 8px;
 }
