@@ -1,21 +1,47 @@
-# GEAR_RECON: RESMED_N30I_SYSTEM_AUDIT
-**DATE:** 2026.01.30  
-**MODEL:** N30i (Nasal Cradle / Top-of-Head Tube)  
-**ASSET_CLASS:** MEDICAL_DURABLE_GOODS  
-**AUDIT_TYPE:** PNEUMATIC_&_STABILITY_RECON
-
+---
+type: "Gear"
+category: "Review"
+item: "ResMed N30i"
+brand: "ResMed"
+rating: 6.6/10
+durability: "Medium"
 ---
 
-### > SYSTEM_RATING
-| Metric | Score | Technical Observation |
-| :--- | :--- | :--- |
-| **PNEUMATIC_FLOW** | 9/10 | Dual-sided frame ensures air delivery even if one side is compressed. |
-| **FIELD_OF_VISION** | 10/10 | Zero-obstruction design; optimal for "Observational" tasks (Reading/TV). |
-| **STABILITY_LOGIC** | 2/10 | "Accordion" strap fails to maintain tension against lateral movement. |
-| **SEAL_RECOVERY** | 4/10 | Once breached by movement, the cradle rarely self-aligns. |
-| **V64_COMFORT_INDEX** | 8/10 | Minimalist footprint; low "claustrophobia" variables. |
+# GEAR_RECON: RESMED_N30I_SYSTEM_AUDIT
 
-**TOTAL_SYSTEM_STABILITY: 66%**
+![[ResMed N30i Front View]](images/resmed-n30i-main.jpg)
+
+### > SYSTEM_RATING
+
+<div class="rating-row">
+    <div class="rating-text">**PNEUMATIC_FLOW:** Dual-sided frame ensures air delivery even if one side is compressed.</div>
+    <div class="rating-score">9/10</div>
+</div>
+
+<div class="rating-row">
+    <div class="rating-text">**FIELD_OF_VISION:** Zero-obstruction design; optimal for "Observational" tasks (Reading/TV).</div>
+    <div class="rating-score">10/10</div>
+</div>
+
+<div class="rating-row">
+    <div class="rating-text">**STABILITY_LOGIC:** "Accordion" strap fails to maintain tension against lateral movement.</div>
+    <div class="rating-score">2/10</div>
+</div>
+
+<div class="rating-row">
+    <div class="rating-text">**SEAL_RECOVERY:** Once breached by movement, the cradle rarely self-aligns.</div>
+    <div class="rating-score">4/10</div>
+</div>
+
+<div class="rating-row">
+    <div class="rating-text">**V64_COMFORT_INDEX:** Minimalist footprint; low "claustrophobia" variables.</div>
+    <div class="rating-score">8/10</div>
+</div>
+
+<div class="rating-row">
+    <div class="rating-text">**TOTAL_SYSTEM_STABILITY:** Overall reliability for active sleepers.</div>
+    <div class="rating-score">66%</div>
+</div>
 
 ---
 
@@ -28,7 +54,7 @@ The ResMed N30i is an engineering marvel that fails at the **Physical Interface 
 
 #### PROPOSED_PATCH (REDESIGN_REQS)
 * **Rigid Rear Spine:** The elastic strap should be replaced with a semi-rigid "Halo" to prevent the frame from sliding forward.
-* **Friction-Lock Frame:** The silicone frame sections that pass over the temples should have a higher-friction texture to "bond" with the user's skin/hair, preventing the swivel from pulling the mask out of alignment.
+* **Friction-Lock Frame:** The silicone frame sections that pass over the temples should have a higher-friction texture to "bond" with the user's skin/hair.
 
 ---
 
