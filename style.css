@@ -231,34 +231,41 @@ header h1 {
 
 /* 14. MOBILE OPTIMIZATIONS */
 @media (max-width: 768px) {
-    /* Force Dark Mode on Mobile if system prefers dark */
     body {
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* Adjust Visual Uplink for Touch Screens */
+    /* FIX: Ensure the header container flexes correctly on mobile */
+    .feed-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        width: 100%;
+        padding: 0 5px;
+    }
+
+    /* FIX: Force the mobile clock to be Green */
+    #stardate {
+        color: var(--accent) !important;
+        text-shadow: 0 0 5px var(--accent);
+        display: inline-block;
+    }
+
+    /* Visual Uplink touch behavior */
     .feed-container {
-        filter: grayscale(0%) contrast(1); /* Keep colors visible on mobile for better UX */
+        filter: grayscale(0%) contrast(1);
         border: 1px solid var(--accent);
         box-shadow: 0 0 10px var(--accent);
         margin-bottom: 10px;
     }
 
-    /* If you want B&W on mobile that colorizes when tapped */
-    .feed-container:active {
-        filter: grayscale(0%) contrast(1.1);
-        box-shadow: 0 0 25px var(--accent);
-    }
-
-    /* Fix Button sizing for thumbs */
+    /* Thumb-friendly buttons */
     .submit-btn, .filter-btn {
         padding: 12px 20px !important;
         font-size: 0.9rem;
         margin: 5px;
-        flex: 1 1 40%; /* Makes buttons stack nicely on small screens */
+        flex: 1 1 40%;
     }
 
-    /* Ensure the blinking uplink stays visible in the feedback box */
     .comment-module {
         padding-top: 50px;
     }
@@ -269,4 +276,3 @@ header h1 {
         right: 10px;
     }
 }
-
