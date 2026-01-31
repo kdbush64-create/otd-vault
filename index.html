@@ -59,11 +59,38 @@
             </section>
 
             <aside class="log-directory">
-                <h3>> LOG_DIRECTORY</h3>
-                <ul class="file-list" id="log-list">
-                    <li>[ SCANNING_VAULT... ]</li>
-                </ul>
-            </aside>
+    <h3>> LOG_DIRECTORY</h3>
+    <ul class="file-list" id="log-list">
+        <li>[ SCANNING_VAULT... ]</li>
+    </ul>
+
+    <div class="surveillance-wrapper">
+        <h3>> VISUAL_UPLINK</h3>
+        <div class="feed-header">
+            <span class="blink">● REC</span>
+            <span id="stardate"></span>
+        </div>
+        <div class="feed-container">
+            <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+        </div>
+        <div class="feed-footer">SOURCE: INSTAGRAM_API_V1</div>
+    </div>
+</aside>
+
+<script>
+  (() => {
+    const d=document,s=d.createElement("script");s.type="module";
+    s.src="https://w.behold.so/widget.js";d.head.append(s);
+  })();
+
+  // Small script for the "Stardate" timestamp
+  function updateClock() {
+    const d = new Date();
+    document.getElementById('stardate').innerText = d.getHours() + ":" + d.getMinutes().toString().padStart(2, '0') + ":" + d.getSeconds().toString().padStart(2, '0');
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+</script>
         </main>
 
         <footer>
@@ -160,3 +187,4 @@
     </script>
 </body>
 </html>
+
