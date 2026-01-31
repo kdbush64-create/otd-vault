@@ -83,19 +83,19 @@ html {
 .hero-container {
     position: relative;
     width: 100%;
-    height: 300px; /* Forces a consistent height so it doesn't "grow" */
+    /* Remove the fixed 300px height so the image can dictate the shape */
+    height: auto; 
     margin-bottom: 25px;
     border: 2px solid var(--border);
-    overflow: hidden; 
     background: #000;
+    line-height: 0; /* Prevents tiny ghost-padding at the bottom of the image */
 }
 
 .hero-container img {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* Keeps image from stretching while filling the box */
-    opacity: 0.5;
+    height: auto; /* This ensures the entire image is shown in its original ratio */
+    opacity: 0.8; /* Increased opacity slightly so the "entire" image is clearer */
 }
 
 /* 6. HEADER */
@@ -298,6 +298,7 @@ header h1 {
     color: var(--primary) !important;
     box-shadow: 0 0 10px var(--primary);
 }
+
 
 
 
