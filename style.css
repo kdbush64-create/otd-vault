@@ -319,15 +319,24 @@ footer a:hover {
     color: var(--accent) !important; /* Ensures time is also the same green */
 }
 
+/* --- SURVEILLANCE FEED: SECURITY BADGE STYLE --- */
 .feed-container {
     border: 1px solid var(--primary-dim);
-    filter: grayscale(40%) sepia(20%);
+    filter: grayscale(100%) contrast(1.1); /* Hard Grayscale */
     transition: all 0.4s ease;
+    cursor: crosshair; /* Changes cursor to a targeting reticle */
 }
 
+/* Square off the images inside the widget */
+behold-widget img {
+    border-radius: 2px !important;
+}
+
+/* THE GLOW: When you hover over a "Surveillance" photo */
 .feed-container:hover {
-    filter: grayscale(0%) sepia(0%);
-    box-shadow: 0 0 15px var(--primary-dim);
+    filter: grayscale(0%) contrast(1); /* Return to color */
+    box-shadow: 0 0 20px var(--accent); /* Neon Green Glow */
+    border-color: var(--accent);
 }
 
 .feed-footer {
@@ -365,3 +374,22 @@ behold-widget { display: block; width: 100%; }
     pointer-events: none;
 }
 
+/* --- COMMENT UPLINK FRAME --- */
+.comment-module {
+    margin-top: 50px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.comment-module::after {
+    content: "SECURE_UPLINK_READY";
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--bg);
+    padding: 0 10px;
+    font-size: 0.6rem;
+    color: var(--accent);
+}
