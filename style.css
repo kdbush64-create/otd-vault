@@ -191,6 +191,20 @@ header h1 .sub-header {
   from, to { border-color: transparent }
   50% { border-color: #ffb000; }
 }
+/* --- SYSTEM GLITCH EFFECT --- */
+.warning-banner {
+    animation: glitch 5s infinite;
+}
+
+@keyframes glitch {
+    0% { opacity: 1; transform: skew(0deg); }
+    2% { opacity: 0.8; transform: skew(10deg); }
+    4% { opacity: 1; transform: skew(0deg); }
+    98% { opacity: 1; transform: skew(0deg); }
+    99% { opacity: 0.5; transform: skew(-20deg); }
+    100% { opacity: 1; transform: skew(0deg); }
+}
 
 .
+
 
