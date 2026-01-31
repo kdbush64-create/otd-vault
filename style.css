@@ -49,23 +49,24 @@ header h1 span.typewriter {
     overflow: hidden;
     border-right: .15em solid #ffb000;
     text-transform: uppercase;
-    width: 0; /* Keeps it hidden until animation starts */
+    width: 0; 
     vertical-align: bottom;
 }
 
-/* Sequential Animation: OTD Types first */
+/* Line 1: OTD Types first, then pulses as a status indicator */
 header h1 span.typewriter:first-child {
     animation: 
       typing 1s steps(10, end) forwards,
-      blink-caret .75s step-end infinite;
+      blink-caret .75s step-end infinite,
+      status-blink 2s linear infinite 1s; /* Pulse starts after 1s typing */
 }
 
-/* Sequential Animation: PERSONAL_VAULT waits for OTD */
+/* Line 2: PERSONAL_VAULT waits for OTD */
 header h1 span.delay-type {
     animation: 
       typing 2s steps(20, end) forwards,
       blink-caret .75s step-end infinite;
-    animation-delay: 1.2s; /* Delays start until OTD is done */
+    animation-delay: 1.2s; 
 }
 
 .warning-banner {
@@ -77,7 +78,7 @@ header h1 span.delay-type {
     animation: glitch 5s infinite;
 }
 
-/* 4. HERO SECTION (STABLE FIX) */
+/* 4. HERO SECTION */
 #personal-identity .hero-container {
     position: relative;
     width: 100%;
@@ -170,7 +171,7 @@ header h1 span.delay-type {
     }
 }
 
-/* 7. LOG LINKS & DIRECTORY */
+/* 7. LOG LINKS */
 .file-list {
     list-style: none;
     padding: 0;
@@ -197,6 +198,11 @@ header h1 span.delay-type {
 @keyframes blink-caret {
   from, to { border-color: transparent; }
   50% { border-color: #ffb000; }
+}
+
+@keyframes status-blink {
+    0%, 100% { color: #ffb000; text-shadow: 0 0 8px rgba(255, 176, 0, 0.8); }
+    50% { color: rgba(255, 176, 0, 0.4); text-shadow: none; }
 }
 
 @keyframes glitch {
