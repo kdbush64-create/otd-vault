@@ -53,15 +53,13 @@ header h1 span.typewriter {
     vertical-align: bottom;
 }
 
-/* Line 1: OTD Types first, then pulses as a status indicator */
 header h1 span.typewriter:first-child {
     animation: 
       typing 1s steps(10, end) forwards,
       blink-caret .75s step-end infinite,
-      status-blink 2s linear infinite 1s; /* Pulse starts after 1s typing */
+      status-blink 2s linear infinite 1s;
 }
 
-/* Line 2: PERSONAL_VAULT waits for OTD */
 header h1 span.delay-type {
     animation: 
       typing 2s steps(20, end) forwards,
@@ -136,7 +134,7 @@ header h1 span.delay-type {
     font-family: inherit;
 }
 
-/* 6. VAULT LAYOUT */
+/* 6. VAULT LAYOUT & CONTENT FIXES */
 .vault-layout {
     display: flex;
     flex-direction: column;
@@ -147,6 +145,32 @@ header h1 span.delay-type {
 .log-display {
     width: 100%;
     min-height: 100px;
+    /* FIX: Prevents text and long words from punching through the right border */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    padding-right: 15px; 
+}
+
+/* --- MARKDOWN CONTENT STYLING --- */
+/* FIX: Pulls bullets and numbers INSIDE the frame so they don't hang over the left border */
+.log-display ul, .log-display ol {
+    list-style-position: inside;
+    margin-bottom: 15px;
+    padding-left: 5px;
+}
+
+.log-display li {
+    margin-bottom: 8px;
+}
+
+.log-display h3 {
+    margin: 20px 0 10px 0;
+}
+
+.log-display hr {
+    border: none;
+    border-top: 1px solid #5c3d2e;
+    margin: 20px 0;
 }
 
 .log-directory {
