@@ -110,6 +110,25 @@ header h1 {
 }
 
 /* 7. VAULT LAYOUT & DIRECTORY FIXES */
+/* FORCE VISIBILITY ON LOG LINKS */
+#log-list li {
+    list-style: none;
+    margin-bottom: 8px;
+    display: block !important;
+    visibility: visible !important;
+}
+
+#log-list a.log-link {
+    color: var(--secondary) !important; /* This is your Neon Blue */
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block !important;
+}
+
+#log-list a.log-link:hover {
+    color: var(--accent) !important; /* Flashes Green on hover */
+    text-shadow: 0 0 8px var(--accent);
+}
 .vault-layout { display: flex; flex-direction: column; gap: 20px; }
 
 /* FIX: Ensure links (.md files) are visible and follow theme */
@@ -275,3 +294,4 @@ header h1 {
         right: 10px !important;
     }
 }
+
