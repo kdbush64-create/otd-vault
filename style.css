@@ -245,3 +245,38 @@ footer {
     border-top: 1px solid #333;
     padding-top: 20px;
 }
+/* --- GEAR REVIEW RATING SYSTEM --- */
+.rating-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(92, 61, 46, 0.3);
+}
+
+.rating-text {
+    flex: 1;
+    color: #ffb000;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.rating-score {
+    color: #00ff41; /* Neon Green */
+    font-weight: bold;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    font-family: 'Courier New', Courier, monospace;
+    text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+    min-width: 60px; /* Slight increase to handle "10/10" comfortably */
+    text-align: right;
+}
+
+@media (max-width: 480px) {
+    .rating-score {
+        font-size: 1rem;
+        min-width: 50px;
+    }
+}
