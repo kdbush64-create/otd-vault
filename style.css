@@ -295,3 +295,52 @@ header h1 {
     }
 }
 
+/* --- DESKTOP LOG CONTENT FIXES --- */
+
+/* 1. Prevent Text Overflow */
+.blog-post, #content {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+/* 2. Restore Bold Titles */
+.blog-post strong, 
+.blog-post b {
+    color: var(--primary); /* Keep titles amber */
+    font-weight: 900 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 3. Neon Green Scoring & Status */
+/* Targets lines starting with STATUS, SUMMARY, or THE_VERDICT */
+.blog-post p {
+    margin-bottom: 1.2rem;
+}
+
+/* This targets the specific "Neon Green" look for your ratings */
+.blog-post strong:contains("STATUS"),
+.blog-post strong:contains("SUMMARY"),
+.blog-post strong:contains("VERDICT"),
+.blog-post strong:contains("PROPOSED_PATCH") {
+    color: var(--accent) !important;
+    text-shadow: 0 0 5px var(--accent);
+}
+
+/* 4. Horizontal Rule Fix (The line under the verdict) */
+.blog-post hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+}
+
+/* 5. List Indentation (Bullet points) */
+.blog-post ul, .blog-post ol {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.blog-post li {
+    margin-bottom: 8px;
+}
