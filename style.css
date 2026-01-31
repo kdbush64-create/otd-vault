@@ -81,9 +81,9 @@ body {
     box-shadow: 0 0 5px var(--accent);
 }
 
-/* 8. LOG LINKS & VAULT FILTERS (Restored Colors) */
+/* 8. LOG LINKS & VAULT FILTERS */
 .log-link {
-    color: var(--secondary) !important; 
+    color: var(--secondary) !important; /* Forces the Blue links */
     text-decoration: none;
     display: block;
     padding: 8px 0;
@@ -92,17 +92,34 @@ body {
 .log-link::before { content: "[ "; }
 .log-link::after { content: " ]"; }
 
-.vault-filters .submit-btn {
-    background-color: var(--primary) !important;
-    color: #000 !important;
+/* Target the filter buttons (ALL, CHOW, COORD, GEAR) */
+.vault-filters .submit-btn, 
+button.submit-btn {
+    display: inline-block;
+    background-color: var(--primary) !important; /* Force Amber Background */
+    color: #000000 !important;                  /* Force Black Text */
     border: 1px solid var(--primary);
-    padding: 4px 10px;
+    padding: 6px 12px;
     font-family: inherit;
     font-size: 0.75rem;
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
     margin-right: 5px;
+    margin-bottom: 5px;
+    
+    /* Neutralize Mobile Browser Defaults */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0; 
+    box-shadow: none;
+}
+
+.vault-filters .submit-btn:hover {
+    background-color: var(--bg) !important;
+    color: var(--primary) !important;
+    box-shadow: 0 0 10px var(--primary);
 }
 
 /* 9. ANIMATIONS */
@@ -167,3 +184,4 @@ body {
     animation: rec-pulse 2s ease-in-out infinite !important;
     display: inline-block;
 }
+
