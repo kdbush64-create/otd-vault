@@ -184,19 +184,34 @@ header h1 {
     background: rgba(0, 0, 0, 0.2);
 }
 
+/* Header container for REC and Stardate */
+.feed-header {
+    display: flex;
+    justify-content: space-between; /* This pushes REC left and Clock right */
+    align-items: center;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+/* Force the Clock to match the Neon Green REC button */
+#stardate {
+    color: var(--accent) !important; 
+    text-shadow: 0 0 5px var(--accent);
+}
+
 .blink {
     color: var(--accent) !important;
     animation: rec-pulse 2s ease-in-out infinite;
+    text-shadow: 0 0 5px var(--accent);
 }
 
-/* FEED IMAGE STYLES - FIXES THE B&W ISSUE */
 .feed-container {
     border: 1px solid var(--primary-dim);
     filter: grayscale(100%) contrast(1.1);
     transition: all 0.4s ease-in-out;
 }
 
-/* RESTORED: Glow and Colorizing on Hover */
 .feed-container:hover {
     filter: grayscale(0%) contrast(1);
     box-shadow: 0 0 20px var(--accent);
@@ -254,3 +269,4 @@ header h1 {
         right: 10px;
     }
 }
+
