@@ -207,6 +207,27 @@ header h1 span.delay-type {
     min-width: 60px;
     text-align: right;
 }
+/* --- VAULT FILTER BUTTONS (MATCHING CONTACT PAGE STYLE) --- */
+.vault-filters .submit-btn {
+    background-color: var(--primary) !important; /* Amber in Dark, Dark-Brown in Light */
+    color: var(--bg) !important;                /* Black in Dark, White in Light */
+    border: 1px solid var(--primary);
+    padding: 6px 15px;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.vault-filters .submit-btn:hover {
+    background-color: transparent !important;
+    color: var(--primary) !important;
+    box-shadow: 0 0 10px var(--primary);
+    transform: translateY(-1px);
+}
 
 /* 9. ANIMATIONS */
 @keyframes typing { from { width: 0; } to { width: 100%; } }
@@ -249,3 +270,4 @@ footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1
 [data-theme="light"] .terminal-overlay {
     opacity: 0.25;
 }
+
