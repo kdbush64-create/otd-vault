@@ -235,44 +235,43 @@ header h1 {
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* FIX: Ensure the header container flexes correctly on mobile */
-    .feed-header {
+    /* FORCED FLEX: This ensures the container actually uses space-between */
+    .surveillance-wrapper .feed-header {
         display: flex !important;
+        flex-direction: row !important;
         justify-content: space-between !important;
-        width: 100%;
-        padding: 0 5px;
+        align-items: center !important;
+        width: 100% !important;
+        padding: 0 5px !important;
     }
 
-    /* FIX: Force the mobile clock to be Green */
-    #stardate {
+    /* FORCED COLOR: Target the spans directly for the green glow */
+    .feed-header span.blink, 
+    .feed-header #stardate {
         color: var(--accent) !important;
-        text-shadow: 0 0 5px var(--accent);
-        display: inline-block;
+        text-shadow: 0 0 5px var(--accent) !important;
+        font-size: 0.8rem !important;
+        display: inline-block !important;
     }
 
-    /* Visual Uplink touch behavior */
-    .feed-container {
-        filter: grayscale(0%) contrast(1);
-        border: 1px solid var(--accent);
-        box-shadow: 0 0 10px var(--accent);
-        margin-bottom: 10px;
+    /* Ensure the timestamp doesn't wrap to a new line */
+    #stardate {
+        text-align: right !important;
+        white-space: nowrap !important;
     }
 
-    /* Thumb-friendly buttons */
+    /* Mobile-optimized buttons */
     .submit-btn, .filter-btn {
-        padding: 12px 20px !important;
-        font-size: 0.9rem;
-        margin: 5px;
-        flex: 1 1 40%;
+        padding: 12px 15px !important;
+        font-size: 0.85rem !important;
+        flex: 1 1 40% !important;
+        margin: 4px !important;
     }
 
-    .comment-module {
-        padding-top: 50px;
-    }
-    
+    /* Maintain the Uplink visibility */
     .comment-module::after {
-        font-size: 0.6rem;
-        top: 15px;
-        right: 10px;
+        font-size: 0.6rem !important;
+        top: 12px !important;
+        right: 10px !important;
     }
 }
