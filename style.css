@@ -1,17 +1,15 @@
 /* 1. THEME VARIABLES & ADA DEFAULTS */
 :root {
-    /* DARK THEME (Default) */
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
-    --primary: #ffb000;         /* Amber */
+    --primary: #ffb000;
     --primary-dim: rgba(255, 176, 0, 0.7);
-    --secondary: #00eeff;       /* Blue links */
-    --accent: #00ff41;          /* Neon Green */
+    --secondary: #00eeff;
+    --accent: #00ff41;
     --border: #5c3d2e;
     --shadow: rgba(0, 0, 0, 0.8);
 }
 
-/* LIGHT THEME OVERRIDES */
 [data-theme="light"] {
     --bg: #f4f4f4;
     --container-bg: #ffffff;
@@ -33,7 +31,6 @@
         scroll-behavior: auto !important;
         transition-duration: 0s !important;
     }
-    header h1 span.typewriter { width: 100% !important; border-right: none !important; }
 }
 
 /* 2. GLOBAL RESET */
@@ -49,7 +46,7 @@ body {
     padding: 15px;
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow-x: hidden; /* Added to prevent global horizontal scroll */
+    overflow-x: hidden;
 }
 
 /* 3. THE CHASSIS */
@@ -65,7 +62,7 @@ body {
     overflow: hidden; 
 }
 
-/* 4. THEME TOGGLE BUTTON */
+/* 4. THEME TOGGLE */
 .theme-switch-wrapper {
     margin-bottom: 15px;
     display: flex;
@@ -77,14 +74,13 @@ body {
     background: transparent;
     border: 1px solid var(--accent);
     color: var(--accent);
-    padding: 6px 12px;
+    padding: 8px 14px; /* Slightly larger for mobile tap */
     cursor: pointer;
     font-family: inherit;
     font-size: 0.8rem;
     font-weight: bold;
     text-transform: uppercase;
     box-shadow: 0 0 5px var(--accent);
-    transition: all 0.2s ease;
 }
 
 /* 5. HERO SECTION */
@@ -129,7 +125,7 @@ header h1 span.typewriter {
 }
 
 header h1 span.typewriter:first-child {
-    animation: typing 1s steps(10, end) forwards, blink-caret .75s step-end infinite, status-blink 2s linear infinite 1s;
+    animation: typing 1s steps(10, end) forwards, blink-caret .75s step-end infinite;
 }
 
 header h1 span.delay-type {
@@ -147,8 +143,7 @@ header h1 span.delay-type {
 }
 
 /* 7. VAULT LAYOUT */
-.vault-layout { display: flex; flex-direction: column; gap: 20px; min-height: 400px; }
-.log-display { width: 100%; overflow-wrap: break-word; padding-right: 5px; }
+.vault-layout { display: flex; flex-direction: column; gap: 20px; }
 
 @media (min-width: 850px) {
     .vault-layout { flex-direction: row; }
@@ -156,61 +151,38 @@ header h1 span.delay-type {
     .log-directory { flex: 1; border-top: none; border-left: 1px dashed var(--border); padding-left: 20px; padding-top: 0; }
 }
 
-/* 8. LOG LINKS & RATING */
-.log-link { color: var(--secondary); text-decoration: none; display: block; padding: 8px 0; font-size: 0.95rem; }
-.log-link::before { content: "[ "; }
-.log-link::after { content: " ]"; }
-
-.rating-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 12px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.rating-score { color: var(--accent); font-weight: bold; text-shadow: 0 0 8px var(--accent); text-align: right; }
-
 /* 9. ANIMATIONS */
 @keyframes typing { from { width: 0; } to { width: 100%; } }
 @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--primary); } }
-@keyframes status-blink {
-    0%, 100% { color: var(--primary); text-shadow: 0 0 8px var(--primary); }
-    50% { color: var(--primary-dim); text-shadow: none; }
-}
 @keyframes glitch {
     0%, 98%, 100% { opacity: 1; transform: skew(0deg); }
     2%, 99% { opacity: 0.8; transform: skew(5deg); }
 }
+
+/* KEY PULSE ANIMATION */
 @keyframes rec-pulse {
-    0%, 100% { opacity: 1; filter: brightness(1.2); }
-    50% { opacity: 0.4; filter: brightness(0.8); }
+    0%, 100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 2px var(--accent)); }
+    50% { opacity: 0.3; filter: brightness(0.7); }
 }
 
-/* 10. TERMINAL SCANLINE OVERLAY */
+/* 10. TERMINAL OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-    background-size: 100% 3px, 3px 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 3px;
     pointer-events: none;
     z-index: 100;
 }
 
 /* 11. FEEDBACK & COMMENTS */
-footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1px solid var(--border); padding-top: 20px; }
-
 .comment-module {
     margin-top: 50px;
-    padding: 20px;
+    padding: 25px 20px;
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
-    /* --- KEY FIXES FOR MOBILE --- */
-    overflow-x: hidden; 
-    width: 100%;
+    overflow: hidden;
 }
 
 .comment-module::before {
@@ -222,6 +194,7 @@ footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1
     letter-spacing: 1px;
 }
 
+/* FIXED UPLINK BLINKING */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
@@ -232,31 +205,24 @@ footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1
     font-size: 0.6rem;
     font-weight: bold;
     color: var(--accent);
-    animation: rec-pulse 2s ease-in-out infinite;
+    animation: rec-pulse 2s ease-in-out infinite !important;
+    text-shadow: 0 0 5px var(--accent);
 }
 
-/* 11.5 THE "GHOST" IN THE SHELL: UTTERANCES OVERRIDES */
-.utterances { 
-    max-width: 100% !important; 
-    width: 100% !important;
-    margin: 0 !important;
-}
+/* 11.5 UTTERANCES MOBILE FIXES */
+.utterances { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
 
-/* This targets the actual iframe generated by the script */
-.utterances-frame {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-}
-
-/* On very small phones, force the comment box to ignore large margins */
-@media (max-width: 400px) {
-    .comment-module {
-        padding: 10px; /* Reduce module padding to give the button more room */
+@media (max-width: 420px) {
+    .comment-module { padding: 20px 5px; }
+    .utterances-frame {
+        transform: scale(0.92);
+        transform-origin: top center;
+        width: 108.6% !important;
+        margin-left: -4.3% !important;
     }
 }
 
-/* 12. VISUAL SURVEILLANCE FEED */
+/* 12. SURVEILLANCE FEED */
 .surveillance-wrapper {
     margin-top: 30px;
     border: 1px solid var(--border);
@@ -268,15 +234,20 @@ footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1
     display: flex;
     justify-content: space-between;
     font-size: 0.7rem;
-    color: var(--accent) !important;
+    color: var(--accent);
     margin-bottom: 8px;
-    padding: 0 5px;
+}
+
+/* FIXED REC BUTTON BLINKING */
+.blink {
+    color: var(--accent) !important;
+    animation: rec-pulse 2s ease-in-out infinite !important;
+    display: inline-block;
 }
 
 .feed-container {
     border: 1px solid var(--primary-dim);
     filter: grayscale(100%) contrast(1.1);
-    transition: all 0.4s ease;
 }
 
 .feed-container:hover {
@@ -285,40 +256,8 @@ footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1
     border-color: var(--accent);
 }
 
-/* --- SECURITY BADGE AVATAR FILTER --- */
+/* AVATAR STYLE */
 .utterances .avatar {
-    filter: grayscale(100%) contrast(1.2) brightness(1.1);
+    filter: grayscale(100%) contrast(1.2);
     border: 1px solid var(--accent);
-    border-radius: 2px !important;
-}
-
-/* 11.6 THE RESET: FORCE IFRAME TO SHRINK */
-@media (max-width: 400px) {
-    .comment-module {
-        padding: 10px 5px; /* Minimal padding to save space */
-    }
-
-    /* Target the container Utterances creates */
-    .utterances {
-        width: 100% !important;
-        display: flex;
-        justify-content: center;
-    }
-
-    /* THE FIX: If it still overflows, scale the whole thing down */
-    .utterances-frame {
-        transform: scale(0.9); /* Shrinks the widget to 90% size */
-        transform-origin: top center;
-        width: 111% !important; /* Counter-adjust width to prevent gaps */
-        margin-left: -5.5% !important; /* Center the scaled iframe */
-    }
-}
-
-/* Extra small screens (iPhone SE, etc) */
-@media (max-width: 350px) {
-    .utterances-frame {
-        transform: scale(0.85);
-        width: 118% !important;
-        margin-left: -9% !important;
-    }
 }
