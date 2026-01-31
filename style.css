@@ -184,8 +184,12 @@ header h1 {
     animation: rec-pulse 2s ease-in-out infinite;
 }
 
-/* 11. UTTERANCES MOBILE FIXES */
-.utterances { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
+/* 11. UTTERANCES & COMMENTS FIX */
+.utterances { 
+    max-width: 100% !important; 
+    width: 100% !important; 
+    margin: 0 !important; 
+}
 
 /* 12. SURVEILLANCE FEED (VISUAL UPLINK) */
 .surveillance-wrapper {
@@ -215,25 +219,48 @@ header h1 {
     text-shadow: 0 0 5px var(--accent);
 }
 
-/* 13. LOG CONTENT FIXES (DESKTOP) */
-.blog-post, #content {
+/* 13. LOG CONTENT FIX (The "Outside Numbers" Fix) */
+.blog-post {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    max-width: 100%; /* Fixes the horizontal overflow */
+    max-width: 100%;
+    padding: 0 10px; /* Gives internal breathing room */
 }
 
+/* FIX: Pulls numbers/bullets back inside the container border */
+.blog-post ol, .blog-post ul {
+    list-style-position: inside; 
+    padding-left: 5px;
+    margin-bottom: 15px;
+}
+
+.blog-post li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+/* Force Bold Titles for Desktop */
 .blog-post strong, .blog-post b {
-    color: var(--primary); /* Keeps titles Amber by default */
+    color: var(--primary);
     font-weight: 900 !important;
     text-transform: uppercase;
 }
 
-.blog-post hr {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 20px 0;
+/* 14. VIEW TYPE BUTTONS (The Amber Theme Fix) */
+.vault-filters .submit-btn {
+    background-color: var(--primary) !important;
+    color: #000000 !important;
+    border: 1px solid var(--primary) !important;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
 }
 
-.blog-post ul {
-    padding-left: 20px;
+.vault-filters .submit-btn:hover {
+    background-color: transparent !important;
+    color: var(--primary) !important;
+    box-shadow: 0 0 10px var(--primary);
 }
