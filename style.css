@@ -283,5 +283,28 @@ footer a:hover {
 [data-theme="light"] .terminal-overlay {
     opacity: 0.25;
 }
+/* --- UTTERANCES MODULE STYLING --- */
+.comment-module {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--border);
+}
+
+/* This targets the container Utterances creates */
+.utterances {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Optional: Add a small "Mod" notice to set the tone */
+.comment-module::before {
+    content: "> FEEDBACK_UPLINK_ACTIVE: MODERATION_ENABLED";
+    display: block;
+    font-size: 0.7rem;
+    color: var(--primary-dim);
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
 
 
