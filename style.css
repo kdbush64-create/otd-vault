@@ -242,6 +242,19 @@ header h1 span.delay-type {
 }
 
 footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1px solid var(--border); padding-top: 20px; }
+/* FEEDBACK LINK STYLING */
+footer a {
+    color: var(--accent); /* Keeps it in that nice Neon/Forest Green */
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent);
+    transition: all 0.2s ease;
+}
+
+footer a:hover {
+    color: var(--primary);
+    border-bottom-style: solid;
+    text-shadow: 0 0 5px var(--primary-dim);
+}
 
 /* 10. TERMINAL SCANLINE OVERLAY */
 .terminal-overlay {
@@ -270,4 +283,5 @@ footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1
 [data-theme="light"] .terminal-overlay {
     opacity: 0.25;
 }
+
 
