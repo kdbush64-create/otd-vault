@@ -15,15 +15,15 @@
 [data-theme="light"] {
     --bg: #f4f4f4;
     --container-bg: #ffffff;
-    --primary: #7a5400;         /* Darkened for ADA contrast on light bg */
+    --primary: #7a5400;
     --primary-dim: #5c5c5c;
     --secondary: #005f6b;
-    --accent: #008522;          /* Forest Green for readability */
+    --accent: #008522;
     --border: #a3a3a3;
     --shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* REDUCED MOTION (ADA Standard) */
+/* REDUCED MOTION */
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
         animation-delay: -1ms !important;
@@ -49,6 +49,7 @@ body {
     padding: 15px;
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden; /* Added to prevent global horizontal scroll */
 }
 
 /* 3. THE CHASSIS */
@@ -86,17 +87,10 @@ body {
     transition: all 0.2s ease;
 }
 
-#theme-toggle:hover {
-    background: var(--accent);
-    color: #000;
-    box-shadow: 0 0 15px var(--accent);
-}
-
 /* 5. HERO SECTION */
 .hero-container {
     position: relative;
     width: 100%;
-    max-width: 100%; 
     margin-bottom: 25px;
     border: 2px solid var(--border);
     overflow: hidden; 
@@ -107,7 +101,6 @@ body {
     display: block;
     width: 100%;
     height: auto;
-    max-width: 100%;
     opacity: 0.5;
 }
 
@@ -153,24 +146,9 @@ header h1 span.delay-type {
     animation: glitch 5s infinite;
 }
 
-/* 7. VAULT LAYOUT & CONTENT */
+/* 7. VAULT LAYOUT */
 .vault-layout { display: flex; flex-direction: column; gap: 20px; min-height: 400px; }
-
-.log-display {
-    width: 100%;
-    overflow-wrap: break-word;
-    padding-right: 15px; 
-}
-
-.log-display ul, .log-display ol { list-style-position: inside; margin-bottom: 15px; padding-left: 5px; }
-.log-display li { margin-bottom: 8px; }
-.log-display hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-
-.log-directory {
-    width: 100%;
-    border-top: 1px dashed var(--border);
-    padding-top: 20px;
-}
+.log-display { width: 100%; overflow-wrap: break-word; padding-right: 5px; }
 
 @media (min-width: 850px) {
     .vault-layout { flex-direction: row; }
@@ -179,13 +157,7 @@ header h1 span.delay-type {
 }
 
 /* 8. LOG LINKS & RATING */
-.log-link {
-    color: var(--secondary);
-    text-decoration: none;
-    display: block;
-    padding: 8px 0;
-    font-size: 0.95rem;
-}
+.log-link { color: var(--secondary); text-decoration: none; display: block; padding: 8px 0; font-size: 0.95rem; }
 .log-link::before { content: "[ "; }
 .log-link::after { content: " ]"; }
 
@@ -198,35 +170,7 @@ header h1 span.delay-type {
     border-bottom: 1px solid var(--border);
 }
 
-.rating-text { flex: 1; line-height: 1.4; }
-.rating-score {
-    color: var(--accent);
-    font-weight: bold;
-    text-shadow: 0 0 8px var(--accent);
-    min-width: 60px;
-    text-align: right;
-}
-
-.vault-filters .submit-btn {
-    background-color: var(--primary) !important;
-    color: var(--bg) !important;
-    border: 1px solid var(--primary);
-    padding: 6px 15px;
-    font-family: inherit;
-    font-size: 0.7rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: all 0.2s ease;
-}
-
-.vault-filters .submit-btn:hover {
-    background-color: transparent !important;
-    color: var(--primary) !important;
-    box-shadow: 0 0 10px var(--primary);
-    transform: translateY(-1px);
-}
+.rating-score { color: var(--accent); font-weight: bold; text-shadow: 0 0 8px var(--accent); text-align: right; }
 
 /* 9. ANIMATIONS */
 @keyframes typing { from { width: 0; } to { width: 100%; } }
@@ -239,8 +183,6 @@ header h1 span.delay-type {
     0%, 98%, 100% { opacity: 1; transform: skew(0deg); }
     2%, 99% { opacity: 0.8; transform: skew(5deg); }
 }
-
-/* CUSTOM PULSE FOR GREEN REC DOT */
 @keyframes rec-pulse {
     0%, 100% { opacity: 1; filter: brightness(1.2); }
     50% { opacity: 0.4; filter: brightness(0.8); }
@@ -257,31 +199,18 @@ header h1 span.delay-type {
     z-index: 100;
 }
 
-[data-theme="light"] .terminal-overlay { opacity: 0.25; }
-
 /* 11. FEEDBACK & COMMENTS */
 footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1px solid var(--border); padding-top: 20px; }
-footer a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px dashed var(--accent);
-    transition: all 0.2s ease;
-}
 
-footer a:hover {
-    color: var(--primary);
-    border-bottom-style: solid;
-    text-shadow: 0 0 5px var(--primary-dim);
-}
-
-/* --- COMMENT UPLINK FRAME --- */
 .comment-module {
     margin-top: 50px;
     padding: 20px;
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow-x: hidden; /* Prevent horizontal overflow on mobile */
+    /* --- KEY FIXES FOR MOBILE --- */
+    overflow-x: hidden; 
+    width: 100%;
 }
 
 .comment-module::before {
@@ -304,20 +233,27 @@ footer a:hover {
     font-weight: bold;
     color: var(--accent);
     animation: rec-pulse 2s ease-in-out infinite;
-    text-shadow: 0 0 5px var(--accent);
 }
 
-/* 11.5 RESPONSIVE BUTTON FIX (The Fix) */
+/* 11.5 THE "GHOST" IN THE SHELL: UTTERANCES OVERRIDES */
 .utterances { 
     max-width: 100% !important; 
-    margin-left: 0 !important; 
-    margin-right: 0 !important; 
+    width: 100% !important;
+    margin: 0 !important;
 }
 
-/* Ensures the iframe inside doesn't force its own width */
+/* This targets the actual iframe generated by the script */
 .utterances-frame {
     width: 100% !important;
     max-width: 100% !important;
+    margin: 0 !important;
+}
+
+/* On very small phones, force the comment box to ignore large margins */
+@media (max-width: 400px) {
+    .comment-module {
+        padding: 10px; /* Reduce module padding to give the button more room */
+    }
 }
 
 /* 12. VISUAL SURVEILLANCE FEED */
@@ -337,26 +273,10 @@ footer a:hover {
     padding: 0 5px;
 }
 
-.blink {
-    color: var(--accent) !important;
-    animation: rec-pulse 2s ease-in-out infinite;
-    font-weight: bold;
-    filter: brightness(1.2);
-}
-
-#stardate {
-    color: var(--accent) !important;
-}
-
 .feed-container {
     border: 1px solid var(--primary-dim);
     filter: grayscale(100%) contrast(1.1);
     transition: all 0.4s ease;
-    cursor: crosshair;
-}
-
-behold-widget img {
-    border-radius: 2px !important;
 }
 
 .feed-container:hover {
@@ -365,34 +285,9 @@ behold-widget img {
     border-color: var(--accent);
 }
 
-.feed-footer {
-    font-size: 0.6rem;
-    color: var(--primary-dim);
-    text-align: right;
-    margin-top: 5px;
-    text-transform: uppercase;
-}
-
-behold-widget { display: block; width: 100%; }
-
 /* --- SECURITY BADGE AVATAR FILTER --- */
 .utterances .avatar {
     filter: grayscale(100%) contrast(1.2) brightness(1.1);
     border: 1px solid var(--accent);
     border-radius: 2px !important;
-    transition: all 0.3s ease;
-}
-
-.utterances .avatar:hover {
-    filter: grayscale(0%) contrast(1) brightness(1);
-    box-shadow: 0 0 8px var(--accent);
-}
-
-.utterances .avatar::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-    background-size: 100% 2px;
-    pointer-events: none;
 }
