@@ -292,6 +292,12 @@ header h1 {
     text-transform: uppercase;
 }
 
+.blog-post ol {
+    padding-left: 40px !important; /* Pushes numbers 1 and 2 away from the border */
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 /* 14. VIEW TYPE BUTTONS (The Amber Theme Fix) */
 .vault-filters .submit-btn {
     background-color: var(--primary) !important;
@@ -310,6 +316,7 @@ header h1 {
     color: var(--primary) !important;
     box-shadow: 0 0 10px var(--primary);
 }
+
 
 
 
