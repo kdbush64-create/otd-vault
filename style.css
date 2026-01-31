@@ -18,7 +18,7 @@
     --primary: #7a5400;         /* Darkened for ADA contrast on light bg */
     --primary-dim: #5c5c5c;
     --secondary: #005f6b;
-    --accent: #008522;          /* Darker Green for readability */
+    --accent: #008522;          /* Forest Green for readability */
     --border: #a3a3a3;
     --shadow: rgba(0, 0, 0, 0.1);
 }
@@ -283,3 +283,59 @@ footer a:hover {
 .comment-module::before {
     content: "> FEEDBACK_UPLINK_ACTIVE: MODERATION_ENABLED";
     display: block;
+    font-size: 0.7rem;
+    color: var(--primary-dim);
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.utterances { max-width: 100% !important; margin-left: 0 !important; margin-right: 0 !important; }
+
+/* 12. VISUAL SURVEILLANCE FEED */
+.surveillance-wrapper {
+    margin-top: 30px;
+    border: 1px solid var(--border);
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between; /* This forces clock to right, REC to left */
+    font-size: 0.7rem;
+    color: var(--accent) !important; /* Locks color to the green defined in the theme */
+    margin-bottom: 8px;
+    padding: 0 5px;
+}
+
+.blink {
+    color: var(--accent) !important;
+    animation: rec-pulse 2s ease-in-out infinite;
+    font-weight: bold;
+    filter: brightness(1.2);
+}
+
+#stardate {
+    color: var(--accent) !important; /* Ensures time is also the same green */
+}
+
+.feed-container {
+    border: 1px solid var(--primary-dim);
+    filter: grayscale(40%) sepia(20%);
+    transition: all 0.4s ease;
+}
+
+.feed-container:hover {
+    filter: grayscale(0%) sepia(0%);
+    box-shadow: 0 0 15px var(--primary-dim);
+}
+
+.feed-footer {
+    font-size: 0.6rem;
+    color: var(--primary-dim);
+    text-align: right;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+behold-widget { display: block; width: 100%; }
