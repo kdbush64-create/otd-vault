@@ -155,19 +155,29 @@
         }
 
         async function loadPost(url) {
-            try {
-                const response = await fetch(url);
-                const markdown = await response.text();
-                if (typeof marked !== 'undefined') {
-                    document.getElementById('content').innerHTML = marked.parse(markdown);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            } catch (err) {
-                document.getElementById('content').innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG</p>";
-            }
+    try {
+        const response = await fetch(url);
+        const markdown = await response.text();
+        if (typeof marked !== 'undefined') {
+            let htmlContent = marked.parse(markdown);
+
+            // This logic finds your specific labels and turns them Neon Green
+            const greenLabels = ["STATUS:", "SUMMARY:", "THE_VERDICT", "PROPOSED_PATCH", "ROOT_CAUSE_ANALYSIS:"];
+            greenLabels.forEach(label => {
+                const regex = new RegExp(label, "g");
+                htmlContent = htmlContent.replace(regex, `<span style="color: var(--accent); text-shadow: 0 0 5px var(--accent); font-weight: bold;">${label}</span>`);
+            });
+
+            document.getElementById('content').innerHTML = htmlContent;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+    } catch (err) {
+        document.getElementById('content').innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG</p>";
+    }
+}
 
         loadLogs();
     </script>
 </body>
 </html>
+
