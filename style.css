@@ -48,6 +48,10 @@ body {
     z-index: 5;
     box-shadow: 0 10px 30px var(--shadow);
 }
+/* FIX: Section 3 - Add this to prevent horizontal "jumping" */
+html {
+    overflow-y: scroll; /* Forces scrollbar to always exist so width never changes */
+}
 
 /* 4. THEME TOGGLE */
 .theme-switch-wrapper {
@@ -107,6 +111,19 @@ header h1 {
     text-align: center;
     border-bottom: 2px dashed var(--border);
     margin-bottom: 15px;
+}
+/* FIX: Section 6 - Give the header a more stable size */
+header h1 {
+    font-size: 1.8rem; /* Use a fixed size instead of 'clamp' to stop the jumping */
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* FIX: Hero Image - Keep it from expanding */
+.hero-container {
+    max-height: 400px; /* Limits how much vertical space the image takes */
+    width: 100%;
+    object-fit: cover;
 }
 
 /* 7. VAULT LAYOUT & DIRECTORY */
@@ -283,4 +300,5 @@ header h1 {
     color: var(--primary) !important;
     box-shadow: 0 0 10px var(--primary);
 }
+
 
