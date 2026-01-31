@@ -158,6 +158,34 @@ button.submit-btn {
     text-shadow: 0 0 5px var(--accent);
 }
 
+/* 10. TERMINAL SCANLINE OVERLAY */
+.terminal-overlay {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    /* Creates the horizontal scanline texture */
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.15) 50%
+    ), 
+    /* Adds a subtle RGB sub-pixel color separation */
+    linear-gradient(
+        90deg, 
+        rgba(255, 0, 0, 0.03), 
+        rgba(0, 255, 0, 0.01), 
+        rgba(0, 0, 255, 0.03)
+    );
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none; /* Allows clicking through the overlay */
+    z-index: 1000;         /* Stays on top of everything */
+}
+
+/* Soften the effect for the Light Theme */
+[data-theme="light"] .terminal-overlay { 
+    opacity: 0.3; 
+}
 /* 11.5 MOBILE RESPONSIVE SCALING */
 .utterances { 
     max-width: 100% !important; 
@@ -184,4 +212,5 @@ button.submit-btn {
     animation: rec-pulse 2s ease-in-out infinite !important;
     display: inline-block;
 }
+
 
