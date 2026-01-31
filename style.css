@@ -1,4 +1,4 @@
-/* 1. THEME VARIABLES & ADA DEFAULTS */
+/* 1. THEME VARIABLES */
 :root {
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
@@ -14,11 +14,9 @@
     --bg: #f4f4f4;
     --container-bg: #ffffff;
     --primary: #7a5400;
-    --primary-dim: #5c5c5c;
     --secondary: #005f6b;
     --accent: #008522;
     --border: #a3a3a3;
-    --shadow: rgba(0, 0, 0, 0.1);
 }
 
 /* 2. GLOBAL RESET */
@@ -33,7 +31,6 @@ body {
     align-items: center;
     padding: 15px;
     line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
 }
 
@@ -46,7 +43,6 @@ body {
     background: var(--container-bg);
     position: relative;
     z-index: 5;
-    box-shadow: 0 10px 30px var(--shadow);
 }
 
 /* 4. THEME TOGGLE */
@@ -64,15 +60,12 @@ body {
     padding: 6px 12px;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: bold;
     text-transform: uppercase;
-    box-shadow: 0 0 5px var(--accent);
 }
 
-/* 5. LOGO & HERO MANAGEMENT */
+/* 5. LOGO & HERO */
 header img, .logo {
-    max-width: 250px; /* Limits logo size on Desktop */
+    max-width: 250px; /* Reined in for Desktop */
     width: 100%;
     height: auto;
     margin: 0 auto 15px auto;
@@ -84,7 +77,6 @@ header img, .logo {
     width: 100%;
     margin-bottom: 25px;
     border: 2px solid var(--border);
-    overflow: hidden; 
     background: #000;
 }
 
@@ -95,11 +87,7 @@ header img, .logo {
     opacity: 0.5;
 }
 
-@media (max-width: 480px) {
-    header img, .logo { max-width: 180px; } /* Reins in logo on Mobile */
-}
-
-/* 6. HEADER & WARNING (Typewriter) */
+/* 6. HEADER & TYPEWRITER */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -107,19 +95,20 @@ header {
     padding-bottom: 15px;
 }
 
-header h1 { font-size: clamp(1.1rem, 6vw, 2rem); letter-spacing: 3px; }
-
 header h1 span.typewriter {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     border-right: .15em solid var(--primary);
     width: 0; 
-    vertical-align: bottom;
 }
 
 /* 7. VAULT LAYOUT */
-.vault-layout { display: flex; flex-direction: column; gap: 20px; }
+.vault-layout { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+}
 
 @media (min-width: 850px) {
     .vault-layout { flex-direction: row; }
@@ -133,12 +122,15 @@ header h1 span.typewriter {
     padding: 8px 0;
 }
 
-.vault-filters .submit-btn, button.submit-btn {
+/* Specifically fixing the white buttons from your 1st image */
+.vault-filters .submit-btn, 
+button.submit-btn {
     display: inline-block;
     background-color: var(--primary) !important;
-    color: #000 !important;
+    color: #000000 !important;
     border: 1px solid var(--primary);
     padding: 6px 12px;
+    font-family: inherit;
     font-size: 0.75rem;
     font-weight: bold;
     text-transform: uppercase;
@@ -150,45 +142,58 @@ header h1 span.typewriter {
 
 /* 9. ANIMATIONS */
 @keyframes rec-pulse {
-    0%, 100% { opacity: 1; filter: brightness(1.2); }
-    50% { opacity: 0.3; filter: brightness(0.8); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
 }
 
 @keyframes typing { from { width: 0; } to { width: 100%; } }
 
-/* 10. TERMINAL SCANLINE OVERLAY */
+/* 10. SCANLINE OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-    background-size: 100% 3px, 3px 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+    background-size: 100% 3px;
     pointer-events: none;
     z-index: 1000;
 }
 
-/* 11. FEEDBACK & COMMENTS (Mobile Scaling Fix) */
+/* 11. FEEDBACK & COMMENTS */
 .comment-module {
     margin-top: 50px;
-    padding: 40px 20px 20px 20px; 
+    padding: 30px 20px 20px 20px; 
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
+    overflow: visible; /* Prevents clipping the blinking label */
 }
 
+/* The label: Positioned for Desktop (inside the box) */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
-    top: 10px; right: 15px;
+    top: 8px; 
+    right: 15px;
     font-size: 0.65rem;
     font-weight: bold;
     color: var(--accent);
     animation: rec-pulse 2s ease-in-out infinite !important;
+    text-shadow: 0 0 5px var(--accent);
 }
 
-@media (max-width: 480px) {
-    .comment-module { padding-top: 45px; }
-    .comment-module::after { top: 18px; } /* Mobile Nudge */
+.utterances { max-width: 100% !important; width: 100% !important; }
+
+/* --- SPECIFIC MOBILE OVERRIDES --- */
+@media (max-width: 600px) {
+    header img, .logo { max-width: 180px; } /* Rein in logo */
+    
+    .comment-module { padding-top: 40px; } /* Make room for label */
+    
+    .comment-module::after {
+        top: 15px !important; /* The Mobile Nudge: Pulls it down off the border */
+        right: 10px;
+    }
+
     .utterances-frame {
         transform: scale(0.9);
         transform-origin: top center;
@@ -205,7 +210,7 @@ header h1 span.typewriter {
 }
 
 .utterances .avatar {
-    filter: grayscale(100%) contrast(1.2);
+    filter: grayscale(100%);
     border: 1px solid var(--accent);
     border-radius: 2px !important;
 }
