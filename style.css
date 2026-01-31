@@ -213,3 +213,44 @@ header h1 {
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
+
+/* 14. MOBILE OPTIMIZATIONS */
+@media (max-width: 768px) {
+    /* Force Dark Mode on Mobile if system prefers dark */
+    body {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Adjust Visual Uplink for Touch Screens */
+    .feed-container {
+        filter: grayscale(0%) contrast(1); /* Keep colors visible on mobile for better UX */
+        border: 1px solid var(--accent);
+        box-shadow: 0 0 10px var(--accent);
+        margin-bottom: 10px;
+    }
+
+    /* If you want B&W on mobile that colorizes when tapped */
+    .feed-container:active {
+        filter: grayscale(0%) contrast(1.1);
+        box-shadow: 0 0 25px var(--accent);
+    }
+
+    /* Fix Button sizing for thumbs */
+    .submit-btn, .filter-btn {
+        padding: 12px 20px !important;
+        font-size: 0.9rem;
+        margin: 5px;
+        flex: 1 1 40%; /* Makes buttons stack nicely on small screens */
+    }
+
+    /* Ensure the blinking uplink stays visible in the feedback box */
+    .comment-module {
+        padding-top: 50px;
+    }
+    
+    .comment-module::after {
+        font-size: 0.6rem;
+        top: 15px;
+        right: 10px;
+    }
+}
