@@ -307,6 +307,11 @@ footer a:hover {
     letter-spacing: 1px;
 }
 /* --- VISUAL SURVEILLANCE FEED STYLING --- */
+/* --- ANIMATION TRIGGER FOR REC DOT --- */
+.blink {
+    animation: status-blink 2s linear infinite;
+}
+
 .surveillance-wrapper {
     margin-top: 30px;
     border: 1px solid var(--border);
@@ -347,5 +352,6 @@ behold-widget {
     display: block;
     width: 100%;
 }
+
 
 
