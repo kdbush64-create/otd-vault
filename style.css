@@ -375,6 +375,7 @@ behold-widget { display: block; width: 100%; }
 }
 
 /* --- COMMENT UPLINK FRAME --- */
+/* --- COMMENT UPLINK FRAME --- */
 .comment-module {
     margin-top: 50px;
     padding: 20px;
@@ -391,5 +392,10 @@ behold-widget { display: block; width: 100%; }
     background: var(--bg);
     padding: 0 10px;
     font-size: 0.6rem;
+    font-weight: bold;      /* Added for punch */
     color: var(--accent);
+    
+    /* --- THE BLINK --- */
+    animation: rec-pulse 2s ease-in-out infinite;
+    text-shadow: 0 0 5px var(--accent); /* Subtle radioactive glow */
 }
