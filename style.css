@@ -274,10 +274,14 @@ footer a:hover {
     text-shadow: 0 0 5px var(--primary-dim);
 }
 
+/* --- COMMENT UPLINK FRAME --- */
 .comment-module {
     margin-top: 50px;
-    padding-top: 20px;
-    border-top: 2px dashed var(--border);
+    padding: 20px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow-x: hidden; /* Prevent horizontal overflow on mobile */
 }
 
 .comment-module::before {
@@ -289,7 +293,32 @@ footer a:hover {
     letter-spacing: 1px;
 }
 
-.utterances { max-width: 100% !important; margin-left: 0 !important; margin-right: 0 !important; }
+.comment-module::after {
+    content: "SECURE_UPLINK_READY";
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--bg);
+    padding: 0 10px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: var(--accent);
+    animation: rec-pulse 2s ease-in-out infinite;
+    text-shadow: 0 0 5px var(--accent);
+}
+
+/* 11.5 RESPONSIVE BUTTON FIX (The Fix) */
+.utterances { 
+    max-width: 100% !important; 
+    margin-left: 0 !important; 
+    margin-right: 0 !important; 
+}
+
+/* Ensures the iframe inside doesn't force its own width */
+.utterances-frame {
+    width: 100% !important;
+    max-width: 100% !important;
+}
 
 /* 12. VISUAL SURVEILLANCE FEED */
 .surveillance-wrapper {
@@ -301,9 +330,9 @@ footer a:hover {
 
 .feed-header {
     display: flex;
-    justify-content: space-between; /* This forces clock to right, REC to left */
+    justify-content: space-between;
     font-size: 0.7rem;
-    color: var(--accent) !important; /* Locks color to the green defined in the theme */
+    color: var(--accent) !important;
     margin-bottom: 8px;
     padding: 0 5px;
 }
@@ -316,26 +345,23 @@ footer a:hover {
 }
 
 #stardate {
-    color: var(--accent) !important; /* Ensures time is also the same green */
+    color: var(--accent) !important;
 }
 
-/* --- SURVEILLANCE FEED: SECURITY BADGE STYLE --- */
 .feed-container {
     border: 1px solid var(--primary-dim);
-    filter: grayscale(100%) contrast(1.1); /* Hard Grayscale */
+    filter: grayscale(100%) contrast(1.1);
     transition: all 0.4s ease;
-    cursor: crosshair; /* Changes cursor to a targeting reticle */
+    cursor: crosshair;
 }
 
-/* Square off the images inside the widget */
 behold-widget img {
     border-radius: 2px !important;
 }
 
-/* THE GLOW: When you hover over a "Surveillance" photo */
 .feed-container:hover {
-    filter: grayscale(0%) contrast(1); /* Return to color */
-    box-shadow: 0 0 20px var(--accent); /* Neon Green Glow */
+    filter: grayscale(0%) contrast(1);
+    box-shadow: 0 0 20px var(--accent);
     border-color: var(--accent);
 }
 
@@ -350,21 +376,18 @@ behold-widget img {
 behold-widget { display: block; width: 100%; }
 
 /* --- SECURITY BADGE AVATAR FILTER --- */
-/* Targets the Utterances avatar images */
 .utterances .avatar {
     filter: grayscale(100%) contrast(1.2) brightness(1.1);
     border: 1px solid var(--accent);
-    border-radius: 2px !important; /* Makes them square-ish for a more rigid look */
+    border-radius: 2px !important;
     transition: all 0.3s ease;
 }
 
-/* Restores color on hover */
 .utterances .avatar:hover {
     filter: grayscale(0%) contrast(1) brightness(1);
     box-shadow: 0 0 8px var(--accent);
 }
 
-/* Optional: Adds a slight scanline texture to avatars */
 .utterances .avatar::after {
     content: "";
     position: absolute;
@@ -372,30 +395,4 @@ behold-widget { display: block; width: 100%; }
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
     background-size: 100% 2px;
     pointer-events: none;
-}
-
-/* --- COMMENT UPLINK FRAME --- */
-/* --- COMMENT UPLINK FRAME --- */
-.comment-module {
-    margin-top: 50px;
-    padding: 20px;
-    border: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.comment-module::after {
-    content: "SECURE_UPLINK_READY";
-    position: absolute;
-    top: -10px;
-    right: 10px;
-    background: var(--bg);
-    padding: 0 10px;
-    font-size: 0.6rem;
-    font-weight: bold;      /* Added for punch */
-    color: var(--accent);
-    
-    /* --- THE BLINK --- */
-    animation: rec-pulse 2s ease-in-out infinite;
-    text-shadow: 0 0 5px var(--accent); /* Subtle radioactive glow */
 }
