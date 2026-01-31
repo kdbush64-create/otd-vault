@@ -306,5 +306,46 @@ footer a:hover {
     margin-bottom: 15px;
     letter-spacing: 1px;
 }
+/* --- VISUAL SURVEILLANCE FEED STYLING --- */
+.surveillance-wrapper {
+    margin-top: 30px;
+    border: 1px solid var(--border);
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--accent); /* Neon Green */
+    margin-bottom: 8px;
+    padding: 0 5px;
+}
+
+.feed-container {
+    border: 1px solid var(--primary-dim);
+    filter: grayscale(40%) sepia(20%); /* Aged surveillance look */
+    transition: all 0.4s ease;
+}
+
+.feed-container:hover {
+    filter: grayscale(0%) sepia(0%); /* Pop back to full color on hover */
+    box-shadow: 0 0 15px var(--primary-dim);
+}
+
+.feed-footer {
+    font-size: 0.6rem;
+    color: var(--primary-dim);
+    text-align: right;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+/* Ensure Behold doesn't break our borders */
+behold-widget {
+    display: block;
+    width: 100%;
+}
 
 
