@@ -10,7 +10,6 @@
     <meta property="og:url" content="https://vintage64.us/logs.html">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-
     <meta name="keywords" content="IT Services, Product Reviews, Gear Recon, Linux, Texas, Tech Rants, MSITM, Consumer Product Testing">
     <meta name="author" content="DeWayne Bush">
 
@@ -22,14 +21,18 @@
 
 <body id="personal-identity">    
     <div class="terminal-overlay"></div>
+
     <div class="container">
+        <div class="theme-switch-wrapper">
+            <button id="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
+        </div>
+
         <header>
-    <div class="warning-banner">!! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD </div>
-    <h1>
-        <span class="typewriter">OTD</span><br>
-        <span class="typewriter delay-type">PERSONAL_VAULT</span>
-    </h1>
-</header>
+            <div class="warning-banner">!! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD </div>
+            <h1>
+                <span class="typewriter">OTD</span><br>
+                <span class="typewriter delay-type">PERSONAL_VAULT</span>
+            </h1>
         </header>
 
         <section class="hero-container">
@@ -75,6 +78,22 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
 
+        /* --- THEME TOGGLE LOGIC --- */
+        const toggleBtn = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            theme = (theme === 'light') ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+
+        /* --- LOG LOADING LOGIC --- */
         async function loadLogs(filter = 'all') {
             const list = document.getElementById('log-list');
             list.innerHTML = '<li>[ FILTERING_VAULT... ]</li>';
@@ -93,6 +112,7 @@
                     logFiles = logFiles.filter(file => file.name.startsWith(filter));
                 }
 
+                // Fetching commits to get dates
                 const filesWithDates = await Promise.all(logFiles.map(async (file) => {
                     const commitRes = await fetch(`https://api.github.com/repos/${repo}/commits?path=${file.path}&page=1&per_page=1`);
                     const commitData = await commitRes.json();
@@ -110,12 +130,7 @@
                     const d = file.lastModified;
                     const dateStr = `${d.getFullYear()}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getDate().toString().padStart(2,'0')}`;
                     
-                    // Display cleaning: Replace dashes with spaces, Uppercase everything
                     let cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    
-                    // THE INVISIBLE BREAK FIX: 
-                    // Insert a Zero-Width Space (\u200B) after every underscore.
-                    // This allows mobile browsers to wrap at the underscore without adding a space.
                     cleanName = cleanName.split('_').join('_\u200B');
                     
                     li.innerHTML = `<a href="#" class="log-link" onclick="loadPost('${file.download_url}')">${dateStr} // ${cleanName}</a>`;
@@ -144,7 +159,3 @@
     </script>
 </body>
 </html>
-
-
-
-
