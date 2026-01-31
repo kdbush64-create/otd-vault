@@ -2,10 +2,10 @@
 :root {
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
-    --primary: #ffb000;         /* Amber */
+    --primary: #ffb000;
     --primary-dim: rgba(255, 176, 0, 0.7);
-    --secondary: #00eeff;       /* Blue links */
-    --accent: #00ff41;          /* Neon Green */
+    --secondary: #00eeff;
+    --accent: #00ff41;
     --border: #5c3d2e;
     --shadow: rgba(0, 0, 0, 0.8);
 }
@@ -27,6 +27,7 @@
         animation-delay: -1ms !important;
         animation-duration: 1ms !important;
         animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
         scroll-behavior: auto !important;
         transition-duration: 0s !important;
     }
@@ -58,6 +59,7 @@ body {
     position: relative;
     z-index: 5;
     box-shadow: 0 10px 30px var(--shadow);
+    overflow: hidden; 
 }
 
 /* 4. THEME TOGGLE */
@@ -72,7 +74,7 @@ body {
     background: transparent;
     border: 1px solid var(--accent);
     color: var(--accent);
-    padding: 6px 12px;
+    padding: 8px 14px; /* Slightly larger for mobile tap */
     cursor: pointer;
     font-family: inherit;
     font-size: 0.8rem;
@@ -81,43 +83,106 @@ body {
     box-shadow: 0 0 5px var(--accent);
 }
 
-/* 8. LOG LINKS & VAULT FILTERS (Restored Colors) */
-.log-link {
-    color: var(--secondary) !important; 
-    text-decoration: none;
-    display: block;
-    padding: 8px 0;
-    font-size: 0.95rem;
+/* 5. HERO SECTION */
+.hero-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+    border: 2px solid var(--border);
+    overflow: hidden; 
+    background: #000;
 }
-.log-link::before { content: "[ "; }
-.log-link::after { content: " ]"; }
 
-.vault-filters .submit-btn {
-    background-color: var(--primary) !important;
-    color: #000 !important;
-    border: 1px solid var(--primary);
-    padding: 4px 10px;
-    font-family: inherit;
-    font-size: 0.75rem;
-    font-weight: bold;
+.hero-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0.5;
+}
+
+/* 6. HEADER & WARNING */
+header {
+    text-align: center;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+header h1 {
+    font-size: clamp(1.1rem, 6vw, 2rem);
+    letter-spacing: 3px;
+    line-height: 1.6;
+}
+
+header h1 span.typewriter {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: .15em solid var(--primary);
     text-transform: uppercase;
-    cursor: pointer;
-    margin-right: 5px;
+    width: 0; 
+    vertical-align: bottom;
+}
+
+header h1 span.typewriter:first-child {
+    animation: typing 1s steps(10, end) forwards, blink-caret .75s step-end infinite;
+}
+
+header h1 span.delay-type {
+    animation: typing 2s steps(20, end) forwards, blink-caret .75s step-end infinite;
+    animation-delay: 1.2s; 
+}
+
+.warning-banner {
+    font-size: 0.75rem;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 15px;
+    animation: glitch 5s infinite;
+}
+
+/* 7. VAULT LAYOUT */
+.vault-layout { display: flex; flex-direction: column; gap: 20px; }
+
+@media (min-width: 850px) {
+    .vault-layout { flex-direction: row; }
+    .log-display { flex: 2; }
+    .log-directory { flex: 1; border-top: none; border-left: 1px dashed var(--border); padding-left: 20px; padding-top: 0; }
 }
 
 /* 9. ANIMATIONS */
+@keyframes typing { from { width: 0; } to { width: 100%; } }
+@keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--primary); } }
+@keyframes glitch {
+    0%, 98%, 100% { opacity: 1; transform: skew(0deg); }
+    2%, 99% { opacity: 0.8; transform: skew(5deg); }
+}
+
+/* KEY PULSE ANIMATION */
 @keyframes rec-pulse {
-    0%, 100% { opacity: 1; filter: brightness(1.2); }
-    50% { opacity: 0.3; filter: brightness(0.8); }
+    0%, 100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 2px var(--accent)); }
+    50% { opacity: 0.3; filter: brightness(0.7); }
+}
+
+/* 10. TERMINAL OVERLAY */
+.terminal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 3px;
+    pointer-events: none;
+    z-index: 100;
 }
 
 /* 11. FEEDBACK & COMMENTS */
 .comment-module {
     margin-top: 50px;
-    padding: 35px 20px 20px 20px; /* Extra top padding for the internal label */
+    padding: 25px 20px;
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
+    overflow: hidden;
 }
 
 .comment-module::before {
@@ -126,44 +191,73 @@ body {
     font-size: 0.7rem;
     color: var(--primary-dim);
     margin-bottom: 15px;
+    letter-spacing: 1px;
 }
 
-/* THE BLINKING HEADER - NOW INTERNAL */
+/* FIXED UPLINK BLINKING */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 0.65rem;
+    top: -10px;
+    right: 10px;
+    background: var(--bg);
+    padding: 0 10px;
+    font-size: 0.6rem;
     font-weight: bold;
     color: var(--accent);
     animation: rec-pulse 2s ease-in-out infinite !important;
     text-shadow: 0 0 5px var(--accent);
 }
 
-/* 11.5 MOBILE RESPONSIVE SCALING */
-.utterances { 
-    max-width: 100% !important; 
-    width: 100% !important; 
-    margin: 0 !important; 
-}
+/* 11.5 UTTERANCES MOBILE FIXES */
+.utterances { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
 
-@media (max-width: 480px) {
-    .comment-module {
-        padding: 35px 10px 15px 10px; /* Slimmer padding for mobile */
-    }
-    
+@media (max-width: 420px) {
+    .comment-module { padding: 20px 5px; }
     .utterances-frame {
-        transform: scale(0.9);
+        transform: scale(0.92);
         transform-origin: top center;
-        width: 111% !important;
-        margin-left: -5.5% !important;
+        width: 108.6% !important;
+        margin-left: -4.3% !important;
     }
 }
 
-/* 12. SURVEILLANCE FEED (Restored REC Blink) */
+/* 12. SURVEILLANCE FEED */
+.surveillance-wrapper {
+    margin-top: 30px;
+    border: 1px solid var(--border);
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+}
+
+/* FIXED REC BUTTON BLINKING */
 .blink {
     color: var(--accent) !important;
     animation: rec-pulse 2s ease-in-out infinite !important;
     display: inline-block;
+}
+
+.feed-container {
+    border: 1px solid var(--primary-dim);
+    filter: grayscale(100%) contrast(1.1);
+}
+
+.feed-container:hover {
+    filter: grayscale(0%) contrast(1);
+    box-shadow: 0 0 20px var(--accent);
+    border-color: var(--accent);
+}
+
+/* AVATAR STYLE */
+.utterances .avatar {
+    filter: grayscale(100%) contrast(1.2);
+    border: 1px solid var(--accent);
 }
