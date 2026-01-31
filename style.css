@@ -38,19 +38,24 @@ body {
 }
 
 /* 3. THE CHASSIS */
+html {
+    /* Forces scrollbar to always exist so the page doesn't "jump" left/right when logs load */
+    overflow-y: scroll; 
+}
+
 .container {
-    width: 100%;
-    max-width: 1000px;
+    width: 95%; /* Gives a tiny bit of space on mobile screens */
+    max-width: 1000px; /* Caps the width on desktop */
+    margin: 0 auto; /* Keeps the vault centered on the screen */
     border: 2px solid var(--border);
-    padding: 15px;
+    padding: 20px; /* Better breathing room for text */
     background: var(--container-bg);
     position: relative;
     z-index: 5;
     box-shadow: 0 10px 30px var(--shadow);
-}
-/* FIX: Section 3 - Add this to prevent horizontal "jumping" */
-html {
-    overflow-y: scroll; /* Forces scrollbar to always exist so width never changes */
+    
+    /* THE STABILIZER: Stops the container from growing wider if a log has long text */
+    overflow: hidden; 
 }
 
 /* 4. THEME TOGGLE */
@@ -78,6 +83,7 @@ html {
 .hero-container {
     position: relative;
     width: 100%;
+    height: 300px; /* Forces a consistent height so it doesn't "grow" */
     margin-bottom: 25px;
     border: 2px solid var(--border);
     overflow: hidden; 
@@ -87,7 +93,8 @@ html {
 .hero-container img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover; /* Keeps image from stretching while filling the box */
     opacity: 0.5;
 }
 
@@ -97,12 +104,15 @@ header {
     border-bottom: 2px dashed var(--border);
     margin-bottom: 20px;
     padding-bottom: 15px;
+    min-height: 110px; /* Prevents the header area from collapsing */
 }
 
 header h1 {
-    font-size: clamp(1.1rem, 6vw, 2rem);
+    /* Stabilized responsive font: won't jump around when logs load */
+    font-size: clamp(1.5rem, 5vw, 2.2rem); 
     letter-spacing: 3px;
     text-transform: uppercase;
+    margin: 10px 0;
 }
 
 .warning-banner {
@@ -111,19 +121,7 @@ header h1 {
     text-align: center;
     border-bottom: 2px dashed var(--border);
     margin-bottom: 15px;
-}
-/* FIX: Section 6 - Give the header a more stable size */
-header h1 {
-    font-size: 1.8rem; /* Use a fixed size instead of 'clamp' to stop the jumping */
-    letter-spacing: 3px;
-    text-transform: uppercase;
-}
-
-/* FIX: Hero Image - Keep it from expanding */
-.hero-container {
-    max-height: 400px; /* Limits how much vertical space the image takes */
-    width: 100%;
-    object-fit: cover;
+    color: var(--primary);
 }
 
 /* 7. VAULT LAYOUT & DIRECTORY */
@@ -300,5 +298,6 @@ header h1 {
     color: var(--primary) !important;
     box-shadow: 0 0 10px var(--primary);
 }
+
 
 
