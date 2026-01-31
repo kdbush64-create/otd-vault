@@ -291,3 +291,34 @@ footer { margin-top: 40px; text-align: center; font-size: 0.75rem; border-top: 1
     border: 1px solid var(--accent);
     border-radius: 2px !important;
 }
+
+/* 11.6 THE RESET: FORCE IFRAME TO SHRINK */
+@media (max-width: 400px) {
+    .comment-module {
+        padding: 10px 5px; /* Minimal padding to save space */
+    }
+
+    /* Target the container Utterances creates */
+    .utterances {
+        width: 100% !important;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* THE FIX: If it still overflows, scale the whole thing down */
+    .utterances-frame {
+        transform: scale(0.9); /* Shrinks the widget to 90% size */
+        transform-origin: top center;
+        width: 111% !important; /* Counter-adjust width to prevent gaps */
+        margin-left: -5.5% !important; /* Center the scaled iframe */
+    }
+}
+
+/* Extra small screens (iPhone SE, etc) */
+@media (max-width: 350px) {
+    .utterances-frame {
+        transform: scale(0.85);
+        width: 118% !important;
+        margin-left: -9% !important;
+    }
+}
