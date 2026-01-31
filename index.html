@@ -1,3 +1,4 @@
+<style>
 /* 1. THEME VARIABLES & ADA DEFAULTS */
 :root {
     --bg: #1a1a1a;
@@ -142,10 +143,10 @@ header h1 span.delay-type {
     animation: glitch 5s infinite;
 }
 
-/* 7. VAULT LAYOUT & DIRECTORY BUG FIX */
+/* 7. VAULT LAYOUT & DIRECTORY FIX */
 .vault-layout { display: flex; flex-direction: column; gap: 20px; }
 
-/* FIX: Ensure .md file links in directory are visible and following secondary color */
+/* FIX: md file visibility */
 .log-directory a, 
 .log-directory .log-link {
     color: var(--secondary) !important;
@@ -183,14 +184,14 @@ header h1 span.delay-type {
     z-index: 100;
 }
 
-/* 10. FEEDBACK & COMMENTS - UPLINK BUG FIX */
+/* 10. FEEDBACK & COMMENTS - UPLINK FIX */
 .comment-module {
     margin-top: 50px;
-    padding: 35px 20px 20px 20px; /* Increased top padding to accommodate internal label */
+    padding: 35px 20px 20px 20px; 
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow: visible; /* Changed from hidden to ensure label isn't clipped */
+    overflow: visible; 
 }
 
 .comment-module::before {
@@ -202,11 +203,11 @@ header h1 span.delay-type {
     letter-spacing: 1px;
 }
 
-/* FIX: Moved inside container for both Desktop and Mobile visibility */
+/* FIXED: Internal label positioning */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
-    top: 10px; /* Positioned inside the box */
+    top: 10px; 
     right: 15px;
     font-size: 0.65rem;
     font-weight: bold;
@@ -228,7 +229,7 @@ header h1 span.delay-type {
     }
 }
 
-/* 12. SURVEILLANCE FEED & BUTTON THEME BUG FIX */
+/* 12. SURVEILLANCE FEED & BUTTON THEME FIX */
 .surveillance-wrapper {
     margin-top: 30px;
     border: 1px solid var(--border);
@@ -236,7 +237,7 @@ header h1 span.delay-type {
     background: rgba(0, 0, 0, 0.2);
 }
 
-/* FIX: Review Type/Filter Buttons theme color override */
+/* FIX: Button color enforcement */
 .vault-filters .submit-btn,
 button.submit-btn,
 .filter-btn {
@@ -274,3 +275,4 @@ button.submit-btn,
     filter: grayscale(100%) contrast(1.2);
     border: 1px solid var(--accent);
 }
+</style>
