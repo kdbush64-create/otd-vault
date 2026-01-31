@@ -79,35 +79,55 @@ html {
     box-shadow: 0 0 5px var(--accent);
 }
 
-/* 5. HERO SECTION - FULL VIEW */
+/* 5. HERO SECTION - CLEAN TITLES */
 .hero-container {
     position: relative;
     width: 100%;
-    /* Remove fixed heights to show the full square image */
     height: auto; 
     margin-bottom: 25px;
     border: 2px solid var(--border);
     background: #000;
-    line-height: 0; /* Removes the tiny gap below the image */
+    line-height: 0;
 }
 
 .hero-container img {
     display: block;
     width: 100%;
-    height: auto; /* Scales the full 1024px height proportionally */
-    opacity: 0.7; /* Keeps the 'Vault' vibe without washing out the colors */
+    height: auto; 
+    opacity: 0.6;
 }
 
 .text-overlay {
     position: absolute;
-    /* This centers the text vertically and horizontally over the image */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 100%;
+    /* STACKING LOGIC: Keeps lines from overlapping */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    width: 90%;
-    z-index: 2;
-    pointer-events: none; /* Allows clicks to pass through to the image if needed */
+    pointer-events: none;
+}
+
+.text-overlay h1 {
+    /* Stabilized responsive font */
+    font-size: clamp(1.2rem, 5vw, 2.5rem) !important;
+    margin: 0;
+    line-height: 1.2;
+    color: var(--primary);
+    text-shadow: 2px 2px 8px #000;
+}
+
+.by-line {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin: 5px 0;
+    font-weight: bold;
+    text-shadow: 1px 1px 5px #000;
 }
 
 /* 6. HEADER */
@@ -265,24 +285,26 @@ header h1 {
     text-shadow: 0 0 5px var(--accent);
 }
 
-/* 13. LOG CONTENT FIX (The "Outside Numbers" Fix) */
+/* 13. LOG CONTENT - FIELD REPORT STYLING */
 .blog-post {
     word-wrap: break-word;
     overflow-wrap: break-word;
     max-width: 100%;
-    padding: 0 10px; /* Gives internal breathing room */
+    padding: 0 10px; 
 }
 
-/* FIX: Pulls numbers/bullets back inside the container border */
+/* Updated List Styling */
 .blog-post ol, .blog-post ul {
-    list-style-position: inside; 
-    padding-left: 5px;
-    margin-bottom: 15px;
+    /* Pushes numbers 1 and 2 away from the container border */
+    padding-left: 45px !important; 
+    margin: 20px 0;
+    list-style-position: outside; /* Keeps numbers aligned in their own column */
 }
 
 .blog-post li {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     line-height: 1.6;
+    padding-left: 5px; /* Tiny bit of space between number and text */
 }
 
 /* Force Bold Titles for Desktop */
@@ -290,12 +312,6 @@ header h1 {
     color: var(--primary);
     font-weight: 900 !important;
     text-transform: uppercase;
-}
-
-.blog-post ol {
-    padding-left: 40px !important; /* Pushes numbers 1 and 2 away from the border */
-    margin-top: 15px;
-    margin-bottom: 15px;
 }
 
 /* 14. VIEW TYPE BUTTONS (The Amber Theme Fix) */
@@ -316,6 +332,7 @@ header h1 {
     color: var(--primary) !important;
     box-shadow: 0 0 10px var(--primary);
 }
+
 
 
 
