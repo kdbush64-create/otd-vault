@@ -176,14 +176,34 @@ header h1 {
     }
 }
 
-/* 12. SURVEILLANCE FEED & BUTTON THEME FIX */
+/* 12. SURVEILLANCE FEED (VISUAL UPLINK) */
 .surveillance-wrapper {
     margin-top: 30px;
     border: 1px solid var(--border);
     padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
 }
 
-/* FIX: Buttons follow amber theme strictly */
+.blink {
+    color: var(--accent) !important;
+    animation: rec-pulse 2s ease-in-out infinite;
+}
+
+/* FEED IMAGE STYLES - FIXES THE B&W ISSUE */
+.feed-container {
+    border: 1px solid var(--primary-dim);
+    filter: grayscale(100%) contrast(1.1);
+    transition: all 0.4s ease-in-out;
+}
+
+/* RESTORED: Glow and Colorizing on Hover */
+.feed-container:hover {
+    filter: grayscale(0%) contrast(1);
+    box-shadow: 0 0 20px var(--accent);
+    border-color: var(--accent);
+}
+
+/* 13. BUTTON THEME ENFORCEMENT */
 .submit-btn, .filter-btn {
     background-color: var(--primary) !important;
     color: #000 !important;
@@ -193,14 +213,3 @@ header h1 {
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
-}
-
-.blink {
-    color: var(--accent) !important;
-    animation: rec-pulse 2s ease-in-out infinite;
-}
-
-.feed-container {
-    border: 1px solid var(--primary-dim);
-    filter: grayscale(100%);
-}
