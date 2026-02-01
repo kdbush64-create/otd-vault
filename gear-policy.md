@@ -21,18 +21,24 @@ Every product reviewed under **GEAR_RECON** is subjected to a 10-point audit acr
 ---
 
 ### > THE "V64_STABILITY" SCORE
-The final percentage is a weighted average of these vectors.
-* **90-100%:** [ MISSION_CRITICAL ] - Superior engineering; highly recommended.
-* **70-89%:** [ OPERATIONAL ] - Solid performance; minor design flaws.
-* **50-69%:** [ DEGRADED ] - Significant design-scope mismatch; requires user "patches."
-* **Below 50%:** [ SYSTEM_FAILURE ] - Not recommended for field use.
+The final percentage is a weighted average of the vectors above.
+
+**MISSION_CRITICAL:** [ 90-100% ] - Superior engineering; highly recommended.
+
+**OPERATIONAL:** [ 70-89% ] - Solid performance; minor design flaws.
+
+**DEGRADED:** [ 50-69% ] - Significant design-scope mismatch; requires user "patches."
+
+**SYSTEM_FAILURE:** [ Below 50% ] - Not recommended for field use.
 
 ---
 
 ### > BRAND_ENGAGEMENT_POLICY
-1. **Unfiltered Truth:** I do not accept "paid-for" positive reviews. If a system fails, the log will reflect that failure.
-2. **Root Cause Analysis:** I don't just complain; I provide technical "patches" (design feedback) for your engineering teams.
-3. **Field Testing:** No "out of the box" reviews. Products are tested in real-world Texas environments for a minimum of 14 days.
+**UNFILTERED_TRUTH:** I do not accept "paid-for" positive reviews. If a system fails, the log will reflect that failure.
+
+**ROOT_CAUSE_ANALYSIS:** I don't just complain; I provide technical "patches" (design feedback) for your engineering teams.
+
+**FIELD_TESTING:** No "out of the box" reviews. Products are tested in real-world Texas environments for a minimum of 14 days.
 
 ---
 **[ END_OF_PROTOCOL ]**
