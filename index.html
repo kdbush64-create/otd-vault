@@ -78,11 +78,13 @@
             </aside>
         </main>
 
-        <footer>
-            <p>PERSONAL_THOUGHTS_V1.1 // <br><br>
-                <a href="#" onclick="loadPost('https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/gear-policy.md')">[ REVIEW_POLICY ]</a> // <br><br>
+        <footer style="margin-top: 40px; border-top: 1px solid var(--accent); padding-top: 20px;">
+            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; font-size: 0.9em;">
+                <a href="index.html" style="text-decoration: none;">[ RETURN_TO_BASE ]</a>
+                <a href="#" onclick="loadPost('https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/gear-policy.md')" style="text-shadow: 0 0 5px var(--accent);">[ GEAR_REVIEW_POLICY ]</a>
                 <a href="mailto:your-email@example.com?subject=V64_UPLINK_FEEDBACK">[ SEND_FEEDBACK ]</a>
-            </p>
+            </div>
+            <p style="text-align: center; margin-top: 20px;" class="blink">PERSONAL_THOUGHTS_V1.2 // SYSTEM_STABLE</p>
         </footer>
     </div>
 
@@ -133,7 +135,8 @@
                 let logFiles = files.filter(file => 
                     file.name.endsWith('.md') && 
                     !file.name.toLowerCase().includes('template') && 
-                    !file.name.toLowerCase().includes('readme')
+                    !file.name.toLowerCase().includes('readme') &&
+                    !file.name.toLowerCase().includes('gear-policy')
                 );
 
                 if (filter !== 'all') {
@@ -167,7 +170,6 @@
                 const response = await fetch(url);
                 const text = await response.text();
                 
-                // FIXED: Better parsing of Front Matter
                 let cleanMarkdown = text;
                 if (text.startsWith('---')) {
                     const parts = text.split('---');
@@ -179,7 +181,12 @@
                 if (typeof marked !== 'undefined') {
                     let htmlContent = marked.parse(cleanMarkdown);
 
-                    const greenLabels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "PROPOSED_PATCH:", "ROOT_CAUSE_ANALYSIS:", "OBSERVATION:", "RATING:"];
+                    // EXTENDED NEON GREEN HIGHLIGHT LIST
+                    const greenLabels = [
+                        "STATUS:", "SUMMARY:", "THE_VERDICT:", "PROPOSED_PATCH:", "ROOT_CAUSE_ANALYSIS:", 
+                        "OBSERVATION:", "RATING:", "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", "ACCESSIBILITY:"
+                    ];
+                    
                     greenLabels.forEach(label => {
                         const regex = new RegExp(label, "g");
                         htmlContent = htmlContent.replace(regex, `<span style="color: var(--accent); text-shadow: 0 0 5px var(--accent); font-weight: bold;">${label}</span>`);
