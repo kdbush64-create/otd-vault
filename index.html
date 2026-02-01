@@ -89,13 +89,11 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
 
-        // 1. BEHOLD WIDGET LOADER
         (() => {
             const d=document,s=d.createElement("script");s.type="module";
             s.src="https://w.behold.so/widget.js";d.head.append(s);
         })();
 
-        // 2. STARDATE CLOCK
         function updateClock() {
             const d = new Date();
             const h = d.getHours();
@@ -107,7 +105,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 3. THEME TOGGLE
         const toggleBtn = document.getElementById('theme-toggle');
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
@@ -124,7 +121,6 @@
             }
         });
 
-        // 4. LOG LOADING LOGIC (Enhanced for OTD Vault)
         async function loadLogs(filter = 'all') {
             const list = document.getElementById('log-list');
             list.innerHTML = '<li>[ FILTERING_VAULT... ]</li>';
@@ -144,18 +140,15 @@
                     logFiles = logFiles.filter(file => file.name.toLowerCase().startsWith(filter.toLowerCase()));
                 }
 
-                // Sort by Filename (Assuming YYYY-MM-DD format for best sorting)
                 logFiles.sort((a, b) => b.name.localeCompare(a.name));
                 
                 list.innerHTML = ''; 
                 logFiles.forEach(file => {
                     const li = document.createElement('li');
-                    // Extract date from filename (2026-02-01-name.md -> 2026.02.01)
                     const dateMatch = file.name.match(/^\d{4}-\d{2}-\d{2}/);
                     const dateDisplay = dateMatch ? dateMatch[0].replace(/-/g, '.') : "LOG";
                     
                     let cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    // Remove the date prefix from the visible label
                     cleanName = cleanName.replace(/^\d{4} \d{2} \d{2} /, '');
 
                     li.innerHTML = `<a href="#" class="log-link" onclick="loadPost('${file.download_url}')">${dateDisplay} // ${cleanName}</a>`;
@@ -174,13 +167,18 @@
                 const response = await fetch(url);
                 const text = await response.text();
                 
-                // Strip YAML Front Matter for the display
-                const cleanMarkdown = text.split('---').pop().trim();
+                // FIXED: Better parsing of Front Matter
+                let cleanMarkdown = text;
+                if (text.startsWith('---')) {
+                    const parts = text.split('---');
+                    if (parts.length >= 3) {
+                        cleanMarkdown = parts.slice(2).join('---').trim();
+                    }
+                }
 
                 if (typeof marked !== 'undefined') {
                     let htmlContent = marked.parse(cleanMarkdown);
 
-                    // Apply Neon Green styling to terminal keywords
                     const greenLabels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "PROPOSED_PATCH:", "ROOT_CAUSE_ANALYSIS:", "OBSERVATION:", "RATING:"];
                     greenLabels.forEach(label => {
                         const regex = new RegExp(label, "g");
