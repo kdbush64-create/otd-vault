@@ -1,12 +1,16 @@
 ---
-title: "DESTINATION_NAME"
+title: "LOCATION_NAME"
 date: 2026-02-01
 category: COORD
 ---
-OBSERVATION: Notes on the journey, the "vibe" of the location, and accessibility.
+STATUS: LOCATION_MAPPED
+COST: [ Free / Entry_Fee / Expensive ]
+RATING: 0/10
 
-SUMMARY: What is actually there? Specific sights, costs, or hidden gems.
+OBSERVATION: First impressions of the landscape and the "vibe" upon arrival.
 
-RATING: 0.0/5.0
+SUMMARY: What is actually there to do or see? Is it as advertised?
 
-THE_VERDICT: Would I navigate back to these coordinates?
+ACCESSIBILITY: [ Easy / Moderate / Rugged / Off-Road ]
+
+THE_VERDICT: A hidden gem or a tourist trap?
