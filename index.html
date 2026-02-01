@@ -95,111 +95,61 @@
         </footer>
     </div>
 
-    <script>
-        const repo = "kdbush64-create/otd-vault";
+    const repo = "kdbush64-create/otd-vault";
 
+        // Initialize BeHold Widget
         (() => {
             const d=document,s=d.createElement("script");s.type="module";
             s.src="https://w.behold.so/widget.js";d.head.append(s);
         })();
 
+        // Clock Update
         function updateClock() {
             const d = new Date();
-            const h = d.getHours();
-            const m = d.getMinutes().toString().padStart(2, '0');
-            const s = d.getSeconds().toString().padStart(2, '0');
             const clockElement = document.getElementById('stardate');
-            if(clockElement) clockElement.innerText = `${h}:${m}:${s}`;
+            if(clockElement) clockElement.innerText = d.toLocaleTimeString();
         }
         setInterval(updateClock, 1000);
         updateClock();
 
+        // Theme Toggle Logic
         const toggleBtn = document.getElementById('theme-toggle');
-        if (localStorage.getItem('theme') === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-        }
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
 
         toggleBtn.addEventListener('click', () => {
-            let currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'light') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-            }
+            let theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
         });
 
-        async function loadLogs(filter = 'all') {
-            const list = document.getElementById('log-list');
-            list.innerHTML = '<li>[ FILTERING_VAULT... ]</li>';
-            try {
-                const response = await fetch(`https://api.github.com/repos/${repo}/contents/`);
-                const files = await response.json();
-                
-                if (!Array.isArray(files)) throw new Error("Invalid API Response");
-
-                let logFiles = files.filter(file => 
-                    file.name.endsWith('.md') && 
-                    !file.name.toLowerCase().includes('template') && 
-                    !file.name.toLowerCase().includes('readme') &&
-                    !file.name.toLowerCase().includes('gear-policy')
-                );
-
-                if (filter !== 'all') {
-                    logFiles = logFiles.filter(file => file.name.toLowerCase().startsWith(filter.toLowerCase()));
-                }
-
-                logFiles.sort((a, b) => b.name.localeCompare(a.name));
-                
-                list.innerHTML = ''; 
-                logFiles.forEach(file => {
-                    const li = document.createElement('li');
-                    const dateMatch = file.name.match(/^\d{4}-\d{2}-\d{2}/);
-                    const dateDisplay = dateMatch ? dateMatch[0].replace(/-/g, '.') : "LOG";
-                    
-                    let cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    cleanName = cleanName.replace(/^\d{4} \d{2} \d{2} /, '');
-
-                    li.innerHTML = `<a href="#" class="log-link" onclick="loadPost('${file.download_url}')">${dateDisplay} // ${cleanName}</a>`;
-                    list.appendChild(li);
-                });
-            } catch (error) {
-                console.error("Vault Error:", error);
-                list.innerHTML = "<li>[ ERROR: VAULT_CHRONOLOGY_FAILED ]</li>";
-            }
-        }
-
-        async function loadPost(url) {
+        // Load specific post content
+        async function loadPost(fileName) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink'>EXTRACTING_DATA_STREAM...</p>";
+            
+            // Set hash so refresh works
+            window.location.hash = fileName;
+
+            // Determine correct URL (Policy is in root, others are too based on your setup)
+            const url = `https://raw.githubusercontent.com/${repo}/main/${fileName}`;
+
             try {
                 const response = await fetch(url);
                 const text = await response.text();
-                
                 let cleanMarkdown = text;
+
+                // Strip YAML Front Matter
                 if (text.startsWith('---')) {
                     const parts = text.split('---');
-                    if (parts.length >= 3) {
-                        cleanMarkdown = parts.slice(2).join('---').trim();
-                    }
+                    if (parts.length >= 3) cleanMarkdown = parts.slice(2).join('---').trim();
                 }
 
                 if (typeof marked !== 'undefined') {
                     let htmlContent = marked.parse(cleanMarkdown);
-
-                    const greenLabels = [
-                        "STATUS:", "SUMMARY:", "THE_VERDICT:", "PROPOSED_PATCH:", "ROOT_CAUSE_ANALYSIS:", 
-                        "OBSERVATION:", "RATING:", "COST:", "BRAND:", "DURABILITY:", "UTILITY:", 
-                        "FLAVOR_PROFILE:", "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:",
-                        "BUILD_QUALITY:", "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", "VALUE_INDEX:",
-                        "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", "SYSTEM_FAILURE:",
-                        "UNFILTERED_TRUTH:", "FIELD_TESTING:"
-                    ];
+                    const greenLabels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:", "BUILD_QUALITY:", "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", "VALUE_INDEX:", "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:", "90-100%:", "70-89%:", "50-69%:", "BELOW 50%:"];
                     
                     greenLabels.forEach(label => {
                         const regex = new RegExp(label, "g");
-                        // Added 'highlight-green' class for light-mode control
                         htmlContent = htmlContent.replace(regex, `<span class="highlight-green" style="color: var(--accent); text-shadow: 0 0 5px var(--accent); font-weight: bold;">${label}</span>`);
                     });
 
@@ -211,7 +161,47 @@
             }
         }
 
-        loadLogs();
-    </script>
+        // Check hash and load content
+        function checkHash() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                loadPost(hash);
+            }
+        }
+
+        // Fetch directory list
+        async function loadLogs(filter = 'all') {
+            const list = document.getElementById('log-list');
+            list.innerHTML = '<li>[ SCANNING... ]</li>';
+            try {
+                const response = await fetch(`https://api.github.com/repos/${repo}/contents/`);
+                const files = await response.json();
+                
+                let logFiles = files.filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template') && !f.name.toLowerCase().includes('readme') && !f.name.toLowerCase().includes('gear-policy'));
+                if (filter !== 'all') logFiles = logFiles.filter(f => f.name.toLowerCase().startsWith(filter));
+
+                logFiles.sort((a, b) => b.name.localeCompare(a.name));
+                list.innerHTML = ''; 
+                logFiles.forEach(file => {
+                    const li = document.createElement('li');
+                    const cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
+                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.name}')">${cleanName}</a>`;
+                    list.appendChild(li);
+                });
+            } catch (error) {
+                list.innerHTML = "<li>[ ERROR: DIRECTORY_OFFLINE ]</li>";
+            }
+        }
+
+        // EVENT LISTENERS
+        window.addEventListener('hashchange', checkHash);
+        
+        // BOOT SEQUENCE
+        window.onload = () => {
+            loadLogs().then(() => {
+                checkHash(); // Run this after logs are loaded
+            });
+        };
 </body>
 </html>
+
