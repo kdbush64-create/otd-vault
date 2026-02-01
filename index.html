@@ -6,6 +6,13 @@
     <title>Vintage64 | Personal Vault</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Light mode specific override for our custom green spans */
+        [data-theme="light"] .highlight-green {
+            color: #008000 !important; /* Darker green for white background */
+            text-shadow: none !important;
+        }
+    </style>
 </head>
 
 <body id="personal-identity">    
@@ -185,12 +192,15 @@
                         "STATUS:", "SUMMARY:", "THE_VERDICT:", "PROPOSED_PATCH:", "ROOT_CAUSE_ANALYSIS:", 
                         "OBSERVATION:", "RATING:", "COST:", "BRAND:", "DURABILITY:", "UTILITY:", 
                         "FLAVOR_PROFILE:", "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:",
-                        "BUILD_QUALITY:", "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", "VALUE_INDEX:"
+                        "BUILD_QUALITY:", "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", "VALUE_INDEX:",
+                        "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", "SYSTEM_FAILURE:",
+                        "UNFILTERED_TRUTH:", "FIELD_TESTING:"
                     ];
                     
                     greenLabels.forEach(label => {
                         const regex = new RegExp(label, "g");
-                        htmlContent = htmlContent.replace(regex, `<span style="color: var(--accent); text-shadow: 0 0 5px var(--accent); font-weight: bold;">${label}</span>`);
+                        // Added 'highlight-green' class for light-mode control
+                        htmlContent = htmlContent.replace(regex, `<span class="highlight-green" style="color: var(--accent); text-shadow: 0 0 5px var(--accent); font-weight: bold;">${label}</span>`);
                     });
 
                     contentArea.innerHTML = htmlContent;
