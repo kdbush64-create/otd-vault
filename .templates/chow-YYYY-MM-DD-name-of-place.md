@@ -1,12 +1,16 @@
 ---
-title: "RESTAURANT_NAME"
+title: "PLACE_NAME"
 date: 2026-02-01
 category: CHOW
 ---
-OBSERVATION: Describe the atmosphere, service, and first impressions here.
+STATUS: REVIEW_COMPLETE
+COST: [ $ / $$ / $$$ ]
+RATING: 0/10
 
-SUMMARY: Details on the meal, specific dishes, and value for the money.
+OBSERVATION: Atmosphere, seating, and initial greeting.
 
-RATING: 0.0/5.0
+SUMMARY: The "meat" of the review. How was the food? Any stand-out dishes?
 
-THE_VERDICT: Final thoughts on whether it's worth a return trip.
+FLAVOR_PROFILE: [ Spicy / Savory / Bland / Greasy ]
+
+THE_VERDICT: Worth the drive or skip it?
