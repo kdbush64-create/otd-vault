@@ -3,10 +3,16 @@ title: "PRODUCT_NAME"
 date: 2026-02-01
 category: GEAR
 ---
-OBSERVATION: Build quality, initial setup, and unboxing impressions.
+STATUS: FIELD_TESTED
+BRAND: "BRAND_NAME"
+COST: [ Budget / Mid-Range / Investment ]
+RATING: 0/10
+DURABILITY: [ High / Medium / Low ]
 
-SUMMARY: Performance under load. How does it handle real-world use?
+OBSERVATION: Build quality, materials used, and out-of-the-box feel.
 
-RATING: 0.0/5.0
+SUMMARY: Performance under actual use. Does it solve a problem or create one?
 
-THE_VERDICT: Essential kit or junk drawer candidate?
+UTILITY: [ Essential / Occasional / Tactical / Novelty ]
+
+THE_VERDICT: Does it earn a spot in the vintage64 kit?
