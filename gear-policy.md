@@ -8,13 +8,15 @@
 ### > THE SCORING MATRIX
 Every product reviewed under **GEAR_RECON** is subjected to a 10-point audit across five key vectors. A "10" is not perfection; it is "Enterprise-Grade Reliability."
 
-| Vector | Definition |
-| :--- | :--- |
-| **BUILD_QUALITY** | Structural integrity, material choice, and manufacturing tolerances. |
-| **OPERATIONAL_EFFICIENCY** | How well the device performs its primary function under stress. |
-| **V64_COMPATIBILITY** | Integration into an "Old Texas Dude" workflow (Linux support, repairability, ease of setup). |
-| **ERGONOMICS / UI** | The human-to-machine interface (straps, buttons, software UX). |
-| **VALUE_INDEX** | The ROI (Return on Investment) based on MSRP vs. Lifecycle. |
+**BUILD_QUALITY:** Structural integrity, material choice, and manufacturing tolerances.
+
+**OPERATIONAL_EFFICIENCY:** How well the device performs its primary function under stress.
+
+**V64_COMPATIBILITY:** Integration into an "Old Texas Dude" workflow (Linux support, repairability, ease of setup).
+
+**ERGONOMICS / UI:** The human-to-machine interface (straps, buttons, software UX).
+
+**VALUE_INDEX:** The ROI (Return on Investment) based on MSRP vs. Lifecycle.
 
 ---
 
