@@ -330,6 +330,81 @@ header h1 {
     transform: scale(1.01);
 }
 
+/* 12. LOG CONTENT & SPACING - REFINED */
+.blog-post {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    padding: 0 10px; 
+}
+
+/* Clearer separation for Headers */
+.blog-post h3 {
+    margin-top: 60px;    /* Pushes header away from the section above */
+    margin-bottom: 25px; /* Adds space before the line or text starts */
+    display: block;      /* Ensures header takes up full width for clear clearance */
+    color: var(--primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* The Separator Line - The "Breathing Room" Fix */
+.blog-post hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 30px 0 50px 0; /* Top: 30px | Sides: 0 | Bottom: 50px */
+    opacity: 0.6;
+    clear: both;
+}
+
+/* Caption spacing fix - Right Aligned Field Note Style */
+.blog-post em { 
+    display: block;
+    text-align: right;   /* Aligns caption to the right to differentiate from body text */
+    font-size: 0.8em;
+    color: var(--secondary);
+    margin-top: 15px;    /* Space between image and caption */
+    margin-bottom: 30px; /* Space between caption and the line below it */
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* Bullet points and list spacing */
+.blog-post ol, .blog-post ul {
+    padding-left: 45px !important; 
+    margin: 30px 0;
+}
+
+.blog-post li {
+    margin-bottom: 12px;
+}
+
+.blog-post strong, .blog-post b {
+    color: var(--primary);
+    font-weight: 900 !important;
+    text-transform: uppercase;
+}
+
+/* Image styling within the post */
+.blog-post img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    margin: 35px auto 10px auto; 
+    box-shadow: 0 0 15px var(--shadow);
+}
+
+/* Light Mode Overrides (Must stay at the bottom) */
+[data-theme="light"] .highlight-green {
+    color: #008000 !important;
+    text-shadow: none !important;
+}
+
+[data-theme="light"] .review-label {
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
 /* 12. LOG CONTENT & SPACING */
 .blog-post {
     word-wrap: break-word;
+
