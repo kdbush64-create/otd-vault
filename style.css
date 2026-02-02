@@ -1,4 +1,4 @@
-/* 1. THEME VARIABLES & ADA DEFAULTS */
+/* 1. THEME VARIABLES */
 :root {
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
@@ -21,7 +21,7 @@
     --shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* 2. GLOBAL RESET */
+/* 2. GLOBAL RESET & BASE */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -33,11 +33,8 @@ body {
     align-items: center;
     padding: 15px;
     line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease;
 }
-
-/* 3. THE CHASSIS */
-html { overflow-y: scroll; }
 
 .container {
     width: 95%;
@@ -49,45 +46,67 @@ html { overflow-y: scroll; }
     position: relative;
     z-index: 5;
     box-shadow: 0 10px 30px var(--shadow);
-    overflow: hidden; 
 }
 
-/* 4. THEME TOGGLE */
-.theme-switch-wrapper {
-    margin-bottom: 15px;
+/* 3. TYPEWRITER EFFECT */
+.typewriter {
+    display: inline-block;
+    overflow: hidden;
+    border-right: .15em solid var(--accent);
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: .15em;
+    animation: typing 2.5s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+.delay-type {
+    border-right: none;
+    animation: typing 2.5s steps(40, end) 2.5s both;
+}
+
+@keyframes typing { from { width: 0 } to { width: 100% } }
+@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--accent); } }
+
+/* 4. HEADER & MOBILE STACKING */
+header {
+    text-align: center;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+header h1 {
+    font-size: clamp(1.5rem, 5vw, 2.2rem); 
     display: flex;
-    justify-content: flex-end;
-    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-#theme-toggle {
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 8px 14px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    box-shadow: 0 0 5px var(--accent);
+@media (min-width: 600px) {
+    header h1 { flex-direction: row; justify-content: center; }
+}
+
+.warning-banner {
+    font-size: 0.75rem;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 15px;
 }
 
 /* 5. HERO SECTION */
 .hero-container {
     position: relative;
     width: 100%;
-    height: auto; 
     margin-bottom: 25px;
     border: 2px solid var(--border);
     background: #000;
-    line-height: 0;
 }
 
 .hero-container img {
     display: block;
     width: 100%;
-    height: auto; 
     opacity: 0.6;
 }
 
@@ -97,57 +116,17 @@ html { overflow-y: scroll; }
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     text-align: center;
     pointer-events: none;
 }
 
 .text-overlay h1 {
-    font-size: clamp(1.2rem, 5vw, 2.5rem) !important;
-    margin: 0;
-    line-height: 1.2;
+    font-size: clamp(1.2rem, 5vw, 2.5rem);
     color: var(--primary);
     text-shadow: 2px 2px 8px #000;
 }
 
-.by-line {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    color: var(--secondary);
-    margin: 5px 0;
-    font-weight: bold;
-    text-shadow: 1px 1px 5px #000;
-}
-
-/* 6. HEADER */
-header {
-    text-align: center;
-    border-bottom: 2px dashed var(--border);
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    min-height: 110px;
-}
-
-header h1 {
-    font-size: clamp(1.5rem, 5vw, 2.2rem); 
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin: 10px 0;
-}
-
-.warning-banner {
-    font-size: 0.75rem;
-    padding: 10px;
-    text-align: center;
-    border-bottom: 2px dashed var(--border);
-    margin-bottom: 15px;
-    color: var(--primary);
-}
-
-/* 7. NAVIGATION */
+/* 6. NAVIGATION & BUTTONS */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
@@ -156,77 +135,26 @@ header h1 {
     margin-bottom: 35px;
 }
 
-.secondary-row {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
+.secondary-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
 .secondary-filters { display: flex; gap: 10px; }
 
-.review-label {
-    font-weight: bold;
-    font-size: 0.9em;
-    color: var(--accent);
-    text-shadow: 0 0 8px var(--accent);
-    letter-spacing: 2px;
-    animation: neonPulse 1.5s infinite;
-}
-
-@keyframes neonPulse {
-    0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--accent); }
-    50% { opacity: 0.3; text-shadow: 0 0 2px var(--accent); }
-}
-
-/* 8. BUTTONS */
 .submit-btn {
     background-color: var(--primary);
-    color: #000000;
+    color: #000;
     border: 1px solid var(--primary);
     padding: 8px 16px;
     font-family: inherit;
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
-    transition: all 0.2s ease;
+    transition: 0.2s;
 }
 
-.submit-btn:hover {
-    background-color: transparent;
-    color: var(--primary);
-    box-shadow: 0 0 10px var(--primary);
-}
+.submit-btn:hover { background: transparent; color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+.submit-btn.active { background: var(--accent) !important; color: #000 !important; box-shadow: 0 0 15px var(--accent); }
 
-.submit-btn.active {
-    background-color: var(--accent) !important;
-    color: #000 !important;
-    border: 1px solid var(--accent) !important;
-    box-shadow: 0 0 15px var(--accent) !important;
-}
-
-[data-theme="light"] .submit-btn.active { color: #ffffff !important; }
-
-/* 9. VAULT LAYOUT & DIRECTORY */
-.vault-layout { display: flex; flex-direction: column; gap: 20px; min-height: 400px; }
-#log-list { list-style: none; padding: 0; margin: 0; }
-#log-list li { margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
-.older-log { display: none; }
-
-.log-link {
-    color: var(--secondary) !important; 
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    transition: all 0.2s ease;
-}
-
-.log-link:hover {
-    color: var(--accent) !important;
-    text-shadow: 0 0 8px var(--accent);
-    padding-left: 5px;
-}
+/* 7. LAYOUT & DIRECTORY */
+.vault-layout { display: flex; flex-direction: column; gap: 20px; }
 
 @media (min-width: 850px) {
     .vault-layout { flex-direction: row; }
@@ -234,12 +162,61 @@ header h1 {
     .log-directory { flex: 1; border-left: 1px dashed var(--border); padding-left: 20px; }
 }
 
-/* 10. ANIMATIONS & OVERLAY */
-@keyframes rec-pulse {
-    0%, 100% { opacity: 1; filter: brightness(1.2); }
-    50% { opacity: 0.3; filter: brightness(0.7); }
+#log-list { list-style: none; }
+#log-list li { margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
+
+.log-link { color: var(--secondary); text-decoration: none; font-weight: bold; transition: 0.2s; }
+.log-link:hover { color: var(--accent); padding-left: 5px; text-shadow: 0 0 8px var(--accent); }
+
+/* 8. CONTENT STYLES (THE VAULT LOOK) */
+.blog-post { word-wrap: break-word; }
+.blog-post h3 { margin-top: 40px; color: var(--primary); text-transform: uppercase; }
+.blog-post ul, .blog-post ol { padding-left: 45px !important; margin: 20px 0; }
+.blog-post li { margin-bottom: 10px; }
+.blog-post img { display: block; max-width: 100%; border: 1px solid var(--border); margin: 30px auto; box-shadow: 0 0 15px var(--shadow); }
+.blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
+
+.highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
+[data-theme="light"] .highlight-green { color: #008000 !important; text-shadow: none !important; }
+
+/* 9. BROADCAST TOOLS (ALIGNMENT FIX) */
+.broadcast-tools { 
+    margin-top: 40px; 
+    padding: 15px 25px; 
+    border: 1px solid var(--border); 
+    background: rgba(0,0,0,0.3); 
+    border-top: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
+.share-icons { display: flex; align-items: center; gap: 20px; height: 32px; }
+
+.share-icons a { 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    vertical-align: middle;
+}
+
+.share-icons img, .share-icons svg {
+    height: 24px !important;
+    width: 24px !important;
+    display: block;
+}
+
+.share-icons i {
+    font-size: 20px !important; 
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 10. SURVEILLANCE & OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -249,111 +226,7 @@ header h1 {
     z-index: 100;
 }
 
-/* 11. COMMENTS & FEED */
-.comment-module {
-    margin-top: 50px;
-    padding: 35px 20px 20px 20px; 
-    border: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.1);
-    position: relative;
-}
+.blink { animation: rec-pulse 2s infinite; color: var(--accent); }
+@keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-.comment-module::after {
-    content: "SECURE_UPLINK_READY";
-    position: absolute;
-    top: 10px; right: 15px;
-    font-size: 0.65rem;
-    font-weight: bold;
-    color: var(--accent);
-    animation: rec-pulse 2s ease-in-out infinite;
-}
-
-.surveillance-wrapper {
-    margin-top: 30px;
-    border: 1px solid var(--border);
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.2);
-}
-
-.feed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: bold; }
-
-#stardate, .blink {
-    color: var(--accent) !important;
-    animation: rec-pulse 2s ease-in-out infinite;
-    text-shadow: 0 0 5px var(--accent);
-}
-
-.feed-container {
-    border: 1px solid var(--border);
-    transition: all 0.3s ease-in-out;
-    position: relative;
-    overflow: hidden;
-}
-
-/* 12. LOG CONTENT SPACING (UNCHANGED) */
-.blog-post { word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; padding: 0 10px; }
-.blog-post h3 { margin-top: 60px; margin-bottom: 25px; display: block; color: var(--primary); letter-spacing: 2px; text-transform: uppercase; }
-.blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 30px 0 50px 0; opacity: 0.6; clear: both; }
-.blog-post em { display: block; text-align: right; font-size: 0.8em; color: var(--secondary); margin-top: 15px; margin-bottom: 30px; font-style: italic; opacity: 0.8; }
-.blog-post ol, .blog-post ul { padding-left: 45px !important; margin: 30px 0; }
-.blog-post li { margin-bottom: 12px; }
-.blog-post strong, .blog-post b { color: var(--primary); font-weight: 900 !important; text-transform: uppercase; }
-.blog-post img { display: block; max-width: 100%; height: auto; border: 1px solid var(--border); margin: 35px auto 10px auto; box-shadow: 0 0 15px var(--shadow); }
-
-/* 13. BROADCAST TOOLS (THE DEFINITIVE ALIGNMENT FIX) */
-.broadcast-tools { 
-    margin-top: 40px; 
-    padding: 15px 25px; 
-    border: 1px solid var(--border); 
-    background: rgba(0,0,0,0.3); 
-    border-top: 2px solid var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 25px;
-    flex-wrap: wrap;
-}
-
-.share-label { font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 1px; }
-
-.share-icons { 
-    display: flex; 
-    align-items: center; 
-    gap: 20px;
-    height: 24px; 
-}
-
-.share-icons a { 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    height: 24px;
-    width: 24px;
-    line-height: 1;
-}
-
-.share-icons img, .share-icons svg {
-    width: 24px !important;
-    height: 24px !important;
-    display: block;
-    object-fit: contain;
-}
-
-.share-icons i {
-    font-size: 18px !important; 
-    color: var(--accent);
-    text-shadow: 0 0 5px var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-}
-
-.share-icons a:hover { transform: translateY(-3px); filter: drop-shadow(0 0 8px var(--accent)); }
-
-/* 14. HIGHLIGHTS & LIGHT MODE FIXES */
-.highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
-[data-theme="light"] .highlight-green { color: #008000 !important; text-shadow: none !important; }
-[data-theme="light"] .review-label { text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+.surveillance-wrapper { margin-top: 30px; border: 1px solid var(--border); padding: 10px; background: rgba(0,0,0,0.2); }
