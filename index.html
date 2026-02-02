@@ -28,16 +28,16 @@
         </div>
 
         <header>
-    <div class="warning-banner">!! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD </div>
-    <div class="header-title-group">
-        <h1 class="main-title">
-            <span class="typewriter">OTD</span>
-        </h1>
-        <h1 class="main-title">
-            <span class="typewriter delay-type">PERSONAL_VAULT</span>
-        </h1>
-    </div>
-</header>
+            <div class="warning-banner">!! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD </div>
+            <div class="header-title-group">
+                <h1 class="main-title">
+                    <span class="typewriter">OTD</span>
+                </h1>
+                <h1 class="main-title">
+                    <span class="typewriter delay-type">PERSONAL_VAULT</span>
+                </h1>
+            </div>
+        </header>
 
         <section class="hero-container">
             <img src="telescope-clean.jpg" alt="The Observation Deck">
@@ -157,27 +157,14 @@
                 }
 
                 if (typeof marked !== 'undefined') {
+                    // 1. Render Markdown to HTML
                     let htmlContent = marked.parse(cleanMarkdown);
                     
-                    const greenLabels = [
-                        "STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", 
-                        "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", 
-                        "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:", "BUILD_QUALITY:", 
-                        "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", 
-                        "VALUE_INDEX:", "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", 
-                        "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:"
-                    ];
-                    
-                    greenLabels.forEach(label => {
-                        // Improved Regex to catch labels even with trailing spaces/newlines
-                        const regex = new RegExp(`(${label})`, "gi");
-                        htmlContent = htmlContent.replace(regex, `<span class="highlight-green">$1</span>`);
-                    });
-
                     const shareUrl = encodeURIComponent(window.location.href);
                     const shareText = encodeURIComponent("New review uplinked from the Observation Deck: ");
                     
-                    const broadcastHtml = `
+                    // 2. Insert HTML into the area
+                    contentArea.innerHTML = `
                         <div class="blog-post">${htmlContent}</div>
                         <div class="broadcast-tools">
                             <span class="share-label">SHARE_TO ></span>
@@ -198,7 +185,42 @@
                         </div>
                     `;
 
-                    contentArea.innerHTML = broadcastHtml;
+                    // 3. Highlight Labels using TreeWalker (The robust fix)
+                    const greenLabels = [
+                        "STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", 
+                        "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", 
+                        "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:", "BUILD_QUALITY:", 
+                        "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", 
+                        "VALUE_INDEX:", "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", 
+                        "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:"
+                    ];
+
+                    const walk = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, null, false);
+                    let node;
+                    const nodesToProcess = [];
+
+                    while (node = walk.nextNode()) {
+                        greenLabels.forEach(label => {
+                            if (node.nodeValue.includes(label)) {
+                                nodesToProcess.push({ node, label });
+                            }
+                        });
+                    }
+
+                    nodesToProcess.forEach(({ node, label }) => {
+                        const span = document.createElement('span');
+                        span.className = 'highlight-green';
+                        span.textContent = label;
+                        
+                        const parts = node.nodeValue.split(label);
+                        if (node.parentNode) {
+                            node.parentNode.insertBefore(document.createTextNode(parts[0]), node);
+                            node.parentNode.insertBefore(span, node);
+                            node.parentNode.insertBefore(document.createTextNode(parts[1]), node);
+                            node.parentNode.removeChild(node);
+                        }
+                    });
+
                     if (isManualClick) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
                 }
             } catch (err) { 
@@ -271,4 +293,3 @@
     </script>
 </body>
 </html>
-
