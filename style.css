@@ -197,42 +197,32 @@ header h1 {
     color: var(--accent) !important; 
     text-shadow: 0 0 8px rgba(0, 255, 65, 0.5); 
     text-transform: uppercase; 
-    letter-spacing: 1px;
 }
 
-/* 7b. Lists & Label Fix - Turns **Bold_Labels** green */
+/* 7b. LISTS & LABELS (THE AGGRESSIVE FIX) */
 .blog-post ul, .blog-post ol { padding-left: 30px !important; margin: 20px 0; }
 .blog-post li { margin-bottom: 10px; color: var(--primary); }
 
-/* This targets the bold text in your Brand Tags list to match the Verdict section */
+/* Targets every common way Markdown bolds labels in lists */
 .blog-post li strong, 
-.blog-post li b {
+.blog-post li b,
+.blog-post li span[style*="font-weight: bold"],
+.blog-post li span[style*="font-weight:bold"] {
     color: var(--accent) !important;
     text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+    font-weight: bold;
 }
 
-/* 7c. Media & Layout Elements (Preserved) */
+/* 7c. Media & Layout Elements */
 .blog-post img { 
-    display: block; 
-    max-width: 100%; 
-    border: 1px solid var(--border); 
-    margin: 30px auto; 
-    box-shadow: 0 0 15px var(--shadow); 
+    display: block; max-width: 100%; border: 1px solid var(--border); 
+    margin: 30px auto; box-shadow: 0 0 15px var(--shadow); 
 }
 
-.blog-post hr { 
-    border: 0; 
-    border-top: 1px solid var(--border); 
-    margin: 40px 0; 
-    opacity: 0.5; 
-}
+.blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
 
-/* 7d. Manual Override Class (Preserved) */
-.highlight-green { 
-    color: var(--accent) !important; 
-    text-shadow: 0 0 5px var(--accent); 
-    font-weight: bold; 
-}
+/* 7d. Manual Override Class */
+.highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
 
 /* 8. BROADCAST TOOLS (REACTIVE BLOOM + ICON FIX) */
 .broadcast-tools { 
@@ -359,6 +349,7 @@ header h1 {
     opacity: 0.5;
     z-index: 2;
 }
+
 
 
 
