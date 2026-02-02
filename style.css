@@ -54,15 +54,15 @@ header {
     border-bottom: 2px dashed var(--border);
     margin-bottom: 20px;
     padding-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
 }
 
 .header-title-group {
-    display: flex;
-    flex-direction: column; /* Force vertical stack */
-    align-items: center;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
     width: 100%;
 }
 
@@ -71,14 +71,7 @@ header h1 {
     margin: 5px 0;
     text-align: center;
     width: 100%;
-}
-
-/* Override the old media query that was pushing them side-by-side */
-@media (min-width: 600px) {
-    header h1 {
-        flex-direction: column;
-        gap: 0;
-    }
+    display: block !important;
 }
 
 .typewriter {
