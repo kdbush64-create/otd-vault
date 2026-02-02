@@ -249,3 +249,11 @@ header h1 {
 @keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
 .surveillance-wrapper { margin-top: 30px; border: 1px solid var(--border); padding: 10px; background: rgba(0,0,0,0.2); }
+
+/* Persistent Active State */
+.submit-btn.selected { 
+    background: var(--accent) !important; 
+    color: #000 !important; 
+    box-shadow: 0 0 15px var(--accent); 
+    border-color: var(--accent);
+}
