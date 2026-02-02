@@ -178,7 +178,12 @@
         async function loadPost(fileName) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink'>EXTRACTING_DATA_STREAM...</p>";
-            window.location.hash = fileName;
+            
+            // This line ensures the browser remembers where you are
+            if (window.location.hash !== '#' + fileName) {
+                window.location.hash = fileName;
+            }
+
             const url = `https://raw.githubusercontent.com/${repo}/main/${fileName}`;
 
             try {
@@ -211,6 +216,12 @@
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
             
+            // 1. CLEAR THE HASH if we are intentionally going back to the Feed landing page
+            if (filter === 'rant' && btnElement) {
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+            }
+
+            // 2. UI Update: Highlight the active button
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) {
                 btnElement.classList.add('active');
@@ -247,6 +258,7 @@
 
                 if (logFiles.length > DISPLAY_LIMIT) loadMoreBtn.style.display = "block";
 
+                // 3. AUTO-LOAD logic: Only load the first one if we aren't currently viewing a specific post via hash
                 if (autoLoadFirst && !window.location.hash && logFiles.length > 0) {
                     loadPost(logFiles[0].name);
                 }
@@ -262,20 +274,26 @@
 
         function checkHash() {
             const hash = window.location.hash.replace('#', '');
-            if (hash) loadPost(hash);
+            if (hash) {
+                loadPost(hash);
+            }
         }
 
         window.addEventListener('hashchange', checkHash);
         
         window.onload = () => {
+            // BOOT SEQUENCE:
+            // If there's a hash, we need to show the post AND ensure the directory shows 'all' so that post is visible in the list.
             if (window.location.hash) {
                 loadLogs('all').then(() => {
                     checkHash();
                 });
             } else {
+                // Otherwise, default to the Feed.
                 loadLogs('rant', true, document.getElementById('btn-feed')); 
             }
         };
     </script>
 </body>
 </html>
+
