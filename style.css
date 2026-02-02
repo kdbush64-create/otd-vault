@@ -242,23 +242,37 @@ header h1 {
 .theme-switch-wrapper { position: absolute; top: 10px; right: 10px; z-index: 10; }
 #theme-toggle { background: none; border: 1px solid var(--border); color: var(--secondary); padding: 5px; cursor: pointer; font-size: 0.6rem; }
 
-/* 10. VISUAL UPLINK FIXES (REACTIVE VERSION) */
+/* 10. VISUAL UPLINK FIXES */
+.feed-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+#stardate {
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+    text-align: right;
+}
+
 .feed-container {
-    border: 1px solid var(--border); /* Solid amber/brown border by default */
+    border: 1px solid var(--border);
     padding: 10px;
     background: #000;
-    transition: all 0.4s ease; /* Smooth transition for the glow */
+    transition: all 0.4s ease;
     position: relative;
-    cursor: crosshair; /* Optional: gives it a "targeting" feel */
+    cursor: crosshair;
 }
 
-/* THE GLOW EFFECT ON HOVER */
 .feed-container:hover {
-    border: 1px solid var(--accent); /* Switches to green on hover */
-    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4); /* Soft green glow with blurred edges */
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
 }
 
-/* Keep the scanlines constant or move them to hover as well */
 .feed-container::after {
     content: "";
     position: absolute;
