@@ -25,7 +25,6 @@
         @keyframes neonPulse { 0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--accent); } 50% { opacity: 0.3; text-shadow: 0 0 2px var(--accent); } }
         .submit-btn.active { background-color: var(--accent) !important; color: #000 !important; box-shadow: 0 0 15px var(--accent); border: 1px solid #fff; }
         
-        /* Broadcast UI Update */
         .broadcast-tools { 
             margin-top: 40px; 
             padding: 15px; 
@@ -37,23 +36,10 @@
             gap: 20px;
             flex-wrap: wrap;
         }
-        .share-label { 
-            font-size: 0.8em; 
-            color: var(--accent); 
-            font-weight: bold; 
-            letter-spacing: 1px;
-        }
-        .share-icons { display: flex; gap: 20px; font-size: 1.5em; }
-        .share-icons a, .share-icons i { 
-            color: var(--accent); 
-            cursor: pointer; 
-            transition: 0.3s;
-            text-decoration: none;
-        }
-        .share-icons a:hover, .share-icons i:hover { 
-            text-shadow: 0 0 15px var(--accent); 
-            transform: scale(1.1); 
-        }
+        .share-label { font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 1px; }
+        .share-icons { display: flex; gap: 25px; font-size: 1.5em; }
+        .share-icons a, .share-icons i { color: var(--accent); cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .share-icons a:hover, .share-icons i:hover { text-shadow: 0 0 15px var(--accent); transform: scale(1.1); }
     </style>
 </head>
 
@@ -153,9 +139,15 @@
             localStorage.setItem('theme', theme);
         });
 
+        // ROBUST COPY FUNCTION
         function copyUplink() {
-            navigator.clipboard.writeText(window.location.href);
-            alert('UPLINK_COPIED: PASTE TO SOCIAL MEDIA BIO OR STORY');
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = window.location.href;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            alert('UPLINK_COPIED_TO_CLIPBOARD');
         }
 
         async function loadPost(filePath, isManualClick = false) {
@@ -170,12 +162,6 @@
                 if (text.startsWith('---')) {
                     const parts = text.split('---');
                     if (parts.length >= 3) cleanMarkdown = parts.slice(2).join('---').trim();
-                }
-
-                const imgMatch = cleanMarkdown.match(/!\[.*?\]\((.*?)\)/);
-                let broadcastImg = "https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/telescope-clean.jpg";
-                if (imgMatch && imgMatch[1]) {
-                    broadcastImg = imgMatch[1].startsWith('http') ? imgMatch[1] : `https://raw.githubusercontent.com/${repo}/main/${imgMatch[1]}`;
                 }
 
                 if (typeof marked !== 'undefined') {
@@ -195,7 +181,7 @@
                             <span class="share-label">SHARE_TO ></span>
                             <div class="share-icons">
                                 <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" title="Broadcast to X"><i class="fa-brands fa-x-twitter"></i></a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&picture=${encodeURIComponent(broadcastImg)}" target="_blank" title="Broadcast to Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" title="Broadcast to Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                                 <i class="fa-brands fa-instagram" onclick="copyUplink()" title="Copy Link for Instagram"></i>
                                 <i class="fa-solid fa-link" onclick="copyUplink()" title="Copy Uplink to Clipboard"></i>
                             </div>
