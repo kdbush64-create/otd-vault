@@ -19,11 +19,11 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
 </head>
 
-<body id="personal-identity">    
+<body id="personal-identity">
     <div class="terminal-overlay"></div>
     <div class="container">
         <div class="theme-switch-wrapper">
-            <button id="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
+            <button id="theme-toggle" name="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
         <header>
@@ -45,14 +45,14 @@
 
         <nav class="vault-nav-container">
             <div class="primary-feed">
-                <button id="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ THE_FEED ]</button>
+                <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ THE_FEED ]</button>
             </div>
             <div class="secondary-row">
                 <span class="review-tag">REVIEWS ></span>
                 <div class="secondary-filters">
-                    <button id="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
-                    <button id="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
-                    <button id="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
+                    <button id="btn-chow" name="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
+                    <button id="btn-coord" name="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
+                    <button id="btn-gear" name="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
                 </div>
             </div>
         </nav>
@@ -71,7 +71,7 @@
                 <h3>> LOG_DIRECTORY</h3>
                 <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: VAULT_ACTIVE ]</div>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
-                <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
+                <button id="load-more-btn" name="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
                 
                 <div class="surveillance-wrapper">
                     <h3>> VISUAL_UPLINK</h3>
