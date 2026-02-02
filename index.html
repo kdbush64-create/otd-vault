@@ -19,13 +19,38 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     
     <style>
-    /* Forces green highlights even if external CSS is cached */
+    /* 1. Green Labels Fix */
     .highlight-green {
         color: #00ff41 !important;
         text-shadow: 0 0 5px rgba(0, 255, 65, 0.6) !important;
         font-weight: bold !important;
         text-transform: uppercase !important;
         display: inline-block !important;
+    }
+
+    /* 2. Typewriter Logic with Green Text & Amber Cursor */
+    .typewriter {
+        color: #00ff41 !important; /* Neon Green Text */
+        text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        letter-spacing: .10em;
+        width: 0;
+        animation: typing 1.5s steps(20, end) forwards;
+    }
+
+    .delay-type {
+        animation: typing 1.5s steps(20, end) 1s forwards, blink-caret .75s step-end infinite;
+        /* Amber Cursor */
+        border-right: .15em solid #ffb000; 
+        padding-right: 4px;
+    }
+
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { 
+        from, to { border-color: transparent } 
+        50% { border-color: #ffb000; } 
     }
 </style>
 </head>
@@ -38,9 +63,19 @@
             <button id="theme-toggle" name="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
-        <header style="border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 10px; width: 100%;">
-    <div class="warning-banner" style="text-align: center; font-size: 0.8rem; line-height: 1.4;">
+        <header style="display: block !important; width: 100% !important; text-align: center !important; border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px; clear: both !important;">
+    
+    <div class="warning-banner" style="display: block !important; width: 100% !important; margin-bottom: 15px !important;">
         !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD 
+    </div>
+
+    <div class="header-title-group" style="display: block !important; width: 100% !important;">
+        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 5px 0 !important; font-size: clamp(1.4rem, 5vw, 2.2rem); text-align: center !important;">
+            <span class="typewriter">OTD</span>
+        </h1>
+        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 5px 0 !important; font-size: clamp(1.4rem, 5vw, 2.2rem); text-align: center !important;">
+            <span class="typewriter delay-type">PERSONAL_VAULT</span>
+        </h1>
     </div>
 </header>
 
@@ -285,5 +320,6 @@
     </script>
 </body>
 </html>
+
 
 
