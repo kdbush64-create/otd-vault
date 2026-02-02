@@ -59,7 +59,6 @@
             border: 1px solid #fff;
         }
 
-        /* Instruction text styling */
         .dir-instruction {
             font-size: 0.65rem;
             color: var(--primary-dim);
@@ -166,7 +165,7 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
         const folders = ['rants', 'chow', 'gear', 'coord'];
-        const DISPLAY_LIMIT = 10; // Current limit before "Show More" appears
+        const DISPLAY_LIMIT = 10;
 
         // Initialize BeHold Widget
         (() => {
@@ -235,10 +234,17 @@
                 statusLabel.innerText = `[ SOURCE: ${filter === 'rants' ? 'THE_FEED' : filter.toUpperCase()} ]`;
             }
 
-            // UI Update: Highlight the active button
+            // Highlight the active button
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // If we have a button element passed in, use it. 
+            // Otherwise, search for the button based on the filter string.
             if (btnElement) {
                 btnElement.classList.add('active');
+            } else {
+                let targetId = (filter === 'rants') ? 'btn-feed' : `btn-${filter}`;
+                const targetBtn = document.getElementById(targetId);
+                if (targetBtn) targetBtn.classList.add('active');
             }
 
             list.innerHTML = '<li>[ SCANNING... ]</li>';
@@ -253,12 +259,10 @@
                 const results = await Promise.all(folderPromises);
                 let logFiles = results.flat().filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template') && !f.name.toLowerCase().includes('readme'));
                 
-                // Filter by directory
                 if (filter !== 'all') {
                     logFiles = logFiles.filter(f => f.path.startsWith(filter + '/'));
                 }
 
-                // Sort newest first
                 logFiles.sort((a, b) => b.name.localeCompare(a.name));
                 list.innerHTML = ''; 
                 
@@ -266,7 +270,6 @@
                     const li = document.createElement('li');
                     const cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     
-                    // Add index checking for "Show More"
                     if (index >= DISPLAY_LIMIT) {
                         li.style.display = "none";
                         li.classList.add('older-log');
@@ -276,12 +279,10 @@
                     list.appendChild(li);
                 });
 
-                // Show button if we exceed limit
                 if (logFiles.length > DISPLAY_LIMIT) {
                     loadMoreBtn.style.display = "block";
                 }
 
-                // FIX: Automatically load the first item in the NEW category
                 if (autoLoadFirst && logFiles.length > 0) {
                     loadPost(logFiles[0].path);
                 }
@@ -299,6 +300,11 @@
             const hash = window.location.hash.replace('#', '');
             if (hash) {
                 loadPost(hash);
+                // When loading via hash, figure out which folder it's in to highlight the right button
+                const folder = hash.split('/')[0];
+                if (folders.includes(folder)) {
+                    loadLogs(folder, false);
+                }
             }
         }
 
@@ -306,12 +312,10 @@
         
         window.onload = () => {
             if (window.location.hash) {
-                loadLogs('all').then(() => {
-                    checkHash();
-                });
+                checkHash();
             } else {
-                // Default boot sequence
-                loadLogs('rants', true, document.getElementById('btn-feed')); 
+                // This now properly highlights "THE_FEED" on fresh boot
+                loadLogs('rants', true); 
             }
         };
     </script>
