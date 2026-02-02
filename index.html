@@ -58,25 +58,17 @@
             text-decoration: none;
             height: 24px;
         }
-        .share-icons img {
+        .share-icons img, .share-icons svg {
             width: 24px;
             height: 24px;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.1));
             display: block;
         }
-        /* ALIGNMENT FIX FOR ICONS */
+        /* ALIGNMENT FOR FONT-AWESOME LINK ICON */
         .share-icons i {
-            font-size: 22px; 
+            font-size: 19px; 
             color: var(--accent);
             text-shadow: 0 0 5px var(--accent);
-            line-height: 24px;
-            display: flex;
-            align-items: center;
-        }
-        /* NEXTDOOR SPECIFIC BRAND COLOR */
-        .share-icons .fa-nextdoor {
-            color: #00B246;
-            text-shadow: 0 0 5px rgba(0, 178, 70, 0.5);
+            transform: translateY(1px); 
         }
         .share-icons a:hover { 
             transform: translateY(-3px); 
@@ -231,7 +223,9 @@
                                     <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
                                 </a>
                                 <a href="https://nextdoor.com/share/feed/?url=${shareUrl}" target="_blank" title="Nextdoor">
-                                    <i class="fa-brands fa-nextdoor"></i>
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 12.001C0 5.372 5.373 0 12 0s12 5.372 12 12.001c0 6.627-5.373 12-12 12s-12-5.373-12-12zm18.32 5.62v-5.91h-3.32v2.24l-3.003-2.24H8.674v5.91h3.323v-2.244l3 2.244h3.323z" fill="#00B246"/>
+                                    </svg>
                                 </a>
                                 <a href="javascript:void(0)" onclick="copyUplink()" title="Copy Link">
                                     <i class="fa-solid fa-link"></i>
@@ -250,14 +244,13 @@
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
             
-            // BUTTON HIGHLIGHT LOGIC
+            // Persistent Button Highlight Fix
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) {
                 btnElement.classList.add('active');
             } else {
-                // FALLBACK: Auto-find button if called without element (on reload)
-                const targetBtn = document.getElementById('btn-' + filter);
-                if (targetBtn) targetBtn.classList.add('active');
+                const autoBtn = document.getElementById('btn-' + filter);
+                if (autoBtn) autoBtn.classList.add('active');
             }
 
             list.innerHTML = '<li>[ SCANNING... ]</li>';
@@ -295,7 +288,6 @@
             if (window.location.hash) {
                 checkHash(); 
             } else { 
-                // Default load
                 loadLogs('rants', true, document.getElementById('btn-rants')); 
             } 
         };
