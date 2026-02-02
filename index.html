@@ -1,20 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vintage64 | Personal Vault</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        /* Light mode specific override for our custom green spans */
-        [data-theme="light"] .highlight-green {
-            color: #008000 !important; /* Darker green for white background */
-            text-shadow: none !important;
-        }
-    </style>
-</head>
-
 <body id="personal-identity">    
     <div class="terminal-overlay"></div>
 
@@ -42,6 +25,7 @@
 
         <nav class="vault-filters" style="margin-bottom: 25px; text-align: center; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
             <button onclick="loadLogs('all')" class="submit-btn">ALL</button>
+            <button onclick="loadLogs('rant')" class="submit-btn">RANTS</button>
             <button onclick="loadLogs('chow')" class="submit-btn">CHOW</button>
             <button onclick="loadLogs('coord')" class="submit-btn">COORD</button>
             <button onclick="loadLogs('gear')" class="submit-btn">GEAR</button>
@@ -50,19 +34,11 @@
         <main class="vault-layout">
             <section class="log-display">
                 <article id="content" class="blog-post">
-                    <p>> SELECT_LOG_FROM_DIRECTORY_ <br> TO_BEGIN_STREAM...</p>
+                    <p>> INITIALIZING_PRIMARY_FEED... <br> STAND_BY_FOR_UPLINK...</p>
                 </article>
 
                 <div class="comment-module">
-                    <script src="https://utteranc.es/client.js"
-                            repo="kdbush64-create/otd-vault"
-                            issue-term="pathname"
-                            label="System"
-                            theme="preferred-color-scheme"
-                            crossorigin="anonymous"
-                            async>
-                    </script>
-                </div>
+                    </div>
             </section>
 
             <aside class="log-directory">
@@ -70,110 +46,34 @@
                 <ul class="file-list" id="log-list">
                     <li>[ SCANNING_VAULT... ]</li>
                 </ul>
+                <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
 
                 <div class="surveillance-wrapper">
-                    <h3>> VISUAL_UPLINK</h3>
-                    <div class="feed-header">
-                        <span class="blink">● REC</span>
-                        <span id="stardate"></span>
                     </div>
-                    <div class="feed-container">
-                        <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
-                    </div>
-                    <div class="feed-footer">SOURCE: INSTAGRAM_API_V1</div>
-                </div>
             </aside>
         </main>
 
         <footer style="margin-top: 50px; border-top: 2px solid var(--accent); padding-top: 30px; padding-bottom: 50px;">
             <div style="display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; gap: 20px; flex-wrap: wrap;">
-                <a href="index.html" class="footer-link" style="flex: 1; text-align: left;">[ RETURN_TO_BASE ]</a>
-                <a href="javascript:void(0)" onclick="loadPost('gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold; flex: 1; text-align: center;">[ GEAR_POLICY ]</a>
+                <a href="javascript:void(0)" onclick="loadPost('gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold; flex: 1; text-align: left;">[ GEAR_POLICY ]</a>
                 <a href="mailto:your-email@example.com?subject=V64_UPLINK_FEEDBACK" class="footer-link" style="flex: 1; text-align: right;">[ SEND_FEEDBACK ]</a>
             </div>
-            <p style="text-align: center; margin-top: 30px; opacity: 0.7;" class="blink">PERSONAL_THOUGHTS_V1.2 // SYSTEM_STABLE</p>
+            <p style="text-align: center; margin-top: 30px; opacity: 0.7;" class="blink">PERSONAL_THOUGHTS_V1.3 // BLOG_MODULE_ACTIVE</p>
         </footer>
     </div>
 
     <script>
         const repo = "kdbush64-create/otd-vault";
+        const DISPLAY_LIMIT = 10; // Number of logs to show before hiding
 
-        // Initialize BeHold Widget
-        (() => {
-            const d=document,s=d.createElement("script");s.type="module";
-            s.src="https://w.behold.so/widget.js";d.head.append(s);
-        })();
+        // ... (Keep existing updateClock and Theme Toggle logic) ...
 
-        // Clock Update
-        function updateClock() {
-            const d = new Date();
-            const clockElement = document.getElementById('stardate');
-            if(clockElement) clockElement.innerText = d.toLocaleTimeString();
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Theme Toggle Logic
-        const toggleBtn = document.getElementById('theme-toggle');
-        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-
-        toggleBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        });
-
-        // Load specific post content
-        async function loadPost(fileName) {
-            const contentArea = document.getElementById('content');
-            contentArea.innerHTML = "<p class='blink'>EXTRACTING_DATA_STREAM...</p>";
-            
-            // Set hash so refresh works
-            window.location.hash = fileName;
-
-            // Determine correct URL
-            const url = `https://raw.githubusercontent.com/${repo}/main/${fileName}`;
-
-            try {
-                const response = await fetch(url);
-                const text = await response.text();
-                let cleanMarkdown = text;
-
-                // Strip YAML Front Matter
-                if (text.startsWith('---')) {
-                    const parts = text.split('---');
-                    if (parts.length >= 3) cleanMarkdown = parts.slice(2).join('---').trim();
-                }
-
-                if (typeof marked !== 'undefined') {
-                    let htmlContent = marked.parse(cleanMarkdown);
-                    const greenLabels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:", "BUILD_QUALITY:", "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", "VALUE_INDEX:", "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:", "90-100%:", "70-89%:", "50-69%:", "BELOW 50%:"];
-                    
-                    greenLabels.forEach(label => {
-                        const regex = new RegExp(label, "g");
-                        htmlContent = htmlContent.replace(regex, `<span class="highlight-green" style="color: var(--accent); text-shadow: 0 0 5px var(--accent); font-weight: bold;">${label}</span>`);
-                    });
-
-                    contentArea.innerHTML = htmlContent;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            } catch (err) {
-                contentArea.innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG</p>";
-            }
-        }
-
-        // Check hash and load content
-        function checkHash() {
-            const hash = window.location.hash.replace('#', '');
-            if (hash) {
-                loadPost(hash);
-            }
-        }
-
-        // Fetch directory list
         async function loadLogs(filter = 'all') {
             const list = document.getElementById('log-list');
+            const loadMoreBtn = document.getElementById('load-more-btn');
             list.innerHTML = '<li>[ SCANNING... ]</li>';
+            loadMoreBtn.style.display = "none";
+
             try {
                 const response = await fetch(`https://api.github.com/repos/${repo}/contents/`);
                 const files = await response.json();
@@ -183,24 +83,47 @@
 
                 logFiles.sort((a, b) => b.name.localeCompare(a.name));
                 list.innerHTML = ''; 
-                logFiles.forEach(file => {
+                
+                logFiles.forEach((file, index) => {
                     const li = document.createElement('li');
                     const cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.name}')">${cleanName}</a>`;
+                    
+                    // Hide items beyond the limit
+                    if (index >= DISPLAY_LIMIT) {
+                        li.style.display = "none";
+                        li.classList.add('older-log');
+                    }
                     list.appendChild(li);
                 });
+
+                // Show button if there are more than the limit
+                if (logFiles.length > DISPLAY_LIMIT) {
+                    loadMoreBtn.style.display = "block";
+                }
+
+                // If no hash, auto-load the very first log in the list
+                if (!window.location.hash) {
+                    const firstLog = logFiles[0];
+                    if(firstLog) loadPost(firstLog.name);
+                }
+
             } catch (error) {
                 list.innerHTML = "<li>[ ERROR: DIRECTORY_OFFLINE ]</li>";
             }
         }
 
-        // EVENT LISTENERS
-        window.addEventListener('hashchange', checkHash);
-        
-        // BOOT SEQUENCE
+        function showAllLogs() {
+            const olderLogs = document.querySelectorAll('.older-log');
+            olderLogs.forEach(log => log.style.display = "block");
+            document.getElementById('load-more-btn').style.display = "none";
+        }
+
+        // ... (Keep existing loadPost and checkHash functions) ...
+
         window.onload = () => {
             loadLogs().then(() => {
-                checkHash(); // Run this after logs are loaded
+                checkHash(); 
             });
         };
     </script>
