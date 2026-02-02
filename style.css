@@ -10,14 +10,14 @@
     --shadow: rgba(0, 0, 0, 0.8);
 }
 
-/* DARK MODE IS DEFAULT - LIGHT MODE OVERRIDE */
+/* LIGHT MODE OVERRIDE */
 [data-theme="light"] {
     --bg: #f4f4f4;
     --container-bg: #ffffff;
     --primary: #7a5400;
     --primary-dim: #5c5c5c;
     --secondary: #005f6b;
-    --accent: #008522;
+    --accent: #008522; /* Forest Green for contrast */
     --border: #a3a3a3;
     --shadow: rgba(0, 0, 0, 0.1);
 }
@@ -150,7 +150,7 @@ header h1 {
     color: var(--primary);
 }
 
-/* 7. HIERARCHICAL NAVIGATION */
+/* 7. HIERARCHICAL NAVIGATION & NEON */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
@@ -172,7 +172,6 @@ header h1 {
     gap: 10px;
 }
 
-/* NEON BLINKING LABEL */
 .review-label {
     font-weight: bold;
     font-size: 0.9em;
@@ -212,6 +211,11 @@ header h1 {
     color: #000 !important;
     border: 1px solid var(--accent) !important;
     box-shadow: 0 0 15px var(--accent) !important;
+}
+
+/* LIGHT MODE BUTTON TEXT FIX */
+[data-theme="light"] .submit-btn.active {
+    color: #ffffff !important;
 }
 
 /* 9. VAULT LAYOUT & DIRECTORY */
@@ -275,7 +279,7 @@ header h1 {
     z-index: 100;
 }
 
-/* 11. COMMENTS & SURVEILLANCE */
+/* 11. COMMENTS & SURVEILLANCE FEED */
 .comment-module {
     margin-top: 50px;
     padding: 35px 20px 20px 20px; 
@@ -315,6 +319,20 @@ header h1 {
     text-shadow: 0 0 5px var(--accent);
 }
 
+/* THE GLOW FIX FOR VISUAL UPLINK */
+.feed-container {
+    border: 1px solid var(--border);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.feed-container:hover {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 20px var(--accent) !important;
+    transform: scale(1.01);
+}
+
 /* 12. LOG CONTENT */
 .blog-post {
     word-wrap: break-word;
@@ -338,8 +356,12 @@ header h1 {
     text-transform: uppercase;
 }
 
-/* Light Mode Highlight Override */
+/* Light Mode Highlight & Text Override */
 [data-theme="light"] .highlight-green {
     color: #008000 !important;
     text-shadow: none !important;
+}
+
+[data-theme="light"] .review-label {
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
