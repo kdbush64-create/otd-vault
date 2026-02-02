@@ -45,10 +45,13 @@
             letter-spacing: 1px;
             margin-right: 5px;
         }
+
+        /* PRECISION ICON ALIGNMENT */
         .share-icons { 
             display: flex; 
             align-items: center; 
-            gap: 20px; 
+            gap: 18px; 
+            height: 30px;
         }
         .share-icons a { 
             display: flex;
@@ -59,17 +62,23 @@
             height: 24px;
             width: 24px;
         }
+        /* Standardizing all icon types to 24px squares */
         .share-icons img, .share-icons svg {
-            width: 24px;
-            height: 24px;
+            width: 24px !important;
+            height: 24px !important;
             display: block;
+            object-fit: contain;
         }
         .share-icons i {
-            font-size: 19px; 
+            font-size: 19px !important; 
             color: var(--accent);
             text-shadow: 0 0 5px var(--accent);
-            /* Manual offset for FontAwesome alignment */
             transform: translateY(1px); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
         }
         .share-icons a:hover { 
             transform: translateY(-3px); 
@@ -224,7 +233,9 @@
                                     <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
                                 </a>
                                 <a href="https://nextdoor.com/share/feed/?url=${shareUrl}" target="_blank" title="Nextdoor">
-                                    <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg"><path d="M41.24 43.103V31.631h-10.49v6.864l-9.49-6.864h-10.5v22.463h10.5v-6.867l9.49 6.867h10.5V43.103zM36 0C16.118 0 0 16.118 0 36s16.118 36 36 36 36-16.118 36-36S55.882 0 36 0z" fill="#00B246"/></svg>
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 12.001C0 5.372 5.373 0 12 0s12 5.372 12 12.001c0 6.627-5.373 12-12 12s-12-5.373-12-12zm18.32 5.62v-5.91h-3.32v2.24l-3.003-2.24H8.674v5.91h3.323v-2.244l3 2.244h3.323z" fill="#00B246"/>
+                                    </svg>
                                 </a>
                                 <a href="javascript:void(0)" onclick="copyUplink()" title="Copy Link">
                                     <i class="fa-solid fa-link"></i>
@@ -243,10 +254,8 @@
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
             
-            // Fix: Clear all active states first
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
             
-            // Fix: Apply active state correctly on refresh
             if (btnElement) {
                 btnElement.classList.add('active');
             } else {
@@ -292,7 +301,6 @@
             if (window.location.hash) {
                 checkHash(); 
             } else { 
-                // Ensure the initial "THE_FEED" button highlights green on load
                 loadLogs('rants', true, document.getElementById('btn-rants')); 
             } 
         };
