@@ -1,4 +1,3 @@
-
 /* 1. THEME VARIABLES & ADA DEFAULTS */
 :root {
     --bg: #1a1a1a;
@@ -40,22 +39,19 @@ body {
 
 /* 3. THE CHASSIS */
 html {
-    /* Forces scrollbar to always exist so the page doesn't "jump" left/right when logs load */
     overflow-y: scroll; 
 }
 
 .container {
-    width: 95%; /* Gives a tiny bit of space on mobile screens */
-    max-width: 1000px; /* Caps the width on desktop */
-    margin: 0 auto; /* Keeps the vault centered on the screen */
+    width: 95%;
+    max-width: 1000px;
+    margin: 0 auto;
     border: 2px solid var(--border);
-    padding: 20px; /* Better breathing room for text */
+    padding: 20px;
     background: var(--container-bg);
     position: relative;
     z-index: 5;
     box-shadow: 0 10px 30px var(--shadow);
-    
-    /* THE STABILIZER: Stops the container from growing wider if a log has long text */
     overflow: hidden; 
 }
 
@@ -80,7 +76,7 @@ html {
     box-shadow: 0 0 5px var(--accent);
 }
 
-/* 5. HERO SECTION - CLEAN TITLES */
+/* 5. HERO SECTION */
 .hero-container {
     position: relative;
     width: 100%;
@@ -104,7 +100,6 @@ html {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
-    /* STACKING LOGIC: Keeps lines from overlapping */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -114,7 +109,6 @@ html {
 }
 
 .text-overlay h1 {
-    /* Stabilized responsive font */
     font-size: clamp(1.2rem, 5vw, 2.5rem) !important;
     margin: 0;
     line-height: 1.2;
@@ -137,11 +131,10 @@ header {
     border-bottom: 2px dashed var(--border);
     margin-bottom: 20px;
     padding-bottom: 15px;
-    min-height: 110px; /* Prevents the header area from collapsing */
+    min-height: 110px;
 }
 
 header h1 {
-    /* Stabilized responsive font: won't jump around when logs load */
     font-size: clamp(1.5rem, 5vw, 2.2rem); 
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -157,7 +150,71 @@ header h1 {
     color: var(--primary);
 }
 
-/* 7. VAULT LAYOUT & DIRECTORY */
+/* 7. HIERARCHICAL NAVIGATION */
+.vault-nav-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.secondary-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.secondary-filters {
+    display: flex;
+    gap: 10px;
+}
+
+/* NEON BLINKING LABEL */
+.review-label {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+    letter-spacing: 2px;
+    animation: neonPulse 1.5s infinite;
+}
+
+@keyframes neonPulse {
+    0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--accent); }
+    50% { opacity: 0.3; text-shadow: 0 0 2px var(--accent); }
+}
+
+/* 8. BUTTON STYLING */
+.submit-btn {
+    background-color: var(--primary);
+    color: #000000;
+    border: 1px solid var(--primary);
+    padding: 8px 16px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: transparent;
+    color: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+}
+
+/* ACTIVE STATE - HIGHLIGHT GREEN */
+.submit-btn.active {
+    background-color: var(--accent) !important;
+    color: #000 !important;
+    border: 1px solid var(--accent) !important;
+    box-shadow: 0 0 15px var(--accent) !important;
+}
+
+/* 9. VAULT LAYOUT & DIRECTORY */
 .vault-layout { 
     display: flex; 
     flex-direction: column; 
@@ -165,23 +222,20 @@ header h1 {
     min-height: 400px;
 }
 
-/* Ensure the list is visible and clickable */
 #log-list {
-    display: block !important;
-    visibility: visible !important;
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
 #log-list li {
-    display: block !important;
     margin-bottom: 12px;
     border-bottom: 1px dashed var(--border);
     padding-bottom: 5px;
 }
 
-/* Neon Blue Links for the Directory */
+.older-log { display: none; }
+
 .log-link {
     color: var(--secondary) !important; 
     text-decoration: none;
@@ -191,35 +245,27 @@ header h1 {
 }
 
 .log-link:hover {
-    color: var(--accent) !important; /* Glow Green on Hover */
+    color: var(--accent) !important;
     text-shadow: 0 0 8px var(--accent);
     padding-left: 5px;
 }
 
-/* DESKTOP SIDE-BY-SIDE VIEW */
 @media (min-width: 850px) {
-    .vault-layout { 
-        flex-direction: row; 
-    }
-    .log-display { 
-        flex: 2; 
-    }
+    .vault-layout { flex-direction: row; }
+    .log-display { flex: 2; }
     .log-directory { 
         flex: 1; 
-        border-top: none; 
         border-left: 1px dashed var(--border); 
         padding-left: 20px; 
-        padding-top: 0; 
     }
 }
 
-/* 8. ANIMATIONS */
+/* 10. ANIMATIONS & OVERLAY */
 @keyframes rec-pulse {
     0%, 100% { opacity: 1; filter: brightness(1.2); }
     50% { opacity: 0.3; filter: brightness(0.7); }
 }
 
-/* 9. TERMINAL OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -229,36 +275,25 @@ header h1 {
     z-index: 100;
 }
 
-/* 10. FEEDBACK & COMMENTS - UPLINK FIX */
+/* 11. COMMENTS & SURVEILLANCE */
 .comment-module {
     margin-top: 50px;
     padding: 35px 20px 20px 20px; 
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow: visible; 
 }
 
-/* FIX: SECURE_UPLINK_READY position and color */
 .comment-module::after {
     content: "SECURE_UPLINK_READY";
     position: absolute;
-    top: 10px; 
-    right: 15px;
+    top: 10px; right: 15px;
     font-size: 0.65rem;
     font-weight: bold;
     color: var(--accent);
     animation: rec-pulse 2s ease-in-out infinite;
 }
 
-/* 11. UTTERANCES & COMMENTS FIX */
-.utterances { 
-    max-width: 100% !important; 
-    width: 100% !important; 
-    margin: 0 !important; 
-}
-
-/* 12. SURVEILLANCE FEED (VISUAL UPLINK) */
 .surveillance-wrapper {
     margin-top: 30px;
     border: 1px solid var(--border);
@@ -272,21 +307,15 @@ header h1 {
     align-items: center;
     margin-bottom: 8px;
     font-weight: bold;
-    font-size: 0.85rem;
 }
 
-#stardate {
-    color: var(--accent) !important;
-    text-shadow: 0 0 5px var(--accent);
-}
-
-.blink {
+#stardate, .blink {
     color: var(--accent) !important;
     animation: rec-pulse 2s ease-in-out infinite;
     text-shadow: 0 0 5px var(--accent);
 }
 
-/* 13. LOG CONTENT - FIELD REPORT STYLING */
+/* 12. LOG CONTENT */
 .blog-post {
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -294,50 +323,23 @@ header h1 {
     padding: 0 10px; 
 }
 
-/* Updated List Styling */
 .blog-post ol, .blog-post ul {
-    /* Pushes numbers 1 and 2 away from the container border */
     padding-left: 45px !important; 
     margin: 20px 0;
-    list-style-position: outside; /* Keeps numbers aligned in their own column */
 }
 
 .blog-post li {
     margin-bottom: 12px;
-    line-height: 1.6;
-    padding-left: 5px; /* Tiny bit of space between number and text */
 }
 
-/* Force Bold Titles for Desktop */
 .blog-post strong, .blog-post b {
     color: var(--primary);
     font-weight: 900 !important;
     text-transform: uppercase;
 }
 
-/* 14. VIEW TYPE BUTTONS (The Amber Theme Fix) */
-.vault-filters .submit-btn {
-    background-color: var(--primary) !important;
-    color: #000000 !important;
-    border: 1px solid var(--primary) !important;
-    padding: 8px 16px;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
+/* Light Mode Highlight Override */
+[data-theme="light"] .highlight-green {
+    color: #008000 !important;
+    text-shadow: none !important;
 }
-
-.vault-filters .submit-btn:hover {
-    background-color: transparent !important;
-    color: var(--primary) !important;
-    box-shadow: 0 0 10px var(--primary);
-}
-
-
-
-
-
-
-
-
