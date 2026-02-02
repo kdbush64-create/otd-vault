@@ -10,14 +10,13 @@ subject: system_launch
 
 It’s been a battle of brackets, semicolons, and CSS specificity, but **The Observation Deck** is finally breathing. Most folks are content with a cookie-cutter site, but I wanted something that felt like a localized uplink from a Texas bunker. 
 
-I’m giving myself a well-deserved pat on the back for this one.
+I’m giving myself a well-deserved pat on the back for this one. I managed to build a hierarchical navigation system that knows exactly where you are, a "THE_FEED" landing page that stays updated, and a visual uplink that actually glows when you look at it. 
 
 ---
 
 ### THE_SETUP
 
 ![Terminal Interface](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/Screenshot%202026-02-02%20080833.jpg)
-
 *The new interface in all its neon glory.*
 
 ---
