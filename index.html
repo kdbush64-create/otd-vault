@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vintage64 | Personal Vault</title>
+    
+    <meta property="og:title" content="Vintage64 | The Observation Deck">
+    <meta property="og:description" content="Unfiltered reviews and rants from the vault.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/telescope-clean.jpg">
+    <meta property="og:url" content="https://kdbush64-create.github.io/otd-vault/">
+    <meta property="og:type" content="website">
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
@@ -176,7 +183,6 @@
         const folders = ['rants', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
-        // Save scroll position
         window.addEventListener('beforeunload', () => {
             localStorage.setItem('vault_scroll', window.scrollY);
         });
@@ -189,7 +195,6 @@
             }
         }
 
-        // Initialize BeHold Widget
         (() => {
             const d=document,s=d.createElement("script");s.type="module";
             s.src="https://w.behold.so/widget.js";d.head.append(s);
@@ -253,7 +258,7 @@
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="submit-btn" style="font-size: 0.7em; text-decoration: none;">[ BROADCAST_FB ]</a>
                                 <button onclick="navigator.clipboard.writeText(window.location.href); alert('UPLINK_COPIED_TO_CLIPBOARD');" class="submit-btn" style="font-size: 0.7em;">[ COPY_UPLINK ]</button>
                             </div>
-                            <p style="font-size: 0.6em; color: var(--secondary); margin-top: 10px;">* TAG TARGETS MANUALLY UPON TRANSMISSION</p>
+                            <p style="font-size: 0.6em; color: var(--secondary); margin-top: 10px;">* FB RESTRICTION: PASTE LINK & TAG MANUALLY</p>
                         </div>
                     `;
 
