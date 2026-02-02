@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vintage64 | Personal Vault</title>
     
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https:;">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -23,7 +23,7 @@
     <div class="terminal-overlay"></div>
     <div class="container">
         <div class="theme-switch-wrapper">
-            <label for="theme-toggle" class="sr-only" style="display:none;">Visual Mode Toggle</label>
+            <label for="theme-toggle" style="display:none;">Theme Toggle</label>
             <button id="theme-toggle" name="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
@@ -46,7 +46,7 @@
 
         <nav class="vault-nav-container">
             <div class="primary-feed">
-                <label for="btn-rants" class="sr-only" style="display:none;">Main Feed</label>
+                <label for="btn-rants" style="display:none;">Rants Feed</label>
                 <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ THE_FEED ]</button>
             </div>
             <div class="secondary-row">
@@ -74,7 +74,7 @@
                 <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: VAULT_ACTIVE ]</div>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
                 
-                <label for="load-more-btn" class="sr-only" style="display:none;">Load more logs</label>
+                <label for="load-more-btn" style="display:none;">Load More</label>
                 <button id="load-more-btn" name="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
                 
                 <div class="surveillance-wrapper">
@@ -82,7 +82,7 @@
                     <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
                     <div class="feed-container">
                         <div id="behold-wrapper" name="behold-wrapper">
-                            <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+                            <behold-widget id="behold-feed" name="behold-feed" feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
                         </div>
                     </div>
                     <div class="feed-footer">SOURCE: INSTAGRAM_API_V1</div>
@@ -168,16 +168,16 @@
                         <div class="broadcast-tools">
                             <span class="share-label">SHARE_TO ></span>
                             <div class="share-icons">
-                                <a id="btn-share-x" name="btn-share-x" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on X">
+                                <a id="share-x-link" name="share-x-link" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on X">
                                     <img src="https://cdn.simpleicons.org/x/white" alt="X">
                                 </a>
-                                <a id="btn-share-fb" name="btn-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook">
+                                <a id="share-fb-link" name="share-fb-link" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook">
                                     <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook">
                                 </a>
-                                <a id="btn-share-ig" name="btn-share-ig" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link for Instagram">
+                                <a id="share-ig-link" name="share-ig-link" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link for Instagram">
                                     <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
                                 </a>
-                                <a id="btn-share-link" name="btn-share-link" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link to Clipboard">
+                                <a id="share-clip-link" name="share-clip-link" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link to Clipboard">
                                     <i class="fa-solid fa-link"></i>
                                 </a>
                             </div>
@@ -210,7 +210,7 @@
                 files.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
-                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ')}</a>`;
+                    li.innerHTML = `<a id="log-link-${i}" name="log-link-${i}" href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ')}</a>`;
                     list.appendChild(li);
                 });
                 
