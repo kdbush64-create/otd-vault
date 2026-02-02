@@ -390,7 +390,7 @@ header h1 {
     box-shadow: 0 0 15px var(--shadow);
 }
 
-/* 13. BROADCAST / SHARING TOOLS (THE FIX) */
+/* 13. BROADCAST / SHARING TOOLS (PRECISION FIXED) */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 25px; 
@@ -415,6 +415,7 @@ header h1 {
     display: flex; 
     align-items: center; 
     gap: 20px; 
+    height: 30px; /* Forces a fixed baseline height */
 }
 
 .share-icons a { 
@@ -424,22 +425,24 @@ header h1 {
     transition: 0.3s ease;
     text-decoration: none;
     height: 24px;
-}
-
-.share-icons img {
     width: 24px;
-    height: 24px;
-    display: block;
 }
 
-/* THE ALIGNMENT FIX FOR THE CHAIN LINK */
+.share-icons img, .share-icons svg {
+    width: 24px !important;
+    height: 24px !important;
+    display: block;
+    object-fit: contain;
+}
+
 .share-icons i {
-    font-size: 19px; 
+    font-size: 19px !important; 
     color: var(--accent);
     text-shadow: 0 0 5px var(--accent);
-    display: inline-block;
-    line-height: 1;
-    transform: translateY(1px); /* Pulls the icon down to align with image baselines */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(1px); /* Precision nudge for FontAwesome alignment */
 }
 
 .share-icons a:hover { 
@@ -447,7 +450,13 @@ header h1 {
     filter: drop-shadow(0 0 8px var(--accent));
 }
 
-/* Light Mode Overrides (Must stay at the bottom) */
+/* 14. HIGHLIGHTS & LIGHT MODE FIXES */
+.highlight-green {
+    color: var(--accent) !important;
+    text-shadow: 0 0 5px var(--accent);
+    font-weight: bold;
+}
+
 [data-theme="light"] .highlight-green {
     color: #008000 !important;
     text-shadow: none !important;
