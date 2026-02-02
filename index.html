@@ -51,7 +51,7 @@
                 <span class="review-tag">REVIEWS ></span>
                 <div class="secondary-filters">
                     <button id="btn-chow" name="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
-                    <button id="btn-coord" name="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
+                    <button id="btn-coord" name="btn-coord" onclick="loadLogs('btn-coord')" class="submit-btn">COORD</button>
                     <button id="btn-gear" name="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
                 </div>
             </div>
@@ -71,13 +71,16 @@
                 <h3>> LOG_DIRECTORY</h3>
                 <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: VAULT_ACTIVE ]</div>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
+                
                 <button id="load-more-btn" name="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
                 
                 <div class="surveillance-wrapper">
                     <h3>> VISUAL_UPLINK</h3>
                     <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
                     <div class="feed-container">
-                        <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+                        <div id="behold-container" name="behold-container">
+                            <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+                        </div>
                     </div>
                     <div class="feed-footer">SOURCE: INSTAGRAM_API_V1</div>
                 </div>
@@ -86,8 +89,8 @@
 
         <footer style="margin-top: 50px; border-top: 2px solid var(--accent); padding-top: 30px; padding-bottom: 50px;">
             <div style="display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; gap: 20px; flex-wrap: wrap;">
-                <a href="javascript:void(0)" onclick="loadPost('gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold;">[ GEAR_POLICY ]</a>
-                <a href="mailto:your-email@example.com?subject=V64_UPLINK_FEEDBACK" class="footer-link">[ SEND_FEEDBACK ]</a>
+                <a id="link-gear-policy" name="link-gear-policy" href="javascript:void(0)" onclick="loadPost('gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold;">[ GEAR_POLICY ]</a>
+                <a id="link-feedback" name="link-feedback" href="mailto:your-email@example.com?subject=V64_UPLINK_FEEDBACK" class="footer-link">[ SEND_FEEDBACK ]</a>
             </div>
             <p style="text-align: center; margin-top: 30px; opacity: 0.7;" class="blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
         </footer>
@@ -162,16 +165,16 @@
                         <div class="broadcast-tools">
                             <span class="share-label">SHARE_TO ></span>
                             <div class="share-icons">
-                                <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on X">
+                                <a id="share-x" name="share-x" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on X">
                                     <img src="https://cdn.simpleicons.org/x/white" alt="X">
                                 </a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook">
+                                <a id="share-facebook" name="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook">
                                     <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook">
                                 </a>
-                                <a href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link for Instagram">
+                                <a id="share-insta" name="share-insta" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link for Instagram">
                                     <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
                                 </a>
-                                <a href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link to Clipboard">
+                                <a id="share-clipboard" name="share-clipboard" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link to Clipboard">
                                     <i class="fa-solid fa-link"></i>
                                 </a>
                             </div>
