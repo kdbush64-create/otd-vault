@@ -23,6 +23,7 @@
     <div class="terminal-overlay"></div>
     <div class="container">
         <div class="theme-switch-wrapper">
+            <label for="theme-toggle" class="sr-only" style="display:none;">Visual Mode Toggle</label>
             <button id="theme-toggle" name="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
@@ -45,10 +46,11 @@
 
         <nav class="vault-nav-container">
             <div class="primary-feed">
+                <label for="btn-rants" class="sr-only" style="display:none;">Main Feed</label>
                 <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ THE_FEED ]</button>
             </div>
             <div class="secondary-row">
-                <span class="review-tag">REVIEWS ></span>
+                <label class="review-tag" for="btn-chow">REVIEWS ></label>
                 <div class="secondary-filters">
                     <button id="btn-chow" name="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
                     <button id="btn-coord" name="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
@@ -72,6 +74,7 @@
                 <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: VAULT_ACTIVE ]</div>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
                 
+                <label for="load-more-btn" class="sr-only" style="display:none;">Load more logs</label>
                 <button id="load-more-btn" name="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
                 
                 <div class="surveillance-wrapper">
