@@ -54,24 +54,26 @@ header {
     border-bottom: 2px dashed var(--border);
     margin-bottom: 20px;
     padding-bottom: 15px;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
+    display: block !important; 
+    width: 100% !important;
+    clear: both !important;
 }
 
 .header-title-group {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    width: 100%;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
 }
 
 header h1 {
     font-size: clamp(1.4rem, 5vw, 2.2rem);
-    margin: 5px 0;
-    text-align: center;
-    width: 100%;
-    display: block !important;
+    margin: 5px 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+    display: block !important; 
 }
 
 .typewriter {
@@ -211,6 +213,7 @@ header h1 {
     text-shadow: 0 0 5px rgba(0, 255, 65, 0.6);
     font-weight: bold;
     text-transform: uppercase;
+    display: inline-block; /* Helps visibility */
 }
 
 .blog-post img { 
@@ -221,6 +224,7 @@ header h1 {
 .blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
 
 /* 8. BROADCAST TOOLS */
+/* ... (unchanged) ... */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 20px; 
