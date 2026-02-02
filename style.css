@@ -48,26 +48,7 @@ body {
     box-shadow: 0 10px 30px var(--shadow);
 }
 
-/* 3. TYPEWRITER EFFECT */
-.typewriter {
-    display: inline-block;
-    overflow: hidden;
-    border-right: .15em solid var(--accent);
-    white-space: nowrap;
-    margin: 0 auto;
-    letter-spacing: .15em;
-    animation: typing 2.5s steps(40, end), blink-caret .75s step-end infinite;
-}
-
-.delay-type {
-    border-right: none;
-    animation: typing 2.5s steps(40, end) 2.5s both;
-}
-
-@keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--accent); } }
-
-/* 4. HEADER & MOBILE STACKING */
+/* 3. TYPEWRITER & HEADER (FIXED DESKTOP SPACING) */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -78,14 +59,43 @@ header {
 header h1 {
     font-size: clamp(1.5rem, 5vw, 2.2rem); 
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stacked for mobile */
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 0; 
+    margin: 10px 0;
 }
 
-@media (min-width: 600px) {
-    header h1 { flex-direction: row; justify-content: center; }
+/* The Green Blinking Line - Fixed to end of title */
+header h1::after {
+    content: "|";
+    color: var(--accent);
+    margin-left: 8px;
+    animation: blink-caret .75s step-end infinite;
 }
+
+.typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: .15em;
+    animation: typing 1.5s steps(20, end);
+}
+
+.delay-type {
+    animation: typing 1.5s steps(20, end) 1.2s both;
+}
+
+/* Desktop override: puts OTD and PERSONAL_VAULT on one line with proper spacing */
+@media (min-width: 600px) {
+    header h1 { 
+        flex-direction: row; 
+        gap: 15px; 
+    }
+}
+
+@keyframes typing { from { width: 0 } to { width: 100% } }
+@keyframes blink-caret { from, to { opacity: 1; } 50% { opacity: 0; } }
 
 .warning-banner {
     font-size: 0.75rem;
@@ -179,7 +189,7 @@ header h1 {
 .highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
 [data-theme="light"] .highlight-green { color: #008000 !important; text-shadow: none !important; }
 
-/* 9. BROADCAST TOOLS (ALIGNMENT FIX) */
+/* 9. BROADCAST TOOLS (PRECISION ALIGNMENT FIX) */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 25px; 
@@ -187,25 +197,32 @@ header h1 {
     background: rgba(0,0,0,0.3); 
     border-top: 2px solid var(--accent);
     display: flex;
-    align-items: center;
+    align-items: center; /* Vertical alignment */
     gap: 20px;
+    flex-wrap: wrap;
 }
 
-.share-icons { display: flex; align-items: center; gap: 20px; height: 32px; }
+.share-icons { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    height: 32px; 
+}
 
 .share-icons a { 
-    display: inline-flex;
+    display: flex; /* Flex is better than inline-flex for vertical centering */
     align-items: center;
     justify-content: center;
     height: 32px;
     width: 32px;
-    vertical-align: middle;
+    text-decoration: none;
 }
 
 .share-icons img, .share-icons svg {
     height: 24px !important;
     width: 24px !important;
     display: block;
+    object-fit: contain;
 }
 
 .share-icons i {
@@ -214,7 +231,10 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-shadow: 0 0 5px var(--accent);
 }
+
+.share-icons a:hover { transform: translateY(-2px); filter: brightness(1.2); }
 
 /* 10. SURVEILLANCE & OVERLAY */
 .terminal-overlay {
