@@ -197,33 +197,50 @@ header h1 {
 
 .highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
 
-/* 8. BROADCAST TOOLS (ALIGNMENT FIX) */
+/* 8. BROADCAST TOOLS (REACTIVE BLOOM) */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 20px; 
-    border: 1px solid var(--border); 
-    background: rgba(0,0,0,0.3); 
-    border-top: 2px solid var(--accent);
+    background: rgba(0,0,0,0.4); 
     display: flex;
     align-items: center;
     gap: 15px;
     flex-wrap: wrap;
     justify-content: center;
+    
+    /* Base State: Subtle border, no glow */
+    border: 1px solid var(--border);
+    transition: all 0.4s ease-in-out;
+}
+
+/* THE RADIOACTIVE BLOOM ON HOVER */
+.broadcast-tools:hover {
+    border-color: var(--accent);
+    /* Layered shadows for the feathered outward glow */
+    box-shadow: 
+        0 0 10px var(--accent), 
+        0 0 20px rgba(0, 255, 65, 0.4), 
+        0 0 30px rgba(0, 255, 65, 0.2),
+        inset 0 0 10px rgba(0, 255, 65, 0.2); /* Subtle inner bleed */
+}
+
+.share-label {
+    font-weight: bold;
+    color: var(--secondary);
+    letter-spacing: 1px;
 }
 
 .share-icons { 
     display: flex; 
     align-items: center; 
-    gap: 15px; 
+    gap: 20px; 
 }
 
-.share-icons a { display: flex; align-items: center; justify-content: center; }
-.share-icons img, .share-icons svg, .share-icons i {
-    height: 24px !important; 
-    width: auto;
-    display: block;
+/* Ensure the icons react when the box is hovered */
+.broadcast-tools:hover .share-icons i,
+.broadcast-tools:hover .share-icons img {
+    filter: drop-shadow(0 0 5px var(--accent));
 }
-.share-icons i { font-size: 22px !important; color: var(--accent); }
 
 /* 9. SURVEILLANCE & OVERLAY */
 .terminal-overlay {
@@ -288,4 +305,5 @@ header h1 {
     opacity: 0.5;
     z-index: 2;
 }
+
 
