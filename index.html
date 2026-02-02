@@ -65,8 +65,6 @@
             transform: translateY(-3px); 
             filter: drop-shadow(0 0 8px var(--accent));
         }
-        /* Custom styling for the link icon to match size */
-        .fa-link-alt { color: var(--accent); font-size: 22px; cursor: pointer; }
     </style>
 </head>
 
@@ -215,7 +213,9 @@
                                 <a href="javascript:void(0)" onclick="copyUplink()" title="Copy for Instagram">
                                     <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
                                 </a>
-                                <i class="fa-solid fa-link fa-link-alt" onclick="copyUplink()" title="Copy Link"></i>
+                                <a href="javascript:void(0)" onclick="copyUplink()" title="Copy Link">
+                                    <img src="https://cdn.simpleicons.org/anchor/00ff00" alt="Link" style="width: 22px; height: 22px;">
+                                </a>
                             </div>
                         </div>
                     `;
