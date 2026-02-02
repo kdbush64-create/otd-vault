@@ -7,13 +7,57 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        /* Light mode specific override for our custom green spans */
         [data-theme="light"] .highlight-green {
             color: #008000 !important;
             text-shadow: none !important;
         }
-        /* Style for hidden logs */
         .older-log { display: none; }
+
+        /* Hierarchical Menu Styling */
+        .vault-nav-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+        
+        .secondary-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .secondary-filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Neon Blinking Label */
+        .review-label {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: var(--accent);
+            text-shadow: 0 0 8px var(--accent);
+            letter-spacing: 2px;
+            animation: neonPulse 1.5s infinite secondary;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--accent); }
+            50% { opacity: 0.3; text-shadow: 0 0 2px var(--accent); }
+        }
+
+        /* Active State Highlight */
+        .submit-btn.active {
+            background-color: var(--accent) !important;
+            color: #000 !important;
+            box-shadow: 0 0 15px var(--accent);
+            border: 1px solid #fff;
+        }
     </style>
 </head>
 
@@ -42,12 +86,19 @@
             </div>
         </section>
 
-        <nav class="vault-filters" style="margin-bottom: 25px; text-align: center; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-            <button onclick="loadLogs('all')" class="submit-btn">ALL</button>
-            <button onclick="loadLogs('rant')" class="submit-btn">RANTS</button>
-            <button onclick="loadLogs('chow')" class="submit-btn">CHOW</button>
-            <button onclick="loadLogs('coord')" class="submit-btn">COORD</button>
-            <button onclick="loadLogs('gear')" class="submit-btn">GEAR</button>
+        <nav class="vault-nav-container">
+            <div class="primary-feed">
+                <button id="btn-feed" onclick="loadLogs('rant', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ THE_FEED ]</button>
+            </div>
+            
+            <div class="secondary-row">
+                <span class="review-label">REVIEWS ></span>
+                <div class="secondary-filters">
+                    <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
+                    <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
+                    <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
+                </div>
+            </div>
         </nav>
 
         <main class="vault-layout">
@@ -94,7 +145,7 @@
                 <a href="javascript:void(0)" onclick="loadPost('gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold; flex: 1; text-align: left;">[ GEAR_POLICY ]</a>
                 <a href="mailto:your-email@example.com?subject=V64_UPLINK_FEEDBACK" class="footer-link" style="flex: 1; text-align: right;">[ SEND_FEEDBACK ]</a>
             </div>
-            <p style="text-align: center; margin-top: 30px; opacity: 0.7;" class="blink">PERSONAL_THOUGHTS_V1.3 // BLOG_MODULE_ACTIVE</p>
+            <p style="text-align: center; margin-top: 30px; opacity: 0.7;" class="blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
         </footer>
     </div>
 
@@ -108,7 +159,6 @@
             s.src="https://w.behold.so/widget.js";d.head.append(s);
         })();
 
-        // Clock Update
         function updateClock() {
             const d = new Date();
             const clockElement = document.getElementById('stardate');
@@ -117,7 +167,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Theme Toggle
         const toggleBtn = document.getElementById('theme-toggle');
         if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
         toggleBtn.addEventListener('click', () => {
@@ -158,9 +207,18 @@
             }
         }
 
-        async function loadLogs(filter = 'all') {
+        async function loadLogs(filter = 'all', autoLoadFirst = false, btnElement = null) {
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
+            
+            document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) {
+                btnElement.classList.add('active');
+            } else if (filter === 'rant') {
+                const feedBtn = document.getElementById('btn-feed');
+                if(feedBtn) feedBtn.classList.add('active');
+            }
+
             list.innerHTML = '<li>[ SCANNING... ]</li>';
             loadMoreBtn.style.display = "none";
 
@@ -168,7 +226,10 @@
                 const response = await fetch(`https://api.github.com/repos/${repo}/contents/`);
                 const files = await response.json();
                 let logFiles = files.filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template') && !f.name.toLowerCase().includes('readme') && !f.name.toLowerCase().includes('gear-policy'));
-                if (filter !== 'all') logFiles = logFiles.filter(f => f.name.toLowerCase().startsWith(filter));
+                
+                if (filter !== 'all') {
+                    logFiles = logFiles.filter(f => f.name.toLowerCase().startsWith(filter));
+                }
 
                 logFiles.sort((a, b) => b.name.localeCompare(a.name));
                 list.innerHTML = ''; 
@@ -186,8 +247,7 @@
 
                 if (logFiles.length > DISPLAY_LIMIT) loadMoreBtn.style.display = "block";
 
-                // Auto-load latest on first visit
-                if (!window.location.hash && logFiles.length > 0) {
+                if (autoLoadFirst && !window.location.hash && logFiles.length > 0) {
                     loadPost(logFiles[0].name);
                 }
             } catch (error) {
@@ -206,10 +266,15 @@
         }
 
         window.addEventListener('hashchange', checkHash);
+        
         window.onload = () => {
-            loadLogs().then(() => {
-                checkHash();
-            });
+            if (window.location.hash) {
+                loadLogs('all').then(() => {
+                    checkHash();
+                });
+            } else {
+                loadLogs('rant', true, document.getElementById('btn-feed')); 
+            }
         };
     </script>
 </body>
