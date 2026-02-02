@@ -27,13 +27,13 @@
             <button id="theme-toggle" name="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
-        <header>
+        <header style="display: flex; flex-direction: column; align-items: center;">
             <div class="warning-banner">!! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD </div>
-            <div class="header-title-group">
-                <h1 class="main-title">
+            <div class="header-title-group" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <h1 class="main-title" style="margin: 0; width: 100%; text-align: center;">
                     <span class="typewriter">OTD</span>
                 </h1>
-                <h1 class="main-title">
+                <h1 class="main-title" style="margin: 0; width: 100%; text-align: center;">
                     <span class="typewriter delay-type">PERSONAL_VAULT</span>
                 </h1>
             </div>
@@ -108,8 +108,8 @@
         const folders = ['rants', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
+        // Restore scroll position
         window.addEventListener('beforeunload', () => { localStorage.setItem('vault_scroll', window.scrollY); });
-        
         function restoreScroll() {
             const scrollPos = localStorage.getItem('vault_scroll');
             if (scrollPos) { 
@@ -118,6 +118,7 @@
             }
         }
 
+        // Behold Widget Loader
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
 
         function updateClock() {
@@ -127,9 +128,9 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // Theme Toggle
         const toggleBtn = document.getElementById('theme-toggle');
         if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-        
         toggleBtn.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', theme);
@@ -157,35 +158,24 @@
                 }
 
                 if (typeof marked !== 'undefined') {
-                    // 1. Render Markdown to HTML
                     let htmlContent = marked.parse(cleanMarkdown);
-                    
                     const shareUrl = encodeURIComponent(window.location.href);
                     const shareText = encodeURIComponent("New review uplinked from the Observation Deck: ");
                     
-                    // 2. Insert HTML into the area
                     contentArea.innerHTML = `
-                        <div class="blog-post">${htmlContent}</div>
+                        <div class="blog-post-body">${htmlContent}</div>
                         <div class="broadcast-tools">
                             <span class="share-label">SHARE_TO ></span>
                             <div class="share-icons">
-                                <a id="share-x-link" name="share-x-link" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on X">
-                                    <img src="https://cdn.simpleicons.org/x/white" alt="X">
-                                </a>
-                                <a id="share-fb-link" name="share-fb-link" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook">
-                                    <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook">
-                                </a>
-                                <a id="share-ig-link" name="share-ig-link" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link for Instagram">
-                                    <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
-                                </a>
-                                <a id="share-clip-link" name="share-clip-link" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link to Clipboard">
-                                    <i class="fa-solid fa-link"></i>
-                                </a>
+                                <a id="share-x" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank"><img src="https://cdn.simpleicons.org/x/white" alt="X"></a>
+                                <a id="share-fb" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank"><img src="https://cdn.simpleicons.org/facebook/1877F2" alt="FB"></a>
+                                <a id="share-ig" href="javascript:void(0)" onclick="copyUplink()"><img src="https://cdn.simpleicons.org/instagram/E4405F" alt="IG"></a>
+                                <a id="share-clip" href="javascript:void(0)" onclick="copyUplink()"><i class="fa-solid fa-link"></i></a>
                             </div>
                         </div>
                     `;
 
-                    // 3. Highlight Labels using TreeWalker (The robust fix)
+                    // RE-IMPLEMENTED TREEWALKER FOR GREEN LABELS
                     const greenLabels = [
                         "STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", 
                         "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", 
@@ -211,7 +201,6 @@
                         const span = document.createElement('span');
                         span.className = 'highlight-green';
                         span.textContent = label;
-                        
                         const parts = node.nodeValue.split(label);
                         if (node.parentNode) {
                             node.parentNode.insertBefore(document.createTextNode(parts[0]), node);
@@ -232,8 +221,13 @@
         async function loadLogs(filter = 'all', autoLoadFirst = false, btnElement = null) {
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
+            
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
-            if (btnElement) btnElement.classList.add('active');
+            if (btnElement) {
+                btnElement.classList.add('active');
+                localStorage.setItem('activeFilterID', btnElement.id);
+            }
+
             list.innerHTML = '<li>[ SCANNING... ]</li>';
             try {
                 const results = await Promise.all(folders.map(f => fetch(`https://api.github.com/repos/${repo}/contents/${f}`).then(res => res.ok ? res.json() : [])));
@@ -243,13 +237,13 @@
                 
                 list.innerHTML = ''; 
                 if (files.length === 0) {
-                    list.innerHTML = '<li>[ NO_LOGS_FOUND_IN_VAULT ]</li>';
+                    list.innerHTML = '<li>[ NO_LOGS_FOUND ]</li>';
                 }
 
                 files.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
-                    li.innerHTML = `<a id="log-link-${i}" name="log-link-${i}" href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ')}</a>`;
+                    li.innerHTML = `<a id="log-link-${i}" href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ')}</a>`;
                     list.appendChild(li);
                 });
                 
@@ -264,6 +258,7 @@
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
+        // INITIALIZATION LOGIC
         window.addEventListener('DOMContentLoaded', () => {
             const savedFilterID = localStorage.getItem('activeFilterID');
             const hash = window.location.hash.replace('#', '');
@@ -281,14 +276,6 @@
             else {
                 loadLogs('rants', true, document.getElementById('btn-rants'));
             }
-
-            document.querySelectorAll('.submit-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (this.id) {
-                        localStorage.setItem('activeFilterID', this.id);
-                    }
-                });
-            });
         });
     </script>
 </body>
