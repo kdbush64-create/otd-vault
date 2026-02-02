@@ -158,8 +158,8 @@
                                     <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
                                 </a>
                                 <a href="https://nextdoor.com/share/feed/?url=${shareUrl}" target="_blank" title="Nextdoor">
-                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 0L0 10.5h3.6v11.1h5.4v-6.6h6v6.6h5.4V10.5H24L12 0zm3.3 12.3l-3.3-2.4-3.3 2.4V8.1h6.6v4.2z" fill="#00B246"/>
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 0L0 10.5H3.6V21.6H9V15H15V21.6H20.4V10.5H24L12 0ZM15.3 12.3L12 9.9L8.7 12.3V8.1H15.3V12.3Z" fill="#00B246"/>
                                     </svg>
                                 </a>
                                 <a href="javascript:void(0)" onclick="copyUplink()" title="Copy Link">
@@ -178,16 +178,8 @@
         async function loadLogs(filter = 'all', autoLoadFirst = false, btnElement = null) {
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
-            
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
-            
-            if (btnElement) {
-                btnElement.classList.add('active');
-            } else {
-                const targetBtn = document.getElementById('btn-' + filter);
-                if (targetBtn) targetBtn.classList.add('active');
-            }
-
+            if (btnElement) btnElement.classList.add('active');
             list.innerHTML = '<li>[ SCANNING... ]</li>';
             try {
                 const results = await Promise.all(folders.map(f => fetch(`https://api.github.com/repos/${repo}/contents/${f}`).then(res => res.ok ? res.json() : [])));
@@ -209,22 +201,11 @@
 
         function showAllLogs() { document.querySelectorAll('.older-log').forEach(log => log.style.display = "block"); document.getElementById('load-more-btn').style.display = "none"; }
         
-        function checkHash() {
+        window.onload = () => { 
             const hash = window.location.hash.replace('#', '');
             if (hash) {
                 const folder = hash.split('/')[0];
-                if (folders.includes(folder)) {
-                    loadLogs(folder, false).then(() => loadPost(hash, false));
-                } else {
-                    loadPost(hash, false);
-                }
-            }
-        }
-        
-        window.addEventListener('hashchange', checkHash);
-        window.onload = () => { 
-            if (window.location.hash) {
-                checkHash(); 
+                loadLogs(folder, false).then(() => loadPost(hash));
             } else { 
                 loadLogs('rants', true, document.getElementById('btn-rants')); 
             } 
