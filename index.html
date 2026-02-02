@@ -167,6 +167,22 @@
         const folders = ['rants', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
+        // --- PERSISTENCE MODULE ---
+        // Save scroll position before the user leaves or reloads
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('vault_scroll', window.scrollY);
+        });
+
+        function restoreScroll() {
+            const scrollPos = localStorage.getItem('vault_scroll');
+            if (scrollPos) {
+                window.scrollTo(0, parseInt(scrollPos));
+                // Clear it so it doesn't stay stuck forever, 
+                // but only after a slight delay to ensure rendering is done
+                setTimeout(() => localStorage.removeItem('vault_scroll'), 100);
+            }
+        }
+
         // Initialize BeHold Widget
         (() => {
             const d=document,s=d.createElement("script");s.type="module";
@@ -189,7 +205,7 @@
             localStorage.setItem('theme', theme);
         });
 
-        async function loadPost(filePath) {
+        async function loadPost(filePath, isManualClick = false) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink'>EXTRACTING_DATA_STREAM...</p>";
             
@@ -218,7 +234,12 @@
                     });
 
                     contentArea.innerHTML = htmlContent;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Only auto-scroll to top if the user MANUALLY clicked a log.
+                    // If it's a page reload, we want to stay where we were.
+                    if (isManualClick) {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                 }
             } catch (err) {
                 contentArea.innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG</p>";
@@ -234,11 +255,8 @@
                 statusLabel.innerText = `[ SOURCE: ${filter === 'rants' ? 'THE_FEED' : filter.toUpperCase()} ]`;
             }
 
-            // Highlight the active button
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
             
-            // If we have a button element passed in, use it. 
-            // Otherwise, search for the button based on the filter string.
             if (btnElement) {
                 btnElement.classList.add('active');
             } else {
@@ -275,7 +293,7 @@
                         li.classList.add('older-log');
                     }
 
-                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.path}')">> ${cleanName}</a>`;
+                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.path}', true)">> ${cleanName}</a>`;
                     list.appendChild(li);
                 });
 
@@ -284,8 +302,13 @@
                 }
 
                 if (autoLoadFirst && logFiles.length > 0) {
-                    loadPost(logFiles[0].path);
+                    // Pass false to loadPost so it doesn't force scroll to top on boot
+                    await loadPost(logFiles[0].path, false);
                 }
+                
+                // Content is loaded, now restore the scroll position
+                restoreScroll();
+
             } catch (error) {
                 list.innerHTML = "<li>[ ERROR: DIRECTORY_OFFLINE ]</li>";
             }
@@ -299,11 +322,13 @@
         function checkHash() {
             const hash = window.location.hash.replace('#', '');
             if (hash) {
-                loadPost(hash);
-                // When loading via hash, figure out which folder it's in to highlight the right button
                 const folder = hash.split('/')[0];
                 if (folders.includes(folder)) {
-                    loadLogs(folder, false);
+                    loadLogs(folder, false).then(() => {
+                         loadPost(hash, false);
+                    });
+                } else {
+                    loadPost(hash, false);
                 }
             }
         }
@@ -314,7 +339,6 @@
             if (window.location.hash) {
                 checkHash();
             } else {
-                // This now properly highlights "THE_FEED" on fresh boot
                 loadLogs('rants', true); 
             }
         };
