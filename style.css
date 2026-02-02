@@ -10,7 +10,6 @@
     --shadow: rgba(0, 0, 0, 0.8);
 }
 
-/* LIGHT MODE OVERRIDE */
 [data-theme="light"] {
     --bg: #f4f4f4;
     --container-bg: #ffffff;
@@ -38,9 +37,7 @@ body {
 }
 
 /* 3. THE CHASSIS */
-html {
-    overflow-y: scroll; 
-}
+html { overflow-y: scroll; }
 
 .container {
     width: 95%;
@@ -150,7 +147,7 @@ header h1 {
     color: var(--primary);
 }
 
-/* 7. HIERARCHICAL NAVIGATION & NEON */
+/* 7. NAVIGATION */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
@@ -167,10 +164,7 @@ header h1 {
     justify-content: center;
 }
 
-.secondary-filters {
-    display: flex;
-    gap: 10px;
-}
+.secondary-filters { display: flex; gap: 10px; }
 
 .review-label {
     font-weight: bold;
@@ -186,7 +180,7 @@ header h1 {
     50% { opacity: 0.3; text-shadow: 0 0 2px var(--accent); }
 }
 
-/* 8. BUTTON STYLING */
+/* 8. BUTTONS */
 .submit-btn {
     background-color: var(--primary);
     color: #000000;
@@ -212,30 +206,12 @@ header h1 {
     box-shadow: 0 0 15px var(--accent) !important;
 }
 
-[data-theme="light"] .submit-btn.active {
-    color: #ffffff !important;
-}
+[data-theme="light"] .submit-btn.active { color: #ffffff !important; }
 
 /* 9. VAULT LAYOUT & DIRECTORY */
-.vault-layout { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 20px; 
-    min-height: 400px;
-}
-
-#log-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#log-list li {
-    margin-bottom: 12px;
-    border-bottom: 1px dashed var(--border);
-    padding-bottom: 5px;
-}
-
+.vault-layout { display: flex; flex-direction: column; gap: 20px; min-height: 400px; }
+#log-list { list-style: none; padding: 0; margin: 0; }
+#log-list li { margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
 .older-log { display: none; }
 
 .log-link {
@@ -255,11 +231,7 @@ header h1 {
 @media (min-width: 850px) {
     .vault-layout { flex-direction: row; }
     .log-display { flex: 2; }
-    .log-directory { 
-        flex: 1; 
-        border-left: 1px dashed var(--border); 
-        padding-left: 20px; 
-    }
+    .log-directory { flex: 1; border-left: 1px dashed var(--border); padding-left: 20px; }
 }
 
 /* 10. ANIMATIONS & OVERLAY */
@@ -277,7 +249,7 @@ header h1 {
     z-index: 100;
 }
 
-/* 11. COMMENTS & SURVEILLANCE FEED */
+/* 11. COMMENTS & FEED */
 .comment-module {
     margin-top: 50px;
     padding: 35px 20px 20px 20px; 
@@ -303,13 +275,7 @@ header h1 {
     background: rgba(0, 0, 0, 0.2);
 }
 
-.feed-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
+.feed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: bold; }
 
 #stardate, .blink {
     color: var(--accent) !important;
@@ -324,73 +290,17 @@ header h1 {
     overflow: hidden;
 }
 
-.feed-container:hover {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 20px var(--accent) !important;
-    transform: scale(1.01);
-}
+/* 12. LOG CONTENT SPACING (UNCHANGED) */
+.blog-post { word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; padding: 0 10px; }
+.blog-post h3 { margin-top: 60px; margin-bottom: 25px; display: block; color: var(--primary); letter-spacing: 2px; text-transform: uppercase; }
+.blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 30px 0 50px 0; opacity: 0.6; clear: both; }
+.blog-post em { display: block; text-align: right; font-size: 0.8em; color: var(--secondary); margin-top: 15px; margin-bottom: 30px; font-style: italic; opacity: 0.8; }
+.blog-post ol, .blog-post ul { padding-left: 45px !important; margin: 30px 0; }
+.blog-post li { margin-bottom: 12px; }
+.blog-post strong, .blog-post b { color: var(--primary); font-weight: 900 !important; text-transform: uppercase; }
+.blog-post img { display: block; max-width: 100%; height: auto; border: 1px solid var(--border); margin: 35px auto 10px auto; box-shadow: 0 0 15px var(--shadow); }
 
-/* 12. LOG CONTENT & SPACING - REFINED */
-.blog-post {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-    padding: 0 10px; 
-}
-
-.blog-post h3 {
-    margin-top: 60px;
-    margin-bottom: 25px;
-    display: block;
-    color: var(--primary);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-.blog-post hr {
-    border: 0;
-    border-top: 1px solid var(--border);
-    margin: 30px 0 50px 0;
-    opacity: 0.6;
-    clear: both;
-}
-
-.blog-post em { 
-    display: block;
-    text-align: right;
-    font-size: 0.8em;
-    color: var(--secondary);
-    margin-top: 15px;
-    margin-bottom: 30px;
-    font-style: italic;
-    opacity: 0.8;
-}
-
-.blog-post ol, .blog-post ul {
-    padding-left: 45px !important; 
-    margin: 30px 0;
-}
-
-.blog-post li {
-    margin-bottom: 12px;
-}
-
-.blog-post strong, .blog-post b {
-    color: var(--primary);
-    font-weight: 900 !important;
-    text-transform: uppercase;
-}
-
-.blog-post img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    border: 1px solid var(--border);
-    margin: 35px auto 10px auto; 
-    box-shadow: 0 0 15px var(--shadow);
-}
-
-/* 13. BROADCAST / SHARING TOOLS (PRECISION FIXED) */
+/* 13. BROADCAST TOOLS (THE DEFINITIVE ALIGNMENT FIX) */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 25px; 
@@ -404,28 +314,23 @@ header h1 {
     flex-wrap: wrap;
 }
 
-.share-label { 
-    font-size: 0.8em; 
-    color: var(--accent); 
-    font-weight: bold; 
-    letter-spacing: 1px;
-}
+.share-label { font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 1px; }
 
 .share-icons { 
     display: flex; 
     align-items: center; 
-    gap: 20px; 
-    height: 30px; /* Forces a fixed baseline height */
+    gap: 20px;
+    height: 24px; 
 }
 
 .share-icons a { 
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.3s ease;
     text-decoration: none;
     height: 24px;
     width: 24px;
+    line-height: 1;
 }
 
 .share-icons img, .share-icons svg {
@@ -436,32 +341,19 @@ header h1 {
 }
 
 .share-icons i {
-    font-size: 19px !important; 
+    font-size: 18px !important; 
     color: var(--accent);
     text-shadow: 0 0 5px var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: translateY(1px); /* Precision nudge for FontAwesome alignment */
+    width: 24px;
+    height: 24px;
 }
 
-.share-icons a:hover { 
-    transform: translateY(-3px); 
-    filter: drop-shadow(0 0 8px var(--accent));
-}
+.share-icons a:hover { transform: translateY(-3px); filter: drop-shadow(0 0 8px var(--accent)); }
 
 /* 14. HIGHLIGHTS & LIGHT MODE FIXES */
-.highlight-green {
-    color: var(--accent) !important;
-    text-shadow: 0 0 5px var(--accent);
-    font-weight: bold;
-}
-
-[data-theme="light"] .highlight-green {
-    color: #008000 !important;
-    text-shadow: none !important;
-}
-
-[data-theme="light"] .review-label {
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
+.highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
+[data-theme="light"] .highlight-green { color: #008000 !important; text-shadow: none !important; }
+[data-theme="light"] .review-label { text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
