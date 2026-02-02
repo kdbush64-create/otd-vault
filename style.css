@@ -242,38 +242,23 @@ header h1 {
 .theme-switch-wrapper { position: absolute; top: 10px; right: 10px; z-index: 10; }
 #theme-toggle { background: none; border: 1px solid var(--border); color: var(--secondary); padding: 5px; cursor: pointer; font-size: 0.6rem; }
 
-/* 10. VISUAL UPLINK FIXES */
-.surveillance-wrapper {
-    margin-top: 30px;
-    border: 1px solid var(--border);
-    padding: 15px;
-    background: rgba(0,0,0,0.4);
-    box-shadow: inset 0 0 15px rgba(0, 255, 65, 0.1); /* Subtle internal glow */
-}
-
-.feed-header {
-    display: flex;
-    justify-content: space-between; /* Pushes REC left and Time right */
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-#stardate {
-    color: var(--accent); /* Makes the time green again */
-    text-shadow: 0 0 8px var(--accent);
-}
-
+/* 10. VISUAL UPLINK FIXES (REACTIVE VERSION) */
 .feed-container {
-    border: 1px solid var(--accent); /* The green border around images */
+    border: 1px solid var(--border); /* Solid amber/brown border by default */
     padding: 10px;
     background: #000;
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); /* The main green glow */
+    transition: all 0.4s ease; /* Smooth transition for the glow */
     position: relative;
+    cursor: crosshair; /* Optional: gives it a "targeting" feel */
 }
 
-/* Adds the "CRT Scanline" effect specifically to the image feed */
+/* THE GLOW EFFECT ON HOVER */
+.feed-container:hover {
+    border: 1px solid var(--accent); /* Switches to green on hover */
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4); /* Soft green glow with blurred edges */
+}
+
+/* Keep the scanlines constant or move them to hover as well */
 .feed-container::after {
     content: "";
     position: absolute;
@@ -281,12 +266,5 @@ header h1 {
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
     background-size: 100% 4px;
     pointer-events: none;
-}
-
-.feed-footer {
-    margin-top: 10px;
-    font-size: 0.7rem;
-    color: var(--primary-dim);
-    text-align: right;
-    letter-spacing: 1px;
+    opacity: 0.5;
 }
