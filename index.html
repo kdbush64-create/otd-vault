@@ -215,60 +215,66 @@
             }
         }
 
-        async function loadLogs(filter = 'all', autoLoadFirst = false, btnElement = null) {
-            const list = document.getElementById('log-list');
-            const loadMoreBtn = document.getElementById('load-more-btn');
-            
-            // 1. CLEAR THE HASH if we are intentionally going back to the Feed landing page
-            if (filter === 'rant' && btnElement) {
-                history.pushState("", document.title, window.location.pathname + window.location.search);
-            }
+       async function loadLogs(filter = 'all', autoLoadFirst = false, btnElement = null) {
+    const list = document.getElementById('log-list');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const statusLabel = document.getElementById('directory-status'); // Get the label
+    
+    // Update the Directory Label based on the filter
+    if (statusLabel) {
+        statusLabel.innerText = `[ SOURCE: ${filter === 'rant' ? 'THE_FEED' : filter.toUpperCase()} ]`;
+    }
 
-            // 2. UI Update: Highlight the active button
-            document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
-            if (btnElement) {
-                btnElement.classList.add('active');
-            } else if (filter === 'rant') {
-                const feedBtn = document.getElementById('btn-feed');
-                if(feedBtn) feedBtn.classList.add('active');
-            }
+    // 1. CLEAR THE HASH if we are intentionally going back to the Feed landing page
+    if (filter === 'rant' && btnElement) {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
 
-            list.innerHTML = '<li>[ SCANNING... ]</li>';
-            loadMoreBtn.style.display = "none";
+    // 2. UI Update: Highlight the active button
+    document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
+    if (btnElement) {
+        btnElement.classList.add('active');
+    } else if (filter === 'rant') {
+        const feedBtn = document.getElementById('btn-feed');
+        if(feedBtn) feedBtn.classList.add('active');
+    }
 
-            try {
-                const response = await fetch(`https://api.github.com/repos/${repo}/contents/`);
-                const files = await response.json();
-                let logFiles = files.filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template') && !f.name.toLowerCase().includes('readme') && !f.name.toLowerCase().includes('gear-policy'));
-                
-                if (filter !== 'all') {
-                    logFiles = logFiles.filter(f => f.name.toLowerCase().startsWith(filter));
-                }
+    list.innerHTML = '<li>[ SCANNING... ]</li>';
+    loadMoreBtn.style.display = "none";
 
-                logFiles.sort((a, b) => b.name.localeCompare(a.name));
-                list.innerHTML = ''; 
-                
-                logFiles.forEach((file, index) => {
-                    const li = document.createElement('li');
-                    const cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.name}')">${cleanName}</a>`;
-                    if (index >= DISPLAY_LIMIT) {
-                        li.style.display = "none";
-                        li.classList.add('older-log');
-                    }
-                    list.appendChild(li);
-                });
-
-                if (logFiles.length > DISPLAY_LIMIT) loadMoreBtn.style.display = "block";
-
-                // 3. AUTO-LOAD logic: Only load the first one if we aren't currently viewing a specific post via hash
-                if (autoLoadFirst && !window.location.hash && logFiles.length > 0) {
-                    loadPost(logFiles[0].name);
-                }
-            } catch (error) {
-                list.innerHTML = "<li>[ ERROR: DIRECTORY_OFFLINE ]</li>";
-            }
+    try {
+        const response = await fetch(`https://api.github.com/repos/${repo}/contents/`);
+        const files = await response.json();
+        let logFiles = files.filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template') && !f.name.toLowerCase().includes('readme') && !f.name.toLowerCase().includes('gear-policy'));
+        
+        if (filter !== 'all') {
+            logFiles = logFiles.filter(f => f.name.toLowerCase().startsWith(filter));
         }
+
+        logFiles.sort((a, b) => b.name.localeCompare(a.name));
+        list.innerHTML = ''; 
+        
+        logFiles.forEach((file, index) => {
+            const li = document.createElement('li');
+            const cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
+            li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.name}')">${cleanName}</a>`;
+            if (index >= DISPLAY_LIMIT) {
+                li.style.display = "none";
+                li.classList.add('older-log');
+            }
+            list.appendChild(li);
+        });
+
+        if (logFiles.length > DISPLAY_LIMIT) loadMoreBtn.style.display = "block";
+
+        // 3. AUTO-LOAD logic
+        if (autoLoadFirst && !window.location.hash && logFiles.length > 0) {
+            loadPost(logFiles[0].name);
+        }
+    } catch (error) {
+        list.innerHTML = "<li>[ ERROR: DIRECTORY_OFFLINE ]</li>";
+    }
+}
 
         function showAllLogs() {
             document.querySelectorAll('.older-log').forEach(log => log.style.display = "block");
@@ -299,5 +305,6 @@
     </script>
 </body>
 </html>
+
 
 
