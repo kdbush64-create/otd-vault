@@ -17,6 +17,15 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+    <style>
+    /* This forces the green highlights even if style.css fails to load */
+    .highlight-green {
+        color: #00ff41 !important;
+        text-shadow: 0 0 5px rgba(0, 255, 65, 0.6) !important;
+        font-weight: bold !important;
+        text-transform: uppercase !important;
+    }
+</style>
 </head>
 
 <body id="personal-identity">
@@ -27,16 +36,16 @@
             <button id="theme-toggle" name="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
-       <header style="display: block !important; text-align: center !important; width: 100% !important; clear: both !important;">
-    <div class="warning-banner" style="display: block !important; width: 100% !important; margin-bottom: 15px !important;">
+       <header style="display: block !important; width: 100% !important; text-align: center !important; border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px;">
+    <div class="warning-banner" style="display: block !important; width: 100% !important; text-align: center !important;">
         !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD 
     </div>
-    <div class="header-title-group" style="display: block !important; width: 100% !important; margin: 0 auto !important;">
-        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 0 0 5px 0 !important; padding: 0 !important; text-align: center !important;">
-            <span class="typewriter" style="display: inline-block !important;">OTD</span>
+    <div class="header-title-group" style="display: block !important; width: 100% !important; text-align: center !important;">
+        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 10px 0 !important;">
+            <span class="typewriter">OTD</span>
         </h1>
-        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 0 !important; padding: 0 !important; text-align: center !important;">
-            <span class="typewriter delay-type" style="display: inline-block !important;">PERSONAL_VAULT</span>
+        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 10px 0 !important;">
+            <span class="typewriter delay-type">PERSONAL_VAULT</span>
         </h1>
     </div>
 </header>
@@ -282,6 +291,7 @@
     </script>
 </body>
 </html>
+
 
 
 
