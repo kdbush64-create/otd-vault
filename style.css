@@ -48,7 +48,7 @@ body {
     box-shadow: 0 10px 30px var(--shadow);
 }
 
-/* 3. TYPEWRITER & HEADER (FIXED DESKTOP SPACING) */
+/* 3. CENTERED HEADER & TYPEWRITER FIX */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -59,39 +59,33 @@ header {
 header h1 {
     font-size: clamp(1.5rem, 5vw, 2.2rem); 
     display: flex;
-    flex-direction: column; /* Stacked for mobile */
+    flex-direction: column; /* Force OTD to stack over PERSONAL_VAULT */
     align-items: center;
     justify-content: center;
-    gap: 0; 
+    gap: 5px; /* Tight vertical spacing */
     margin: 10px 0;
+    position: relative;
 }
 
-/* The Green Blinking Line - Fixed to end of title */
-header h1::after {
+/* The Cursor: Now attached to the end of the bottom line only */
+.delay-type::after {
     content: "|";
     color: var(--accent);
-    margin-left: 8px;
+    margin-left: 5px;
     animation: blink-caret .75s step-end infinite;
 }
 
 .typewriter {
-    display: inline-block;
+    display: block; /* Ensures they occupy their own lines */
     overflow: hidden;
     white-space: nowrap;
     letter-spacing: .15em;
+    width: fit-content;
     animation: typing 1.5s steps(20, end);
 }
 
 .delay-type {
-    animation: typing 1.5s steps(20, end) 1.2s both;
-}
-
-/* Desktop override: puts OTD and PERSONAL_VAULT on one line with proper spacing */
-@media (min-width: 600px) {
-    header h1 { 
-        flex-direction: row; 
-        gap: 15px; 
-    }
+    animation: typing 1.5s steps(20, end) 1.5s both;
 }
 
 @keyframes typing { from { width: 0 } to { width: 100% } }
@@ -105,7 +99,7 @@ header h1::after {
     margin-bottom: 15px;
 }
 
-/* 5. HERO SECTION */
+/* 4. HERO SECTION */
 .hero-container {
     position: relative;
     width: 100%;
@@ -136,7 +130,7 @@ header h1::after {
     text-shadow: 2px 2px 8px #000;
 }
 
-/* 6. NAVIGATION & BUTTONS */
+/* 5. NAVIGATION & BUTTONS */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
@@ -163,7 +157,7 @@ header h1::after {
 .submit-btn:hover { background: transparent; color: var(--primary); box-shadow: 0 0 10px var(--primary); }
 .submit-btn.active { background: var(--accent) !important; color: #000 !important; box-shadow: 0 0 15px var(--accent); }
 
-/* 7. LAYOUT & DIRECTORY */
+/* 6. LAYOUT & DIRECTORY */
 .vault-layout { display: flex; flex-direction: column; gap: 20px; }
 
 @media (min-width: 850px) {
@@ -178,7 +172,7 @@ header h1::after {
 .log-link { color: var(--secondary); text-decoration: none; font-weight: bold; transition: 0.2s; }
 .log-link:hover { color: var(--accent); padding-left: 5px; text-shadow: 0 0 8px var(--accent); }
 
-/* 8. CONTENT STYLES (THE VAULT LOOK) */
+/* 7. CONTENT STYLES */
 .blog-post { word-wrap: break-word; }
 .blog-post h3 { margin-top: 40px; color: var(--primary); text-transform: uppercase; }
 .blog-post ul, .blog-post ol { padding-left: 45px !important; margin: 20px 0; }
@@ -189,7 +183,7 @@ header h1::after {
 .highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
 [data-theme="light"] .highlight-green { color: #008000 !important; text-shadow: none !important; }
 
-/* 9. BROADCAST TOOLS (PRECISION ALIGNMENT FIX) */
+/* 8. BROADCAST TOOLS (ALIGNMENT FIX FROM SCREENSHOT) */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 25px; 
@@ -197,7 +191,7 @@ header h1::after {
     background: rgba(0,0,0,0.3); 
     border-top: 2px solid var(--accent);
     display: flex;
-    align-items: center; /* Vertical alignment */
+    align-items: center;
     gap: 20px;
     flex-wrap: wrap;
 }
@@ -210,7 +204,7 @@ header h1::after {
 }
 
 .share-icons a { 
-    display: flex; /* Flex is better than inline-flex for vertical centering */
+    display: flex;
     align-items: center;
     justify-content: center;
     height: 32px;
@@ -218,25 +212,23 @@ header h1::after {
     text-decoration: none;
 }
 
-.share-icons img, .share-icons svg {
-    height: 24px !important;
-    width: 24px !important;
+/* Force all icons to a consistent baseline */
+.share-icons img, .share-icons svg, .share-icons i {
+    height: 22px !important; /* Adjusted slightly to match FA link scale */
+    width: auto;
     display: block;
     object-fit: contain;
 }
 
 .share-icons i {
-    font-size: 20px !important; 
+    font-size: 22px !important; 
     color: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-shadow: 0 0 5px var(--accent);
 }
 
 .share-icons a:hover { transform: translateY(-2px); filter: brightness(1.2); }
 
-/* 10. SURVEILLANCE & OVERLAY */
+/* 9. SURVEILLANCE & OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
