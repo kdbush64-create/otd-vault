@@ -17,7 +17,7 @@
     --primary: #7a5400;
     --primary-dim: #5c5c5c;
     --secondary: #005f6b;
-    --accent: #008522; /* Forest Green for contrast */
+    --accent: #008522; 
     --border: #a3a3a3;
     --shadow: rgba(0, 0, 0, 0.1);
 }
@@ -205,7 +205,6 @@ header h1 {
     box-shadow: 0 0 10px var(--primary);
 }
 
-/* ACTIVE STATE - HIGHLIGHT GREEN */
 .submit-btn.active {
     background-color: var(--accent) !important;
     color: #000 !important;
@@ -213,7 +212,6 @@ header h1 {
     box-shadow: 0 0 15px var(--accent) !important;
 }
 
-/* LIGHT MODE BUTTON TEXT FIX */
 [data-theme="light"] .submit-btn.active {
     color: #ffffff !important;
 }
@@ -319,7 +317,6 @@ header h1 {
     text-shadow: 0 0 5px var(--accent);
 }
 
-/* THE GLOW FIX FOR VISUAL UPLINK */
 .feed-container {
     border: 1px solid var(--border);
     transition: all 0.3s ease-in-out;
@@ -333,44 +330,6 @@ header h1 {
     transform: scale(1.01);
 }
 
-/* 12. LOG CONTENT */
+/* 12. LOG CONTENT & SPACING */
 .blog-post {
     word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-    padding: 0 10px; 
-}
-
-.blog-post ol, .blog-post ul {
-    padding-left: 45px !important; 
-    margin: 20px 0;
-}
-
-.blog-post li {
-    margin-bottom: 12px;
-}
-
-.blog-post strong, .blog-post b {
-    color: var(--primary);
-    font-weight: 900 !important;
-    text-transform: uppercase;
-}
-
-/* Light Mode Highlight & Text Override */
-[data-theme="light"] .highlight-green {
-    color: #008000 !important;
-    text-shadow: none !important;
-}
-
-[data-theme="light"] .review-label {
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-
-/* Responsive Images in Posts */
-.blog-post img {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid var(--border);
-    margin: 20px 0;
-    box-shadow: 0 0 10px var(--shadow);
-}
