@@ -31,24 +31,24 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px;
+    padding: 10px; /* Reduced padding for mobile width */
     line-height: 1.6;
     transition: background-color 0.3s ease;
 }
 
 .container {
-    width: 95%;
+    width: 100%; /* S24 width optimization */
     max-width: 1000px;
     margin: 0 auto;
     border: 2px solid var(--border);
-    padding: 20px;
+    padding: 15px;
     background: var(--container-bg);
     position: relative;
     z-index: 5;
     box-shadow: 0 10px 30px var(--shadow);
 }
 
-/* 3. CENTERED HEADER & TYPEWRITER FIX */
+/* 3. CENTERED HEADER & TYPEWRITER (S24 CLIPPING FIX) */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -57,42 +57,53 @@ header {
 }
 
 header h1 {
-    font-size: clamp(1.5rem, 5vw, 2.2rem); 
+    font-size: clamp(1.2rem, 4.2vw, 2.2rem); /* Scaled down for S24 viewport */
     display: flex;
-    flex-direction: column; /* Force OTD to stack over PERSONAL_VAULT */
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
-    gap: 5px; /* Tight vertical spacing */
+    gap: 8px; 
     margin: 10px 0;
-    position: relative;
-}
-
-/* The Cursor: Now attached to the end of the bottom line only */
-.delay-type::after {
-    content: "|";
-    color: var(--accent);
-    margin-left: 5px;
-    animation: blink-caret .75s step-end infinite;
 }
 
 .typewriter {
-    display: block; /* Ensures they occupy their own lines */
+    display: block;
     overflow: hidden;
     white-space: nowrap;
-    letter-spacing: .15em;
-    width: fit-content;
-    animation: typing 1.5s steps(20, end);
+    letter-spacing: 0.05em; /* Tightened slightly for mobile safety */
+    width: 0;
+    max-width: max-content;
+    margin: 0 auto;
+    animation: typing 1.5s steps(20, end) forwards;
 }
 
 .delay-type {
-    animation: typing 1.5s steps(20, end) 1.5s both;
+    animation: typing 1.5s steps(20, end) 1.5s forwards;
+    position: relative; /* Anchor for the cursor */
 }
 
-@keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes blink-caret { from, to { opacity: 1; } 50% { opacity: 0; } }
+/* The Cursor: Absolute Positioned so it NEVER wraps */
+.delay-type::after {
+    content: "|";
+    color: var(--accent);
+    position: absolute;
+    right: -12px; /* Pulls cursor outside the text container */
+    top: 0;
+    animation: blink-caret .75s step-end infinite;
+}
+
+@keyframes typing { 
+    from { width: 0 } 
+    to { width: 100% } 
+}
+
+@keyframes blink-caret { 
+    from, to { opacity: 1; } 
+    50% { opacity: 0; } 
+}
 
 .warning-banner {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     padding: 10px;
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -125,7 +136,7 @@ header h1 {
 }
 
 .text-overlay h1 {
-    font-size: clamp(1.2rem, 5vw, 2.5rem);
+    font-size: clamp(1rem, 5vw, 2.5rem);
     color: var(--primary);
     text-shadow: 2px 2px 8px #000;
 }
@@ -140,13 +151,13 @@ header h1 {
 }
 
 .secondary-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
-.secondary-filters { display: flex; gap: 10px; }
+.secondary-filters { display: flex; gap: 8px; }
 
 .submit-btn {
     background-color: var(--primary);
     color: #000;
     border: 1px solid var(--primary);
-    padding: 8px 16px;
+    padding: 8px 12px;
     font-family: inherit;
     font-weight: bold;
     cursor: pointer;
@@ -175,7 +186,7 @@ header h1 {
 /* 7. CONTENT STYLES */
 .blog-post { word-wrap: break-word; }
 .blog-post h3 { margin-top: 40px; color: var(--primary); text-transform: uppercase; }
-.blog-post ul, .blog-post ol { padding-left: 45px !important; margin: 20px 0; }
+.blog-post ul, .blog-post ol { padding-left: 30px !important; margin: 20px 0; }
 .blog-post li { margin-bottom: 10px; }
 .blog-post img { display: block; max-width: 100%; border: 1px solid var(--border); margin: 30px auto; box-shadow: 0 0 15px var(--shadow); }
 .blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
@@ -183,23 +194,24 @@ header h1 {
 .highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
 [data-theme="light"] .highlight-green { color: #008000 !important; text-shadow: none !important; }
 
-/* 8. BROADCAST TOOLS (ALIGNMENT FIX FROM SCREENSHOT) */
+/* 8. BROADCAST TOOLS */
 .broadcast-tools { 
     margin-top: 40px; 
-    padding: 15px 25px; 
+    padding: 15px 20px; 
     border: 1px solid var(--border); 
     background: rgba(0,0,0,0.3); 
     border-top: 2px solid var(--accent);
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .share-icons { 
     display: flex; 
     align-items: center; 
-    gap: 15px; 
+    gap: 12px; 
     height: 32px; 
 }
 
@@ -209,24 +221,18 @@ header h1 {
     justify-content: center;
     height: 32px;
     width: 32px;
-    text-decoration: none;
 }
 
-/* Force all icons to a consistent baseline */
 .share-icons img, .share-icons svg, .share-icons i {
-    height: 22px !important; /* Adjusted slightly to match FA link scale */
+    height: 22px !important; 
     width: auto;
     display: block;
-    object-fit: contain;
 }
 
 .share-icons i {
     font-size: 22px !important; 
     color: var(--accent);
-    text-shadow: 0 0 5px var(--accent);
 }
-
-.share-icons a:hover { transform: translateY(-2px); filter: brightness(1.2); }
 
 /* 9. SURVEILLANCE & OVERLAY */
 .terminal-overlay {
