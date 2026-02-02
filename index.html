@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vintage64 | Personal Vault</title>
+    
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; style-src 'self' https: 'unsafe-inline';">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <meta property="og:title" content="Vintage64 | The Observation Deck">
@@ -14,7 +16,7 @@
     <meta property="og:type" content="website">
 
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
 </head>
 
 <body id="personal-identity">    
@@ -46,7 +48,7 @@
                 <button id="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ THE_FEED ]</button>
             </div>
             <div class="secondary-row">
-                <span class="review-label">REVIEWS ></span>
+                <span class="review-tag">REVIEWS ></span>
                 <div class="secondary-filters">
                     <button id="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
                     <button id="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
@@ -70,10 +72,13 @@
                 <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: VAULT_ACTIVE ]</div>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
                 <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
+                
                 <div class="surveillance-wrapper">
                     <h3>> VISUAL_UPLINK</h3>
                     <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
-                    <div class="feed-container"><behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget></div>
+                    <div class="feed-container">
+                        <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+                    </div>
                     <div class="feed-footer">SOURCE: INSTAGRAM_API_V1</div>
                 </div>
             </aside>
@@ -94,9 +99,13 @@
         const DISPLAY_LIMIT = 10;
 
         window.addEventListener('beforeunload', () => { localStorage.setItem('vault_scroll', window.scrollY); });
+        
         function restoreScroll() {
             const scrollPos = localStorage.getItem('vault_scroll');
-            if (scrollPos) { window.scrollTo(0, parseInt(scrollPos)); setTimeout(() => localStorage.removeItem('vault_scroll'), 150); }
+            if (scrollPos) { 
+                window.scrollTo(0, parseInt(scrollPos)); 
+                setTimeout(() => localStorage.removeItem('vault_scroll'), 150); 
+            }
         }
 
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
@@ -110,6 +119,7 @@
 
         const toggleBtn = document.getElementById('theme-toggle');
         if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        
         toggleBtn.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', theme);
@@ -138,6 +148,7 @@
                 if (typeof marked !== 'undefined') {
                     let htmlContent = marked.parse(cleanMarkdown);
                     const greenLabels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:", "BUILD_QUALITY:", "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", "VALUE_INDEX:", "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:"];
+                    
                     greenLabels.forEach(label => {
                         const regex = new RegExp(label, "g");
                         htmlContent = htmlContent.replace(regex, `<span class="highlight-green">${label}</span>`);
@@ -184,57 +195,56 @@
                 let files = results.flat().filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template'));
                 if (filter !== 'all') files = files.filter(f => f.path.startsWith(filter + '/'));
                 files.sort((a, b) => b.name.localeCompare(a.name));
+                
                 list.innerHTML = ''; 
+                if (files.length === 0) {
+                    list.innerHTML = '<li>[ NO_LOGS_FOUND_IN_VAULT ]</li>';
+                }
+
                 files.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
                     li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ')}</a>`;
                     list.appendChild(li);
                 });
+                
                 loadMoreBtn.style.display = files.length > DISPLAY_LIMIT ? "block" : "none";
                 if (autoLoadFirst && files.length > 0) await loadPost(files[0].path, false);
                 restoreScroll();
             } catch (error) { list.innerHTML = "<li>[ ERROR: OFFLINE ]</li>"; }
         }
 
-        function showAllLogs() { document.querySelectorAll('.older-log').forEach(log => log.style.display = "block"); document.getElementById('load-more-btn').style.display = "none"; }
-    </script>
+        function showAllLogs() { 
+            document.querySelectorAll('.older-log').forEach(log => log.style.display = "block"); 
+            document.getElementById('load-more-btn').style.display = "none"; 
+        }
 
-    <script>
         window.addEventListener('DOMContentLoaded', () => {
-            // 1. Check memory for last active filter
             const savedFilterID = localStorage.getItem('activeFilterID');
-
-            // 2. Priority 1: Check if URL has a specific post hash (Deep Link)
             const hash = window.location.hash.replace('#', '');
+            
             if (hash) {
                 const folder = hash.split('/')[0];
                 const folderBtn = document.getElementById('btn-' + folder);
                 loadLogs(folder, false, folderBtn).then(() => loadPost(hash));
             } 
-            // 3. Priority 2: Use saved memory button
             else if (savedFilterID && document.getElementById(savedFilterID)) {
                 const targetBtn = document.getElementById(savedFilterID);
                 const folder = savedFilterID.replace('btn-', '');
                 loadLogs(folder, true, targetBtn);
             } 
-            // 4. Fallback: Default to Rants/The Feed
             else {
                 loadLogs('rants', true, document.getElementById('btn-rants'));
             }
-        });
 
-        // Event Listeners for saving the state on click
-        document.querySelectorAll('.submit-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Save the ID so we know which button to light up next time
-                if (this.id) {
-                    localStorage.setItem('activeFilterID', this.id);
-                }
+            document.querySelectorAll('.submit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.id) {
+                        localStorage.setItem('activeFilterID', this.id);
+                    }
+                });
             });
         });
     </script>
 </body>
 </html>
-
-
