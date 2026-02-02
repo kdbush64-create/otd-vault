@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vintage64 | Personal Vault</title>
     
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; style-src 'self' https: 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https:;">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -51,7 +51,7 @@
                 <span class="review-tag">REVIEWS ></span>
                 <div class="secondary-filters">
                     <button id="btn-chow" name="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
-                    <button id="btn-coord" name="btn-coord" onclick="loadLogs('btn-coord')" class="submit-btn">COORD</button>
+                    <button id="btn-coord" name="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
                     <button id="btn-gear" name="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                     <h3>> VISUAL_UPLINK</h3>
                     <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
                     <div class="feed-container">
-                        <div id="behold-container" name="behold-container">
+                        <div id="behold-wrapper" name="behold-wrapper">
                             <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
                         </div>
                     </div>
@@ -89,8 +89,8 @@
 
         <footer style="margin-top: 50px; border-top: 2px solid var(--accent); padding-top: 30px; padding-bottom: 50px;">
             <div style="display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; gap: 20px; flex-wrap: wrap;">
-                <a id="link-gear-policy" name="link-gear-policy" href="javascript:void(0)" onclick="loadPost('gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold;">[ GEAR_POLICY ]</a>
-                <a id="link-feedback" name="link-feedback" href="mailto:your-email@example.com?subject=V64_UPLINK_FEEDBACK" class="footer-link">[ SEND_FEEDBACK ]</a>
+                <a id="footer-gear-link" name="footer-gear-link" href="javascript:void(0)" onclick="loadPost('gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold;">[ GEAR_POLICY ]</a>
+                <a id="footer-mail-link" name="footer-mail-link" href="mailto:your-email@example.com?subject=V64_UPLINK_FEEDBACK" class="footer-link">[ SEND_FEEDBACK ]</a>
             </div>
             <p style="text-align: center; margin-top: 30px; opacity: 0.7;" class="blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
         </footer>
@@ -165,16 +165,16 @@
                         <div class="broadcast-tools">
                             <span class="share-label">SHARE_TO ></span>
                             <div class="share-icons">
-                                <a id="share-x" name="share-x" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on X">
+                                <a id="btn-share-x" name="btn-share-x" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on X">
                                     <img src="https://cdn.simpleicons.org/x/white" alt="X">
                                 </a>
-                                <a id="share-facebook" name="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook">
+                                <a id="btn-share-fb" name="btn-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook">
                                     <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook">
                                 </a>
-                                <a id="share-insta" name="share-insta" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link for Instagram">
+                                <a id="btn-share-ig" name="btn-share-ig" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link for Instagram">
                                     <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
                                 </a>
-                                <a id="share-clipboard" name="share-clipboard" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link to Clipboard">
+                                <a id="btn-share-link" name="btn-share-link" href="javascript:void(0)" onclick="copyUplink()" aria-label="Copy Link to Clipboard">
                                     <i class="fa-solid fa-link"></i>
                                 </a>
                             </div>
