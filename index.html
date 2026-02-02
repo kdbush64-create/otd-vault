@@ -58,6 +58,16 @@
             box-shadow: 0 0 15px var(--accent);
             border: 1px solid #fff;
         }
+
+        /* Instruction text styling */
+        .dir-instruction {
+            font-size: 0.65rem;
+            color: var(--primary-dim);
+            margin-bottom: 10px;
+            border-left: 2px solid var(--border);
+            padding-left: 8px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 
@@ -94,9 +104,9 @@
             <div class="secondary-row">
                 <span class="review-label">REVIEWS ></span>
                 <div class="secondary-filters">
-                    <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
-                    <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
-                    <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
+                    <button id="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
+                    <button id="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
+                    <button id="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
                 </div>
             </div>
         </nav>
@@ -121,7 +131,8 @@
 
             <aside class="log-directory">
                 <h3>> LOG_DIRECTORY</h3>
-                <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 10px; font-weight: bold;">[ SOURCE: THE_FEED ]</div>
+                <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: THE_FEED ]</div>
+                <div class="dir-instruction">SELECT_ENTRY_FOR_FULL_UPLINK</div>
                 
                 <ul class="file-list" id="log-list">
                     <li>[ SCANNING_VAULT... ]</li>
@@ -155,7 +166,7 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
         const folders = ['rants', 'chow', 'gear', 'coord'];
-        const DISPLAY_LIMIT = 10;
+        const DISPLAY_LIMIT = 10; // Current limit before "Show More" appears
 
         // Initialize BeHold Widget
         (() => {
@@ -224,23 +235,16 @@
                 statusLabel.innerText = `[ SOURCE: ${filter === 'rants' ? 'THE_FEED' : filter.toUpperCase()} ]`;
             }
 
-            if (filter === 'rants' && btnElement) {
-                history.pushState("", document.title, window.location.pathname + window.location.search);
-            }
-
+            // UI Update: Highlight the active button
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) {
                 btnElement.classList.add('active');
-            } else if (filter === 'rants') {
-                const feedBtn = document.getElementById('btn-feed');
-                if(feedBtn) feedBtn.classList.add('active');
             }
 
             list.innerHTML = '<li>[ SCANNING... ]</li>';
             loadMoreBtn.style.display = "none";
 
             try {
-                // Fetch from subfolders in parallel
                 const folderPromises = folders.map(folder => 
                     fetch(`https://api.github.com/repos/${repo}/contents/${folder}`)
                         .then(res => res.ok ? res.json() : [])
@@ -249,28 +253,36 @@
                 const results = await Promise.all(folderPromises);
                 let logFiles = results.flat().filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template') && !f.name.toLowerCase().includes('readme'));
                 
-                // If filter is active, only show files from that specific folder
+                // Filter by directory
                 if (filter !== 'all') {
                     logFiles = logFiles.filter(f => f.path.startsWith(filter + '/'));
                 }
 
+                // Sort newest first
                 logFiles.sort((a, b) => b.name.localeCompare(a.name));
                 list.innerHTML = ''; 
                 
                 logFiles.forEach((file, index) => {
                     const li = document.createElement('li');
                     const cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.path}')">${cleanName}</a>`;
+                    
+                    // Add index checking for "Show More"
                     if (index >= DISPLAY_LIMIT) {
                         li.style.display = "none";
                         li.classList.add('older-log');
                     }
+
+                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.path}')">> ${cleanName}</a>`;
                     list.appendChild(li);
                 });
 
-                if (logFiles.length > DISPLAY_LIMIT) loadMoreBtn.style.display = "block";
+                // Show button if we exceed limit
+                if (logFiles.length > DISPLAY_LIMIT) {
+                    loadMoreBtn.style.display = "block";
+                }
 
-                if (autoLoadFirst && !window.location.hash && logFiles.length > 0) {
+                // FIX: Automatically load the first item in the NEW category
+                if (autoLoadFirst && logFiles.length > 0) {
                     loadPost(logFiles[0].path);
                 }
             } catch (error) {
@@ -298,6 +310,7 @@
                     checkHash();
                 });
             } else {
+                // Default boot sequence
                 loadLogs('rants', true, document.getElementById('btn-feed')); 
             }
         };
