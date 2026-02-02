@@ -197,37 +197,27 @@ header h1 {
 
 .highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
 
-/* 8. BROADCAST TOOLS (REACTIVE BLOOM) */
+/* 8. BROADCAST TOOLS (REACTIVE BLOOM + ICON FIX) */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 20px; 
+    border: 1px solid var(--border); 
     background: rgba(0,0,0,0.4); 
     display: flex;
     align-items: center;
     gap: 15px;
     flex-wrap: wrap;
     justify-content: center;
-    
-    /* Base State: Subtle border, no glow */
-    border: 1px solid var(--border);
     transition: all 0.4s ease-in-out;
 }
 
-/* THE RADIOACTIVE BLOOM ON HOVER */
 .broadcast-tools:hover {
-    border-color: var(--accent);
-    /* Layered shadows for the feathered outward glow */
+    border: 1px solid var(--accent);
     box-shadow: 
         0 0 10px var(--accent), 
         0 0 20px rgba(0, 255, 65, 0.4), 
-        0 0 30px rgba(0, 255, 65, 0.2),
-        inset 0 0 10px rgba(0, 255, 65, 0.2); /* Subtle inner bleed */
-}
-
-.share-label {
-    font-weight: bold;
-    color: var(--secondary);
-    letter-spacing: 1px;
+        0 0 35px rgba(0, 255, 65, 0.2),
+        inset 0 0 10px rgba(0, 255, 65, 0.2); 
 }
 
 .share-icons { 
@@ -236,10 +226,37 @@ header h1 {
     gap: 20px; 
 }
 
-/* Ensure the icons react when the box is hovered */
-.broadcast-tools:hover .share-icons i,
-.broadcast-tools:hover .share-icons img {
-    filter: drop-shadow(0 0 5px var(--accent));
+/* THE FIX: Force icon visibility and size */
+.share-icons a { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-decoration: none;
+}
+
+.share-icons img {
+    height: 24px !important;
+    width: 24px !important;
+    display: block;
+    object-fit: contain;
+}
+
+.share-icons i { 
+    font-size: 22px !important; 
+    color: var(--accent) !important; 
+    display: block;
+}
+
+/* Maintain SVG visibility (Nextdoor/Others) */
+.share-icons svg {
+    height: 24px !important;
+    width: 24px !important;
+    fill: var(--accent);
+}
+
+.broadcast-tools:hover .share-icons img,
+.broadcast-tools:hover .share-icons i {
+    filter: drop-shadow(0 0 8px var(--accent));
 }
 
 /* 9. SURVEILLANCE & OVERLAY */
@@ -305,5 +322,6 @@ header h1 {
     opacity: 0.5;
     z-index: 2;
 }
+
 
 
