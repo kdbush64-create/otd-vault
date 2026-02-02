@@ -25,21 +25,48 @@
         @keyframes neonPulse { 0%, 100% { opacity: 1; text-shadow: 0 0 12px var(--accent); } 50% { opacity: 0.3; text-shadow: 0 0 2px var(--accent); } }
         .submit-btn.active { background-color: var(--accent) !important; color: #000 !important; box-shadow: 0 0 15px var(--accent); border: 1px solid #fff; }
         
+        /* ALIGNED COLORFUL BROADCAST UI */
         .broadcast-tools { 
             margin-top: 40px; 
-            padding: 15px; 
+            padding: 15px 25px; 
             border: 1px solid var(--border); 
-            background: rgba(0,0,0,0.2); 
+            background: rgba(0,0,0,0.3); 
             border-top: 2px solid var(--accent);
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: flex-start;
+            gap: 25px;
             flex-wrap: wrap;
         }
-        .share-label { font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 1px; }
-        .share-icons { display: flex; gap: 25px; font-size: 1.5em; }
-        .share-icons a, .share-icons i { color: var(--accent); cursor: pointer; transition: 0.3s; text-decoration: none; }
-        .share-icons a:hover, .share-icons i:hover { text-shadow: 0 0 15px var(--accent); transform: scale(1.1); }
+        .share-label { 
+            font-size: 0.8em; 
+            color: var(--accent); 
+            font-weight: bold; 
+            letter-spacing: 1px;
+            margin-right: 5px;
+        }
+        .share-icons { 
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+        }
+        .share-icons a, .share-icons i { 
+            display: flex;
+            align-items: center;
+            transition: 0.3s ease;
+            text-decoration: none;
+        }
+        .share-icons img {
+            width: 24px;
+            height: 24px;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.1));
+        }
+        .share-icons a:hover, .share-icons i:hover { 
+            transform: translateY(-3px); 
+            filter: drop-shadow(0 0 8px var(--accent));
+        }
+        /* Custom styling for the link icon to match size */
+        .fa-link-alt { color: var(--accent); font-size: 22px; cursor: pointer; }
     </style>
 </head>
 
@@ -139,7 +166,6 @@
             localStorage.setItem('theme', theme);
         });
 
-        // ROBUST COPY FUNCTION
         function copyUplink() {
             const dummy = document.createElement("textarea");
             document.body.appendChild(dummy);
@@ -180,10 +206,16 @@
                         <div class="broadcast-tools">
                             <span class="share-label">SHARE_TO ></span>
                             <div class="share-icons">
-                                <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" title="Broadcast to X"><i class="fa-brands fa-x-twitter"></i></a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" title="Broadcast to Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                                <i class="fa-brands fa-instagram" onclick="copyUplink()" title="Copy Link for Instagram"></i>
-                                <i class="fa-solid fa-link" onclick="copyUplink()" title="Copy Uplink to Clipboard"></i>
+                                <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" title="X">
+                                    <img src="https://cdn.simpleicons.org/x/white" alt="X">
+                                </a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" title="Facebook">
+                                    <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook">
+                                </a>
+                                <a href="javascript:void(0)" onclick="copyUplink()" title="Copy for Instagram">
+                                    <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
+                                </a>
+                                <i class="fa-solid fa-link fa-link-alt" onclick="copyUplink()" title="Copy Link"></i>
                             </div>
                         </div>
                     `;
