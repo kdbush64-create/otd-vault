@@ -24,13 +24,13 @@
             <button id="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
-<header>
-    <div class="warning-banner">!! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD </div>
-    <h1>
-        <span class="typewriter">OTD</span>
-        <span class="typewriter delay-type">PERSONAL_VAULT</span>
-    </h1>
-</header>
+        <header>
+            <div class="warning-banner">!! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD </div>
+            <h1>
+                <span class="typewriter">OTD</span>
+                <span class="typewriter delay-type">PERSONAL_VAULT</span>
+            </h1>
+        </header>
 
         <section class="hero-container">
             <img src="telescope-clean.jpg" alt="The Observation Deck">
@@ -203,17 +203,41 @@
         }
 
         function showAllLogs() { document.querySelectorAll('.older-log').forEach(log => log.style.display = "block"); document.getElementById('load-more-btn').style.display = "none"; }
-        
-        window.onload = () => { 
+    </script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 1. Check memory for last active filter
+            const savedFilterID = localStorage.getItem('activeFilterID');
+
+            // 2. Priority 1: Check if URL has a specific post hash (Deep Link)
             const hash = window.location.hash.replace('#', '');
             if (hash) {
                 const folder = hash.split('/')[0];
-                loadLogs(folder, false).then(() => loadPost(hash));
-            } else { 
-                loadLogs('rants', true, document.getElementById('btn-rants')); 
+                const folderBtn = document.getElementById('btn-' + folder);
+                loadLogs(folder, false, folderBtn).then(() => loadPost(hash));
             } 
-        };
+            // 3. Priority 2: Use saved memory button
+            else if (savedFilterID && document.getElementById(savedFilterID)) {
+                const targetBtn = document.getElementById(savedFilterID);
+                const folder = savedFilterID.replace('btn-', '');
+                loadLogs(folder, true, targetBtn);
+            } 
+            // 4. Fallback: Default to Rants/The Feed
+            else {
+                loadLogs('rants', true, document.getElementById('btn-rants'));
+            }
+        });
+
+        // Event Listeners for saving the state on click
+        document.querySelectorAll('.submit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Save the ID so we know which button to light up next time
+                if (this.id) {
+                    localStorage.setItem('activeFilterID', this.id);
+                }
+            });
+        });
     </script>
 </body>
 </html>
-
