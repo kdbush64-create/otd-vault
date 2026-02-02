@@ -14,7 +14,9 @@ I’m giving myself a well-deserved pat on the back for this one. I managed to b
 
 ### THE_SETUP
 ![Terminal Interface](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/Screenshot%202026-02-02%20080833.jpg)
+
 *The new interface in all its neon glory.*
+
 
 ### THE_OBSERVATION
 > **UNFILTERED_TRUTH:** Coding is a lot like fixing an old tractor. You think you’ve got the timing right, then a gasket blows (or a CSS rule breaks). But once she purrs, there’s no better feeling. 
