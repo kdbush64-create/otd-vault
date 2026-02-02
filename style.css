@@ -48,27 +48,36 @@ body {
     box-shadow: 0 10px 30px var(--shadow);
 }
 
-/* 3. BRAVE-SAFE HEADER (No 'ch' units) */
+/* 3. HEADER FIX (Forces stack on desktop) */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
     margin-bottom: 20px;
     padding-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-title-group {
+    display: flex;
+    flex-direction: column; /* Force vertical stack */
+    align-items: center;
+    width: 100%;
 }
 
 header h1 {
     font-size: clamp(1.4rem, 5vw, 2.2rem);
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    justify-content: center;
-    gap: 0;
+    margin: 5px 0;
+    text-align: center;
+    width: 100%;
 }
 
+/* Override the old media query that was pushing them side-by-side */
 @media (min-width: 600px) {
     header h1 {
-        flex-direction: row;
-        gap: 15px;
+        flex-direction: column;
+        gap: 0;
     }
 }
 
@@ -96,6 +105,7 @@ header h1 {
     text-align: center;
     border-bottom: 2px dashed var(--border);
     margin-bottom: 15px;
+    width: 100%;
 }
 
 /* 4. HERO SECTION */
@@ -131,7 +141,7 @@ header h1 {
 
 .by-line { font-size: 0.9rem; color: var(--secondary); display: block; margin: 5px 0; }
 
-/* 5. NAVIGATION & BUTTONS (STICKY GREEN STATE) */
+/* 5. NAVIGATION & BUTTONS */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
@@ -143,7 +153,6 @@ header h1 {
 .secondary-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
 .secondary-filters { display: flex; gap: 10px; }
 
-/* BASE BUTTON (AMBER) */
 .submit-btn {
     background-color: var(--primary);
     color: #000;
@@ -164,7 +173,6 @@ header h1 {
     box-shadow: 0 0 10px var(--primary); 
 }
 
-/* ACTIVE BUTTON (GREEN) */
 .submit-btn.active {
     background: var(--accent) !important;
     color: #000 !important;
@@ -190,7 +198,6 @@ header h1 {
 /* 7. CONTENT STYLES */
 .blog-post { word-wrap: break-word; }
 
-/* 7a. Markdown Headers - Automatically Green */
 .blog-post h2, .blog-post h3 { 
     margin-top: 40px; 
     margin-bottom: 15px;
@@ -199,21 +206,20 @@ header h1 {
     text-transform: uppercase; 
 }
 
-/* 7b. LISTS & LABELS (THE AGGRESSIVE FIX) */
+/* 7b. LISTS & LABELS (REINFORCED) */
 .blog-post ul, .blog-post ol { padding-left: 30px !important; margin: 20px 0; }
 .blog-post li { margin-bottom: 10px; color: var(--primary); }
 
-/* Targets every common way Markdown bolds labels in lists */
-.blog-post li strong, 
-.blog-post li b,
-.blog-post li span[style*="font-weight: bold"],
-.blog-post li span[style*="font-weight:bold"] {
+/* GREEN TEXT HIGHLIGHTS */
+.highlight-green, 
+.blog-post strong, 
+.blog-post b {
     color: var(--accent) !important;
-    text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+    text-shadow: 0 0 5px rgba(0, 255, 65, 0.6);
     font-weight: bold;
+    text-transform: uppercase;
 }
 
-/* 7c. Media & Layout Elements */
 .blog-post img { 
     display: block; max-width: 100%; border: 1px solid var(--border); 
     margin: 30px auto; box-shadow: 0 0 15px var(--shadow); 
@@ -221,10 +227,7 @@ header h1 {
 
 .blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
 
-/* 7d. Manual Override Class */
-.highlight-green { color: var(--accent) !important; text-shadow: 0 0 5px var(--accent); font-weight: bold; }
-
-/* 8. BROADCAST TOOLS (REACTIVE BLOOM + ICON FIX) */
+/* 8. BROADCAST TOOLS */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 20px; 
@@ -240,51 +243,13 @@ header h1 {
 
 .broadcast-tools:hover {
     border: 1px solid var(--accent);
-    box-shadow: 
-        0 0 10px var(--accent), 
-        0 0 20px rgba(0, 255, 65, 0.4), 
-        0 0 35px rgba(0, 255, 65, 0.2),
-        inset 0 0 10px rgba(0, 255, 65, 0.2); 
+    box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0, 255, 65, 0.4); 
 }
 
-.share-icons { 
-    display: flex; 
-    align-items: center; 
-    gap: 20px; 
-}
-
-/* THE FIX: Force icon visibility and size */
-.share-icons a { 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    text-decoration: none;
-}
-
-.share-icons img {
-    height: 24px !important;
-    width: 24px !important;
-    display: block;
-    object-fit: contain;
-}
-
-.share-icons i { 
-    font-size: 22px !important; 
-    color: var(--accent) !important; 
-    display: block;
-}
-
-/* Maintain SVG visibility (Nextdoor/Others) */
-.share-icons svg {
-    height: 24px !important;
-    width: 24px !important;
-    fill: var(--accent);
-}
-
-.broadcast-tools:hover .share-icons img,
-.broadcast-tools:hover .share-icons i {
-    filter: drop-shadow(0 0 8px var(--accent));
-}
+.share-icons { display: flex; align-items: center; gap: 20px; }
+.share-icons a { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+.share-icons img { height: 24px !important; width: 24px !important; display: block; object-fit: contain; }
+.share-icons i { font-size: 22px !important; color: var(--accent) !important; display: block; }
 
 /* 9. SURVEILLANCE & OVERLAY */
 .terminal-overlay {
@@ -303,7 +268,7 @@ header h1 {
 .theme-switch-wrapper { position: absolute; top: 10px; right: 10px; z-index: 10; }
 #theme-toggle { background: none; border: 1px solid var(--border); color: var(--secondary); padding: 5px; cursor: pointer; font-size: 0.6rem; }
 
-/* 10. VISUAL UPLINK FIXES - THE BREAD BOX GLOW */
+/* 10. VISUAL UPLINK FIXES */
 .feed-header {
     display: flex !important;
     justify-content: space-between !important;
@@ -319,7 +284,7 @@ header h1 {
 }
 
 .feed-container {
-    border: 2px solid var(--border); /* Thicker base border */
+    border: 2px solid var(--border);
     padding: 10px;
     background: #000;
     transition: all 0.3s ease-in-out;
@@ -328,15 +293,9 @@ header h1 {
     overflow: hidden;
 }
 
-/* THE RADIANT GLOW ON HOVER */
 .feed-container:hover {
     border-color: var(--accent);
-    /* Multiple shadows create the "feathered" bloom effect */
-    box-shadow: 
-        0 0 10px var(--accent),           /* Sharp inner glow */
-        0 0 20px rgba(0, 255, 65, 0.6),   /* Mid-feather */
-        0 0 40px rgba(0, 255, 65, 0.4),   /* Wide atmospheric bloom */
-        inset 0 0 15px rgba(0, 255, 65, 0.3); /* Internal glow into the photos */
+    box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0, 255, 65, 0.6), inset 0 0 15px rgba(0, 255, 65, 0.3);
 }
 
 .feed-container::after {
@@ -349,11 +308,3 @@ header h1 {
     opacity: 0.5;
     z-index: 2;
 }
-
-
-
-
-
-
-
-
