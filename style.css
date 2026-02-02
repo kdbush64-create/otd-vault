@@ -189,7 +189,14 @@ header h1 {
 
 /* 7. CONTENT STYLES */
 .blog-post { word-wrap: break-word; }
-.blog-post h3 { margin-top: 40px; color: var(--primary); text-transform: uppercase; }
+.blog-post h3 { 
+    margin-top: 40px; 
+    color: var(--accent) !important; /* This makes it green */
+    text-shadow: 0 0 5px var(--accent); /* Adds a slight terminal glow */
+    text-transform: uppercase; 
+    border-left: 3px solid var(--accent); /* Optional: adds a green vertical line */
+    padding-left: 10px;
+}
 .blog-post ul, .blog-post ol { padding-left: 30px !important; margin: 20px 0; }
 .blog-post li { margin-bottom: 10px; }
 .blog-post img { display: block; max-width: 100%; border: 1px solid var(--border); margin: 30px auto; box-shadow: 0 0 15px var(--shadow); }
@@ -322,6 +329,7 @@ header h1 {
     opacity: 0.5;
     z-index: 2;
 }
+
 
 
 
