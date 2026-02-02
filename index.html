@@ -67,6 +67,15 @@
             padding-left: 8px;
             text-transform: uppercase;
         }
+
+        /* Broadcast Tool Styling */
+        .broadcast-tools {
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
+            border-top: 2px solid var(--accent);
+        }
     </style>
 </head>
 
@@ -167,8 +176,7 @@
         const folders = ['rants', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
-        // --- PERSISTENCE MODULE ---
-        // Save scroll position before the user leaves or reloads
+        // Save scroll position
         window.addEventListener('beforeunload', () => {
             localStorage.setItem('vault_scroll', window.scrollY);
         });
@@ -177,9 +185,7 @@
             const scrollPos = localStorage.getItem('vault_scroll');
             if (scrollPos) {
                 window.scrollTo(0, parseInt(scrollPos));
-                // Clear it so it doesn't stay stuck forever, 
-                // but only after a slight delay to ensure rendering is done
-                setTimeout(() => localStorage.removeItem('vault_scroll'), 100);
+                setTimeout(() => localStorage.removeItem('vault_scroll'), 150);
             }
         }
 
@@ -233,10 +239,26 @@
                         htmlContent = htmlContent.replace(regex, `<span class="highlight-green" style="color: var(--accent); text-shadow: 0 0 5px var(--accent); font-weight: bold;">${label}</span>`);
                     });
 
-                    contentArea.innerHTML = htmlContent;
+                    // BROADCAST LOGIC
+                    const shareUrl = encodeURIComponent(window.location.href);
+                    const shareText = encodeURIComponent("New review uplinked from the Observation Deck: ");
                     
-                    // Only auto-scroll to top if the user MANUALLY clicked a log.
-                    // If it's a page reload, we want to stay where we were.
+                    const broadcastHtml = `
+                        <div class="blog-post">${htmlContent}</div>
+                        <hr style="margin-top:40px; border: 1px dashed var(--accent); opacity:0.3;">
+                        <div class="broadcast-tools">
+                            <p style="font-size: 0.7em; color: var(--accent); margin-bottom: 10px;">> OUTBOUND_BROADCAST_PROTOCOLS:</p>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" class="submit-btn" style="font-size: 0.7em; text-decoration: none;">[ BROADCAST_X ]</a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="submit-btn" style="font-size: 0.7em; text-decoration: none;">[ BROADCAST_FB ]</a>
+                                <button onclick="navigator.clipboard.writeText(window.location.href); alert('UPLINK_COPIED_TO_CLIPBOARD');" class="submit-btn" style="font-size: 0.7em;">[ COPY_UPLINK ]</button>
+                            </div>
+                            <p style="font-size: 0.6em; color: var(--secondary); margin-top: 10px;">* TAG TARGETS MANUALLY UPON TRANSMISSION</p>
+                        </div>
+                    `;
+
+                    contentArea.innerHTML = broadcastHtml;
+                    
                     if (isManualClick) {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
@@ -256,7 +278,6 @@
             }
 
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
-            
             if (btnElement) {
                 btnElement.classList.add('active');
             } else {
@@ -266,7 +287,6 @@
             }
 
             list.innerHTML = '<li>[ SCANNING... ]</li>';
-            loadMoreBtn.style.display = "none";
 
             try {
                 const folderPromises = folders.map(folder => 
@@ -287,26 +307,20 @@
                 logFiles.forEach((file, index) => {
                     const li = document.createElement('li');
                     const cleanName = file.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    
                     if (index >= DISPLAY_LIMIT) {
                         li.style.display = "none";
                         li.classList.add('older-log');
                     }
-
                     li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${file.path}', true)">> ${cleanName}</a>`;
                     list.appendChild(li);
                 });
 
-                if (logFiles.length > DISPLAY_LIMIT) {
-                    loadMoreBtn.style.display = "block";
-                }
+                if (logFiles.length > DISPLAY_LIMIT) loadMoreBtn.style.display = "block";
+                else loadMoreBtn.style.display = "none";
 
                 if (autoLoadFirst && logFiles.length > 0) {
-                    // Pass false to loadPost so it doesn't force scroll to top on boot
                     await loadPost(logFiles[0].path, false);
                 }
-                
-                // Content is loaded, now restore the scroll position
                 restoreScroll();
 
             } catch (error) {
@@ -324,9 +338,7 @@
             if (hash) {
                 const folder = hash.split('/')[0];
                 if (folders.includes(folder)) {
-                    loadLogs(folder, false).then(() => {
-                         loadPost(hash, false);
-                    });
+                    loadLogs(folder, false).then(() => loadPost(hash, false));
                 } else {
                     loadPost(hash, false);
                 }
