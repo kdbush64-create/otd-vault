@@ -19,21 +19,15 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     
     <style>
-        /* INTERNAL OVERRIDE: Ensures green highlights work even if CSS is cached */
-        .highlight-green {
-            color: #00ff41 !important;
-            text-shadow: 0 0 5px rgba(0, 255, 65, 0.6) !important;
-            font-weight: bold !important;
-            text-transform: uppercase !important;
-            display: inline-block !important;
-        }
-        /* Forces the typewriter spans to behave as blocks within their H1 parents */
-        .header-title-group .typewriter {
-            display: block !important;
-            width: fit-content !important;
-            margin: 0 auto !important;
-        }
-    </style>
+    /* Forces green highlights even if external CSS is cached */
+    .highlight-green {
+        color: #00ff41 !important;
+        text-shadow: 0 0 5px rgba(0, 255, 65, 0.6) !important;
+        font-weight: bold !important;
+        text-transform: uppercase !important;
+        display: inline-block !important;
+    }
+</style>
 </head>
 
 <body id="personal-identity">
@@ -44,19 +38,11 @@
             <button id="theme-toggle" name="theme-toggle" aria-label="Toggle between light and dark mode">TOGGLE_VISUAL_MODE</button>
         </div>
 
-        <header style="display: block !important; width: 100% !important; text-align: center !important; border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px; clear: both !important;">
-            <div class="warning-banner" style="display: block !important; width: 100% !important; margin-bottom: 10px !important;">
-                !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD 
-            </div>
-            <div class="header-title-group" style="display: block !important; width: 100% !important;">
-                <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 0 !important; padding: 5px 0 !important; text-align: center !important;">
-                    <span class="typewriter">OLD_TEXAS_DUDE</span>
-                </h1>
-                <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 0 !important; padding: 5px 0 !important; text-align: center !important;">
-                    <span class="typewriter delay-type">PERSONAL_VAULT</span>
-                </h1>
-            </div>
-        </header>
+        <header style="border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 10px; width: 100%;">
+    <div class="warning-banner" style="text-align: center; font-size: 0.8rem; line-height: 1.4;">
+        !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD 
+    </div>
+</header>
 
         <section class="hero-container">
             <img src="telescope-clean.jpg" alt="The Observation Deck">
@@ -299,4 +285,5 @@
     </script>
 </body>
 </html>
+
 
