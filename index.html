@@ -120,24 +120,27 @@
             </section>
 
             <aside class="log-directory">
-                <h3>> LOG_DIRECTORY</h3>
-                <ul class="file-list" id="log-list">
-                    <li>[ SCANNING_VAULT... ]</li>
-                </ul>
-                <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
+    <h3>> LOG_DIRECTORY</h3>
+    <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 10px; font-weight: bold;">[ SOURCE: THE_FEED ]</div>
+    
+    <ul class="file-list" id="log-list">
+        <li>[ SCANNING_VAULT... ]</li>
+    </ul>
+    
+    <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
 
-                <div class="surveillance-wrapper">
-                    <h3>> VISUAL_UPLINK</h3>
-                    <div class="feed-header">
-                        <span class="blink">● REC</span>
-                        <span id="stardate"></span>
-                    </div>
-                    <div class="feed-container">
-                        <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
-                    </div>
-                    <div class="feed-footer">SOURCE: INSTAGRAM_API_V1</div>
-                </div>
-            </aside>
+    <div class="surveillance-wrapper">
+        <h3>> VISUAL_UPLINK</h3>
+        <div class="feed-header">
+            <span class="blink">● REC</span>
+            <span id="stardate"></span>
+        </div>
+        <div class="feed-container">
+            <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+        </div>
+        <div class="feed-footer">SOURCE: INSTAGRAM_API_V1</div>
+    </div>
+</aside>
         </main>
 
         <footer style="margin-top: 50px; border-top: 2px solid var(--accent); padding-top: 30px; padding-bottom: 50px;">
@@ -296,4 +299,5 @@
     </script>
 </body>
 </html>
+
 
