@@ -19,22 +19,8 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     
     <style>
-    /* THEME OVERRIDES FOR DYNAMIC COLORS */
-    .submit-btn.active {
-        background-color: var(--accent) !important;
-        color: #000 !important;
-        border-color: var(--accent) !important;
-        box-shadow: 0 0 15px var(--accent) !important;
-        font-weight: 900 !important;
-        transform: scale(1.05);
-    }
-
-    .highlight-green {
-        color: var(--accent) !important;
-        text-shadow: var(--glow);
-        font-weight: bold !important;
-        text-transform: uppercase !important;
-    }
+    /* THEME OVERRIDES FOR DYNAMIC ANIMATIONS */
+    /* Note: Static colors and glows are now handled in style.css to prevent Light Mode bleed */
 
     .typewriter {
         color: var(--accent) !important; 
@@ -62,14 +48,14 @@
     <div class="terminal-overlay"></div>
     <div class="container">
 
-        <header style="border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px;">
+        <header>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
                 
                 <div style="width: 100%; display: flex; justify-content: flex-end;">
-                     <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 4px 12px; border-radius: 0;">TOGGLE_VISUAL_MODE</button>
+                     <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 4px 12px;">TOGGLE_VISUAL_MODE</button>
                 </div>
 
-                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 10px; background: var(--box-bg); text-shadow: var(--glow-dim); text-align: center; box-sizing: border-box;">
+                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 10px; background: var(--box-bg); text-shadow: var(--glow-dim); text-align: center;">
                     <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
                     <span style="font-size: 0.85em; letter-spacing: 1px; word-wrap: break-word; display: block;">UNFILTERED_OPINIONS_AHEAD</span>
                 </div>
@@ -105,7 +91,7 @@
 
         <nav class="vault-nav-container">
             <div class="primary-feed">
-                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 20px; font-size: 1.1em; min-width: 200px; max-width: 100%; box-sizing: border-box;">ACCESS_WATCH_TOWER</button>
+                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 20px; font-size: 1.1em; min-width: 200px;">ACCESS_WATCH_TOWER</button>
             </div>
             <div class="secondary-row">
                 <label class="review-tag" style="color: var(--primary);">REVIEWS ></label>
@@ -137,9 +123,9 @@
                     [ SHOW_OLDER_LOGS ]
                 </button>
                 
-                <div class="surveillance-wrapper" style="margin-top:20px; background: var(--box-bg);">
-                    <h3 style="color: var(--accent);">> VISUAL_UPLINK</h3>
-                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate" style="color: var(--secondary); opacity: 0.8;"></span></div>
+                <div class="surveillance-wrapper" style="margin-top:20px; background: var(--box-bg); padding: 10px; border: 1px solid var(--border);">
+                    <h3 style="color: var(--accent); margin-bottom: 5px;">> VISUAL_UPLINK</h3>
+                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate" style="color: var(--secondary); opacity: 0.8; font-size: 0.8em;"></span></div>
                     <div class="feed-container">
                         <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
                     </div>
