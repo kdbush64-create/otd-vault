@@ -40,7 +40,6 @@
     @keyframes typing { from { width: 0 } to { width: 100% } }
     @keyframes blink-caret { 50% { border-color: transparent; } }
 
-    /* Button scaling preserved from version 2.2 */
     .submit-btn.active {
         font-weight: 900 !important;
         transform: scale(1.05);
@@ -55,14 +54,18 @@
         <header>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
                 
-                <div style="width: 100%; display: flex; justify-content: flex-end;">
-                     <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 4px 12px;">TOGGLE_VISUAL_MODE</button>
-                </div>
-
-                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 10px; background: var(--box-bg); text-shadow: var(--glow-dim); text-align: center; box-sizing: border-box;">
+                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 15px; background: var(--box-bg); text-align: center; box-sizing: border-box;">
                     <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
-                    <span style="font-size: 0.85em; letter-spacing: 1px; word-wrap: break-word; display: block;">UNFILTERED_OPINIONS_AHEAD</span>
-                    <span class="system-status" style="display: block; margin-top: 5px; font-size: 0.7em;">[ VIEW_MODE: <span id="mode-text">NATIVE_TERMINAL</span> ]</span>
+                    <span style="font-size: 0.85em; letter-spacing: 1px; display: block; margin-bottom: 12px;">UNFILTERED_OPINIONS_AHEAD</span>
+                    
+                    <div style="border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 10px;">
+                        <span class="system-status" style="display: block; font-size: 0.75em; line-height: 1.6; letter-spacing: 0.5px;">
+                            [ VIEW_MODE: <span id="mode-text">NATIVE_TERMINAL</span> ]<br>
+                            TOGGLE VISUAL_MODE FOR THE FULL VAULT EXPERIENCE
+                        </span>
+                        
+                        <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 6px 16px; margin-top: 15px;">VISUAL_MODE</button>
+                    </div>
                 </div>
 
                 <div class="header-title-group" style="text-align: center;">
