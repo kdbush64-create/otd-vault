@@ -66,16 +66,24 @@
             <button id="theme-toggle" aria-label="Toggle Theme">TOGGLE_VISUAL_MODE</button>
         </div>
 
-        <header style="text-align: center; border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px; position: relative;">
-    <div class="warning-banner" style="margin: 0 auto 15px auto; max-width: 60%; color: #ffb000; border: 1px solid #ffb000; padding: 10px; background: rgba(255, 176, 0, 0.05); text-shadow: 0 0 5px rgba(255, 176, 0, 0.5); text-align: center;">
-        <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
-        <span style="font-size: 0.9em; letter-spacing: 1px;">UNFILTERED_OPINIONS_AHEAD</span>
+        <header style="border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+        
+        <div style="width: 100%; display: flex; justify-content: flex-end;">
+             <button id="theme-toggle" aria-label="Toggle Theme" style="font-size: 0.7em;">TOGGLE_VISUAL_MODE</button>
+        </div>
+
+        <div class="warning-banner" style="width: 90%; max-width: 600px; color: #ffb000; border: 1px solid #ffb000; padding: 10px; background: rgba(255, 176, 0, 0.05); text-shadow: 0 0 5px rgba(255, 176, 0, 0.5); text-align: center; box-sizing: border-box;">
+            <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
+            <span style="font-size: 0.85em; letter-spacing: 1px; word-wrap: break-word;">UNFILTERED_OPINIONS_AHEAD</span>
+        </div>
+
+        <div class="header-title-group" style="text-align: center;">
+            <h1 class="main-title"><span class="typewriter">OTD</span></h1>
+            <h1 class="main-title"><span class="typewriter delay-type">PERSONAL_VAULT</span></h1>
+        </div>
     </div>
-            <div class="header-title-group">
-                <h1 class="main-title"><span class="typewriter">OTD</span></h1>
-                <h1 class="main-title"><span class="typewriter delay-type">PERSONAL_VAULT</span></h1>
-            </div>
-        </header>
+</header>
 
         <section class="hero-container">
             <img src="telescope-clean.jpg" alt="The Watch Tower">
@@ -297,6 +305,7 @@
     </script>
 </body>
 </html>
+
 
 
 
