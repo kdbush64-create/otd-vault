@@ -143,7 +143,6 @@
 
     <script>
         const repo = "kdbush64-create/otd-vault";
-        const folders = ['watch_tower', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
         // --- THEME & CLOCK ---
@@ -167,7 +166,6 @@
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink'>EXTRACTING_DATA_STREAM...</p>";
             
-            // Update URL hash without causing a reload
             const cleanPath = filePath.replace('#', '');
             window.location.hash = cleanPath;
 
@@ -183,8 +181,6 @@
                 }
 
                 contentArea.innerHTML = `<div class="blog-post-body">${marked.parse(cleanMarkdown)}</div>`;
-                
-                // Highlight Labels
                 highlightLogLabels(contentArea);
 
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
@@ -197,18 +193,22 @@
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
             
-            // 1. UI RESET: Set Green Button
+            // 1. UI RESET
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
-            if (btnElement) btnElement.classList.add('active');
+            
+            // If we don't have a btnElement passed (like on refresh), find it by ID
+            const targetBtn = btnElement || document.getElementById(`btn-${filterFolder}`);
+            if (targetBtn) targetBtn.classList.add('active');
+
+            // 2. MEMORY: Save current folder to localStorage for refresh persistence
+            localStorage.setItem('v64_current_folder', filterFolder);
 
             list.innerHTML = '<li>[ SCANNING_VAULT... ]</li>';
 
             try {
-                // 2. FETCH ONLY THE REQUESTED FOLDER
                 const response = await fetch(`https://api.github.com/repos/${repo}/contents/${filterFolder}?t=${new Date().getTime()}`);
                 const files = await response.json();
                 
-                // 3. FILTER & SORT
                 const mdFiles = files.filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template'))
                                      .sort((a, b) => b.name.localeCompare(a.name));
 
@@ -218,7 +218,6 @@
                     return;
                 }
 
-                // 4. BUILD LIST
                 mdFiles.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
@@ -229,7 +228,6 @@
                 
                 loadMoreBtn.style.display = mdFiles.length > DISPLAY_LIMIT ? "block" : "none";
                 
-                // 5. AUTO-LOAD FIRST FILE
                 if (autoLoadFirst && mdFiles.length > 0) {
                     await loadPost(mdFiles[0].path, false);
                 }
@@ -261,20 +259,21 @@
         // --- INITIALIZATION ---
         window.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash.replace('#', '');
-            const watchTowerBtn = document.getElementById('btn-watch_tower');
+            const savedFolder = localStorage.getItem('v64_current_folder');
 
             if (hash && hash.includes('/')) {
-                // If shared link: Load that specific post and its folder
+                // If the user lands via a shared deep link (e.g., #gear/file.md)
                 const folder = hash.split('/')[0];
-                const btn = document.getElementById(`btn-${folder}`);
-                loadLogs(folder, false, btn).then(() => loadPost(hash));
+                loadLogs(folder, false).then(() => loadPost(hash));
+            } else if (savedFolder) {
+                // If it's a refresh, load the folder they were last looking at
+                loadLogs(savedFolder, true);
             } else {
-                // Fresh Land: Force Watch Tower only
-                loadLogs('watch_tower', true, watchTowerBtn);
+                // Initial fresh landing
+                loadLogs('watch_tower', true);
             }
         });
 
-        // External widget loader
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
     </script>
 </body>
