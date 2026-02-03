@@ -19,27 +19,26 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     
     <style>
-    /* 1. OVERRIDE FOR ACTIVE BUTTON (FORCES GREEN) */
+    /* THEME OVERRIDES FOR DYNAMIC COLORS */
     .submit-btn.active {
-        background-color: #00ff41 !important;
+        background-color: var(--accent) !important;
         color: #000 !important;
-        border-color: #00ff41 !important;
-        box-shadow: 0 0 15px #00ff41 !important;
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 15px var(--accent) !important;
         font-weight: 900 !important;
         transform: scale(1.05);
     }
 
-    /* 2. TERMINAL TEXT EFFECTS */
     .highlight-green {
-        color: #00ff41 !important;
-        text-shadow: 0 0 5px rgba(0, 255, 65, 0.6) !important;
+        color: var(--accent) !important;
+        text-shadow: var(--glow);
         font-weight: bold !important;
         text-transform: uppercase !important;
     }
 
     .typewriter {
-        color: #00ff41 !important; 
-        text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+        color: var(--accent) !important; 
+        text-shadow: var(--glow);
         display: inline-block;
         overflow: hidden;
         white-space: nowrap;
@@ -50,7 +49,7 @@
 
     .delay-type {
         animation: typing 1.5s steps(20, end) 1s forwards, blink-caret .75s step-end infinite;
-        border-right: .15em solid #ffb000; 
+        border-right: .15em solid var(--primary); 
         padding-right: 4px;
     }
 
@@ -70,7 +69,7 @@
                      <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 4px 12px; border-radius: 0;">TOGGLE_VISUAL_MODE</button>
                 </div>
 
-                <div class="warning-banner" style="width: 95%; max-width: 600px; color: #ffb000; border: 1px solid #ffb000; padding: 10px; background: rgba(255, 176, 0, 0.05); text-shadow: 0 0 5px rgba(255, 176, 0, 0.5); text-align: center; box-sizing: border-box;">
+                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 10px; background: var(--box-bg); text-shadow: var(--glow-dim); text-align: center; box-sizing: border-box;">
                     <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
                     <span style="font-size: 0.85em; letter-spacing: 1px; word-wrap: break-word; display: block;">UNFILTERED_OPINIONS_AHEAD</span>
                 </div>
@@ -92,11 +91,11 @@
         </section>
 
         <section class="vault-manifesto" style="max-width: 700px; margin: 0 auto 40px auto; text-align: center;">
-            <h3 style="color: #ffb000; font-size: 0.9rem; letter-spacing: 2px;">[ ACCESS_PURPOSE ]</h3>
-            <div style="border-left: 3px solid var(--accent); border-right: 3px solid var(--accent); padding: 20px; background: rgba(0, 255, 65, 0.05);">
+            <h3 style="color: var(--primary); font-size: 0.9rem; letter-spacing: 2px;">[ ACCESS_PURPOSE ]</h3>
+            <div style="border-left: 3px solid var(--accent); border-right: 3px solid var(--accent); padding: 20px; background: var(--box-bg);">
                 <p>Unfiltered watch_tower reports and observations from <span class="highlight-green">Old Texas Dude™</span>.</p>
                 
-                <p style="color: #00f0ff; font-weight: bold; line-height: 1.4; margin-top: 15px;">
+                <p style="color: var(--secondary); font-weight: bold; line-height: 1.4; margin-top: 15px;">
                     > FIELD_TESTED<br>
                     <span style="font-size: 1em; display: inline-block; margin: 2px 0;">&Sigma;</span><br>
                     OLD_MAN_APPROVED <
@@ -109,7 +108,7 @@
                 <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 20px; font-size: 1.1em; min-width: 200px; max-width: 100%; box-sizing: border-box;">ACCESS_WATCH_TOWER</button>
             </div>
             <div class="secondary-row">
-                <label class="review-tag">REVIEWS ></label>
+                <label class="review-tag" style="color: var(--primary);">REVIEWS ></label>
                 <div class="secondary-filters">
                     <button id="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
                     <button id="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
@@ -121,7 +120,7 @@
         <main class="vault-layout">
             <section class="log-display">
                 <article id="content" class="blog-post">
-                    <p class="blink">> ESTABLISHING_UPLINK...</p>
+                    <p class="blink" style="color: var(--accent);">> ESTABLISHING_UPLINK...</p>
                 </article>
                 <div class="comment-module">
                     <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async></script>
@@ -129,18 +128,18 @@
             </section>
 
             <aside class="log-directory">
-                <h3>> LOG_DIRECTORY</h3>
-                <p style="color: #ffb000; font-size: 0.65em; margin: -5px 0 15px 5px; opacity: 0.9; letter-spacing: 0.5px;">
-    [ select entry to load data ]
-</p>
+                <h3 style="color: var(--accent);">> LOG_DIRECTORY</h3>
+                <p style="color: var(--primary); font-size: 0.65em; margin: -5px 0 15px 5px; opacity: 0.9; letter-spacing: 0.5px;">
+                    [ select entry to load data ]
+                </p>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
-                <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; color: #ffb000; border-color: #ffb000; box-shadow: 0 0 5px rgba(255, 176, 0, 0.3);">
-    [ SHOW_OLDER_LOGS ]
-</button>
+                <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px;">
+                    [ SHOW_OLDER_LOGS ]
+                </button>
                 
-                <div class="surveillance-wrapper" style="margin-top:20px;">
-                    <h3>> VISUAL_UPLINK</h3>
-                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate" style="color: #00f0ff; opacity: 0.8;"></span></div>
+                <div class="surveillance-wrapper" style="margin-top:20px; background: var(--box-bg);">
+                    <h3 style="color: var(--accent);">> VISUAL_UPLINK</h3>
+                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate" style="color: var(--secondary); opacity: 0.8;"></span></div>
                     <div class="feed-container">
                         <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
                     </div>
@@ -150,10 +149,10 @@
 
         <footer style="margin-top: 50px; border-top: 2px solid var(--accent); padding: 30px 0;">
             <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-                <a href="javascript:void(0)" onclick="loadPost('gear/gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold;">[ GEAR_POLICY ]</a>
-                <a href="mailto:your-email@example.com" class="footer-link">[ SEND_FEEDBACK ]</a>
+                <a href="javascript:void(0)" onclick="loadPost('gear/gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold; text-decoration: none;">[ GEAR_POLICY ]</a>
+                <a href="mailto:your-email@example.com" class="footer-link" style="color: var(--primary); text-decoration: none;">[ SEND_FEEDBACK ]</a>
             </div>
-            <p style="text-align: center; margin-top: 30px; opacity: 0.7;" class="blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
+            <p style="text-align: center; margin-top: 30px; opacity: 0.7; color: var(--accent);" class="blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
         </footer>
     </div>
 
@@ -161,7 +160,6 @@
         const repo = "kdbush64-create/otd-vault";
         const DISPLAY_LIMIT = 10;
 
-        // --- THEME & CLOCK ---
         const toggleBtn = document.getElementById('theme-toggle');
         if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
         toggleBtn.addEventListener('click', () => {
@@ -177,10 +175,9 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- CORE LOGIC ---
         async function loadPost(filePath, isManualClick = false) {
             const contentArea = document.getElementById('content');
-            contentArea.innerHTML = "<p class='blink'>EXTRACTING_DATA_STREAM...</p>";
+            contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
             
             const cleanPath = filePath.replace('#', '');
             window.location.hash = cleanPath;
@@ -200,17 +197,16 @@
                 highlightLogLabels(contentArea);
 
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
-            /* ... rest of the loadPost function ... */
-    } catch (err) { 
-        contentArea.innerHTML = `
-            <div style="border: 1px dashed #ff0000; padding: 20px; background: rgba(255,0,0,0.05);">
-                <p style="color: #ff0000; font-weight: bold;" class="blink">[!] ERROR: DATA_CORRUPTION_DETECTED</p>
-                <p style="color: #ff0000; font-size: 0.8em;">> UNABLE_TO_EXTRACT_LOG: ${cleanPath}</p>
-                <p style="color: #ff0000; font-size: 0.8em;">> STATUS: ACCESS_DENIED // LINK_SEVERED</p>
-            </div>`; 
-    }
-}
-        
+            } catch (err) { 
+                contentArea.innerHTML = `
+                    <div style="border: 1px dashed #ff0000; padding: 20px; background: rgba(255,0,0,0.1);">
+                        <p style="color: #ff0000; font-weight: bold;" class="blink">[!] ERROR: DATA_CORRUPTION_DETECTED</p>
+                        <p style="color: #ff0000; font-size: 0.8em;">> UNABLE_TO_EXTRACT_LOG: ${cleanPath}</p>
+                        <p style="color: #ff0000; font-size: 0.8em;">> STATUS: ACCESS_DENIED // LINK_SEVERED</p>
+                    </div>`; 
+            }
+        }
+
         async function loadLogs(filterFolder, autoLoadFirst = false, btnElement = null) {
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
@@ -250,7 +246,7 @@
                     }
 
                     const cleanName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    const newBadge = isNew ? `<span class="blink" style="color: #ff0000; font-size: 0.7em; font-weight: bold; margin-right: 8px; text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);">[NEW]</span>` : '';
+                    const newBadge = isNew ? `<span class="blink" style="color: #ff0000; font-size: 0.7em; font-weight: bold; margin-right: 8px;">[NEW]</span>` : '';
                     
                     li.innerHTML = `${newBadge}<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${cleanName}</a>`;
                     list.appendChild(li);
@@ -304,6 +300,3 @@
     </script>
 </body>
 </html>
-
-
-
