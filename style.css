@@ -1,36 +1,36 @@
 /* VINTAGE64 | SYSTEM STYLESHEET 
-   VERSION: 2.2 (FULL NEON RESTORATION)
+   VERSION: 2.3 (FINAL CALIBRATION)
 */
 
 /* 1. THEME VARIABLES */
 :root {
-    /* DARK MODE - THE TERMINAL */
+    /* DARK MODE - THE NATIVE TERMINAL */
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
-    --primary: #ffb000;
-    --primary-dim: rgba(255, 176, 0, 0.7);
-    --secondary: #00eeff;
-    --accent: #00ff41;
+    --primary: #ffb000;          /* Gold Text */
+    --primary-dim: #b58900;      /* Amber Unselected */
+    --secondary: #00eeff;        /* Blue Accents */
+    --accent: #00ff41;           /* Neon Green Glow */
     --border: #5c3d2e;
     --shadow: rgba(0, 0, 0, 0.8);
-    --glow: 0 0 10px rgba(0, 255, 65, 0.8); /* THE GREEN GLOW */
+    --glow: 0 0 10px rgba(0, 255, 65, 0.8);
     --box-bg: rgba(0, 255, 65, 0.08);
-    --rec-color: #ff0000; /* FIXED RED REC */
+    --rec-color: #ff0000;        /* Pure Red REC */
 }
 
 [data-theme="light"] {
-    /* LIGHT MODE - THE FIELD MANUAL */
+    /* LIGHT MODE - THE FIELD EXTRACT */
     --bg: #eee8d5;
     --container-bg: #fdf6e3;
-    --primary: #433422;      /* Amber/Brown for text */
-    --primary-dim: #b58900;  /* Pure Amber for unselected buttons */
-    --secondary: #268bd2;
-    --accent: #859900;       /* Light Sage Green (Lighter, not neon) */
+    --primary: #433422;          /* Deep Brown Text */
+    --primary-dim: #b58900;      /* Amber Unselected (Leather/Paper vibe) */
+    --secondary: #268bd2;        /* Classic Blue */
+    --accent: #859900;           /* Soft Sage Green (Selected) */
     --border: #d3cbb1;
     --shadow: rgba(0, 0, 0, 0.05);
-    --glow: none !important; 
-    --box-bg: rgba(181, 137, 0, 0.05); /* Amber tint for boxes */
-    --rec-color: #cc0000;
+    --glow: none !important;     /* No glowing on paper */
+    --box-bg: rgba(181, 137, 0, 0.05);
+    --rec-color: #cc0000;        /* Muted Red REC */
 }
 
 /* 2. GLOBAL RESET & BASE */
@@ -117,10 +117,12 @@ header h1 {
     margin-bottom: 35px;
 }
 
+.secondary-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
+.secondary-filters { display: flex; gap: 10px; }
+
 .submit-btn {
-    /* Unselected state uses Amber in light mode, Gold in dark mode */
-    background-color: var(--primary-dim);
-    color: #000; 
+    background-color: var(--primary-dim); /* Amber Base */
+    color: #000;
     border: 1px solid var(--border);
     padding: 8px 16px;
     font-family: inherit;
@@ -139,13 +141,11 @@ header h1 {
 }
 
 .submit-btn.active {
-    /* Selected state uses Sage in light mode, Neon in dark mode */
-    background-color: var(--accent) !important;
+    background-color: var(--accent) !important; /* Sage in Light, Neon in Dark */
     color: #000 !important;
     border-color: var(--accent) !important;
     box-shadow: var(--glow) !important;
     font-weight: 900 !important;
-    transform: scale(1.05);
 }
 
 /* 6. LAYOUT & DIRECTORY */
@@ -181,7 +181,7 @@ header h1 {
     margin: 30px auto; box-shadow: 0 0 15px var(--shadow); 
 }
 
-/* 8. SURVEILLANCE & OVERLAY */
+/* 8. SURVEILLANCE & STATUS INDICATORS */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -194,10 +194,22 @@ header h1 {
 
 .blink { 
     animation: rec-pulse 2s infinite; 
-    color: var(--rec-color) !important; /* BACK TO RED */
+    color: var(--rec-color) !important; 
 }
 
 @keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* System Mode Status (New FIELD_EXTRACT logic) */
+.system-status {
+    color: var(--accent); 
+    opacity: 0.8;
+}
+
+[data-theme="light"] .system-status {
+    color: var(--primary-dim); 
+    font-weight: bold;
+    opacity: 1;
+}
 
 .feed-header {
     display: flex; justify-content: space-between; align-items: center;
@@ -214,10 +226,9 @@ header h1 {
 
 .feed-container:hover {
     border-color: var(--accent);
-    /* RESTORED GREEN SURVEILLANCE GLOW */
+    /* GREEN BEHOLD GLOW RESTORED */
     box-shadow: var(--glow), inset 0 0 15px rgba(0, 255, 65, 0.3);
 }
 
 /* 9. FOOTER */
 footer a:hover { color: var(--accent) !important; text-shadow: var(--glow); }
-
