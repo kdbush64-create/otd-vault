@@ -100,7 +100,7 @@
         <nav class="vault-nav-container">
             <div class="primary-feed">
                 <label for="btn-rants" style="display:none;">Watch Tower Feed</label>
-                <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ ACCESS_WATCH_TOWER ]</button>
+                <button id="btn-rants" name="btn-rants" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ ACCESS_WATCH_TOWER ]</button>
             </div>
             <div class="secondary-row">
                 <label class="review-tag" for="btn-chow">REVIEWS ></label>
@@ -154,7 +154,8 @@
 
     <script>
         const repo = "kdbush64-create/otd-vault";
-        const folders = ['rants', 'chow', 'gear', 'coord'];
+        // UPDATED: 'rants' changed to 'watch_tower'
+        const folders = ['watch_tower', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
         window.addEventListener('beforeunload', () => { localStorage.setItem('vault_scroll', window.scrollY); });
@@ -318,7 +319,8 @@
                 loadLogs(folder, true, targetBtn);
             } 
             else {
-                loadLogs('rants', true, document.getElementById('btn-rants'));
+                // UPDATED: Default load points to watch_tower folder
+                loadLogs('watch_tower', true, document.getElementById('btn-rants'));
             }
         });
     </script>
