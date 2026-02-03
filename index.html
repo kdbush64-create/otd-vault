@@ -67,9 +67,10 @@
         </div>
 
         <header style="text-align: center; border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px;">
-            <div class="warning-banner" style="margin-bottom: 15px;">
-                !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD 
-            </div>
+            <div class="warning-banner" style="margin-bottom: 15px; color: #ffb000; border: 1px solid #ffb000; padding: 10px; background: rgba(255, 176, 0, 0.05); text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);">
+    <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
+    <span style="font-size: 0.9em; letter-spacing: 1px;">UNFILTERED_OPINIONS_AHEAD</span>
+</div>
             <div class="header-title-group">
                 <h1 class="main-title"><span class="typewriter">OTD</span></h1>
                 <h1 class="main-title"><span class="typewriter delay-type">PERSONAL_VAULT</span></h1>
@@ -128,11 +129,13 @@
     [ select entry to load data ]
 </p>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
-                <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px;">[ SHOW_OLDER_LOGS ]</button>
+                <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; color: #ffb000; border-color: #ffb000; box-shadow: 0 0 5px rgba(255, 176, 0, 0.3);">
+    [ SHOW_OLDER_LOGS ]
+</button>
                 
                 <div class="surveillance-wrapper" style="margin-top:20px;">
                     <h3>> VISUAL_UPLINK</h3>
-                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
+                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate" style="color: #00f0ff; opacity: 0.8;"></span></div>
                     <div class="feed-container">
                         <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
                     </div>
@@ -294,6 +297,7 @@
     </script>
 </body>
 </html>
+
 
 
 
