@@ -99,8 +99,7 @@
 
         <nav class="vault-nav-container">
             <div class="primary-feed">
-                <label for="btn-rants" style="display:none;">Watch Tower Feed</label>
-                <button id="btn-rants" name="btn-rants" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ ACCESS_WATCH_TOWER ]</button>
+                <button id="btn-watch_tower" name="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ ACCESS_WATCH_TOWER ]</button>
             </div>
             <div class="secondary-row">
                 <label class="review-tag" for="btn-chow">REVIEWS ></label>
@@ -248,6 +247,7 @@
 
         async function loadLogs(filter = 'all', autoLoadFirst = false, btnElement = null) {
             const list = document.getElementById('log-list');
+            const contentArea = document.getElementById('content');
             const loadMoreBtn = document.getElementById('load-more-btn');
             
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
@@ -268,11 +268,7 @@
                 const results = await Promise.all(fetchPromises);
                 let files = results.flat().filter(f => f.name && f.name.endsWith('.md') && !f.name.toLowerCase().includes('template'));
                 
-                // Debug log to see what the API is finding
-                console.log("Files found:", files.map(f => f.path));
-
                 if (filter !== 'all') {
-                    // Match folder name exactly or check if path contains it
                     files = files.filter(f => f.path.includes(filter + '/'));
                 }
                 
@@ -281,6 +277,7 @@
                 list.innerHTML = ''; 
                 if (files.length === 0) {
                     list.innerHTML = '<li>[ NO_LOGS_FOUND ]</li>';
+                    contentArea.innerHTML = "<p class='blink' style='color:var(--accent); font-weight:bold;'> > NO_OBSERVATIONS_FOUND </p>";
                     return;
                 }
 
@@ -292,7 +289,10 @@
                 });
                 
                 loadMoreBtn.style.display = files.length > DISPLAY_LIMIT ? "block" : "none";
-                if (autoLoadFirst && files.length > 0) await loadPost(files[0].path, false);
+                
+                if (autoLoadFirst && files.length > 0) {
+                    await loadPost(files[0].path, false);
+                }
                 restoreScroll();
             } catch (error) { 
                 list.innerHTML = "<li>[ ERROR: SCAN_FAILED ]</li>"; 
@@ -310,12 +310,14 @@
             
             if (hash) {
                 loadLogs('all', false).then(() => loadPost(hash));
+            } else if (savedFilterID && document.getElementById(savedFilterID)) {
+                const targetBtn = document.getElementById(savedFilterID);
+                const folder = savedFilterID.replace('btn-', '');
+                loadLogs(folder, true, targetBtn);
             } else {
-                // Force load Watch Tower on startup
-                loadLogs('watch_tower', true, document.getElementById('btn-rants'));
+                loadLogs('watch_tower', true, document.getElementById('btn-watch_tower'));
             }
         });
     </script>
 </body>
 </html>
-
