@@ -8,17 +8,23 @@
     --accent: #00ff41;
     --border: #5c3d2e;
     --shadow: rgba(0, 0, 0, 0.8);
+    --glow: 0 0 8px rgba(0, 255, 65, 0.5);
+    --glow-dim: 0 0 5px rgba(255, 176, 0, 0.5);
+    --box-bg: rgba(0, 255, 65, 0.05);
 }
 
 [data-theme="light"] {
-    --bg: #f4f4f4;
+    --bg: #e8e6e1; /* Vintage paper color */
     --container-bg: #ffffff;
-    --primary: #7a5400;
+    --primary: #8b5a2b; /* Deep wood/rust */
     --primary-dim: #5c5c5c;
     --secondary: #005f6b;
-    --accent: #008522; 
-    --border: #a3a3a3;
+    --accent: #006400; /* Dark forest green for readability */
+    --border: #b0a99f;
     --shadow: rgba(0, 0, 0, 0.1);
+    --glow: none; /* Disable glows on light background */
+    --glow-dim: none;
+    --box-bg: rgba(0, 0, 0, 0.05);
 }
 
 /* 2. GLOBAL RESET & BASE */
@@ -48,7 +54,7 @@ body {
     box-shadow: 0 10px 30px var(--shadow);
 }
 
-/* 3. HEADER FIX */
+/* 3. HEADER */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -59,48 +65,12 @@ header {
     clear: both !important;
 }
 
-.header-title-group {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    margin: 0 auto !important;
-}
-
 header h1 {
     font-size: clamp(1.4rem, 5vw, 2.2rem);
     margin: 5px 0 !important;
     text-align: center !important;
     width: 100% !important;
     display: block !important; 
-}
-
-.typewriter {
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    letter-spacing: .10em;
-    width: 0;
-    animation: typing 1.5s steps(20, end) forwards;
-}
-
-.delay-type {
-    animation: typing 1.5s steps(20, end) 1s forwards, blink-caret .75s step-end infinite;
-    border-right: .15em solid var(--accent); 
-    padding-right: 4px;
-}
-
-@keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--accent); } }
-
-.warning-banner {
-    font-size: 0.75rem;
-    padding: 10px;
-    text-align: center;
-    border-bottom: 2px dashed var(--border);
-    margin-bottom: 15px;
-    width: 100%;
 }
 
 /* 4. HERO SECTION */
@@ -168,15 +138,6 @@ header h1 {
     box-shadow: 0 0 10px var(--primary); 
 }
 
-/* CORRECTED ACTIVE STATE - FORCES GREEN */
-.submit-btn.active {
-    background-color: var(--accent) !important;
-    color: #000 !important;
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 15px var(--accent);
-    font-weight: 900;
-}
-
 /* 6. LAYOUT & DIRECTORY */
 .vault-layout { display: flex; flex-direction: column; gap: 20px; }
 
@@ -190,7 +151,7 @@ header h1 {
 #log-list li { margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
 
 .log-link { color: var(--secondary); text-decoration: none; font-weight: bold; transition: 0.2s; }
-.log-link:hover { color: var(--accent); padding-left: 5px; text-shadow: 0 0 8px var(--accent); }
+.log-link:hover { color: var(--accent); padding-left: 5px; text-shadow: var(--glow); }
 
 /* 7. CONTENT STYLES */
 .blog-post { word-wrap: break-word; }
@@ -199,21 +160,18 @@ header h1 {
     margin-top: 40px; 
     margin-bottom: 15px;
     color: var(--accent) !important; 
-    text-shadow: 0 0 8px rgba(0, 255, 65, 0.5); 
+    text-shadow: var(--glow); 
     text-transform: uppercase; 
 }
 
 .blog-post ul, .blog-post ol { padding-left: 30px !important; margin: 20px 0; }
 .blog-post li { margin-bottom: 10px; color: var(--primary); }
 
-.highlight-green, 
-.blog-post strong, 
-.blog-post b {
+.blog-post strong, .blog-post b {
     color: var(--accent) !important;
-    text-shadow: 0 0 5px rgba(0, 255, 65, 0.6);
+    text-shadow: var(--glow);
     font-weight: bold;
     text-transform: uppercase;
-    display: inline-block; 
 }
 
 .blog-post img { 
@@ -223,31 +181,7 @@ header h1 {
 
 .blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
 
-/* 8. BROADCAST TOOLS */
-.broadcast-tools { 
-    margin-top: 40px; 
-    padding: 15px 20px; 
-    border: 1px solid var(--border); 
-    background: rgba(0,0,0,0.4); 
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-    transition: all 0.4s ease-in-out;
-}
-
-.broadcast-tools:hover {
-    border: 1px solid var(--accent);
-    box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0, 255, 65, 0.4); 
-}
-
-.share-icons { display: flex; align-items: center; gap: 20px; }
-.share-icons a { display: flex; align-items: center; justify-content: center; text-decoration: none; }
-.share-icons img { height: 24px !important; width: 24px !important; display: block; object-fit: contain; }
-.share-icons i { font-size: 22px !important; color: var(--accent) !important; display: block; }
-
-/* 9. SURVEILLANCE & OVERLAY */
+/* 8. TERMINAL EFFECTS */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -257,26 +191,15 @@ header h1 {
     z-index: 100;
 }
 
-.blink { animation: rec-pulse 2s infinite; color: var(--accent); }
+.blink { animation: rec-pulse 2s infinite; }
 @keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-.surveillance-wrapper { margin-top: 30px; border: 1px solid var(--border); padding: 10px; background: rgba(0,0,0,0.2); }
-.theme-switch-wrapper { position: absolute; top: 10px; right: 10px; z-index: 10; }
-#theme-toggle { background: none; border: 1px solid var(--border); color: var(--secondary); padding: 5px; cursor: pointer; font-size: 0.6rem; }
-
-/* 10. VISUAL UPLINK FIXES */
 .feed-header {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
     margin-bottom: 10px;
-}
-
-#stardate {
-    color: var(--accent) !important;
-    text-shadow: 0 0 8px var(--accent);
-    font-weight: bold;
 }
 
 .feed-container {
@@ -291,16 +214,5 @@ header h1 {
 
 .feed-container:hover {
     border-color: var(--accent);
-    box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0, 255, 65, 0.6), inset 0 0 15px rgba(0, 255, 65, 0.3);
-}
-
-.feed-container::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
-    background-size: 100% 4px;
-    pointer-events: none;
-    opacity: 0.5;
-    z-index: 2;
+    box-shadow: 0 0 10px var(--accent), inset 0 0 15px rgba(0, 255, 65, 0.1);
 }
