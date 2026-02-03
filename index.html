@@ -9,8 +9,8 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <meta property="og:title" content="Vintage64 | The Observation Deck">
-    <meta property="og:description" content="Unfiltered reviews and observations from the vault.">
+    <meta property="og:title" content="Vintage64 | The Watch Tower">
+    <meta property="og:description" content="Unfiltered reports and observations from the tower.">
     <meta property="og:image" content="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/telescope-clean.jpg">
     <meta property="og:url" content="https://kdbush64-create.github.io/otd-vault/">
     <meta property="og:type" content="website">
@@ -19,7 +19,6 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     
     <style>
-    /* 1. Green Labels Fix */
     .highlight-green {
         color: #00ff41 !important;
         text-shadow: 0 0 5px rgba(0, 255, 65, 0.6) !important;
@@ -28,7 +27,6 @@
         display: inline-block !important;
     }
 
-    /* 2. Typewriter Logic */
     .typewriter {
         color: #00ff41 !important; 
         text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
@@ -78,9 +76,9 @@
         </header>
 
         <section class="hero-container">
-            <img src="telescope-clean.jpg" alt="The Observation Deck">
+            <img src="telescope-clean.jpg" alt="The Watch Tower">
             <div class="text-overlay">
-                <h1>The Observation Deck</h1>
+                <h1>The Watch Tower</h1>
                 <span class="by-line">by</span>
                 <h1>Old Texas Dude&trade;</h1>
             </div>
@@ -90,8 +88,8 @@
             <h3 style="color: #ffb000; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 10px;">[ ACCESS_PURPOSE ]</h3>
             <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; line-height: 1.5; color: var(--text); border-left: 3px solid var(--accent); border-right: 3px solid var(--accent); padding: 15px; background: rgba(0, 255, 65, 0.05);">
                 <p style="margin-bottom: 10px;">
-                    Unfiltered deck_view observations, everyday observations, and real-world reviews from the 
-                    Observation Deck of <span class="highlight-green">Old Texas Dude™</span>.
+                    Unfiltered watch_tower reports, everyday observations, and real-world reviews from the 
+                    vantage point of <span class="highlight-green">Old Texas Dude™</span>.
                 </p>
                 <p style="color: var(--accent); font-weight: bold; letter-spacing: 1px;">
                     > FIELD_TESTED_AND_OLD_MAN_APPROVED
@@ -101,8 +99,8 @@
 
         <nav class="vault-nav-container">
             <div class="primary-feed">
-                <label for="btn-rants" style="display:none;">Deck View Feed</label>
-                <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ ACCESS_DECK_VIEW ]</button>
+                <label for="btn-rants" style="display:none;">Watch Tower Feed</label>
+                <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ ACCESS_WATCH_TOWER ]</button>
             </div>
             <div class="secondary-row">
                 <label class="review-tag" for="btn-chow">REVIEWS ></label>
@@ -208,7 +206,7 @@
                 if (typeof marked !== 'undefined') {
                     let htmlContent = marked.parse(cleanMarkdown);
                     const shareUrl = encodeURIComponent(window.location.href);
-                    const shareText = encodeURIComponent("New review uplinked from the Observation Deck: ");
+                    const shareText = encodeURIComponent("New report from the Watch Tower: ");
                     
                     contentArea.innerHTML = `
                         <div class="blog-post-body">${htmlContent}</div>
@@ -229,7 +227,7 @@
                         "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:", "BUILD_QUALITY:", 
                         "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", 
                         "VALUE_INDEX:", "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", 
-                        "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:"
+                        "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:", "VIGILANCE_LEVEL:"
                     ];
 
                     const walk = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, null, false);
