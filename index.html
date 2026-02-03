@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <meta property="og:title" content="Vintage64 | The Observation Deck">
-    <meta property="og:description" content="Unfiltered reviews and rants from the vault.">
+    <meta property="og:description" content="Unfiltered reviews and observations from the vault.">
     <meta property="og:image" content="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/telescope-clean.jpg">
     <meta property="og:url" content="https://kdbush64-create.github.io/otd-vault/">
     <meta property="og:type" content="website">
@@ -28,9 +28,9 @@
         display: inline-block !important;
     }
 
-    /* 2. Typewriter Logic with Green Text & Amber Cursor */
+    /* 2. Typewriter Logic */
     .typewriter {
-        color: #00ff41 !important; /* Neon Green Text */
+        color: #00ff41 !important; 
         text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
         display: inline-block;
         overflow: hidden;
@@ -42,7 +42,6 @@
 
     .delay-type {
         animation: typing 1.5s steps(20, end) 1s forwards, blink-caret .75s step-end infinite;
-        /* Amber Cursor */
         border-right: .15em solid #ffb000; 
         padding-right: 4px;
     }
@@ -52,7 +51,7 @@
         from, to { border-color: transparent } 
         50% { border-color: #ffb000; } 
     }
-</style>
+    </style>
 </head>
 
 <body id="personal-identity">
@@ -64,20 +63,19 @@
         </div>
 
         <header style="display: block !important; width: 100% !important; text-align: center !important; border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px; clear: both !important;">
-    
-    <div class="warning-banner" style="display: block !important; width: 100% !important; margin-bottom: 15px !important;">
-        !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD 
-    </div>
+            <div class="warning-banner" style="display: block !important; width: 100% !important; margin-bottom: 15px !important;">
+                !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD <br>
+            </div>
 
-    <div class="header-title-group" style="display: block !important; width: 100% !important;">
-        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 5px 0 !important; font-size: clamp(1.4rem, 5vw, 2.2rem); text-align: center !important;">
-            <span class="typewriter">OTD</span>
-        </h1>
-        <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 5px 0 !important; font-size: clamp(1.4rem, 5vw, 2.2rem); text-align: center !important;">
-            <span class="typewriter delay-type">PERSONAL_VAULT</span>
-        </h1>
-    </div>
-</header>
+            <div class="header-title-group" style="display: block !important; width: 100% !important;">
+                <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 5px 0 !important; font-size: clamp(1.4rem, 5vw, 2.2rem); text-align: center !important;">
+                    <span class="typewriter">OTD</span>
+                </h1>
+                <h1 class="main-title" style="display: block !important; width: 100% !important; margin: 5px 0 !important; font-size: clamp(1.4rem, 5vw, 2.2rem); text-align: center !important;">
+                    <span class="typewriter delay-type">PERSONAL_VAULT</span>
+                </h1>
+            </div>
+        </header>
 
         <section class="hero-container">
             <img src="telescope-clean.jpg" alt="The Observation Deck">
@@ -88,22 +86,23 @@
             </div>
         </section>
 
-<section class="vault-manifesto" style="max-width: 700px; margin: 0 auto 40px auto; text-align: center; padding: 0 20px;">
-    <h3 style="color: #ffb000; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 10px;">[ ACCESS_PURPOSE ]</h3>
-    <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; line-height: 1.5; color: var(--text); border-left: 3px solid var(--accent); border-right: 3px solid var(--accent); padding: 15px; background: rgba(0, 255, 65, 0.05);">
-        <p style="margin-bottom: 10px;">
-            Unfiltered rants, everyday observations, and real-world reviews from the 
-            Observation Deck of <span class="highlight-green">Old Texas Dude™</span>.
-        </p>
-        <p style="color: var(--accent); font-weight: bold; letter-spacing: 1px;">
-            > FIELD_TESTED_AND_OLD_MAN_APPROVED
-        </p>
-    </div>
-</section>
+        <section class="vault-manifesto" style="max-width: 700px; margin: 0 auto 40px auto; text-align: center; padding: 0 20px;">
+            <h3 style="color: #ffb000; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 10px;">[ ACCESS_PURPOSE ]</h3>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; line-height: 1.5; color: var(--text); border-left: 3px solid var(--accent); border-right: 3px solid var(--accent); padding: 15px; background: rgba(0, 255, 65, 0.05);">
+                <p style="margin-bottom: 10px;">
+                    Unfiltered deck_view observations, everyday observations, and real-world reviews from the 
+                    Observation Deck of <span class="highlight-green">Old Texas Dude™</span>.
+                </p>
+                <p style="color: var(--accent); font-weight: bold; letter-spacing: 1px;">
+                    > FIELD_TESTED_AND_OLD_MAN_APPROVED
+                </p>
+            </div>
+        </section>
+
         <nav class="vault-nav-container">
             <div class="primary-feed">
-                <label for="btn-rants" style="display:none;">Rants Feed</label>
-                <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ THE_FEED ]</button>
+                <label for="btn-rants" style="display:none;">Deck View Feed</label>
+                <button id="btn-rants" name="btn-rants" onclick="loadLogs('rants', true, this)" class="submit-btn" style="padding: 15px 50px; font-size: 1.2em; min-width: 250px;">[ ACCESS_DECK_VIEW ]</button>
             </div>
             <div class="secondary-row">
                 <label class="review-tag" for="btn-chow">REVIEWS ></label>
@@ -129,10 +128,10 @@
                 <h3>> LOG_DIRECTORY</h3>
                 <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: VAULT_ACTIVE ]</div>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
-                <br>
+                
                 <label for="load-more-btn" style="display:none;">Load More</label>
                 <button id="load-more-btn" name="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
-                <br>
+                
                 <div class="surveillance-wrapper">
                     <h3>> VISUAL_UPLINK</h3>
                     <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
@@ -160,7 +159,6 @@
         const folders = ['rants', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
-        // Restore scroll position
         window.addEventListener('beforeunload', () => { localStorage.setItem('vault_scroll', window.scrollY); });
         function restoreScroll() {
             const scrollPos = localStorage.getItem('vault_scroll');
@@ -170,7 +168,6 @@
             }
         }
 
-        // Behold Widget Loader
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
 
         function updateClock() {
@@ -180,7 +177,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Theme Toggle
         const toggleBtn = document.getElementById('theme-toggle');
         if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
         toggleBtn.addEventListener('click', () => {
@@ -227,7 +223,6 @@
                         </div>
                     `;
 
-                    // RE-IMPLEMENTED TREEWALKER FOR GREEN LABELS
                     const greenLabels = [
                         "STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", 
                         "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", 
@@ -310,7 +305,6 @@
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
-        // INITIALIZATION LOGIC
         window.addEventListener('DOMContentLoaded', () => {
             const savedFilterID = localStorage.getItem('activeFilterID');
             const hash = window.location.hash.replace('#', '');
