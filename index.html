@@ -256,24 +256,23 @@
                 localStorage.setItem('activeFilterID', btnElement.id);
             }
 
-            list.innerHTML = '<li>[ SCANNING... ]</li>';
+            list.innerHTML = '<li>[ SCANNING_VAULT... ]</li>';
 
             try {
-                const fetchPromises = folders.map(f => 
+                // Determine which folders to scan
+                const targetFolders = (filter === 'all') ? folders : [filter];
+                
+                const fetchPromises = targetFolders.map(f => 
                     fetch(`https://api.github.com/repos/${repo}/contents/${f}?t=${new Date().getTime()}`)
                         .then(res => res.ok ? res.json() : [])
-                        .catch(() => []) 
                 );
 
                 const results = await Promise.all(fetchPromises);
                 let files = results.flat().filter(f => f.name && f.name.endsWith('.md') && !f.name.toLowerCase().includes('template'));
                 
-                if (filter !== 'all') {
-                    files = files.filter(f => f.path.includes(filter + '/'));
-                }
-                
-                files.sort((a, b) => b.name.localeCompare(a.name));
-                
+                // Debug uplink status
+                console.log(`Vault uplink found ${files.length} files for filter: ${filter}`);
+
                 list.innerHTML = ''; 
                 if (files.length === 0) {
                     list.innerHTML = '<li>[ NO_LOGS_FOUND ]</li>';
@@ -281,10 +280,13 @@
                     return;
                 }
 
+                files.sort((a, b) => b.name.localeCompare(a.name));
+
                 files.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
-                    li.innerHTML = `<a id="log-link-${i}" href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ')}</a>`;
+                    const cleanName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
+                    li.innerHTML = `<a id="log-link-${i}" href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${cleanName}</a>`;
                     list.appendChild(li);
                 });
                 
@@ -295,6 +297,7 @@
                 }
                 restoreScroll();
             } catch (error) { 
+                console.error("Uplink Error:", error);
                 list.innerHTML = "<li>[ ERROR: SCAN_FAILED ]</li>"; 
             }
         }
