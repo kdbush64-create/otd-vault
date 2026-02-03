@@ -1,5 +1,10 @@
+/* VINTAGE64 | SYSTEM STYLESHEET
+    VERSION: 2.0 (THEME OPTIMIZED)
+*/
+
 /* 1. THEME VARIABLES */
 :root {
+    /* DARK MODE - THE TERMINAL */
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
     --primary: #ffb000;
@@ -10,25 +15,30 @@
     --shadow: rgba(0, 0, 0, 0.8);
     --glow: 0 0 8px rgba(0, 255, 65, 0.5);
     --glow-dim: 0 0 5px rgba(255, 176, 0, 0.5);
-    --box-bg: rgba(0, 255, 65, 0.05);
+    --box-bg: rgba(0, 255, 65, 0.08);
 }
 
 [data-theme="light"] {
-    --bg: #e8e6e1; /* Vintage paper color */
-    --container-bg: #ffffff;
-    --primary: #8b5a2b; /* Deep wood/rust */
-    --primary-dim: #5c5c5c;
-    --secondary: #005f6b;
-    --accent: #006400; /* Dark forest green for readability */
-    --border: #b0a99f;
-    --shadow: rgba(0, 0, 0, 0.1);
-    --glow: none; /* Disable glows on light background */
+    /* LIGHT MODE - THE FIELD MANUAL */
+    --bg: #eee8d5;           /* Desk surface */
+    --container-bg: #fdf6e3;     /* Aged parchment */
+    --primary: #433422;      /* Heavy typewriter ink */
+    --primary-dim: #657b83;
+    --secondary: #268bd2;    /* Blueprint blue */
+    --accent: #2d5a27;       /* Pressed leaf green */
+    --border: #d3cbb1;       /* Folder crease */
+    --shadow: rgba(0, 0, 0, 0.05);
+    --glow: none;            /* No glow on paper */
     --glow-dim: none;
-    --box-bg: rgba(0, 0, 0, 0.05);
+    --box-bg: rgba(45, 90, 39, 0.05);
 }
 
 /* 2. GLOBAL RESET & BASE */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
 body {
     background-color: var(--bg);
@@ -39,7 +49,7 @@ body {
     align-items: center;
     padding: 15px;
     line-height: 1.6;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -54,23 +64,23 @@ body {
     box-shadow: 0 10px 30px var(--shadow);
 }
 
-/* 3. HEADER */
+/* 3. HEADER & TITLE */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
     margin-bottom: 20px;
     padding-bottom: 15px;
-    display: block !important; 
-    width: 100% !important;
-    clear: both !important;
 }
 
 header h1 {
     font-size: clamp(1.4rem, 5vw, 2.2rem);
-    margin: 5px 0 !important;
-    text-align: center !important;
-    width: 100% !important;
-    display: block !important; 
+    margin: 5px 0;
+    color: var(--primary);
+}
+
+.main-title {
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 /* 4. HERO SECTION */
@@ -80,12 +90,18 @@ header h1 {
     margin-bottom: 25px;
     border: 2px solid var(--border);
     background: #000;
+    overflow: hidden;
 }
 
 .hero-container img {
     display: block;
     width: 100%;
-    opacity: 0.6;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .hero-container img {
+    opacity: 0.9;
 }
 
 .text-overlay {
@@ -100,11 +116,16 @@ header h1 {
 
 .text-overlay h1 {
     font-size: clamp(1.2rem, 5vw, 2.5rem);
-    color: var(--primary);
+    color: #ffb000; /* Keep hero text gold for branding */
     text-shadow: 2px 2px 8px #000;
 }
 
-.by-line { font-size: 0.9rem; color: var(--secondary); display: block; margin: 5px 0; }
+.by-line { 
+    font-size: 0.9rem; 
+    color: var(--secondary); 
+    display: block; 
+    margin: 5px 0; 
+}
 
 /* 5. NAVIGATION & BUTTONS */
 .vault-nav-container {
@@ -115,21 +136,32 @@ header h1 {
     margin-bottom: 35px;
 }
 
-.secondary-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
-.secondary-filters { display: flex; gap: 10px; }
+.secondary-row { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+}
+
+.secondary-filters { 
+    display: flex; 
+    gap: 10px; 
+}
 
 .submit-btn {
     background-color: var(--primary);
-    color: #000;
+    color: var(--container-bg); /* Contrast color */
     border: 1px solid var(--primary);
     padding: 8px 16px;
     font-family: inherit;
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
-    transition: 0.2s;
+    transition: all 0.2s ease;
     text-decoration: none;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .submit-btn:hover { 
@@ -139,22 +171,49 @@ header h1 {
 }
 
 /* 6. LAYOUT & DIRECTORY */
-.vault-layout { display: flex; flex-direction: column; gap: 20px; }
+.vault-layout { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+}
 
 @media (min-width: 850px) {
     .vault-layout { flex-direction: row; }
     .log-display { flex: 2; }
-    .log-directory { flex: 1; border-left: 1px dashed var(--border); padding-left: 20px; }
+    .log-directory { 
+        flex: 1; 
+        border-left: 1px dashed var(--border); 
+        padding-left: 20px; 
+    }
 }
 
 #log-list { list-style: none; }
-#log-list li { margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
 
-.log-link { color: var(--secondary); text-decoration: none; font-weight: bold; transition: 0.2s; }
-.log-link:hover { color: var(--accent); padding-left: 5px; text-shadow: var(--glow); }
+#log-list li { 
+    margin-bottom: 12px; 
+    border-bottom: 1px dashed var(--border); 
+    padding-bottom: 5px; 
+    font-size: 0.9rem;
+}
 
-/* 7. CONTENT STYLES */
-.blog-post { word-wrap: break-word; }
+.log-link { 
+    color: var(--secondary); 
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: 0.2s; 
+}
+
+.log-link:hover { 
+    color: var(--accent); 
+    padding-left: 5px; 
+    text-shadow: var(--glow); 
+}
+
+/* 7. CONTENT STYLES (THE POSTS) */
+.blog-post { 
+    word-wrap: break-word; 
+    color: var(--primary);
+}
 
 .blog-post h2, .blog-post h3 { 
     margin-top: 40px; 
@@ -164,55 +223,85 @@ header h1 {
     text-transform: uppercase; 
 }
 
-.blog-post ul, .blog-post ol { padding-left: 30px !important; margin: 20px 0; }
-.blog-post li { margin-bottom: 10px; color: var(--primary); }
-
 .blog-post strong, .blog-post b {
     color: var(--accent) !important;
     text-shadow: var(--glow);
     font-weight: bold;
-    text-transform: uppercase;
 }
 
 .blog-post img { 
-    display: block; max-width: 100%; border: 1px solid var(--border); 
-    margin: 30px auto; box-shadow: 0 0 15px var(--shadow); 
+    display: block; 
+    max-width: 100%; 
+    border: 1px solid var(--border); 
+    margin: 30px auto; 
+    box-shadow: 0 0 15px var(--shadow); 
 }
 
-.blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
+.blog-post hr { 
+    border: 0; 
+    border-top: 1px solid var(--border); 
+    margin: 40px 0; 
+    opacity: 0.5; 
+}
 
-/* 8. TERMINAL EFFECTS */
+/* 8. SURVEILLANCE & OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-    background-size: 100% 3px;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+    background-size: 100% 4px;
     pointer-events: none;
     z-index: 100;
+    opacity: 0.3;
 }
 
-.blink { animation: rec-pulse 2s infinite; }
-@keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.blink { 
+    animation: rec-pulse 2s infinite; 
+}
+
+@keyframes rec-pulse { 
+    0%, 100% { opacity: 1; } 
+    50% { opacity: 0.4; } 
+}
 
 .feed-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     margin-bottom: 10px;
+    font-size: 0.8rem;
 }
 
 .feed-container {
     border: 2px solid var(--border);
     padding: 10px;
     background: #000;
-    transition: all 0.3s ease-in-out;
     position: relative;
-    cursor: crosshair;
     overflow: hidden;
 }
 
-.feed-container:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 10px var(--accent), inset 0 0 15px rgba(0, 255, 65, 0.1);
+.feed-container::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+}
+
+/* 9. FOOTER & MISC */
+footer a {
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--accent) !important;
+    text-shadow: var(--glow);
+}
+
+.comment-module {
+    margin-top: 50px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
 }
