@@ -200,11 +200,17 @@
                 highlightLogLabels(contentArea);
 
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
-            } catch (err) { 
-                contentArea.innerHTML = `<p>ERROR: UNABLE_TO_EXTRACT_LOG (${cleanPath})</p>`; 
-            }
-        }
-
+            /* ... rest of the loadPost function ... */
+    } catch (err) { 
+        contentArea.innerHTML = `
+            <div style="border: 1px dashed #ff0000; padding: 20px; background: rgba(255,0,0,0.05);">
+                <p style="color: #ff0000; font-weight: bold;" class="blink">[!] ERROR: DATA_CORRUPTION_DETECTED</p>
+                <p style="color: #ff0000; font-size: 0.8em;">> UNABLE_TO_EXTRACT_LOG: ${cleanPath}</p>
+                <p style="color: #ff0000; font-size: 0.8em;">> STATUS: ACCESS_DENIED // LINK_SEVERED</p>
+            </div>`; 
+    }
+}
+        
         async function loadLogs(filterFolder, autoLoadFirst = false, btnElement = null) {
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
@@ -298,4 +304,5 @@
     </script>
 </body>
 </html>
+
 
