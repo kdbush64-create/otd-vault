@@ -154,7 +154,6 @@
 
     <script>
         const repo = "kdbush64-create/otd-vault";
-        // UPDATED: 'rants' changed to 'watch_tower'
         const folders = ['watch_tower', 'chow', 'gear', 'coord'];
         const DISPLAY_LIMIT = 10;
 
@@ -275,15 +274,28 @@
             }
 
             list.innerHTML = '<li>[ SCANNING... ]</li>';
+
             try {
-                const results = await Promise.all(folders.map(f => fetch(`https://api.github.com/repos/${repo}/contents/${f}`).then(res => res.ok ? res.json() : [])));
-                let files = results.flat().filter(f => f.name.endsWith('.md') && !f.name.toLowerCase().includes('template'));
-                if (filter !== 'all') files = files.filter(f => f.path.startsWith(filter + '/'));
+                // FAIL-SAFE: Fetch folders individually to handle GitHub Pages sync lag
+                const fetchPromises = folders.map(f => 
+                    fetch(`https://api.github.com/repos/${repo}/contents/${f}`)
+                        .then(res => res.ok ? res.json() : [])
+                        .catch(() => []) 
+                );
+
+                const results = await Promise.all(fetchPromises);
+                let files = results.flat().filter(f => f.name && f.name.endsWith('.md') && !f.name.toLowerCase().includes('template'));
+                
+                if (filter !== 'all') {
+                    files = files.filter(f => f.path.startsWith(filter + '/'));
+                }
+                
                 files.sort((a, b) => b.name.localeCompare(a.name));
                 
                 list.innerHTML = ''; 
                 if (files.length === 0) {
                     list.innerHTML = '<li>[ NO_LOGS_FOUND ]</li>';
+                    return;
                 }
 
                 files.forEach((f, i) => {
@@ -296,7 +308,10 @@
                 loadMoreBtn.style.display = files.length > DISPLAY_LIMIT ? "block" : "none";
                 if (autoLoadFirst && files.length > 0) await loadPost(files[0].path, false);
                 restoreScroll();
-            } catch (error) { list.innerHTML = "<li>[ ERROR: OFFLINE ]</li>"; }
+            } catch (error) { 
+                console.error("Vault Scan Error:", error);
+                list.innerHTML = "<li>[ ERROR: SCAN_FAILED ]</li>"; 
+            }
         }
 
         function showAllLogs() { 
@@ -319,7 +334,6 @@
                 loadLogs(folder, true, targetBtn);
             } 
             else {
-                // UPDATED: Default load points to watch_tower folder
                 loadLogs('watch_tower', true, document.getElementById('btn-rants'));
             }
         });
