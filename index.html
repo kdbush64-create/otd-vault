@@ -62,28 +62,25 @@
 <body id="personal-identity">
     <div class="terminal-overlay"></div>
     <div class="container">
-        <div class="theme-switch-wrapper">
-            <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.7em; padding: 5px 10px;">TOGGLE_VISUAL_MODE</button>
-        </div>
 
         <header style="border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px;">
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
-        
-        <div style="width: 100%; display: flex; justify-content: flex-end;">
-             <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 4px 12px; border-radius: 0;">TOGGLE_VISUAL_MODE</button>
-        </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                
+                <div style="width: 100%; display: flex; justify-content: flex-end;">
+                     <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 4px 12px; border-radius: 0;">TOGGLE_VISUAL_MODE</button>
+                </div>
 
-        <div class="warning-banner" style="width: 90%; max-width: 600px; color: #ffb000; border: 1px solid #ffb000; padding: 10px; background: rgba(255, 176, 0, 0.05); text-shadow: 0 0 5px rgba(255, 176, 0, 0.5); text-align: center; box-sizing: border-box;">
-            <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
-            <span style="font-size: 0.85em; letter-spacing: 1px; word-wrap: break-word;">UNFILTERED_OPINIONS_AHEAD</span>
-        </div>
+                <div class="warning-banner" style="width: 95%; max-width: 600px; color: #ffb000; border: 1px solid #ffb000; padding: 10px; background: rgba(255, 176, 0, 0.05); text-shadow: 0 0 5px rgba(255, 176, 0, 0.5); text-align: center; box-sizing: border-box;">
+                    <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
+                    <span style="font-size: 0.85em; letter-spacing: 1px; word-wrap: break-word; display: block;">UNFILTERED_OPINIONS_AHEAD</span>
+                </div>
 
-        <div class="header-title-group" style="text-align: center;">
-            <h1 class="main-title"><span class="typewriter">OTD</span></h1>
-            <h1 class="main-title"><span class="typewriter delay-type">PERSONAL_VAULT</span></h1>
-        </div>
-    </div>
-</header>
+                <div class="header-title-group" style="text-align: center;">
+                    <h1 class="main-title"><span class="typewriter">OTD</span></h1>
+                    <h1 class="main-title"><span class="typewriter delay-type">PERSONAL_VAULT</span></h1>
+                </div>
+            </div>
+        </header>
 
         <section class="hero-container">
             <img src="telescope-clean.jpg" alt="The Watch Tower">
@@ -232,7 +229,6 @@
                     return;
                 }
 
-                // 7-DAY WINDOW CALCULATION
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
@@ -240,7 +236,6 @@
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
                     
-                    // DATE DETECTION LOGIC
                     const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
                     let isNew = false;
                     if (dateMatch) {
@@ -249,8 +244,6 @@
                     }
 
                     const cleanName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    
-                    // RED ALERT STYLING
                     const newBadge = isNew ? `<span class="blink" style="color: #ff0000; font-size: 0.7em; font-weight: bold; margin-right: 8px; text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);">[NEW]</span>` : '';
                     
                     li.innerHTML = `${newBadge}<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${cleanName}</a>`;
@@ -305,13 +298,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
