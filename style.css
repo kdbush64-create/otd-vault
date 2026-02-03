@@ -1,5 +1,5 @@
-/* VINTAGE64 | SYSTEM STYLESHEET
-    VERSION: 2.0 (THEME OPTIMIZED)
+/* VINTAGE64 | SYSTEM STYLESHEET 
+   VERSION: 2.2 (FULL NEON RESTORATION)
 */
 
 /* 1. THEME VARIABLES */
@@ -13,32 +13,28 @@
     --accent: #00ff41;
     --border: #5c3d2e;
     --shadow: rgba(0, 0, 0, 0.8);
-    --glow: 0 0 8px rgba(0, 255, 65, 0.5);
-    --glow-dim: 0 0 5px rgba(255, 176, 0, 0.5);
+    --glow: 0 0 10px rgba(0, 255, 65, 0.8); /* THE GREEN GLOW */
     --box-bg: rgba(0, 255, 65, 0.08);
+    --rec-color: #ff0000; /* FIXED RED REC */
 }
 
 [data-theme="light"] {
     /* LIGHT MODE - THE FIELD MANUAL */
-    --bg: #eee8d5;           /* Desk surface */
-    --container-bg: #fdf6e3;     /* Aged parchment */
-    --primary: #433422;      /* Heavy typewriter ink */
+    --bg: #eee8d5;
+    --container-bg: #fdf6e3;
+    --primary: #433422;
     --primary-dim: #657b83;
-    --secondary: #268bd2;    /* Blueprint blue */
-    --accent: #2d5a27;       /* Pressed leaf green */
-    --border: #d3cbb1;       /* Folder crease */
+    --secondary: #268bd2;
+    --accent: #2d5a27;
+    --border: #d3cbb1;
     --shadow: rgba(0, 0, 0, 0.05);
-    --glow: none;            /* No glow on paper */
-    --glow-dim: none;
+    --glow: none !important; /* FORCED NO GLOW ON PAPER */
     --box-bg: rgba(45, 90, 39, 0.05);
+    --rec-color: #cc0000;
 }
 
 /* 2. GLOBAL RESET & BASE */
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg);
@@ -49,7 +45,7 @@ body {
     align-items: center;
     padding: 15px;
     line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 .container {
@@ -78,11 +74,6 @@ header h1 {
     color: var(--primary);
 }
 
-.main-title {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
 /* 4. HERO SECTION */
 .hero-container {
     position: relative;
@@ -97,11 +88,6 @@ header h1 {
     display: block;
     width: 100%;
     opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
-
-[data-theme="light"] .hero-container img {
-    opacity: 0.9;
 }
 
 .text-overlay {
@@ -116,16 +102,11 @@ header h1 {
 
 .text-overlay h1 {
     font-size: clamp(1.2rem, 5vw, 2.5rem);
-    color: #ffb000; /* Keep hero text gold for branding */
+    color: #ffb000;
     text-shadow: 2px 2px 8px #000;
 }
 
-.by-line { 
-    font-size: 0.9rem; 
-    color: var(--secondary); 
-    display: block; 
-    margin: 5px 0; 
-}
+.by-line { font-size: 0.9rem; color: var(--secondary); display: block; margin: 5px 0; }
 
 /* 5. NAVIGATION & BUTTONS */
 .vault-nav-container {
@@ -136,95 +117,52 @@ header h1 {
     margin-bottom: 35px;
 }
 
-.secondary-row { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-}
-
-.secondary-filters { 
-    display: flex; 
-    gap: 10px; 
-}
+.secondary-row { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
+.secondary-filters { display: flex; gap: 10px; }
 
 .submit-btn {
     background-color: var(--primary);
-    color: var(--container-bg); /* Contrast color: black in dark, parchment in light */
+    color: #000;
     border: 1px solid var(--primary);
     padding: 8px 16px;
     font-family: inherit;
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
-    transition: all 0.2s ease;
+    transition: 0.2s;
     text-decoration: none;
     display: inline-block;
-    white-space: nowrap;
 }
 
 .submit-btn:hover { 
     background: transparent; 
     color: var(--primary); 
-    box-shadow: var(--glow-dim); 
+    box-shadow: 0 0 10px var(--primary); 
 }
 
-/* ACTIVE STATE - SWAPS GLOW FOR CLEAN BORDER IN LIGHT MODE */
 .submit-btn.active {
     background-color: var(--accent) !important;
-    color: var(--container-bg) !important;
+    color: #000 !important;
     border-color: var(--accent) !important;
-    box-shadow: var(--glow) !important; /* Defined as 'none' in Light Mode Variables */
+    box-shadow: var(--glow) !important;
     font-weight: 900 !important;
     transform: scale(1.05);
 }
 
 /* 6. LAYOUT & DIRECTORY */
-.vault-layout { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 20px; 
-}
-
 @media (min-width: 850px) {
-    .vault-layout { flex-direction: row; }
+    .vault-layout { display: flex; flex-direction: row; gap: 20px; }
     .log-display { flex: 2; }
-    .log-directory { 
-        flex: 1; 
-        border-left: 1px dashed var(--border); 
-        padding-left: 20px; 
-    }
+    .log-directory { flex: 1; border-left: 1px dashed var(--border); padding-left: 20px; }
 }
 
 #log-list { list-style: none; }
+#log-list li { margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
 
-#log-list li { 
-    margin-bottom: 12px; 
-    border-bottom: 1px dashed var(--border); 
-    padding-bottom: 5px; 
-    font-size: 0.9rem;
-}
+.log-link { color: var(--secondary); text-decoration: none; font-weight: bold; transition: 0.2s; }
+.log-link:hover { color: var(--accent); padding-left: 5px; text-shadow: var(--glow); }
 
-.log-link { 
-    color: var(--secondary); 
-    text-decoration: none; 
-    font-weight: bold; 
-    transition: 0.2s; 
-}
-
-.log-link:hover { 
-    color: var(--accent); 
-    padding-left: 5px; 
-    text-shadow: var(--glow); 
-}
-
-/* 7. CONTENT STYLES (THE POSTS) */
-.blog-post { 
-    word-wrap: break-word; 
-    color: var(--primary);
-}
-
+/* 7. CONTENT STYLES */
 .blog-post h2, .blog-post h3 { 
     margin-top: 40px; 
     margin-bottom: 15px;
@@ -233,25 +171,15 @@ header h1 {
     text-transform: uppercase; 
 }
 
-.blog-post strong, .blog-post b {
+.blog-post strong, .blog-post b, .highlight-green {
     color: var(--accent) !important;
     text-shadow: var(--glow);
     font-weight: bold;
 }
 
 .blog-post img { 
-    display: block; 
-    max-width: 100%; 
-    border: 1px solid var(--border); 
-    margin: 30px auto; 
-    box-shadow: 0 0 15px var(--shadow); 
-}
-
-.blog-post hr { 
-    border: 0; 
-    border-top: 1px solid var(--border); 
-    margin: 40px 0; 
-    opacity: 0.5; 
+    display: block; max-width: 100%; border: 1px solid var(--border); 
+    margin: 30px auto; box-shadow: 0 0 15px var(--shadow); 
 }
 
 /* 8. SURVEILLANCE & OVERLAY */
@@ -267,20 +195,14 @@ header h1 {
 
 .blink { 
     animation: rec-pulse 2s infinite; 
+    color: var(--rec-color) !important; /* BACK TO RED */
 }
 
-@keyframes rec-pulse { 
-    0%, 100% { opacity: 1; } 
-    50% { opacity: 0.4; } 
-}
+@keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
 .feed-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
-    font-size: 0.8rem;
+    display: flex; justify-content: space-between; align-items: center;
+    width: 100%; margin-bottom: 10px;
 }
 
 .feed-container {
@@ -288,31 +210,14 @@ header h1 {
     padding: 10px;
     background: #000;
     position: relative;
-    overflow: hidden;
-}
-
-.feed-container::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 50%);
-    background-size: 100% 4px;
-    pointer-events: none;
-}
-
-/* 9. FOOTER & MISC */
-footer a {
     transition: all 0.3s ease;
 }
 
-footer a:hover {
-    color: var(--accent) !important;
-    text-shadow: var(--glow);
+.feed-container:hover {
+    border-color: var(--accent);
+    /* RESTORED GREEN SURVEILLANCE GLOW */
+    box-shadow: var(--glow), inset 0 0 15px rgba(0, 255, 65, 0.3);
 }
 
-.comment-module {
-    margin-top: 50px;
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
-}
-
+/* 9. FOOTER */
+footer a:hover { color: var(--accent) !important; text-shadow: var(--glow); }
