@@ -258,23 +258,27 @@
 
         // --- INITIALIZATION ---
         window.addEventListener('DOMContentLoaded', () => {
-            const hash = window.location.hash.replace('#', '');
-            const savedFolder = localStorage.getItem('v64_current_folder');
+    const hash = window.location.hash.replace('#', '');
+    const savedFolder = localStorage.getItem('v64_current_folder');
 
-            if (hash && hash.includes('/')) {
-                // If the user lands via a shared deep link (e.g., #gear/file.md)
-                const folder = hash.split('/')[0];
-                loadLogs(folder, false).then(() => loadPost(hash));
-            } else if (savedFolder) {
-                // If it's a refresh, load the folder they were last looking at
-                loadLogs(savedFolder, true);
-            } else {
-                // Initial fresh landing
-                loadLogs('watch_tower', true);
-            }
-        });
+    // DEBUG LOG: Let's see what the brain is thinking on startup
+    console.log("System Boot: Hash:", hash, "Saved Folder:", savedFolder);
+
+    if (hash && hash.includes('/')) {
+        const folder = hash.split('/')[0];
+        loadLogs(folder, false).then(() => loadPost(hash));
+    } else if (savedFolder) {
+        // Refresh persistence
+        loadLogs(savedFolder, true);
+    } else {
+        // DEFAULT: Force a clean handshake with watch_tower
+        console.log("Initiating Primary Uplink: watch_tower");
+        loadLogs('watch_tower', true);
+    }
+});
 
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
     </script>
 </body>
 </html>
+
