@@ -53,9 +53,9 @@
         <header>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
                 
-                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 15px; background: var(--box-bg); text-align: center; box-sizing: border-box;">
+                <div class="warning-banner" style="width: 95%; max-width: 800px; color: var(--primary); border: 1px solid var(--primary); padding: 20px; background: var(--box-bg); text-align: center; box-sizing: border-box;">
                     <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
-                    <span style="font-size: 0.85em; letter-spacing: 1px; display: block; margin-bottom: 12px;">UNFILTERED_OPINIONS AHEAD</span>
+                    <span style="font-size: 0.85em; letter-spacing: 1px; display: block; margin-bottom: 12px; white-space: normal;">UNFILTERED OPINIONS AHEAD</span>
                     
                     <div style="border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 10px;">
                         <span class="system-status" style="display: block; font-size: 0.75em; line-height: 1.6; letter-spacing: 0.5px;">
@@ -98,7 +98,7 @@
 
         <nav class="vault-nav-container">
             <div class="primary-feed">
-                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 20px; font-size: 1.1em; min-width: 200px;">ACCESS_WATCH_TOWER</button>
+                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 20px; font-size: 1.1em; min-width: 200px; white-space: normal; height: auto;">ACCESS WATCH TOWER</button>
             </div>
             <div class="secondary-row">
                 <label class="review-tag" style="color: var(--primary);">REVIEWS ></label>
@@ -121,7 +121,7 @@
             </section>
 
             <aside class="log-directory">
-                <h3 style="color: var(--accent);">> LOG_DIRECTORY</h3>
+                <h3 style="color: var(--accent); white-space: normal; overflow-wrap: break-word;">> WATCH TOWER REPOSITORY</h3>
                 <p style="color: var(--primary); font-size: 0.65em; margin: -5px 0 15px 5px; opacity: 0.9; letter-spacing: 0.5px;">
                     [ select entry to load data ]
                 </p>
@@ -214,7 +214,17 @@
                     if (parts.length >= 3) cleanMarkdown = parts.slice(2).join('---').trim();
                 }
 
-                contentArea.innerHTML = `<div class="blog-post-body">${marked.parse(cleanMarkdown)}</div>`;
+                // FIX: Dynamic Header Generation to remove underscores and allow wrapping
+                const headerText = cleanPath.split('/').pop().replace('.md', '').replace(/_/g, ' ').replace(/-/g, ' ').toUpperCase();
+
+                contentArea.innerHTML = `
+                    <div class="blog-post-body">
+                        <h2 style="color: var(--secondary); font-size: clamp(1.2rem, 5vw, 2rem); white-space: normal; line-height: 1.2; margin-bottom: 10px;">
+                            LOG: ${headerText}
+                        </h2>
+                        ${marked.parse(cleanMarkdown)}
+                    </div>`;
+
                 highlightLogLabels(contentArea);
 
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
@@ -321,5 +331,3 @@
     </script>
 </body>
 </html>
-
-
