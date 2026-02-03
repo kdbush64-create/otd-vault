@@ -48,7 +48,7 @@ body {
     box-shadow: 0 10px 30px var(--shadow);
 }
 
-/* 3. HEADER FIX (Forces stack on desktop) */
+/* 3. HEADER FIX */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -168,11 +168,13 @@ header h1 {
     box-shadow: 0 0 10px var(--primary); 
 }
 
+/* CORRECTED ACTIVE STATE - FORCES GREEN */
 .submit-btn.active {
-    background: var(--accent) !important;
+    background-color: var(--accent) !important;
     color: #000 !important;
     border-color: var(--accent) !important;
     box-shadow: 0 0 15px var(--accent);
+    font-weight: 900;
 }
 
 /* 6. LAYOUT & DIRECTORY */
@@ -201,11 +203,9 @@ header h1 {
     text-transform: uppercase; 
 }
 
-/* 7b. LISTS & LABELS (REINFORCED) */
 .blog-post ul, .blog-post ol { padding-left: 30px !important; margin: 20px 0; }
 .blog-post li { margin-bottom: 10px; color: var(--primary); }
 
-/* GREEN TEXT HIGHLIGHTS */
 .highlight-green, 
 .blog-post strong, 
 .blog-post b {
@@ -213,7 +213,7 @@ header h1 {
     text-shadow: 0 0 5px rgba(0, 255, 65, 0.6);
     font-weight: bold;
     text-transform: uppercase;
-    display: inline-block; /* Helps visibility */
+    display: inline-block; 
 }
 
 .blog-post img { 
@@ -224,7 +224,6 @@ header h1 {
 .blog-post hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; opacity: 0.5; }
 
 /* 8. BROADCAST TOOLS */
-/* ... (unchanged) ... */
 .broadcast-tools { 
     margin-top: 40px; 
     padding: 15px 20px; 
