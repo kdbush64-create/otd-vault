@@ -20,8 +20,6 @@
     
     <style>
     /* THEME OVERRIDES FOR DYNAMIC ANIMATIONS */
-    /* Note: Static colors and glows are now handled in style.css to prevent Light Mode bleed */
-
     .typewriter {
         color: var(--accent) !important; 
         text-shadow: var(--glow);
@@ -41,6 +39,12 @@
 
     @keyframes typing { from { width: 0 } to { width: 100% } }
     @keyframes blink-caret { 50% { border-color: transparent; } }
+
+    /* Button scaling preserved from version 2.2 */
+    .submit-btn.active {
+        font-weight: 900 !important;
+        transform: scale(1.05);
+    }
     </style>
 </head>
 
@@ -55,9 +59,10 @@
                      <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 4px 12px;">TOGGLE_VISUAL_MODE</button>
                 </div>
 
-                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 10px; background: var(--box-bg); text-shadow: var(--glow-dim); text-align: center;">
+                <div class="warning-banner" style="width: 95%; max-width: 600px; color: var(--primary); border: 1px solid var(--primary); padding: 10px; background: var(--box-bg); text-shadow: var(--glow-dim); text-align: center; box-sizing: border-box;">
                     <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
                     <span style="font-size: 0.85em; letter-spacing: 1px; word-wrap: break-word; display: block;">UNFILTERED_OPINIONS_AHEAD</span>
+                    <span class="system-status" style="display: block; margin-top: 5px; font-size: 0.7em;">[ VIEW_MODE: <span id="mode-text">NATIVE_TERMINAL</span> ]</span>
                 </div>
 
                 <div class="header-title-group" style="text-align: center;">
@@ -145,15 +150,32 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
         const DISPLAY_LIMIT = 10;
-
         const toggleBtn = document.getElementById('theme-toggle');
-        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        const modeText = document.getElementById('mode-text');
+
+        // 1. Hardware Preference Logic
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        let currentTheme = savedTheme || (systemPrefersLight ? 'light' : 'dark');
+
+        // 2. Initial Application
+        if (currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            if (modeText) modeText.innerText = 'FIELD_EXTRACT';
+        }
+
+        // 3. Theme Toggle Functionality
         toggleBtn.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
+            
+            if (modeText) {
+                modeText.innerText = theme === 'light' ? 'FIELD_EXTRACT' : 'NATIVE_TERMINAL';
+            }
         });
 
+        // 4. Utility Functions
         function updateClock() {
             const clock = document.getElementById('stardate');
             if(clock) clock.innerText = new Date().toLocaleTimeString();
