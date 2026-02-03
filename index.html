@@ -308,19 +308,25 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedFilterID = localStorage.getItem('activeFilterID');
-            const hash = window.location.hash.replace('#', '');
-            
-            if (hash) {
-                loadLogs('all', false).then(() => loadPost(hash));
-            } else if (savedFilterID && document.getElementById(savedFilterID)) {
-                const targetBtn = document.getElementById(savedFilterID);
-                const folder = savedFilterID.replace('btn-', '');
-                loadLogs(folder, true, targetBtn);
-            } else {
-                loadLogs('watch_tower', true, document.getElementById('btn-watch_tower'));
-            }
-        });
+    const savedFilterID = localStorage.getItem('activeFilterID');
+    const hash = window.location.hash.replace('#', '');
+    
+    if (hash) {
+        // If a specific log is linked (e.g., via a share link), load everything 
+        // but display that specific post.
+        loadLogs('all', false).then(() => loadPost(hash));
+    } else if (savedFilterID && document.getElementById(savedFilterID)) {
+        // If the user previously clicked a button (like GEAR), return to it.
+        const targetBtn = document.getElementById(savedFilterID);
+        const folder = savedFilterID.replace('btn-', '');
+        loadLogs(folder, true, targetBtn);
+    } else {
+        // DEFAULT LANDING: Force-load the watch_tower folder and light up the button.
+        const watchTowerBtn = document.getElementById('btn-watch_tower');
+        loadLogs('watch_tower', true, watchTowerBtn);
+    }
+});
     </script>
 </body>
 </html>
+
