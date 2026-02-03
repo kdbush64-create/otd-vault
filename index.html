@@ -19,6 +19,16 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     
     <style>
+    /* REINFORCED ACTIVE STATE: FORCES GREEN */
+    .submit-btn.active {
+        background-color: var(--accent) !important;
+        color: #000 !important;
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 15px var(--accent);
+        font-weight: 900;
+        transform: scale(1.02);
+    }
+
     .highlight-green {
         color: #00ff41 !important;
         text-shadow: 0 0 5px rgba(0, 255, 65, 0.6) !important;
@@ -62,7 +72,7 @@
 
         <header style="display: block !important; width: 100% !important; text-align: center !important; border-bottom: 2px dashed var(--border); margin-bottom: 20px; padding-bottom: 15px; clear: both !important;">
             <div class="warning-banner" style="display: block !important; width: 100% !important; margin-bottom: 15px !important;">
-                !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD <br>
+                !! WARNING: !! <br> UNFILTERED_OPINIONS_AHEAD 
             </div>
 
             <div class="header-title-group" style="display: block !important; width: 100% !important;">
@@ -125,10 +135,10 @@
                 <h3>> LOG_DIRECTORY</h3>
                 <div id="directory-status" style="font-size: 0.7em; color: var(--secondary); margin-bottom: 5px; font-weight: bold;">[ SOURCE: VAULT_ACTIVE ]</div>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
-                
+                <br>
                 <label for="load-more-btn" style="display:none;">Load More</label>
                 <button id="load-more-btn" name="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px; font-size: 0.8em;">[ SHOW_OLDER_LOGS ]</button>
-                
+                <br>
                 <div class="surveillance-wrapper">
                     <h3>> VISUAL_UPLINK</h3>
                     <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
@@ -157,6 +167,7 @@
         const DISPLAY_LIMIT = 10;
 
         window.addEventListener('beforeunload', () => { localStorage.setItem('vault_scroll', window.scrollY); });
+        
         function restoreScroll() {
             const scrollPos = localStorage.getItem('vault_scroll');
             if (scrollPos) { 
@@ -190,10 +201,15 @@
         async function loadPost(filePath, isManualClick = false) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink'>EXTRACTING_DATA_STREAM...</p>";
-            if (window.location.hash !== '#' + filePath) { window.location.hash = filePath; }
+            
+            // Fix: Clean hash to prevent pathing errors
+            const cleanPath = filePath.replace('#', '');
+            if (window.location.hash !== '#' + cleanPath) { 
+                window.location.hash = cleanPath; 
+            }
 
             try {
-                const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}`);
+                const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${cleanPath}`);
                 if (!response.ok) throw new Error('File not found');
                 const text = await response.text();
                 let cleanMarkdown = text;
@@ -219,7 +235,9 @@
                         </div>
                     `;
 
+                    // Green Label Highlight Logic
                     const greenLabels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "OBSERVATION:", "RATING:", "COST:", "BRAND:", "DURABILITY:", "UTILITY:", "FLAVOR_PROFILE:", "ACCESSIBILITY:", "VERSION:", "AUTHOR:", "SUBJECT:", "BUILD_QUALITY:", "OPERATIONAL_EFFICIENCY:", "V64_COMPATIBILITY:", "ERGONOMICS / UI:", "VALUE_INDEX:", "MISSION_CRITICAL:", "OPERATIONAL:", "DEGRADED:", "SYSTEM_FAILURE:", "UNFILTERED_TRUTH:", "FIELD_TESTING:", "VIGILANCE_LEVEL:"];
+                    
                     const walk = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, null, false);
                     let node;
                     const nodesToProcess = [];
@@ -241,7 +259,7 @@
                     if (isManualClick) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
                 }
             } catch (err) { 
-                contentArea.innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG (" + filePath + ")</p>"; 
+                contentArea.innerHTML = "<p>ERROR: UNABLE_TO_EXTRACT_LOG (" + cleanPath + ")</p>"; 
             }
         }
 
@@ -250,6 +268,7 @@
             const contentArea = document.getElementById('content');
             const loadMoreBtn = document.getElementById('load-more-btn');
             
+            // Handle Green Active Button State
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
             if (btnElement) {
                 btnElement.classList.add('active');
@@ -259,9 +278,7 @@
             list.innerHTML = '<li>[ SCANNING_VAULT... ]</li>';
 
             try {
-                // Determine which folders to scan
                 const targetFolders = (filter === 'all') ? folders : [filter];
-                
                 const fetchPromises = targetFolders.map(f => 
                     fetch(`https://api.github.com/repos/${repo}/contents/${f}?t=${new Date().getTime()}`)
                         .then(res => res.ok ? res.json() : [])
@@ -270,8 +287,10 @@
                 const results = await Promise.all(fetchPromises);
                 let files = results.flat().filter(f => f.name && f.name.endsWith('.md') && !f.name.toLowerCase().includes('template'));
                 
-                // Debug uplink status
-                console.log(`Vault uplink found ${files.length} files for filter: ${filter}`);
+                // Ensure correct folder pathing
+                if (filter !== 'all') {
+                    files = files.filter(f => f.path.startsWith(filter + '/'));
+                }
 
                 list.innerHTML = ''; 
                 if (files.length === 0) {
@@ -308,25 +327,17 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-    const savedFilterID = localStorage.getItem('activeFilterID');
-    const hash = window.location.hash.replace('#', '');
-    
-    if (hash) {
-        // If a specific log is linked (e.g., via a share link), load everything 
-        // but display that specific post.
-        loadLogs('all', false).then(() => loadPost(hash));
-    } else if (savedFilterID && document.getElementById(savedFilterID)) {
-        // If the user previously clicked a button (like GEAR), return to it.
-        const targetBtn = document.getElementById(savedFilterID);
-        const folder = savedFilterID.replace('btn-', '');
-        loadLogs(folder, true, targetBtn);
-    } else {
-        // DEFAULT LANDING: Force-load the watch_tower folder and light up the button.
-        const watchTowerBtn = document.getElementById('btn-watch_tower');
-        loadLogs('watch_tower', true, watchTowerBtn);
-    }
-});
+            const hash = window.location.hash.replace('#', '');
+            const watchTowerBtn = document.getElementById('btn-watch_tower');
+
+            if (hash) {
+                // Shared Link: Load specific post
+                loadLogs('all', false).then(() => loadPost(hash));
+            } else {
+                // Landing: Default to Watch Tower + Green Button
+                loadLogs('watch_tower', true, watchTowerBtn);
+            }
+        });
     </script>
 </body>
 </html>
-
