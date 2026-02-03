@@ -1,17 +1,18 @@
 ---
 title: "DISPATCH_TITLE"
 date: "2026-02-02"
-category: deck_view
+category: watch_tower
 ---
 
-# LOG: DECK_VIEW_OBSERVATION
+# LOG: WATCH_TOWER_REPORT
 **STATUS:** [ UNFILTERED ]
-**LOCATION:** [ OBSERVATION_DECK ]
+**VIGILANCE_LEVEL:** [ NORMAL ]
+**LOCATION:** [ THE_WATCH_TOWER ]
 
 ---
 
 ### > THE_OBSERVATION
-[Write your thoughts, complaints, or technical debriefs here.]
+[Write your thoughts, observations, or technical debriefs here.]
 
 ### > ROOT_CAUSE_ANALYSIS
 [Identify why the system/item/experience failed or succeeded.]
