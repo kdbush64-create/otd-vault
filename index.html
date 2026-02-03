@@ -218,16 +218,26 @@
                     return;
                 }
 
+                // 7-DAY WINDOW CALCULATION
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
                 mdFiles.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
                     
-                    const today = new Date().toISOString().split('T')[0];
-                    const yesterday = new Date(Date.now() - 864e5).toISOString().split('T')[0];
-                    const isNew = f.name.includes(today) || f.name.includes(yesterday);
+                    // DATE DETECTION LOGIC
+                    const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
+                    let isNew = false;
+                    if (dateMatch) {
+                        const fileDate = new Date(dateMatch[0]);
+                        isNew = fileDate >= sevenDaysAgo;
+                    }
 
                     const cleanName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    const newBadge = isNew ? `<span class="blink" style="color: #ffb000; font-size: 0.7em; margin-left: 8px;">[NEW]</span>` : '';
+                    
+                    // RED ALERT STYLING
+                    const newBadge = isNew ? `<span class="blink" style="color: #ff0000; font-size: 0.7em; margin-left: 8px; text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);">[NEW]</span>` : '';
                     
                     li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${cleanName}</a>${newBadge}`;
                     list.appendChild(li);
