@@ -170,6 +170,7 @@
             window.location.hash = cleanPath;
 
             try {
+                // Fetch using the exact relative path from GitHub
                 const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${cleanPath}?t=${new Date().getTime()}`);
                 if (!response.ok) throw new Error('File not found');
                 const text = await response.text();
@@ -193,16 +194,11 @@
             const list = document.getElementById('log-list');
             const loadMoreBtn = document.getElementById('load-more-btn');
             
-            // 1. UI RESET
             document.querySelectorAll('.submit-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // If we don't have a btnElement passed (like on refresh), find it by ID
             const targetBtn = btnElement || document.getElementById(`btn-${filterFolder}`);
             if (targetBtn) targetBtn.classList.add('active');
 
-            // 2. MEMORY: Save current folder to localStorage for refresh persistence
             localStorage.setItem('v64_current_folder', filterFolder);
-
             list.innerHTML = '<li>[ SCANNING_VAULT... ]</li>';
 
             try {
@@ -221,7 +217,11 @@
                 mdFiles.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
+                    
+                    // Format display name: remove .md, caps, replace dashes with space
                     const cleanName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
+                    
+                    // CRITICAL: We pass f.path (the full path) so loadPost doesn't have to guess the folder
                     li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${cleanName}</a>`;
                     list.appendChild(li);
                 });
@@ -236,6 +236,7 @@
             }
         }
 
+        // Using your preferred TreeWalker label highlighter
         function highlightLogLabels(container) {
             const labels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "RATING:", "OBSERVATION:"];
             const walk = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
@@ -258,27 +259,23 @@
 
         // --- INITIALIZATION ---
         window.addEventListener('DOMContentLoaded', () => {
-    const hash = window.location.hash.replace('#', '');
-    const savedFolder = localStorage.getItem('v64_current_folder');
+            const hash = window.location.hash.replace('#', '');
+            const savedFolder = localStorage.getItem('v64_current_folder');
 
-    // DEBUG LOG: Let's see what the brain is thinking on startup
-    console.log("System Boot: Hash:", hash, "Saved Folder:", savedFolder);
+            console.log("System Boot: Hash:", hash, "Saved Folder:", savedFolder);
 
-    if (hash && hash.includes('/')) {
-        const folder = hash.split('/')[0];
-        loadLogs(folder, false).then(() => loadPost(hash));
-    } else if (savedFolder) {
-        // Refresh persistence
-        loadLogs(savedFolder, true);
-    } else {
-        // DEFAULT: Force a clean handshake with watch_tower
-        console.log("Initiating Primary Uplink: watch_tower");
-        loadLogs('watch_tower', true);
-    }
-});
+            if (hash && hash.includes('/')) {
+                const folder = hash.split('/')[0];
+                loadLogs(folder, false).then(() => loadPost(hash));
+            } else if (savedFolder) {
+                loadLogs(savedFolder, true);
+            } else {
+                console.log("Initiating Primary Uplink: watch_tower");
+                loadLogs('watch_tower', true);
+            }
+        });
 
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
     </script>
 </body>
 </html>
-
