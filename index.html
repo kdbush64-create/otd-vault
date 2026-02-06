@@ -237,14 +237,61 @@
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const hash = window.location.hash.replace('#', '');
-            if (hash) loadLogs(hash.split('/')[0], false).then(() => loadPost(hash));
-            else loadLogs('watch_tower', true);
-        });
+        window.addEventListener('DOMContentLoaded', async () => {
+    const hash = window.location.hash.replace('#', '');
+    
+    // If a user clicks a specific link, go straight there
+    if (hash) {
+        loadLogs(hash.split('/')[0], false).then(() => loadPost(hash));
+    } else {
+        // Option B: Scan all folders to find the absolute newest post for the landing page
+        const folders = ['watch_tower', 'chow', 'gear', 'coord'];
+        let newestFile = null;
+        let newestDate = "";
+
+        try {
+            const scanPromises = folders.map(folder => 
+                fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${new Date().getTime()}`)
+                .then(res => res.json())
+                .catch(() => []) // Ignore empty/missing folders
+            );
+
+            const results = await Promise.all(scanPromises);
+            
+            results.flat().forEach(f => {
+                if (f.name && f.name.endsWith('.md')) {
+                    // Extract date from YYYY-MM-DD format
+                    const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
+                    const fileDate = dateMatch ? dateMatch[0] : "0000-00-00";
+                    
+                    if (fileDate > newestDate) {
+                        newestDate = fileDate;
+                        newestFile = f;
+                    }
+                }
+            });
+
+            if (newestFile) {
+                // Determine which folder the newest file belongs to
+                const folderOfFile = newestFile.path.split('/')[0];
+                const navBtn = document.getElementById(`btn-${folderOfFile}`);
+                
+                // Load the list for that folder and display the post
+                loadLogs(folderOfFile, true, navBtn);
+            } else {
+                // Fallback if no dated files are found
+                loadLogs('watch_tower', true, document.getElementById('btn-watch_tower'));
+            }
+        } catch (err) {
+            console.error("Global scan failed", err);
+            loadLogs('watch_tower', true);
+        }
+    }
+});
 
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
     </script>
 </body>
 </html>
+
 
