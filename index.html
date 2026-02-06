@@ -54,7 +54,7 @@
             <aside class="log-directory">
                 <h3>> LOG_DIRECTORY</h3>
                 <p class="archive-note">[ AUTO_ARCHIVE: ACTIVE (>7 DAYS) ]</p>
-                <ul class="file-list" id="log-list"><li>[ INITIALIZING_SCAN... ]</li></ul>
+                <ul class="file-list" id="log-list"><li>[ INITIALIZING_UNIVERSAL_SCAN... ]</li></ul>
                 <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px;">
                     [ SHOW_FULL_ARCHIVE ]
                 </button>
@@ -151,7 +151,6 @@
                     cleanMarkdown = text.split('---').slice(2).join('---').trim();
                 }
                 let finalHTML = marked.parse(cleanMarkdown);
-                finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
                 setTimeout(() => highlightLogLabels(contentArea), 50);
                 if (isManualClick) window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -203,48 +202,57 @@
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
-        // --- NEW GLOBAL STARTUP SCAN ---
+        // --- THE UNIVERSAL STARTUP SCAN ---
         window.addEventListener('DOMContentLoaded', async () => {
             const hash = window.location.hash.replace('#', '');
+            
+            // If user has a deep link, go there.
             if (hash) {
                 loadLogs(hash.split('/')[0], false).then(() => loadPost(hash));
-            } else {
-                const list = document.getElementById('log-list');
-                const folders = ['watch_tower', 'chow', 'gear', 'coord'];
-                let newFiles = [];
-                const sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                return;
+            }
 
-                try {
-                    const results = await Promise.all(folders.map(f => 
-                        fetch(`https://api.github.com/repos/${repo}/contents/${f}?t=${new Date().getTime()}`).then(res => res.json())
-                    ));
+            // Otherwise, scan ALL folders for anything [NEW]
+            const list = document.getElementById('log-list');
+            const folders = ['watch_tower', 'chow', 'gear', 'coord'];
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            
+            let allNewFiles = [];
 
-                    results.flat().forEach(f => {
-                        if (f.name && f.name.endsWith('.md')) {
-                            const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
-                            if (dateMatch && new Date(dateMatch[0]) >= sevenDaysAgo) {
-                                newFiles.push(f);
-                            }
+            try {
+                // Fetch all folder contents in parallel
+                const responses = await Promise.all(folders.map(folder => 
+                    fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${new Date().getTime()}`)
+                    .then(res => res.ok ? res.json() : [])
+                ));
+
+                responses.flat().forEach(f => {
+                    if (f.name && f.name.toLowerCase().endsWith('.md')) {
+                        const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
+                        if (dateMatch && new Date(dateMatch[0]) >= sevenDaysAgo) {
+                            allNewFiles.push(f);
                         }
-                    });
-
-                    if (newFiles.length > 0) {
-                        list.innerHTML = '';
-                        // Sort newest files by name (date)
-                        newFiles.sort((a, b) => b.name.localeCompare(a.name));
-                        newFiles.forEach(f => {
-                            const li = document.createElement('li');
-                            let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
-                            li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${displayName}</a>`;
-                            list.appendChild(li);
-                        });
-                    } else {
-                        list.innerHTML = '<li>[ NO_RECENT_ACTIVITY_DETECTED ]</li>';
                     }
-                } catch (err) {
-                    list.innerHTML = '<li>[ GLOBAL_SCAN_ERROR ]</li>';
+                });
+
+                if (allNewFiles.length > 0) {
+                    list.innerHTML = '';
+                    // Sort by name descending (newest dates first)
+                    allNewFiles.sort((a, b) => b.name.localeCompare(a.name));
+                    
+                    allNewFiles.forEach(f => {
+                        const li = document.createElement('li');
+                        let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
+                        li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${displayName}</a>`;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
                 }
+            } catch (err) {
+                console.error("Startup scan failed", err);
+                list.innerHTML = '<li>[ SCAN_SEVERED ]</li>';
             }
         });
 
