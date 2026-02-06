@@ -81,36 +81,45 @@ body {
     margin: 5px 0; 
 }
 
-/* 5. TYPEWRITER ANIMATION - RESTORED & MOBILE FIXED */
+/* 5. TYPEWRITER ANIMATION - STABILIZED FOR ALL SCREENS */
+.hero-text-block { 
+    padding: 25px 10px; 
+    text-align: center; 
+    border-top: 1px solid var(--border);
+    min-height: 120px; /* Prevents the page from "jumping" when text starts */
+}
+
 .main-title { 
-    font-size: 1.3rem; /* Slightly smaller for better mobile fit */
-    margin: 0; 
-    line-height: 1.4; 
+    font-size: 1.4rem; 
+    margin: 5px 0; 
+    line-height: 1.2;
+    display: flex;
+    justify-content: center; /* Keeps the typing centered */
 }
 
 .typewriter { 
-    color: var(--primary) !important; /* Restored to Golden Amber */
+    color: var(--primary); 
     display: inline-block; 
     overflow: hidden; 
-    white-space: normal; /* Allows wrapping on mobile so it won't overrun */
+    white-space: nowrap; 
     width: 0; 
-    animation: typing 3.5s steps(40, end) forwards; /* Slower, more vintage speed */
-    text-shadow: none;
+    /* Changed to 3s for a more natural mechanical feel */
+    animation: typing 3s steps(40, end) forwards;
 }
 
 .delay-type { 
-    animation: typing 3.5s steps(40, end) 1.5s forwards; /* Delayed start for second line */
+    animation: typing 3s steps(40, end) 1.5s forwards; 
 }
 
 @keyframes typing { 
-    from { width: 0 } 
-    to { width: 100% } 
+    from { width: 0; } 
+    /* Ensures the width matches the text exactly to prevent wrapping glitches */
+    to { width: 100%; max-width: max-content; } 
 }
 
-/* Specific Mobile Adjustment to prevent horizontal scroll */
 @media (max-width: 600px) {
     .main-title { font-size: 1.1rem; }
-    .typewriter { letter-spacing: 1px; }
+    .hero-text-block { min-height: 100px; }
 }
 
 /* 6. NAVIGATION */
@@ -290,4 +299,5 @@ footer {
     z-index: 1000; 
     opacity: 0.12; 
 }
+
 
