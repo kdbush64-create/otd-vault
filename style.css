@@ -1,4 +1,4 @@
-/* VINTAGE64 | SYSTEM STYLESHEET 3.2 */
+/* VINTAGE64 | SYSTEM STYLESHEET 3.3 */
 
 /* 1. THEME VARIABLES */
 :root {
@@ -10,6 +10,7 @@
     --accent: #00ff41;           
     --border: #33221a;           
     --box-bg: rgba(20, 20, 20, 0.4);
+    --glow: 0 0 10px rgba(0, 255, 65, 0.3);
 }
 
 [data-theme="light"] {
@@ -52,7 +53,7 @@ body {
     background: var(--container-bg); 
 }
 
-/* 4. HERO SECTION (NON-OVERLAPPING) */
+/* 4. HERO SECTION */
 .hero-container { 
     border: 1px solid var(--border); 
     margin: 20px 0; 
@@ -69,7 +70,12 @@ body {
 .hero-text-block { 
     padding: 25px 10px; 
     text-align: center; 
-    border-top: 1px solid var(--border); 
+    border-top: 1px solid var(--border);
+    min-height: 130px; /* Fixed height to prevent page jump */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .by-line { 
@@ -78,48 +84,41 @@ body {
     letter-spacing: 3px; 
     opacity: 0.7; 
     display: block; 
-    margin: 5px 0; 
+    margin: 8px 0; 
 }
 
-/* 5. TYPEWRITER ANIMATION - STABILIZED FOR ALL SCREENS */
-.hero-text-block { 
-    padding: 25px 10px; 
-    text-align: center; 
-    border-top: 1px solid var(--border);
-    min-height: 120px; /* Prevents the page from "jumping" when text starts */
-}
-
+/* 5. TYPEWRITER ANIMATION - FINAL STABILITY FIX */
 .main-title { 
     font-size: 1.4rem; 
-    margin: 5px 0; 
+    margin: 0; 
     line-height: 1.2;
+    width: 100%;
     display: flex;
-    justify-content: center; /* Keeps the typing centered */
+    justify-content: center;
 }
 
 .typewriter { 
     color: var(--primary); 
     display: inline-block; 
     overflow: hidden; 
-    white-space: nowrap; 
+    white-space: nowrap; /* Essential: prevents wrapping during animation */
     width: 0; 
-    /* Changed to 3s for a more natural mechanical feel */
-    animation: typing 3s steps(40, end) forwards;
+    max-width: max-content; /* Forces box to stay size of text */
+    animation: typing 3.5s steps(40, end) forwards;
 }
 
 .delay-type { 
-    animation: typing 3s steps(40, end) 1.5s forwards; 
+    animation: typing 3.5s steps(40, end) 1.5s forwards; 
 }
 
 @keyframes typing { 
     from { width: 0; } 
-    /* Ensures the width matches the text exactly to prevent wrapping glitches */
-    to { width: 100%; max-width: max-content; } 
+    to { width: 100%; } 
 }
 
 @media (max-width: 600px) {
-    .main-title { font-size: 1.1rem; }
-    .hero-text-block { min-height: 100px; }
+    .main-title { font-size: 1.05rem; }
+    .hero-text-block { min-height: 110px; }
 }
 
 /* 6. NAVIGATION */
@@ -240,7 +239,14 @@ body {
     margin-top: 30px; 
     background: var(--box-bg); 
     padding: 10px; 
-    border: 1px solid var(--border); 
+    border: 1px solid var(--border);
+    transition: all 0.3s ease; /* Smooth glow transition */
+}
+
+/* RE-ENABLED SOFT GREEN GLOW */
+.surveillance-wrapper:hover {
+    border-color: var(--accent);
+    box-shadow: var(--glow);
 }
 
 .feed-header { 
@@ -258,13 +264,14 @@ body {
     50% { opacity: 0; } 
 }
 
+/* HIGHLIGHTS - FORCED OVERRIDE */
 .highlight-blue { 
-    color: var(--secondary); 
+    color: var(--secondary) !important; 
     font-weight: bold; 
 }
 
 .highlight-green { 
-    color: var(--accent); 
+    color: var(--accent) !important; 
     font-weight: bold; 
 }
 
@@ -299,5 +306,3 @@ footer {
     z-index: 1000; 
     opacity: 0.12; 
 }
-
-
