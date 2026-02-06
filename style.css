@@ -81,29 +81,36 @@ body {
     margin: 5px 0; 
 }
 
-/* 5. TYPEWRITER ANIMATION */
+/* 5. TYPEWRITER ANIMATION - RESTORED & MOBILE FIXED */
 .main-title { 
-    font-size: 1.4rem; 
+    font-size: 1.3rem; /* Slightly smaller for better mobile fit */
     margin: 0; 
-    line-height: 1.2; 
+    line-height: 1.4; 
 }
 
 .typewriter { 
-    color: var(--accent); 
+    color: var(--primary) !important; /* Restored to Golden Amber */
     display: inline-block; 
     overflow: hidden; 
-    white-space: nowrap; 
+    white-space: normal; /* Allows wrapping on mobile so it won't overrun */
     width: 0; 
-    animation: typing 1.5s steps(20, end) forwards; 
+    animation: typing 3.5s steps(40, end) forwards; /* Slower, more vintage speed */
+    text-shadow: none;
 }
 
 .delay-type { 
-    animation: typing 1.5s steps(20, end) 1s forwards; 
+    animation: typing 3.5s steps(40, end) 1.5s forwards; /* Delayed start for second line */
 }
 
 @keyframes typing { 
     from { width: 0 } 
     to { width: 100% } 
+}
+
+/* Specific Mobile Adjustment to prevent horizontal scroll */
+@media (max-width: 600px) {
+    .main-title { font-size: 1.1rem; }
+    .typewriter { letter-spacing: 1px; }
 }
 
 /* 6. NAVIGATION */
@@ -283,3 +290,4 @@ footer {
     z-index: 1000; 
     opacity: 0.12; 
 }
+
