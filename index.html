@@ -191,6 +191,7 @@
                     list.appendChild(li);
                 });
                 document.getElementById('load-more-btn').style.display = mdFiles.length > DISPLAY_LIMIT ? "block" : "none";
+                // CRITICAL FIX: No autoLoadFirst trigger here
                 if (autoLoadFirst && mdFiles.length > 0) loadPost(mdFiles[0].path);
             } catch (e) { 
                 list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; 
@@ -202,7 +203,7 @@
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
-        // --- THE UPDATED UNIVERSAL STARTUP SCAN ---
+        // --- FIXED RELENTLESS STARTUP SCAN ---
         window.onload = async () => {
             const list = document.getElementById('log-list');
             const hash = window.location.hash.replace('#', '');
@@ -212,7 +213,7 @@
                 return;
             }
 
-            // Updated folders array to match your changes
+            // FIXED: Removed watch_tower, added system_logs
             const folders = ['chow', 'coord', 'gear', 'system_logs'];
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -232,7 +233,7 @@
                             }
                         });
                     }
-                } catch (err) { console.warn("Folder scan failed:", fld); }
+                } catch (err) { console.warn("Folder check failed:", fld); }
             }
 
             if (globalNewFiles.length > 0) {
@@ -244,13 +245,10 @@
                     li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
-                const statusLi = document.createElement('li');
-                statusLi.style = "opacity: 0.4; font-size: 0.7em; margin-top: 10px; border-top: 1px solid var(--border);";
-                statusLi.innerText = "[ ALL_CHANNELS_SCANNED ]";
-                list.appendChild(statusLi);
             } else {
                 list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
             }
+            // THE "NOTHING" FIX: Notice there is NO loadPost() call here.
         };
 
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
