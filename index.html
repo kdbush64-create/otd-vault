@@ -102,18 +102,22 @@
         </section>
 
         <nav class="vault-nav-container">
-            <div class="primary-feed">
-                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn" style="padding: 15px 20px; font-size: 1.1em; min-width: 200px; white-space: normal; height: auto;">ACCESS WATCH TOWER</button>
-            </div>
-            <div class="secondary-row">
-                <label class="review-tag" style="color: var(--primary);">REVIEWS ></label>
-                <div class="secondary-filters">
-                    <button id="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
-                    <button id="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
-                    <button id="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
-                </div>
-            </div>
-        </nav>
+    <div class="nav-group">
+        <h3 class="nav-label">[ PRIMARY_COMMAND ]</h3>
+        <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn primary-gate">
+            ACCESS_WATCH_TOWER
+        </button>
+    </div>
+
+    <div class="nav-group">
+        <h3 class="nav-label">[ ARCHIVE_FILTERS ]</h3>
+        <div class="secondary-filters">
+            <button id="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
+            <button id="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
+            <button id="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
+        </div>
+    </div>
+</nav>
 
         <main class="vault-layout">
             <section class="log-display">
@@ -355,4 +359,5 @@
     </script>
 </body>
 </html>
+
 
