@@ -87,7 +87,7 @@
 
         <footer>
             <div class="footer-grid">
-                <a href="javascript:void(0)" onclick="loadPost('gear/gear-policy.md')" class="footer-link">[ GEAR_POLICY ]</a>
+                <a href="javascript:void(0)" onclick="loadPost('gear/gear-policy.md', true, event)" class="footer-link">[ GEAR_POLICY ]</a>
                 <a href="mailto:your-email@example.com" class="footer-link">[ SEND_FEEDBACK ]</a>
             </div>
             <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
@@ -142,12 +142,15 @@
             });
         }
 
-        async function loadPost(filePath, isManualClick = false) {
+        async function loadPost(filePath, isManualClick = false, event = null) {
+            // FIX: Prevent the browser from jumping to the anchor
+            if (event) event.preventDefault();
+            
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
             
-            // REVERTED to stable hash method
-            window.location.hash = filePath; 
+            // Update URL quietly without triggering a scroll
+            history.replaceState(null, null, '#' + filePath);
 
             try {
                 const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}?t=${new Date().getTime()}`);
@@ -161,8 +164,7 @@
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
                 setTimeout(() => highlightLogLabels(contentArea), 50);
                 
-                // RESTORED original behavior
-                if (isManualClick) window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Jump fix: window.scrollTo is removed to keep you stationary
             } catch (err) { 
                 contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED - FILE_NOT_FOUND</p>"; 
             }
@@ -196,7 +198,9 @@
                     const isNew = dateMatch && new Date(dateMatch[0]) >= sevenDaysAgo;
                     const badge = isNew ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span>` : '';
                     let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
-                    li.innerHTML = `${badge}<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${displayName}</a>`;
+                    
+                    // FIX: Added 'event' to the function call
+                    li.innerHTML = `${badge}<a href="#${f.path}" class="log-link" onclick="loadPost('${f.path}', true, event)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
                 document.getElementById('load-more-btn').style.display = mdFiles.length > DISPLAY_LIMIT ? "block" : "none";
@@ -215,8 +219,7 @@
             const list = document.getElementById('log-list');
             const contentArea = document.getElementById('content');
             
-            // Clear URL and highlights
-            window.location.hash = '';
+            history.replaceState(null, null, ' '); // Clear the hash quietly
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             
             contentArea.innerHTML = `
@@ -255,7 +258,9 @@
                 globalNewFiles.forEach(f => {
                     const li = document.createElement('li');
                     let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
-                    li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${displayName}</a>`;
+                    
+                    // FIX: Added 'event' to the function call
+                    li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="#${f.path}" class="log-link" onclick="loadPost('${f.path}', true, event)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
             } else {
