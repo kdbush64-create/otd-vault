@@ -1,5 +1,5 @@
 /* VINTAGE64 | SYSTEM STYLESHEET 
-   VERSION: 2.7 (COMMENT_VISIBILITY & MOBILE_LAYOUT_FIX)
+   VERSION: 2.8 (IFRAME_EXPANSION_FIX)
 */
 
 /* 1. THEME VARIABLES */
@@ -33,7 +33,7 @@
 
 img, behold-widget, video, iframe {
     max-width: 100% !important;
-    height: auto !important;
+    height: auto; /* Removed !important here to allow dynamic resizing */
     display: block;
 }
 
@@ -59,6 +59,9 @@ body {
     background: var(--container-bg);
     position: relative;
     box-shadow: 0 10px 30px var(--shadow);
+    /* CRITICAL FIX: Ensure container can grow with content */
+    display: block; 
+    overflow: visible;
 }
 
 @media (min-width: 1000px) {
@@ -68,7 +71,7 @@ body {
     }
 }
 
-/* 4. NAV & MENU CLUTTER FIX */
+/* 4. NAV & MENU */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
@@ -126,25 +129,11 @@ body {
     box-shadow: var(--glow);
 }
 
-/* 6. CONTENT, LAYOUT & COMMENT FIX */
-.vault-layout {
-    display: flex;
-    flex-direction: column; /* Stacked for mobile by default */
-    gap: 30px;
-}
-
-@media (min-width: 850px) {
-    .vault-layout {
-        flex-direction: row; /* Side-by-side for desktop */
-        align-items: flex-start;
-    }
-    .log-display { flex: 1; min-width: 0; }
-    .log-directory { width: 250px; position: sticky; top: 20px; }
-}
-
+/* 6. CONTENT & COMMENT MODULE FIX */
 .log-display {
     width: 100%;
-    height: auto !important; /* Ensure it grows with comments */
+    height: auto !important;
+    overflow: visible !important;
 }
 
 .blog-post-body h2, .blog-post-body h3 {
@@ -154,36 +143,34 @@ body {
     font-size: 1.2rem;
 }
 
-.blog-post-body h2, .blog-post-body h3, .blog-post-body p {
-    overflow-wrap: break-word;
-    word-break: keep-all; 
-    hyphens: none;
-}
-
-/* UN-OBSCURE COMMENTS */
+/* COMMENT SECTION RESCUE */
 .comment-module {
     width: 100%;
-    margin-top: 40px;
-    padding-top: 20px;
+    margin-top: 50px;
+    padding: 20px 0;
     border-top: 1px dashed var(--border);
-    min-height: 300px; /* Space for login button */
+    /* Forces the module to be at least tall enough for the login prompt */
+    min-height: 450px !important; 
+    display: block !important;
     overflow: visible !important;
+    clear: both;
+}
+
+/* Specific fix for the Utterances iframe */
+.utterances {
+    max-width: 100% !important;
+    height: auto !important;
 }
 
 .highlight-blue { color: var(--secondary); text-shadow: var(--blue-glow); font-weight: bold; }
 .highlight-green { color: var(--accent); text-shadow: var(--glow); font-weight: bold; }
 
-/* 7. BEHOLD / INSTAGRAM FIX */
+/* 7. BEHOLD / INSTAGRAM */
 .feed-container {
     border: 1px solid var(--border);
     padding: 10px;
     background: #000;
     transition: all 0.4s ease;
-}
-
-.feed-container:hover {
-    border-color: var(--accent);
-    box-shadow: var(--glow);
 }
 
 /* 8. TERMINAL EFFECTS */
