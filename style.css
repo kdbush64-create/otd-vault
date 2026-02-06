@@ -1,7 +1,8 @@
 /* VINTAGE64 | SYSTEM STYLESHEET 
-   VERSION: 2.9 (WIDGET_RESTORE_FIX)
+   VERSION: 3.1 (FULL_RESTORE)
 */
 
+/* 1. THEME VARIABLES */
 :root {
     --bg: #0d0d0d;
     --container-bg: rgba(5, 5, 5, 0.98);
@@ -25,8 +26,10 @@
     --accent: #859900;           
     --border: #d3cbb1;
     --shadow: rgba(0, 0, 0, 0.05);
+    --box-bg: rgba(0, 0, 0, 0.03);
 }
 
+/* 2. GLOBAL RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 img, video {
@@ -46,6 +49,7 @@ body {
     line-height: 1.6;
 }
 
+/* 3. CONTAINER */
 .container {
     width: 95%;
     max-width: 800px; 
@@ -60,6 +64,55 @@ body {
     .container { width: 70%; padding: 40px; }
 }
 
+/* 4. HERO SECTION */
+.hero-container {
+    position: relative;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.text-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, var(--container-bg));
+    padding: 20px;
+    text-align: center;
+}
+
+.by-line {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    display: block;
+    margin: 5px 0;
+    opacity: 0.8;
+}
+
+/* 5. TYPEWRITER ANIMATION */
+.typewriter {
+    color: var(--accent) !important; 
+    text-shadow: var(--glow);
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: .10em;
+    width: 0;
+    animation: typing 1.5s steps(20, end) forwards;
+}
+
+.delay-type {
+    animation: typing 1.5s steps(20, end) 1s forwards, blink-caret .75s step-end infinite;
+    border-right: .15em solid var(--primary); 
+    padding-right: 4px;
+}
+
+@keyframes typing { from { width: 0 } to { width: 100% } }
+@keyframes blink-caret { 50% { border-color: transparent; } }
+
+/* 6. NAV & BUTTONS */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
@@ -86,27 +139,24 @@ body {
     box-shadow: var(--glow);
 }
 
+.submit-btn.active {
+    font-weight: 900 !important;
+    transform: scale(1.05);
+}
+
 .primary-gate { width: 100%; max-width: 400px; color: var(--accent); border-color: var(--accent); }
 
+/* 7. LOG DISPLAY & TYPOGRAPHY */
 .log-display {
     width: 100%;
     margin-top: 20px;
 }
 
-.comment-module {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px dashed var(--border);
-    width: 100%;
-    min-height: 250px;
-}
-
-.utterances {
-    width: 100% !important;
-    margin: 0 !important;
-}
-
-.blog-post-body h2, .blog-post-body h3 {
+.blog-post-body h1, .blog-post-body h2, .blog-post-body h3 {
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word;
+    line-height: 1.2;
     color: var(--secondary) !important;
     text-shadow: var(--blue-glow);
     margin: 25px 0 15px 0;
@@ -114,6 +164,15 @@ body {
 
 .highlight-blue { color: var(--secondary); text-shadow: var(--blue-glow); font-weight: bold; }
 .highlight-green { color: var(--accent); text-shadow: var(--glow); font-weight: bold; }
+
+/* 8. WIDGETS & OVERLAYS */
+.comment-module {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+    width: 100%;
+    min-height: 250px;
+}
 
 .feed-container {
     border: 1px solid var(--border);
@@ -130,3 +189,7 @@ body {
     z-index: 1000;
     opacity: 0.12;
 }
+
+/* 9. UTILITIES */
+.blink { animation: blink-eye 1.5s steps(2, start) infinite; }
+@keyframes blink-eye { to { visibility: hidden; } }
