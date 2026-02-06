@@ -197,6 +197,54 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // 1. DATA-BLUE AUTO-HIGHLIGHTER (Aggressive Version)
+        function highlightLogLabels(container) {
+            // GREEN for status/action
+            const greenKeywords = ["STATUS:", "THE_VERDICT:", "RATING:"];
+            // BLUE for professional/branding labels
+            const blueKeywords = [
+                "SUMMARY:", 
+                "OBSERVATION:", 
+                "WATCH_TOWER_REPORT", 
+                "Old Texas Dude™",
+                "ACCESS_PURPOSE",
+                "FIELD_TESTED",
+                "OLD_MAN_APPROVED"
+            ];
+            
+            if (!container) return;
+
+            // Target headers, strong tags, list items, and paragraphs
+            const targets = container.querySelectorAll('h2, h3, strong, li, p, span');
+            
+            targets.forEach(el => {
+                let html = el.innerHTML;
+                let changed = false;
+
+                // Apply Blue Highlights
+                blueKeywords.forEach(keyword => {
+                    if (html.includes(keyword) && !el.closest('.highlight-blue')) {
+                        const regex = new RegExp(`(${keyword})`, 'g');
+                        html = html.replace(regex, '<span class="highlight-blue">$1</span>');
+                        changed = true;
+                    }
+                });
+
+                // Apply Green Highlights
+                greenKeywords.forEach(keyword => {
+                    if (html.includes(keyword) && !el.closest('.highlight-green')) {
+                        const regex = new RegExp(`(${keyword})`, 'g');
+                        html = html.replace(regex, '<span class="highlight-green">$1</span>');
+                        changed = true;
+                    }
+                });
+
+                if (changed) {
+                    el.innerHTML = html;
+                }
+            });
+        }
+
         async function loadPost(filePath, isManualClick = false) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
@@ -216,9 +264,12 @@
                 }
 
                 let finalHTML = marked.parse(cleanMarkdown);
-                finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
+                // Fix potential spacing issues in custom labels
+                finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER_REPORT');
 
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
+                
+                // Trigger the aggressive highlighter on the new content
                 highlightLogLabels(contentArea);
 
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
@@ -278,27 +329,15 @@
             }
         }
 
-        function highlightLogLabels(container) {
-            const labels = ["STATUS:", "SUMMARY:", "THE_VERDICT:", "RATING:", "OBSERVATION:"];
-            const walk = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-            let node;
-            const targets = [];
-            while (node = walk.nextNode()) {
-                labels.forEach(l => { if (node.nodeValue.includes(l)) targets.push({node, l}); });
-            }
-            targets.forEach(({node, l}) => {
-                const span = `<span class="highlight-green">${l}</span>`;
-                const newHTML = node.parentNode.innerHTML.replace(l, span);
-                node.parentNode.innerHTML = newHTML;
-            });
-        }
-
         function showAllLogs() { 
             document.querySelectorAll('.older-log').forEach(log => log.style.display = "block"); 
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Run highlighter on static parts of the page first
+            highlightLogLabels(document.body);
+
             const hash = window.location.hash.replace('#', '');
             const savedFolder = localStorage.getItem('v64_current_folder');
 
@@ -316,3 +355,4 @@
     </script>
 </body>
 </html>
+
