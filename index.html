@@ -165,6 +165,7 @@
         const modeText = document.getElementById('mode-text');
         const instructionText = document.getElementById('instruction-text');
 
+        // --- THEME LOGIC ---
         const savedTheme = localStorage.getItem('theme');
         const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
         let currentTheme = savedTheme || (systemPrefersLight ? 'light' : 'dark');
@@ -173,9 +174,6 @@
             document.documentElement.setAttribute('data-theme', 'light');
             if (modeText) modeText.innerText = 'FIELD_EXTRACT';
             if (instructionText) instructionText.innerText = 'TOGGLE VISUAL_MODE FOR THE FULL VAULT EXPERIENCE';
-        } else {
-            if (modeText) modeText.innerText = 'NATIVE_TERMINAL';
-            if (instructionText) instructionText.innerText = 'TOGGLE VISUAL_MODE FOR HIGH-VISIBILITY READING';
         }
 
         toggleBtn.addEventListener('click', () => {
@@ -194,6 +192,7 @@
             }
         });
 
+        // --- CLOCK ---
         function updateClock() {
             const clock = document.getElementById('stardate');
             if(clock) clock.innerText = new Date().toLocaleTimeString();
@@ -201,15 +200,13 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 1. DATA-BLUE AUTO-HIGHLIGHTER (Aggressive Version)
+        // --- AGGRESSIVE HIGHLIGHTER ---
         function highlightLogLabels(container) {
-            // GREEN for status/action
             const greenKeywords = ["STATUS:", "THE_VERDICT:", "RATING:"];
-            // BLUE for professional/branding labels
             const blueKeywords = [
                 "SUMMARY:", 
                 "OBSERVATION:", 
-                "WATCH_TOWER_REPORT", 
+                "WATCH_TOWER REPORT", // Space instead of underscore for mobile wrap
                 "Old Texas Dude™",
                 "ACCESS_PURPOSE",
                 "FIELD_TESTED",
@@ -217,15 +214,12 @@
             ];
             
             if (!container) return;
-
-            // Target headers, strong tags, list items, and paragraphs
             const targets = container.querySelectorAll('h2, h3, strong, li, p, span');
             
             targets.forEach(el => {
                 let html = el.innerHTML;
                 let changed = false;
 
-                // Apply Blue Highlights
                 blueKeywords.forEach(keyword => {
                     if (html.includes(keyword) && !el.closest('.highlight-blue')) {
                         const regex = new RegExp(`(${keyword})`, 'g');
@@ -234,7 +228,6 @@
                     }
                 });
 
-                // Apply Green Highlights
                 greenKeywords.forEach(keyword => {
                     if (html.includes(keyword) && !el.closest('.highlight-green')) {
                         const regex = new RegExp(`(${keyword})`, 'g');
@@ -243,12 +236,11 @@
                     }
                 });
 
-                if (changed) {
-                    el.innerHTML = html;
-                }
+                if (changed) el.innerHTML = html;
             });
         }
 
+        // --- CONTENT LOADING ---
         async function loadPost(filePath, isManualClick = false) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
@@ -268,12 +260,11 @@
                 }
 
                 let finalHTML = marked.parse(cleanMarkdown);
-                // Fix potential spacing issues in custom labels
-                finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER_REPORT');
+                
+                // MOBILE FIX: Replace underscore with space so it wraps correctly
+                finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
 
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
-                
-                // Trigger the aggressive highlighter on the new content
                 highlightLogLabels(contentArea);
 
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
@@ -339,9 +330,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Run highlighter on static parts of the page first
             highlightLogLabels(document.body);
-
             const hash = window.location.hash.replace('#', '');
             const savedFolder = localStorage.getItem('v64_current_folder');
 
@@ -359,5 +348,6 @@
     </script>
 </body>
 </html>
+
 
 
