@@ -17,6 +17,40 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+    
+    <style>
+    .typewriter {
+        color: var(--accent) !important; 
+        text-shadow: var(--glow);
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        letter-spacing: .10em;
+        width: 0;
+        animation: typing 1.5s steps(20, end) forwards;
+    }
+
+    .delay-type {
+        animation: typing 1.5s steps(20, end) 1s forwards, blink-caret .75s step-end infinite;
+        border-right: .15em solid var(--primary); 
+        padding-right: 4px;
+    }
+
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { 50% { border-color: transparent; } }
+
+    .submit-btn.active {
+        font-weight: 900 !important;
+        transform: scale(1.05);
+    }
+
+    .blog-post-body h1, .blog-post-body h2 {
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word;
+        line-height: 1.2;
+    }
+    </style>
 </head>
 
 <body id="personal-identity">
@@ -24,27 +58,30 @@
     <div class="container">
 
         <header>
-            <div class="system-status-bar">
-                <div class="status-left">
-                    <span class="blink" style="color: var(--accent); font-weight: bold;">[!] STATUS:</span> 
-                    UNFILTERED_REPORTS_ACTIVE
-                </div>
-                
-                <div class="status-right">
-                    <span id="instruction-text">[ MODE: <span id="mode-text">NATIVE_TERMINAL</span> ]</span>
-                    <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme">VISUAL_MODE</button>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <div class="warning-banner" style="width: 95%; max-width: 800px; color: var(--primary); border: 1px solid var(--primary); padding: 20px; background: var(--box-bg); text-align: center; box-sizing: border-box;">
+                    <span class="blink" style="font-weight: bold;">!! WARNING: !!</span> <br> 
+                    <span style="font-size: 0.85em; letter-spacing: 1px; display: block; margin-bottom: 12px; white-space: normal;">UNFILTERED OPINIONS AHEAD</span>
+                    
+                    <div style="border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 10px;">
+                        <span class="system-status" style="display: block; font-size: 0.75em; line-height: 1.6; letter-spacing: 0.5px;">
+                            [ VIEW_MODE: <span id="mode-text">NATIVE_TERMINAL</span> ]<br>
+                            <span id="instruction-text">TOGGLE VISUAL_MODE FOR HIGH-VISIBILITY READING</span>
+                        </span>
+                        <button id="theme-toggle" class="submit-btn" aria-label="Toggle Theme" style="font-size: 0.75em; padding: 6px 16px; margin-top: 15px;">VISUAL_MODE</button>
+                    </div>
                 </div>
             </div>
-
-            <section class="hero-container">
-                <img src="telescope-clean.jpg" alt="The Watch Tower">
-                <div class="text-overlay">
-                    <h1 class="hero-title">The Watch Tower</h1>
-                    <span class="by-line">by</span>
-                    <h1 class="hero-author">Old Texas Dude&trade;</h1>
-                </div>
-            </section>
         </header>
+
+        <section class="hero-container">
+            <img src="telescope-clean.jpg" alt="The Watch Tower">
+            <div class="text-overlay">
+                <h1>The Watch Tower</h1>
+                <span class="by-line">by</span>
+                <h1>Old Texas Dude&trade;</h1>
+            </div>
+        </section>
 
         <nav class="vault-nav-container">
             <div class="nav-group">
@@ -75,16 +112,18 @@
             </section>
 
             <aside class="log-directory">
-                <h3>> LOG_DIRECTORY</h3>
-                <p class="directory-hint">[ select entry to load data ]</p>
+                <h3 style="color: var(--accent); white-space: normal; overflow-wrap: break-word;">> LOG_DIRECTORY</h3>
+                <p style="color: var(--primary); font-size: 0.65em; margin: -5px 0 15px 5px; opacity: 0.9; letter-spacing: 0.5px;">
+                    [ select entry to load data ]
+                </p>
                 <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
                 <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px;">
                     [ SHOW_OLDER_LOGS ]
                 </button>
                 
-                <div class="surveillance-wrapper">
-                    <h3>> VISUAL_UPLINK</h3>
-                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
+                <div class="surveillance-wrapper" style="margin-top:20px; background: var(--box-bg); padding: 10px; border: 1px solid var(--border);">
+                    <h3 style="color: var(--accent); margin-bottom: 5px;">> VISUAL_UPLINK</h3>
+                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate" style="color: var(--secondary); opacity: 0.8; font-size: 0.8em;"></span></div>
                     <div class="feed-container">
                         <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
                     </div>
@@ -92,12 +131,12 @@
             </aside>
         </main>
 
-        <footer>
-            <div class="footer-links">
-                <a href="javascript:void(0)" onclick="loadPost('gear/gear-policy.md')" class="footer-link">[ GEAR_POLICY ]</a>
-                <a href="mailto:your-email@example.com" class="footer-link">[ SEND_FEEDBACK ]</a>
+        <footer style="margin-top: 50px; border-top: 2px solid var(--accent); padding: 30px 0;">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                <a href="javascript:void(0)" onclick="loadPost('gear/gear-policy.md')" class="footer-link" style="color: var(--accent); font-weight: bold; text-decoration: none;">[ GEAR_POLICY ]</a>
+                <a href="mailto:your-email@example.com" class="footer-link" style="color: var(--primary); text-decoration: none;">[ SEND_FEEDBACK ]</a>
             </div>
-            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
+            <p style="text-align: center; margin-top: 30px; opacity: 0.7; color: var(--accent);" class="blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
         </footer>
     </div>
 
@@ -108,7 +147,6 @@
         const modeText = document.getElementById('mode-text');
         const instructionText = document.getElementById('instruction-text');
 
-        // --- THEME LOGIC ---
         const savedTheme = localStorage.getItem('theme');
         const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
         let currentTheme = savedTheme || (systemPrefersLight ? 'light' : 'dark');
@@ -116,6 +154,7 @@
         if (currentTheme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
             if (modeText) modeText.innerText = 'FIELD_EXTRACT';
+            if (instructionText) instructionText.innerText = 'TOGGLE VISUAL_MODE FOR THE FULL VAULT EXPERIENCE';
         }
 
         toggleBtn.addEventListener('click', () => {
@@ -123,12 +162,17 @@
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
             
-            if (modeText) {
-                modeText.innerText = (theme === 'light') ? 'FIELD_EXTRACT' : 'NATIVE_TERMINAL';
+            if (modeText && instructionText) {
+                if (theme === 'light') {
+                    modeText.innerText = 'FIELD_EXTRACT';
+                    instructionText.innerText = 'TOGGLE VISUAL_MODE FOR THE FULL VAULT EXPERIENCE';
+                } else {
+                    modeText.innerText = 'NATIVE_TERMINAL';
+                    instructionText.innerText = 'TOGGLE VISUAL_MODE FOR HIGH-VISIBILITY READING';
+                }
             }
         });
 
-        // --- CLOCK ---
         function updateClock() {
             const clock = document.getElementById('stardate');
             if(clock) clock.innerText = new Date().toLocaleTimeString();
@@ -136,7 +180,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- AGGRESSIVE HIGHLIGHTER ---
         function highlightLogLabels(container) {
             const greenKeywords = ["STATUS:", "THE_VERDICT:", "RATING:"];
             const blueKeywords = ["SUMMARY:", "OBSERVATION:", "WATCH_TOWER REPORT", "Old Texas Dude™"];
@@ -168,7 +211,6 @@
             });
         }
 
-        // --- CONTENT LOADING ---
         async function loadPost(filePath, isManualClick = false) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
@@ -195,7 +237,7 @@
 
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
             } catch (err) { 
-                contentArea.innerHTML = `<div class="error-box"><p class="blink">[!] ERROR: LINK_SEVERED</p></div>`; 
+                contentArea.innerHTML = `<div style="border: 1px dashed #ff0000; padding: 20px; background: rgba(255,0,0,0.1);"><p style="color: #ff0000; font-weight: bold;" class="blink">[!] ERROR: LINK_SEVERED</p></div>`; 
             }
         }
 
@@ -222,35 +264,15 @@
                     return;
                 }
 
-                const sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
                 mdFiles.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
-                    
-                    const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
-                    let isNew = false;
-                    if (dateMatch) {
-                        const fileDate = new Date(dateMatch[0]);
-                        isNew = fileDate >= sevenDaysAgo;
-                    }
-
-                    const cleanName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    const newBadge = isNew ? `<span class="blink" style="color: #ff0000; font-size: 0.7em; font-weight: bold; margin-right: 8px;">[NEW]</span>` : '';
-                    
-                    li.innerHTML = `${newBadge}<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${cleanName}</a>`;
+                    li.innerHTML = `<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ')}</a>`;
                     list.appendChild(li);
                 });
                 
                 loadMoreBtn.style.display = mdFiles.length > DISPLAY_LIMIT ? "block" : "none";
-                
-                if (autoLoadFirst && mdFiles.length > 0) {
-                    const hash = window.location.hash.replace('#', '');
-                    if (!hash || !hash.includes(filterFolder)) {
-                        await loadPost(mdFiles[0].path, false);
-                    }
-                }
+                if (autoLoadFirst && mdFiles.length > 0) await loadPost(mdFiles[0].path, false);
             } catch (error) { 
                 list.innerHTML = "<li>[ ERROR: SCAN_FAILED ]</li>"; 
             }
@@ -265,7 +287,6 @@
             highlightLogLabels(document.body);
             const hash = window.location.hash.replace('#', '');
             const savedFolder = localStorage.getItem('v64_current_folder');
-
             if (hash && hash.includes('/')) {
                 const folder = hash.split('/')[0];
                 loadLogs(folder, false).then(() => loadPost(hash));
