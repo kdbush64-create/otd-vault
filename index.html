@@ -45,7 +45,7 @@
                     <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
                     <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
                     <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
-                    <button id="btn-watch_tower" onclick="loadLogs('watch_tower', false, this)" class="submit-btn">SYSTEM_LOGS</button>
+                    <button id="btn-system_logs" onclick="loadLogs('system_logs', false, this)" class="submit-btn">SYSTEM_LOGS</button>
                 </div>
             </div>
         </nav>
@@ -202,7 +202,7 @@
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
-        // --- THE RELENTLESS STARTUP SCAN ---
+        // --- THE UPDATED UNIVERSAL STARTUP SCAN ---
         window.onload = async () => {
             const list = document.getElementById('log-list');
             const hash = window.location.hash.replace('#', '');
@@ -212,7 +212,8 @@
                 return;
             }
 
-            const folders = ['chow', 'coord', 'gear', 'watch_tower'];
+            // Updated folders array to match your changes
+            const folders = ['chow', 'coord', 'gear', 'system_logs'];
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             let globalNewFiles = [];
@@ -231,7 +232,7 @@
                             }
                         });
                     }
-                } catch (err) { console.warn("Failed folder:", fld); }
+                } catch (err) { console.warn("Folder scan failed:", fld); }
             }
 
             if (globalNewFiles.length > 0) {
