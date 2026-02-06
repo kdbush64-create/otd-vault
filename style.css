@@ -133,7 +133,13 @@ body {
     margin: 30px 0 15px 0;
     font-size: 1.2rem;
 }
-
+.blog-post-body h2, 
+.blog-post-body h3, 
+.blog-post-body p {
+    overflow-wrap: break-word; /* Allows breaking at underscores if absolutely necessary */
+    word-break: keep-all;      /* Prefers breaking at spaces first */
+    hyphens: none;
+}
 .highlight-blue { color: var(--secondary); text-shadow: var(--blue-glow); font-weight: bold; }
 .highlight-green { color: var(--accent); text-shadow: var(--glow); font-weight: bold; }
 
@@ -163,3 +169,4 @@ body {
 
 .blink { animation: rec-pulse 2s infinite; }
 @keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
