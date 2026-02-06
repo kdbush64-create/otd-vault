@@ -1,5 +1,5 @@
 /* VINTAGE64 | SYSTEM STYLESHEET 
-   VERSION: 2.8 (IFRAME_EXPANSION_FIX)
+   VERSION: 2.9 (WIDGET_RESTORE_FIX)
 */
 
 /* 1. THEME VARIABLES */
@@ -14,7 +14,6 @@
     --shadow: rgba(0, 0, 0, 0.9);
     --glow: 0 0 10px rgba(0, 255, 65, 0.8);
     --blue-glow: 0 0 10px rgba(0, 238, 255, 0.5);
-    --box-bg: rgba(0, 255, 65, 0.05);
 }
 
 [data-theme="light"] {
@@ -28,12 +27,13 @@
     --shadow: rgba(0, 0, 0, 0.05);
 }
 
-/* 2. GLOBAL RESET & FLUID MEDIA */
+/* 2. GLOBAL RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-img, behold-widget, video, iframe {
+/* Fixed: Only target images for fluid scaling, leave iframes to their scripts */
+img, video {
     max-width: 100% !important;
-    height: auto; /* Removed !important here to allow dynamic resizing */
+    height: auto !important;
     display: block;
 }
 
@@ -46,10 +46,9 @@ body {
     align-items: center;
     padding: 10px; 
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
-/* 3. THE "VINTAGE64" CONTAINER PROFILE */
+/* 3. CONTAINER */
 .container {
     width: 95%;
     max-width: 800px; 
@@ -57,123 +56,81 @@ body {
     border: 1px solid var(--border);
     padding: 15px; 
     background: var(--container-bg);
-    position: relative;
     box-shadow: 0 10px 30px var(--shadow);
-    /* CRITICAL FIX: Ensure container can grow with content */
-    display: block; 
-    overflow: visible;
 }
 
 @media (min-width: 1000px) {
-    .container {
-        width: 70%; 
-        padding: 40px;
-    }
+    .container { width: 70%; padding: 40px; }
 }
 
-/* 4. NAV & MENU */
+/* 4. NAV & BUTTONS */
 .vault-nav-container {
     display: flex;
     flex-direction: column;
-    gap: 25px;
-    margin: 35px 0;
-    width: 100%;
+    gap: 20px;
+    margin: 30px 0;
 }
 
-.nav-group {
-    width: 100%;
-    text-align: center;
-}
+.nav-group { width: 100%; text-align: center; }
 
-.nav-label {
-    font-size: 0.7rem;
-    color: var(--primary-dim);
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
-
-.secondary-filters {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-/* 5. BUTTONS */
 .submit-btn {
     background: transparent;
     color: var(--primary-dim);
     border: 1px solid var(--border);
     padding: 10px 18px;
-    font-family: inherit;
-    font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
+    font-family: inherit;
     transition: 0.2s;
-    font-size: 0.9rem;
-}
-
-.primary-gate {
-    width: 100%;
-    max-width: 400px;
-    border-color: var(--accent);
-    color: var(--accent);
-    font-size: 1.1rem;
 }
 
 .submit-btn:hover, .submit-btn.active { 
     background: var(--accent); 
     color: #000; 
-    border-color: var(--accent);
     box-shadow: var(--glow);
 }
 
-/* 6. CONTENT & COMMENT MODULE FIX */
+.primary-gate { width: 100%; max-width: 400px; color: var(--accent); border-color: var(--accent); }
+
+/* 5. LOG DISPLAY & COMMENTS */
 .log-display {
     width: 100%;
-    height: auto !important;
-    overflow: visible !important;
+    margin-top: 20px;
 }
 
+/* The Fix: Giving the comment module a flexible but visible foundation */
+.comment-module {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+    width: 100%;
+    min-height: 250px; /* Smaller min-height to avoid massive gaps */
+}
+
+/* This allows the Utterances iframe to take over its own height */
+.utterances {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* 6. TYPOGRAPHY */
 .blog-post-body h2, .blog-post-body h3 {
     color: var(--secondary) !important;
     text-shadow: var(--blue-glow);
-    margin: 30px 0 15px 0;
-    font-size: 1.2rem;
-}
-
-/* COMMENT SECTION RESCUE */
-.comment-module {
-    width: 100%;
-    margin-top: 50px;
-    padding: 20px 0;
-    border-top: 1px dashed var(--border);
-    /* Forces the module to be at least tall enough for the login prompt */
-    min-height: 450px !important; 
-    display: block !important;
-    overflow: visible !important;
-    clear: both;
-}
-
-/* Specific fix for the Utterances iframe */
-.utterances {
-    max-width: 100% !important;
-    height: auto !important;
+    margin: 25px 0 15px 0;
 }
 
 .highlight-blue { color: var(--secondary); text-shadow: var(--blue-glow); font-weight: bold; }
 .highlight-green { color: var(--accent); text-shadow: var(--glow); font-weight: bold; }
 
-/* 7. BEHOLD / INSTAGRAM */
+/* 7. WIDGETS */
 .feed-container {
     border: 1px solid var(--border);
     padding: 10px;
     background: #000;
-    transition: all 0.4s ease;
 }
 
-/* 8. TERMINAL EFFECTS */
+/* 8. TERMINAL OVERLAY */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -183,6 +140,3 @@ body {
     z-index: 1000;
     opacity: 0.12;
 }
-
-.blink { animation: rec-pulse 2s infinite; }
-@keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
