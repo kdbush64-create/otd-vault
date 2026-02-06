@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vintage64 | Personal Vault</title>
+    <title>Old Texas Dude | The Vault</title>
     
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https:;">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <meta property="og:title" content="Vintage64 | The Watch Tower">
-    <meta property="og:description" content="Unfiltered reports and observations from the tower.">
+    <meta name="description" content="Personal archives, tech logs, and Texas stories from DeWayne Bush.">
+    <meta property="og:title" content="Old Texas Dude | The Vault">
+    <meta property="og:description" content="Unfiltered reports and observations from the personal archives of the Old Texas Dude.">
     <meta property="og:image" content="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/telescope-clean.jpg">
     <meta property="og:url" content="https://kdbush64-create.github.io/otd-vault/">
     <meta property="og:type" content="website">
 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https:;">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     
@@ -215,8 +215,6 @@
                     if (parts.length >= 3) cleanMarkdown = parts.slice(2).join('---').trim();
                 }
 
-                // Removed the dynamic header injection.
-                // Now we just parse the markdown and manually fix the specific underscore.
                 let finalHTML = marked.parse(cleanMarkdown);
                 finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
 
