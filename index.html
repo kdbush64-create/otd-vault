@@ -52,8 +52,8 @@
 
         <main class="vault-layout">
             <aside class="log-directory">
-                <button id="re-scan-btn" onclick="runGlobalScan()" class="submit-btn" style="width: 100%; margin-bottom: 15px; border-color: var(--accent); color: var(--accent);">
-                    [ RESCAN ]
+                <button id="re-scan-btn" onclick="runGlobalScan()" class="submit-btn" style="width: 100%; margin-bottom: 20px; border: 2px solid var(--accent); color: var(--accent); font-weight: bold; letter-spacing: 2px;">
+                    [ > RESCAN_ALL_SYSTEMS < ]
                 </button>
 
                 <h3>> LOG_DIRECTORY</h3>
@@ -145,7 +145,10 @@
         async function loadPost(filePath, isManualClick = false) {
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
-            window.location.hash = filePath; 
+            
+            // Push state prevents the "snap to top" jump
+            history.pushState(null, null, '#' + filePath);
+
             try {
                 const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}?t=${new Date().getTime()}`);
                 if (!response.ok) throw new Error('File not found');
@@ -157,7 +160,8 @@
                 let finalHTML = marked.parse(cleanMarkdown);
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
                 setTimeout(() => highlightLogLabels(contentArea), 50);
-                if (isManualClick) window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Jump fix: window.scrollTo is intentionally omitted here.
             } catch (err) { 
                 contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED - FILE_NOT_FOUND</p>"; 
             }
@@ -206,12 +210,10 @@
             document.getElementById('load-more-btn').style.display = "none"; 
         }
 
-        // --- NEW REUSABLE GLOBAL SCAN FUNCTION ---
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
             const contentArea = document.getElementById('content');
             
-            // Clear current selection highlight and reset display
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             contentArea.innerHTML = `
                 <div style="text-align: center; margin-top: 50px;">
