@@ -41,31 +41,22 @@
         <nav class="vault-nav-container">
             <div class="nav-group">
                 <h3 class="nav-label">[ PRIMARY_COMMAND ]</h3>
-                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', true, this)" class="submit-btn primary-gate">
-                    ACCESS_WATCH_TOWER
+                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', false, this)" class="submit-btn primary-gate">
+                    SYSTEM_LOGS
                 </button>
             </div>
 
             <div class="nav-group">
                 <h3 class="nav-label">[ DATA_CHANNELS ]</h3>
                 <div class="secondary-filters">
-                    <button id="btn-chow" onclick="loadLogs('chow', true, this)" class="submit-btn">CHOW</button>
-                    <button id="btn-coord" onclick="loadLogs('coord', true, this)" class="submit-btn">COORD</button>
-                    <button id="btn-gear" onclick="loadLogs('gear', true, this)" class="submit-btn">GEAR</button>
+                    <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
+                    <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
+                    <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
                 </div>
             </div>
         </nav>
 
         <main class="vault-layout">
-            <section class="log-display">
-                <article id="content" class="blog-post">
-                    <p class="blink" style="color: var(--accent);">> ESTABLISHING_UPLINK...</p>
-                </article>
-                <div class="comment-module">
-                    <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async></script>
-                </div>
-            </section>
-
             <aside class="log-directory">
                 <h3>> LOG_DIRECTORY</h3>
                 <p class="archive-note">[ AUTO_ARCHIVE: ACTIVE (>7 DAYS) ]</p>
@@ -82,6 +73,18 @@
                     </div>
                 </div>
             </aside>
+
+            <section class="log-display">
+                <article id="content" class="blog-post">
+                    <div style="text-align: center; margin-top: 50px;">
+                        <h2 class="highlight-blue">> SYSTEM_READY</h2>
+                        <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">SELECT A DATA_CHANNEL OR SYSTEM_LOG TO BEGIN EXTRACTION.</p>
+                    </div>
+                </article>
+                <div class="comment-module">
+                    <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async></script>
+                </div>
+            </section>
         </main>
 
         <footer>
@@ -169,7 +172,7 @@
                 setTimeout(() => highlightLogLabels(contentArea), 50);
                 
                 if (isManualClick) {
-                    const scrollTarget = window.innerWidth < 850 ? 800 : 400;
+                    const scrollTarget = window.innerWidth < 850 ? 0 : 0; 
                     window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
                 }
             } catch (err) { 
@@ -185,11 +188,9 @@
             list.innerHTML = '<li>[ SCANNING... ]</li>';
 
             try {
-                // The ?t= timestamp forces GitHub to show your newly renamed file immediately
                 const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${new Date().getTime()}`);
                 const files = await response.json();
                 
-                // Filter for .md files and sort alphabetically (dates will float to the top)
                 const mdFiles = files.filter(f => f.name.toLowerCase().endsWith('.md')).sort((a, b) => b.name.localeCompare(a.name));
                 
                 list.innerHTML = '';
@@ -209,15 +210,12 @@
                         li.classList.add('older-log'); 
                     }
                     
-                    // Check for [NEW] badge logic
                     const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
                     const isNew = dateMatch && new Date(dateMatch[0]) >= sevenDaysAgo;
                     const badge = isNew ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span>` : '';
                     
-                    // Cleanup display name: remove .md and turn dashes to spaces
                     let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
                     
-                    // Use f.path to ensure the link points to the correct folder
                     li.innerHTML = `${badge}<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
@@ -238,60 +236,18 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-    const hash = window.location.hash.replace('#', '');
-    
-    // If a user clicks a specific link, go straight there
-    if (hash) {
-        loadLogs(hash.split('/')[0], false).then(() => loadPost(hash));
-    } else {
-        // Option B: Scan all folders to find the absolute newest post for the landing page
-        const folders = ['watch_tower', 'chow', 'gear', 'coord'];
-        let newestFile = null;
-        let newestDate = "";
-
-        try {
-            const scanPromises = folders.map(folder => 
-                fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${new Date().getTime()}`)
-                .then(res => res.json())
-                .catch(() => []) // Ignore empty/missing folders
-            );
-
-            const results = await Promise.all(scanPromises);
+            const hash = window.location.hash.replace('#', '');
             
-            results.flat().forEach(f => {
-                if (f.name && f.name.endsWith('.md')) {
-                    // Extract date from YYYY-MM-DD format
-                    const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
-                    const fileDate = dateMatch ? dateMatch[0] : "0000-00-00";
-                    
-                    if (fileDate > newestDate) {
-                        newestDate = fileDate;
-                        newestFile = f;
-                    }
-                }
-            });
-
-            if (newestFile) {
-                // Determine which folder the newest file belongs to
-                const folderOfFile = newestFile.path.split('/')[0];
-                const navBtn = document.getElementById(`btn-${folderOfFile}`);
-                
-                // Load the list for that folder and display the post
-                loadLogs(folderOfFile, true, navBtn);
+            if (hash) {
+                // Load specific link if provided in URL
+                loadLogs(hash.split('/')[0], false).then(() => loadPost(hash));
             } else {
-                // Fallback if no dated files are found
-                loadLogs('watch_tower', true, document.getElementById('btn-watch_tower'));
+                // CLEAN START: Load directory but leave display pane on SYSTEM_READY
+                loadLogs('watch_tower', false, document.getElementById('btn-watch_tower'));
             }
-        } catch (err) {
-            console.error("Global scan failed", err);
-            loadLogs('watch_tower', true);
-        }
-    }
-});
+        });
 
         (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
     </script>
 </body>
 </html>
-
-
