@@ -1,4 +1,4 @@
-/* VINTAGE64 | SYSTEM STYLESHEET 3.3 */
+/* VINTAGE64 | SYSTEM STYLESHEET 3.4 - LAYOUT SWAP */
 
 /* 1. THEME VARIABLES */
 :root {
@@ -71,7 +71,7 @@ body {
     padding: 25px 10px; 
     text-align: center; 
     border-top: 1px solid var(--border);
-    min-height: 130px; /* Fixed height to prevent page jump */
+    min-height: 130px; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -87,7 +87,7 @@ body {
     margin: 8px 0; 
 }
 
-/* 5. TYPEWRITER ANIMATION - FINAL STABILITY FIX */
+/* 5. TYPEWRITER ANIMATION */
 .main-title { 
     font-size: 1.4rem; 
     margin: 0; 
@@ -101,9 +101,9 @@ body {
     color: var(--primary); 
     display: inline-block; 
     overflow: hidden; 
-    white-space: nowrap; /* Essential: prevents wrapping during animation */
+    white-space: nowrap; 
     width: 0; 
-    max-width: max-content; /* Forces box to stay size of text */
+    max-width: max-content; 
     animation: typing 3.5s steps(40, end) forwards;
 }
 
@@ -170,7 +170,7 @@ body {
     border-color: var(--accent); 
 }
 
-/* 7. LAYOUT (DESKTOP SIDEBAR) */
+/* 7. LAYOUT (SWAPPED: DIRECTORY LEFT, CONTENT RIGHT) */
 .vault-layout { 
     display: flex; 
     flex-direction: column; 
@@ -179,19 +179,20 @@ body {
 
 @media (min-width: 850px) { 
     .vault-layout { 
-        flex-direction: row; 
+        flex-direction: row; /* Natural order, but we change element order in HTML or keep directory first */
         align-items: flex-start; 
+    } 
+    .log-directory { 
+        flex: 1; 
+        border-right: 1px dashed var(--border); /* Divider now on the RIGHT */
+        padding-right: 20px; 
+        position: sticky; 
+        top: 20px; 
     } 
     .log-display { 
         flex: 2; 
         min-width: 0; 
-    } 
-    .log-directory { 
-        flex: 1; 
-        border-left: 1px dashed var(--border); 
-        padding-left: 20px; 
-        position: sticky; 
-        top: 20px; 
+        padding-left: 10px;
     } 
 }
 
@@ -235,7 +236,6 @@ body {
     margin-bottom: 10px; 
 }
 
-/* TARGET THIS SECTION SPECIFICALLY */
 .surveillance-wrapper { 
     margin-top: 30px; 
     background: rgba(20, 20, 20, 0.6); 
@@ -247,7 +247,6 @@ body {
     cursor: crosshair; 
 }
 
-/* THE FORCED GREEN GLOW */
 .surveillance-wrapper:hover {
     border-color: #00ff41 !important; 
     box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); 
@@ -270,7 +269,6 @@ body {
     50% { opacity: 0; } 
 }
 
-/* HIGHLIGHTS - FORCED OVERRIDE */
 .highlight-blue { 
     color: var(--secondary) !important; 
     font-weight: bold; 
@@ -312,4 +310,3 @@ footer {
     z-index: 1000; 
     opacity: 0.12; 
 }
-
