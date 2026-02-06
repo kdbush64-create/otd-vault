@@ -117,14 +117,33 @@
         setInterval(updateClock, 1000);
 
         function highlightLogLabels(container) {
-            const greenKeywords = ["STATUS:", "THE_VERDICT:", "RATING:"];
             const blueKeywords = ["SUMMARY:", "OBSERVATION:", "WATCH_TOWER REPORT", "Old Texas Dude™"];
-            const targets = container.querySelectorAll('h2, h3, strong, li, p, span');
+            const greenKeywords = ["STATUS:", "THE_VERDICT:", "RATING:"];
+            
+            // Targets all text elements inside the blog post
+            const targets = container.querySelectorAll('h1, h2, h3, strong, li, p, span');
+            
             targets.forEach(el => {
                 let html = el.innerHTML;
-                blueKeywords.forEach(k => { if(html.includes(k) && !html.includes('blue')) html = html.replace(new RegExp(k, 'g'), `<span class="highlight-blue">${k}</span>`); });
-                greenKeywords.forEach(k => { if(html.includes(k) && !html.includes('green')) html = html.replace(new RegExp(k, 'g'), `<span class="highlight-green">${k}</span>`); });
-                el.innerHTML = html;
+                let changed = false;
+
+                blueKeywords.forEach(k => { 
+                    if(html.includes(k) && !html.includes('highlight-blue')) {
+                        const regex = new RegExp(`(${k})`, 'g');
+                        html = html.replace(regex, `<span class="highlight-blue">$1</span>`); 
+                        changed = true;
+                    }
+                });
+
+                greenKeywords.forEach(k => { 
+                    if(html.includes(k) && !html.includes('highlight-green')) {
+                        const regex = new RegExp(`(${k})`, 'g');
+                        html = html.replace(regex, `<span class="highlight-green">$1</span>`); 
+                        changed = true;
+                    }
+                });
+
+                if (changed) el.innerHTML = html;
             });
         }
 
@@ -137,8 +156,18 @@
                 const text = await response.text();
                 let cleanMarkdown = text;
                 if (text.startsWith('---')) cleanMarkdown = text.split('---').slice(2).join('---').trim();
-                contentArea.innerHTML = `<div class="blog-post-body">${marked.parse(cleanMarkdown)}</div>`;
+                
+                // 1. Convert Markdown to HTML
+                let finalHTML = marked.parse(cleanMarkdown);
+                
+                // 2. Remove underscores specifically from WATCH_TOWER_REPORT
+                finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
+
+                contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
+                
+                // 3. Apply highlighting
                 highlightLogLabels(contentArea);
+                
                 if (isManualClick) window.scrollTo({ top: 400, behavior: 'smooth' });
             } catch (err) { contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED</p>"; }
         }
@@ -189,3 +218,4 @@
     </script>
 </body>
 </html>
+
