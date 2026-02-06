@@ -235,18 +235,23 @@ body {
     margin-bottom: 10px; 
 }
 
+/* TARGET THIS SECTION SPECIFICALLY */
 .surveillance-wrapper { 
     margin-top: 30px; 
-    background: var(--box-bg); 
-    padding: 10px; 
+    background: rgba(20, 20, 20, 0.6); 
+    padding: 15px; 
     border: 1px solid var(--border);
-    transition: all 0.3s ease; /* Smooth glow transition */
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    z-index: 5; 
+    cursor: crosshair; 
 }
 
-/* RE-ENABLED SOFT GREEN GLOW */
+/* THE FORCED GREEN GLOW */
 .surveillance-wrapper:hover {
-    border-color: var(--accent);
-    box-shadow: var(--glow);
+    border-color: #00ff41 !important; 
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); 
+    background: rgba(0, 255, 65, 0.05); 
 }
 
 .feed-header { 
@@ -254,6 +259,7 @@ body {
     justify-content: space-between; 
     font-size: 0.7em; 
     margin-bottom: 8px; 
+    color: var(--accent);
 }
 
 .blink { 
@@ -306,3 +312,4 @@ footer {
     z-index: 1000; 
     opacity: 0.12; 
 }
+
