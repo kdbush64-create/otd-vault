@@ -146,8 +146,8 @@
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
             
-            // Push state prevents the "snap to top" jump
-            history.pushState(null, null, '#' + filePath);
+            // REVERTED to stable hash method
+            window.location.hash = filePath; 
 
             try {
                 const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}?t=${new Date().getTime()}`);
@@ -161,7 +161,8 @@
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
                 setTimeout(() => highlightLogLabels(contentArea), 50);
                 
-                // Jump fix: window.scrollTo is intentionally omitted here.
+                // RESTORED original behavior
+                if (isManualClick) window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) { 
                 contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED - FILE_NOT_FOUND</p>"; 
             }
@@ -214,7 +215,10 @@
             const list = document.getElementById('log-list');
             const contentArea = document.getElementById('content');
             
+            // Clear URL and highlights
+            window.location.hash = '';
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
+            
             contentArea.innerHTML = `
                 <div style="text-align: center; margin-top: 50px;">
                     <h2 class="highlight-blue">> SYSTEM_READY</h2>
