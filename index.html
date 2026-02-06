@@ -147,41 +147,36 @@
         }
 
         async function loadPost(filePath, isManualClick = false) {
-    const contentArea = document.getElementById('content');
-    contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
-    
-    // This ensures the URL hash matches the actual file path
-    window.location.hash = filePath; 
+            const contentArea = document.getElementById('content');
+            contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
+            window.location.hash = filePath; 
 
-    try {
-        // We use the full filePath directly from the GitHub API list
-        const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}?t=${new Date().getTime()}`);
-        
-        if (!response.ok) throw new Error('File not found');
+            try {
+                const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}?t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error('File not found');
 
-        const text = await response.text();
-        let cleanMarkdown = text;
-        if (text.startsWith('---')) {
-            cleanMarkdown = text.split('---').slice(2).join('---').trim();
+                const text = await response.text();
+                let cleanMarkdown = text;
+                if (text.startsWith('---')) {
+                    cleanMarkdown = text.split('---').slice(2).join('---').trim();
+                }
+                
+                let finalHTML = marked.parse(cleanMarkdown);
+                finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
+
+                contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
+                
+                setTimeout(() => highlightLogLabels(contentArea), 50);
+                
+                if (isManualClick) {
+                    const scrollTarget = window.innerWidth < 850 ? 800 : 400;
+                    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+                }
+            } catch (err) { 
+                console.error(err);
+                contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED - FILE_NOT_FOUND</p>"; 
+            }
         }
-        
-        let finalHTML = marked.parse(cleanMarkdown);
-        finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
-
-        contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
-        
-        setTimeout(() => highlightLogLabels(contentArea), 50);
-        
-        if (isManualClick) {
-            // Smooth scroll to content on mobile/desktop
-            const scrollTarget = window.innerWidth < 850 ? 800 : 400;
-            window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
-        }
-    } catch (err) { 
-        console.error(err);
-        contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED - FILE_NOT_FOUND</p>"; 
-    }
-}
 
         async function loadLogs(folder, autoLoadFirst = false, btn = null) {
             const list = document.getElementById('log-list');
@@ -206,9 +201,9 @@
                     const isNew = dateMatch && new Date(dateMatch[0]) >= sevenDaysAgo;
                     const badge = isNew ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span>` : '';
                     
-                    // Cleanup list links underscores
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     
+                    // FIXED: Now uses f.path to ensure it finds dated files in their correct folders
                     li.innerHTML = `${badge}<a href="javascript:void(0)" class="log-link" onclick="loadPost('${f.path}', true)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
@@ -232,4 +227,3 @@
     </script>
 </body>
 </html>
-
