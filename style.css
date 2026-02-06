@@ -1,5 +1,5 @@
 /* VINTAGE64 | SYSTEM STYLESHEET 
-   VERSION: 2.6 (VINTAGE-TIGHT ALIGNMENT)
+   VERSION: 2.7 (COMMENT_VISIBILITY & MOBILE_LAYOUT_FIX)
 */
 
 /* 1. THEME VARIABLES */
@@ -44,18 +44,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px; 
+    padding: 10px; 
     line-height: 1.6;
     overflow-x: hidden;
 }
 
 /* 3. THE "VINTAGE64" CONTAINER PROFILE */
 .container {
-    width: 95%; /* Mobile default */
-    max-width: 800px; /* Force-matched to Vintage64TX business profile */
+    width: 95%;
+    max-width: 800px; 
     margin: 20px auto;
     border: 1px solid var(--border);
-    padding: 20px; 
+    padding: 15px; 
     background: var(--container-bg);
     position: relative;
     box-shadow: 0 10px 30px var(--shadow);
@@ -63,7 +63,7 @@ body {
 
 @media (min-width: 1000px) {
     .container {
-        width: 70%; /* Keeps it narrow on ultra-wide monitors */
+        width: 70%; 
         padding: 40px;
     }
 }
@@ -126,20 +126,50 @@ body {
     box-shadow: var(--glow);
 }
 
-/* 6. CONTENT & HEADERS */
+/* 6. CONTENT, LAYOUT & COMMENT FIX */
+.vault-layout {
+    display: flex;
+    flex-direction: column; /* Stacked for mobile by default */
+    gap: 30px;
+}
+
+@media (min-width: 850px) {
+    .vault-layout {
+        flex-direction: row; /* Side-by-side for desktop */
+        align-items: flex-start;
+    }
+    .log-display { flex: 1; min-width: 0; }
+    .log-directory { width: 250px; position: sticky; top: 20px; }
+}
+
+.log-display {
+    width: 100%;
+    height: auto !important; /* Ensure it grows with comments */
+}
+
 .blog-post-body h2, .blog-post-body h3 {
     color: var(--secondary) !important;
     text-shadow: var(--blue-glow);
     margin: 30px 0 15px 0;
     font-size: 1.2rem;
 }
-.blog-post-body h2, 
-.blog-post-body h3, 
-.blog-post-body p {
-    overflow-wrap: break-word; /* Allows breaking at underscores if absolutely necessary */
-    word-break: keep-all;      /* Prefers breaking at spaces first */
+
+.blog-post-body h2, .blog-post-body h3, .blog-post-body p {
+    overflow-wrap: break-word;
+    word-break: keep-all; 
     hyphens: none;
 }
+
+/* UN-OBSCURE COMMENTS */
+.comment-module {
+    width: 100%;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+    min-height: 300px; /* Space for login button */
+    overflow: visible !important;
+}
+
 .highlight-blue { color: var(--secondary); text-shadow: var(--blue-glow); font-weight: bold; }
 .highlight-green { color: var(--accent); text-shadow: var(--glow); font-weight: bold; }
 
@@ -169,4 +199,3 @@ body {
 
 .blink { animation: rec-pulse 2s infinite; }
 @keyframes rec-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
