@@ -40,18 +40,12 @@
 
         <nav class="vault-nav-container">
             <div class="nav-group">
-                <h3 class="nav-label">[ PRIMARY_COMMAND ]</h3>
-                <button id="btn-watch_tower" onclick="loadLogs('watch_tower', false, this)" class="submit-btn primary-gate">
-                    SYSTEM_LOGS
-                </button>
-            </div>
-
-            <div class="nav-group">
-                <h3 class="nav-label">[ DATA_CHANNELS ]</h3>
+                <h3 class="nav-label">[ DATA_CHANNELS & ARCHIVES ]</h3>
                 <div class="secondary-filters">
                     <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
                     <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
                     <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
+                    <button id="btn-watch_tower" onclick="loadLogs('watch_tower', false, this)" class="submit-btn">SYSTEM_LOGS</button>
                 </div>
             </div>
         </nav>
@@ -60,7 +54,7 @@
             <aside class="log-directory">
                 <h3>> LOG_DIRECTORY</h3>
                 <p class="archive-note">[ AUTO_ARCHIVE: ACTIVE (>7 DAYS) ]</p>
-                <ul class="file-list" id="log-list"><li>[ SCANNING_VAULT... ]</li></ul>
+                <ul class="file-list" id="log-list"><li>[ SYSTEM_IDLE: SELECT_CHANNEL ]</li></ul>
                 <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px;">
                     [ SHOW_FULL_ARCHIVE ]
                 </button>
@@ -78,7 +72,7 @@
                 <article id="content" class="blog-post">
                     <div style="text-align: center; margin-top: 50px;">
                         <h2 class="highlight-blue">> SYSTEM_READY</h2>
-                        <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">SELECT A DATA_CHANNEL OR SYSTEM_LOG TO BEGIN EXTRACTION.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">SELECT A DATA_CHANNEL ABOVE TO INITIALIZE ARCHIVE SCAN.</p>
                     </div>
                 </article>
                 <div class="comment-module">
@@ -172,8 +166,7 @@
                 setTimeout(() => highlightLogLabels(contentArea), 50);
                 
                 if (isManualClick) {
-                    const scrollTarget = window.innerWidth < 850 ? 0 : 0; 
-                    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             } catch (err) { 
                 console.error(err);
@@ -239,15 +232,12 @@
             const hash = window.location.hash.replace('#', '');
             
             if (hash) {
-                // Load specific link if provided in URL
                 loadLogs(hash.split('/')[0], false).then(() => loadPost(hash));
             } else {
-                // CLEAN START: Load directory but leave display pane on SYSTEM_READY
-                loadLogs('watch_tower', false, document.getElementById('btn-watch_tower'));
+                // TOTAL IDLE: No directory auto-load on start
+                const list = document.getElementById('log-list');
+                list.innerHTML = '<li>[ SYSTEM_IDLE: SELECT_CHANNEL ]</li>';
             }
         });
 
-        (() => { const d=document,s=d.createElement("script");s.type="module"; s.src="https://w.behold.so/widget.js";d.head.append(s); })();
-    </script>
-</body>
-</html>
+        (() => { const d=document,s=d.createElement("script");s.type="module";
