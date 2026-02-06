@@ -206,7 +206,7 @@
             const blueKeywords = [
                 "SUMMARY:", 
                 "OBSERVATION:", 
-                "WATCH_TOWER REPORT", // Space instead of underscore for mobile wrap
+                "WATCH_TOWER REPORT",
                 "Old Texas Dude™",
                 "ACCESS_PURPOSE",
                 "FIELD_TESTED",
@@ -221,7 +221,7 @@
                 let changed = false;
 
                 blueKeywords.forEach(keyword => {
-                    if (html.includes(keyword) && !el.closest('.highlight-blue')) {
+                    if (html.includes(keyword) && !el.innerHTML.includes('highlight-blue')) {
                         const regex = new RegExp(`(${keyword})`, 'g');
                         html = html.replace(regex, '<span class="highlight-blue">$1</span>');
                         changed = true;
@@ -229,7 +229,7 @@
                 });
 
                 greenKeywords.forEach(keyword => {
-                    if (html.includes(keyword) && !el.closest('.highlight-green')) {
+                    if (html.includes(keyword) && !el.innerHTML.includes('highlight-green')) {
                         const regex = new RegExp(`(${keyword})`, 'g');
                         html = html.replace(regex, '<span class="highlight-green">$1</span>');
                         changed = true;
@@ -260,8 +260,6 @@
                 }
 
                 let finalHTML = marked.parse(cleanMarkdown);
-                
-                // MOBILE FIX: Replace underscore with space so it wraps correctly
                 finalHTML = finalHTML.replace(/WATCH_TOWER_REPORT/g, 'WATCH_TOWER REPORT');
 
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
@@ -318,7 +316,13 @@
                 });
                 
                 loadMoreBtn.style.display = mdFiles.length > DISPLAY_LIMIT ? "block" : "none";
-                if (autoLoadFirst && mdFiles.length > 0) await loadPost(mdFiles[0].path, false);
+                
+                if (autoLoadFirst && mdFiles.length > 0) {
+                    const hash = window.location.hash.replace('#', '');
+                    if (!hash || !hash.includes(filterFolder)) {
+                        await loadPost(mdFiles[0].path, false);
+                    }
+                }
             } catch (error) { 
                 list.innerHTML = "<li>[ ERROR: SCAN_FAILED ]</li>"; 
             }
@@ -348,6 +352,9 @@
     </script>
 </body>
 </html>
+</body>
+</html>
+
 
 
 
