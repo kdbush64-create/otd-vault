@@ -8,6 +8,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+    <style>
+        /* DATA-BLUE RESCAN BUTTON STYLING */
+        #re-scan-btn {
+            background-color: #000000 !important;
+            color: #00eeff !important; /* Data Blue / Cyan */
+            border: 1px solid #00eeff !important;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Clicking or Tapping effect: Inverts to solid Blue with Black text */
+        #re-scan-btn:active, #re-scan-btn:focus {
+            background-color: #00eeff !important;
+            color: #000000 !important;
+            outline: none;
+        }
+        
+        @media (hover: hover) {
+            #re-scan-btn:hover {
+                background-color: #003333; /* Darker blue tint on hover */
+            }
+        }
+    </style>
 </head>
 
 <body id="personal-identity">
@@ -52,8 +82,8 @@
 
         <main class="vault-layout">
             <aside class="log-directory">
-                <button id="re-scan-btn" onclick="runGlobalScan()" class="submit-btn" style="width: 100%; margin-bottom: 20px; border: 2px solid var(--accent); color: var(--accent); font-weight: bold; letter-spacing: 2px;">
-                    [ > RESCAN_ALL_SYSTEMS < ]
+                <button id="re-scan-btn" onclick="runGlobalScan()" class="submit-btn">
+                    RESCAN
                 </button>
 
                 <h3>> LOG_DIRECTORY</h3>
@@ -98,7 +128,6 @@
         const repo = "kdbush64-create/otd-vault";
         const DISPLAY_LIMIT = 10;
 
-        // Theme Logic
         const toggleBtn = document.getElementById('theme-toggle');
         const modeText = document.getElementById('mode-text');
         const savedTheme = localStorage.getItem('theme');
@@ -143,15 +172,10 @@
         }
 
         async function loadPost(filePath, isManualClick = false, event = null) {
-            // FIX: Prevent the browser from jumping to the anchor
             if (event) event.preventDefault();
-            
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
-            
-            // Update URL quietly without triggering a scroll
             history.replaceState(null, null, '#' + filePath);
-
             try {
                 const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}?t=${new Date().getTime()}`);
                 if (!response.ok) throw new Error('File not found');
@@ -163,8 +187,6 @@
                 let finalHTML = marked.parse(cleanMarkdown);
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
                 setTimeout(() => highlightLogLabels(contentArea), 50);
-                
-                // Jump fix: window.scrollTo is removed to keep you stationary
             } catch (err) { 
                 contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED - FILE_NOT_FOUND</p>"; 
             }
@@ -175,7 +197,6 @@
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             list.innerHTML = '<li>[ SCANNING... ]</li>';
-
             try {
                 const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${new Date().getTime()}`);
                 const files = await response.json();
@@ -187,7 +208,6 @@
                 }
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
                 mdFiles.forEach((f, i) => {
                     const li = document.createElement('li');
                     if (i >= DISPLAY_LIMIT) { 
@@ -198,8 +218,6 @@
                     const isNew = dateMatch && new Date(dateMatch[0]) >= sevenDaysAgo;
                     const badge = isNew ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span>` : '';
                     let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
-                    
-                    // FIX: Added 'event' to the function call
                     li.innerHTML = `${badge}<a href="#${f.path}" class="log-link" onclick="loadPost('${f.path}', true, event)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
@@ -218,23 +236,18 @@
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
             const contentArea = document.getElementById('content');
-            
-            history.replaceState(null, null, ' '); // Clear the hash quietly
+            history.replaceState(null, null, ' '); 
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
-            
             contentArea.innerHTML = `
                 <div style="text-align: center; margin-top: 50px;">
                     <h2 class="highlight-blue">> SYSTEM_READY</h2>
                     <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">SELECT A DATA_CHANNEL TO INITIALIZE FULL ARCHIVE SCAN.</p>
                 </div>`;
-            
             list.innerHTML = '<li>[ INITIALIZING_SCAN... ]</li>';
-
             const folders = ['chow', 'coord', 'gear', 'system_logs'];
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             let globalNewFiles = [];
-
             for (const fld of folders) {
                 try {
                     const r = await fetch(`https://api.github.com/repos/${repo}/contents/${fld}?nocache=${new Date().getTime()}`);
@@ -251,15 +264,12 @@
                     }
                 } catch (err) { console.warn("Folder check failed:", fld); }
             }
-
             if (globalNewFiles.length > 0) {
                 list.innerHTML = '';
                 globalNewFiles.sort((a, b) => b.name.localeCompare(a.name));
                 globalNewFiles.forEach(f => {
                     const li = document.createElement('li');
                     let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
-                    
-                    // FIX: Added 'event' to the function call
                     li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="#${f.path}" class="log-link" onclick="loadPost('${f.path}', true, event)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
