@@ -209,13 +209,13 @@ footer {
     font-size: 0.8rem;
 }
 
-/* 11. LOG DISPLAY: TECHNICAL DATA BLUE OVERRIDES (CORRECTED) */
+/* 11. LOG DISPLAY: TECHNICAL DATA BLUE OVERRIDES */
 
-/* Force blue on specific classes used by JavaScript */
-.force-blue, .highlight-blue {
+/* High-priority class for JS injection */
+.force-blue {
     color: var(--data-blue) !important;
-    text-shadow: 0 0 8px var(--blue-glow);
-    font-weight: bold;
+    text-shadow: 0 0 8px var(--blue-glow) !important;
+    font-weight: bold !important;
 }
 
 /* Status line at top of log */
@@ -226,28 +226,15 @@ footer {
     border-bottom: 1px solid var(--border);
     padding-bottom: 8px;
     margin-bottom: 15px;
-    letter-spacing: 1px;
 }
 
-/* Section Headers */
-.blog-post-body h1, .blog-post-body h2, .blog-post-body h3 {
-    color: var(--data-blue) !important;
-    font-size: 1.1rem;
-    text-shadow: 0 0 5px var(--blue-glow);
-    margin-top: 25px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
-
-/* Bold text parsed by the engine */
+/* Headers and Bold tags */
+.blog-post-body h1, .blog-post-body h2, .blog-post-body h3,
 .blog-post-body strong, .blog-post-body b {
     color: var(--data-blue) !important;
-    text-shadow: 0 0 4px var(--blue-glow);
-    font-weight: bold;
+    text-shadow: 0 0 5px var(--blue-glow);
 }
 
-/* List Markers */
-.blog-post-body ul li::marker, .blog-post-body ol li::marker {
+.blog-post-body ul li::marker {
     color: var(--data-blue);
-    font-weight: bold;
 }
