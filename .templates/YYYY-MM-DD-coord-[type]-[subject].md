@@ -10,7 +10,7 @@ website: "https://en.wikipedia.org/wiki/Website"
 
 # COORD_REPORT: [LOCATION_NAME]
 **DATE:** 2026-02-08
-**MAP_LINK:** [Click here for GPS](https://www.google.com/maps/search/?api=1&query=[LOCATION_NAME])
+**MAP_LINK:** [📍 Open in GPS](https://www.google.com/maps/search/?api=1&query=[LOCATION_NAME]+[CITY]+[STATE])
 **OFFICIAL_SITE:** [Visit Website]([URL_HERE])
 **COST:** [ Free / Entry_Fee / Expensive ]
 **RATING:** 0/10
