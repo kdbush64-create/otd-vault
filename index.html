@@ -64,15 +64,10 @@
             </section>
         </main>
 
-        <div class="surveillance-wrapper">
-            <h3>> VISUAL_UPLINK</h3>
-            <div style="font-size:0.7rem; margin-bottom:10px;"><span class="blink">● REC</span> <span id="stardate"></span></div>
-            <div class="feed-container">
-                <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
-            </div>
-        </div>
-
         <footer>
+            <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
+                SYSTEM_TIME: <span id="stardate"></span>
+            </div>
             <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
         </footer>
     </div>
@@ -147,18 +142,19 @@
             try {
                 const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
+                
+                if (!Array.isArray(files)) {
+                    list.innerHTML = "<li>[ NO_FILES_FOUND ]</li>";
+                    return;
+                }
+
                 list.innerHTML = "";
                 
                 files.filter(f => {
-                    // 1. Must be a markdown file
                     if (!f.name.endsWith('.md')) return false;
-                    
                     const name = f.name.toLowerCase();
-                    // 2. If Transit button pressed, only show files with 'transit' in name
                     if (isTransitButton) return name.includes('transit');
-                    // 3. If Coord button pressed, hide files with 'transit' in name
                     if (isCoordButton) return !name.includes('transit');
-                    
                     return true; 
                 })
                 .sort((a,b) => b.name.localeCompare(a.name))
@@ -169,13 +165,16 @@
                     li.innerHTML = `<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${name}</a>`;
                     list.appendChild(li);
                 });
+                
+                if (list.innerHTML === "") {
+                    list.innerHTML = "<li>[ NO_MATCHING_DATA ]</li>";
+                }
             } catch (e) { list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; }
         }
 
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
             clearStage("SYSTEM_READY");
-            
             document.querySelectorAll('.secondary-filters .submit-btn').forEach(b => b.classList.remove('active'));
 
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
@@ -216,7 +215,6 @@
                     li.style.marginBottom = "10px";
 
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    
                     li.innerHTML = `
                         <span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold; flex-shrink:0;">[NEW]</span>
                         <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link" style="margin:0;">> ${displayName}</a>
