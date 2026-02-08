@@ -135,7 +135,10 @@
 
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
-            clearStage(`${folder.toUpperCase()}_CHANNEL`);
+            const isTransitButton = btn && btn.id === 'btn-transit';
+            const isCoordButton = btn && btn.id === 'btn-coord';
+            
+            clearStage(`${isTransitButton ? 'TRANSIT' : folder.toUpperCase()}_CHANNEL`);
             
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
@@ -146,7 +149,16 @@
                 const files = await r.json();
                 list.innerHTML = "";
                 
-                files.filter(f => f.name.endsWith('.md')).sort((a,b) => b.name.localeCompare(a.name)).forEach(f => {
+                files.filter(f => {
+                    if (!f.name.endsWith('.md')) return false;
+                    const name = f.name.toLowerCase();
+                    // FILTER LOGIC: Transit button only shows 'transit' files. Coord button shows everything ELSE in coord folder.
+                    if (isTransitButton) return name.includes('transit');
+                    if (isCoordButton) return !name.includes('transit');
+                    return true; 
+                })
+                .sort((a,b) => b.name.localeCompare(a.name))
+                .forEach(f => {
                     const li = document.createElement('li');
                     li.style.listStyle = "none";
                     let name = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
@@ -190,8 +202,6 @@
                 recentFiles.sort((a, b) => b.name.localeCompare(a.name));
                 recentFiles.forEach(f => {
                     const li = document.createElement('li');
-                    
-                    // FIX: Force horizontal alignment and remove bullet
                     li.style.listStyle = "none";
                     li.style.display = "flex";
                     li.style.alignItems = "center";
@@ -200,7 +210,6 @@
 
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     
-                    // NEW TAG and FILENAME on one line
                     li.innerHTML = `
                         <span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold; flex-shrink:0;">[NEW]</span>
                         <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link" style="margin:0;">> ${displayName}</a>
@@ -232,5 +241,3 @@
     <script type="module" src="https://w.behold.so/widget.js"></script>
 </body>
 </html>
-
-
