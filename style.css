@@ -1,4 +1,4 @@
-/* 1. THEME VARIABLES (Consolidated) */
+/* 1. THEME VARIABLES */
 :root {
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
@@ -8,7 +8,7 @@
     --accent: #00ff41;          /* Neon Green */
     --border: #5c3d2e;          /* Chassis Brown */
     --shadow: rgba(0, 0, 0, 0.8);
-    --data-blue: #00d4ff;       /* Professional Data Blue */
+    --data-blue: #00d4ff;       
     --blue-glow: rgba(0, 212, 255, 0.5);
 }
 
@@ -23,7 +23,7 @@
     --shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* 2. GLOBAL RESET & CENTERING LOGIC */
+/* 2. GLOBAL RESET & CENTERING */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -36,13 +36,13 @@ body {
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Vintage64 alignment */
+    align-items: center; 
     padding: 20px;
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 3. THE CHASSIS (Optimized narrow container) */
+/* 3. THE CHASSIS (Vintage64 Narrow Layout) */
 .container {
     width: 100%;
     max-width: 650px; 
@@ -55,20 +55,22 @@ body {
     overflow: hidden;
 }
 
-/* 4. HEADER & HERO ELEMENTS */
+/* 4. HEADER & HERO (Centering Fix for "By" line) */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
     margin-bottom: 30px;
     padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hero-container {
     border: 2px solid var(--border);
     margin: 20px 0;
     background: #000;
-    position: relative;
-    overflow: hidden;
+    width: 100%;
 }
 
 .hero-container img {
@@ -78,7 +80,29 @@ header {
     filter: grayscale(0.3) brightness(0.8);
 }
 
-/* 5. NAVIGATION & BUTTONS */
+.hero-text-block {
+    width: 100%;
+    padding: 25px 10px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Forces the 'by' line to the center */
+    justify-content: center;
+}
+
+.by-line {
+    display: block;
+    width: 100%;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.8;
+    margin: 8px 0;
+    text-align: center;
+}
+
+/* 5. NAVIGATION & INTERACTIVE BUTTONS */
 .system-nav, .secondary-filters {
     display: flex;
     justify-content: center;
@@ -105,11 +129,11 @@ header {
     box-shadow: 0 0 15px var(--accent);
 }
 
-/* 6. CLEAN STACK LAYOUT (Removed Sidebar Logic) */
+/* 6. VAULT LAYOUT (Single Column Stack) */
 .vault-layout {
     display: flex;
     flex-direction: column;
-    gap: 35px;
+    gap: 40px;
 }
 
 .log-directory {
@@ -122,7 +146,15 @@ header {
     width: 100%;
 }
 
-/* 7. TYPEWRITER ANIMATION (Kept for OTD flavor) */
+/* 7. TYPEWRITER ANIMATION */
+.main-title {
+    font-size: 1.4rem;
+    margin: 0;
+    line-height: 1.2;
+    display: flex;
+    justify-content: center;
+}
+
 .typewriter {
     display: inline-block;
     overflow: hidden;
@@ -136,13 +168,12 @@ header {
     to { width: 100%; }
 }
 
-/* 8. SURVEILLANCE & SPECIAL WIDGETS */
+/* 8. SURVEILLANCE & VISUAL WIDGETS */
 .surveillance-wrapper {
     margin-top: 30px;
     background: rgba(20, 20, 20, 0.6);
     padding: 15px;
     border: 1px solid var(--border);
-    cursor: crosshair;
 }
 
 .surveillance-wrapper:hover {
@@ -153,10 +184,7 @@ header {
 .blink { animation: blinker 1.5s linear infinite; }
 @keyframes blinker { 50% { opacity: 0; } }
 
-/* 9. TYPOGRAPHY & OVERLAYS */
-h1 { letter-spacing: 3px; font-size: 1.5rem; text-align: center; }
-.highlight-blue { color: var(--data-blue) !important; text-shadow: 0 0 8px var(--blue-glow); }
-
+/* 9. OVERLAYS & HIGHLIGHTS */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -165,6 +193,11 @@ h1 { letter-spacing: 3px; font-size: 1.5rem; text-align: center; }
     pointer-events: none;
     z-index: 1000;
     opacity: 0.12;
+}
+
+.highlight-blue {
+    color: var(--data-blue) !important;
+    text-shadow: 0 0 8px var(--blue-glow);
 }
 
 /* 10. FOOTER */
