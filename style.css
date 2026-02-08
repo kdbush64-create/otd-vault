@@ -243,3 +243,10 @@ footer {
     color: var(--data-blue);
     font-weight: bold;
 }
+
+/* SAFETY NET: Targets lines that might have failed to parse bold tags */
+/* This catches the raw ** text and applies the blue branding anyway */
+.log-display p:contains("**"), 
+.log-display li:contains("**") {
+    color: var(--data-blue);
+}
