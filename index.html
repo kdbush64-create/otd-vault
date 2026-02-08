@@ -74,7 +74,6 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
 
-        // This cleans the main screen when switching channels
         function clearStage(message = "CHANNEL_SELECTED") {
             const content = document.getElementById('content');
             content.innerHTML = `
@@ -107,7 +106,7 @@
                 
                 applyBlueBranding(content);
                 setTimeout(() => applyBlueBranding(content), 150);
-                window.scrollTo({top: 0, behavior: 'smooth'});
+                // SCROLL_TO_TOP REMOVED TO PREVENT JUMPING
             } catch (e) { 
                 content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
             }
@@ -115,10 +114,7 @@
 
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
-            
-            // WIPE STAGE ON FOLDER CLICK
             clearStage(`${folder.toUpperCase()}_CHANNEL`);
-
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             
@@ -139,10 +135,7 @@
 
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
-            
-            // WIPE STAGE ON RESCAN
             clearStage("SYSTEM_READY");
-
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['chow', 'coord', 'gear', 'system_logs'];
             const sevenDaysAgo = new Date();
