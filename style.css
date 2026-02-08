@@ -232,8 +232,10 @@ footer {
     color: var(--primary);
 }
 
-/* Specific Blue Accent for labels: Forced to Blue even inside Amber containers */
-.blog-post-body .force-blue {
+/* Specific Blue Accent for labels: Captured via Class OR bold tags */
+.blog-post-body .force-blue,
+.blog-post-body strong,
+.blog-post-body b {
     color: var(--data-blue) !important;
     text-shadow: 0 0 8px var(--blue-glow) !important;
     font-weight: bold !important;
