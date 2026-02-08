@@ -36,6 +36,7 @@
 
         <nav class="vault-nav-container">
             <div class="secondary-filters">
+                <button id="btn-about" onclick="loadLogs('about', false, this)" class="submit-btn" style="border-color: var(--accent); color: var(--accent);">THE_MAN</button>
                 <button id="btn-dispatch" onclick="loadLogs('dispatch', false, this)" class="submit-btn">THE DISPATCH</button>
                 <button id="btn-transit" onclick="loadLogs('coord', false, this)" class="submit-btn">TRANSIT</button>
                 <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
@@ -108,18 +109,8 @@
                     txt = txt.split('---').slice(2).join('---').trim();
                 }
 
-                let isRecipe = path.toLowerCase().includes('recipe');
-                let schemaType = isRecipe ? "https://schema.org/Recipe" : "https://schema.org/Article";
-
                 marked.setOptions({ gfm: true, breaks: true });
-                
-                content.innerHTML = `
-                    <div class="blog-post-body" itemscope itemtype="${schemaType}">
-                        <meta itemprop="author" content="Old Texas Dude">
-                        <div itemprop="articleBody">
-                            ${marked.parse(txt)}
-                        </div>
-                    </div>`;
+                content.innerHTML = `<div class="blog-post-body"><div>${marked.parse(txt)}</div></div>`;
                 
                 applyBlueBranding(content);
                 setTimeout(() => applyBlueBranding(content), 150);
@@ -149,7 +140,6 @@
                 }
 
                 list.innerHTML = "";
-                
                 files.filter(f => {
                     if (!f.name.endsWith('.md')) return false;
                     const name = f.name.toLowerCase();
@@ -165,18 +155,12 @@
                     li.innerHTML = `<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${name}</a>`;
                     list.appendChild(li);
                 });
-                
-                if (list.innerHTML === "") {
-                    list.innerHTML = "<li>[ NO_MATCHING_DATA ]</li>";
-                }
             } catch (e) { list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; }
         }
 
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
             clearStage("SYSTEM_READY");
-            document.querySelectorAll('.secondary-filters .submit-btn').forEach(b => b.classList.remove('active'));
-
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['dispatch', 'gear', 'coord', 'table'];
             const sevenDaysAgo = new Date();
@@ -191,11 +175,8 @@
                         data.forEach(file => {
                             if (file.name.endsWith('.md')) {
                                 const match = file.name.match(/\d{4}-\d{2}-\d{2}/);
-                                if (match) {
-                                    const fileDate = new Date(match[0]);
-                                    if (fileDate >= sevenDaysAgo) {
-                                        recentFiles.push(file);
-                                    }
+                                if (match && new Date(match[0]) >= sevenDaysAgo) {
+                                    recentFiles.push(file);
                                 }
                             }
                         });
@@ -209,20 +190,12 @@
                 recentFiles.forEach(f => {
                     const li = document.createElement('li');
                     li.style.listStyle = "none";
-                    li.style.display = "flex";
-                    li.style.alignItems = "center";
-                    li.style.gap = "8px";
-                    li.style.marginBottom = "10px";
-
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    li.innerHTML = `
-                        <span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold; flex-shrink:0;">[NEW]</span>
-                        <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link" style="margin:0;">> ${displayName}</a>
-                    `;
+                    li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
             } else {
-                list.innerHTML = '<li style="list-style:none;">[ NO_RECENT_ACTIVITY ]</li>';
+                list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
             }
         }
 
@@ -243,6 +216,5 @@
             runGlobalScan();
         };
     </script>
-    <script type="module" src="https://w.behold.so/widget.js"></script>
 </body>
 </html>
