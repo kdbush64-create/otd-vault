@@ -87,7 +87,7 @@ header {
     border-top: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Forces the 'by' line to the center */
+    align-items: center; 
     justify-content: center;
 }
 
@@ -207,4 +207,39 @@ footer {
     border-top: 1px solid var(--border);
     padding-top: 20px;
     font-size: 0.8rem;
+}
+
+/* 11. LOG DISPLAY: TECHNICAL DATA BLUE OVERRIDES */
+
+/* Targets the 'TOTAL SYSTEM STABILITY' or status line at top of log */
+.log-display p:first-child {
+    color: var(--data-blue);
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+/* Targets Section Headers (e.g. ### FIELD_REPORT) */
+.log-display h3, .log-display h2 {
+    color: var(--data-blue) !important;
+    font-size: 1.1rem;
+    text-shadow: 0 0 5px var(--blue-glow);
+    margin-top: 25px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+/* Targets Line Titles/Labels inside paragraphs or lists (**Bold Text**) */
+.log-display strong, .log-display b {
+    color: var(--data-blue) !important;
+    text-shadow: 0 0 4px var(--blue-glow);
+}
+
+/* Targets List Markers (Bullets/Numbers) */
+.log-display ul li::marker, .log-display ol li::marker {
+    color: var(--data-blue);
+    font-weight: bold;
 }
