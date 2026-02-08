@@ -150,11 +150,15 @@
                 list.innerHTML = "";
                 
                 files.filter(f => {
+                    // 1. Must be a markdown file
                     if (!f.name.endsWith('.md')) return false;
+                    
                     const name = f.name.toLowerCase();
-                    // FILTER LOGIC: Transit button only shows 'transit' files. Coord button shows everything ELSE in coord folder.
+                    // 2. If Transit button pressed, only show files with 'transit' in name
                     if (isTransitButton) return name.includes('transit');
+                    // 3. If Coord button pressed, hide files with 'transit' in name
                     if (isCoordButton) return !name.includes('transit');
+                    
                     return true; 
                 })
                 .sort((a,b) => b.name.localeCompare(a.name))
@@ -188,8 +192,11 @@
                         data.forEach(file => {
                             if (file.name.endsWith('.md')) {
                                 const match = file.name.match(/\d{4}-\d{2}-\d{2}/);
-                                if (match && new Date(match[0]) >= sevenDaysAgo) {
-                                    recentFiles.push(file);
+                                if (match) {
+                                    const fileDate = new Date(match[0]);
+                                    if (fileDate >= sevenDaysAgo) {
+                                        recentFiles.push(file);
+                                    }
                                 }
                             }
                         });
