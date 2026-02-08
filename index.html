@@ -40,14 +40,15 @@
 
         <main class="vault-layout">
             <aside class="log-directory">
-                <button id="re-scan-btn" onclick="location.reload()" class="submit-btn" style="width:100%; margin-bottom:20px; color:var(--secondary); border-color:var(--secondary);">RESCAN</button>
+                <button id="re-scan-btn" onclick="runGlobalScan()" class="submit-btn" style="width:100%; margin-bottom:20px; color:var(--secondary); border-color:var(--secondary);">RESCAN</button>
                 <h3>> LOG_DIRECTORY</h3>
-                <ul id="log-list" class="file-list"><li>[ SELECT_CHANNEL ]</li></ul>
+                <ul id="log-list" class="file-list"><li>[ INITIALIZING_SCAN... ]</li></ul>
             </aside>
 
             <section class="log-display">
                 <article id="content" class="blog-post">
                     <h2 class="highlight-blue">> SYSTEM_READY</h2>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING AUTOMATED ARCHIVE SCAN...</p>
                 </article>
                 <div class="comment-module" style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
                     <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async></script>
@@ -69,13 +70,11 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
 
-        // Precise text-branding function
         function applyBlueBranding(container) {
             const targets = container.querySelectorAll('p, li, strong, b');
             targets.forEach(el => {
                 let html = el.innerHTML;
                 if (html.includes('**')) {
-                    // This regex converts **text** into a blue span, bypassing engine failure
                     el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
                 }
             });
@@ -93,24 +92,68 @@
                 content.innerHTML = `<div class="blog-post-body">${marked.parse(txt)}</div>`;
                 
                 applyBlueBranding(content);
-                setTimeout(() => applyBlueBranding(content), 100);
+                setTimeout(() => applyBlueBranding(content), 150);
             } catch (e) { content.innerHTML = "[!] DATA_LINK_ERROR"; }
         }
 
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
+            document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            
             list.innerHTML = "<li>SCANNING...</li>";
             try {
-                const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}`);
+                const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
                 list.innerHTML = "";
-                files.filter(f => f.name.endsWith('.md')).reverse().forEach(f => {
+                files.filter(f => f.name.endsWith('.md')).sort((a,b) => b.name.localeCompare(a.name)).forEach(f => {
                     const li = document.createElement('li');
                     let name = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     li.innerHTML = `<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${name}</a>`;
                     list.appendChild(li);
                 });
             } catch (e) { list.innerHTML = "<li>SCAN_FAILED</li>"; }
+        }
+
+        // RESTORED GLOBAL SCAN LOGIC
+        async function runGlobalScan() {
+            const list = document.getElementById('log-list');
+            list.innerHTML = '<li>[ SCANNING_ALL_CHANNELS... ]</li>';
+            const folders = ['chow', 'coord', 'gear', 'system_logs'];
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            let recentFiles = [];
+
+            for (const fld of folders) {
+                try {
+                    const r = await fetch(`https://api.github.com/repos/${repo}/contents/${fld}?t=${Date.now()}`);
+                    const data = await r.json();
+                    if (Array.isArray(data)) {
+                        data.forEach(file => {
+                            if (file.name.endsWith('.md')) {
+                                const match = file.name.match(/\d{4}-\d{2}-\d{2}/);
+                                if (match && new Date(match[0]) >= sevenDaysAgo) {
+                                    file.folder = fld;
+                                    recentFiles.push(file);
+                                }
+                            }
+                        });
+                    }
+                } catch (err) { console.error("Scan error in:", fld); }
+            }
+
+            if (recentFiles.length > 0) {
+                list.innerHTML = '';
+                recentFiles.sort((a, b) => b.name.localeCompare(a.name));
+                recentFiles.forEach(f => {
+                    const li = document.createElement('li');
+                    let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
+                    li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                    list.appendChild(li);
+                });
+            } else {
+                list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
+            }
         }
 
         // Theme Toggle
@@ -128,7 +171,7 @@
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-            if(window.location.hash) loadPost(window.location.hash.substring(1));
+            runGlobalScan(); // Automatically scan on load
         };
     </script>
     <script type="module" src="https://w.behold.so/widget.js"></script>
