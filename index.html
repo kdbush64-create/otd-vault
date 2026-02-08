@@ -47,8 +47,10 @@
 
             <section class="log-display">
                 <article id="content" class="blog-post">
-                    <h2 class="force-blue">> SYSTEM_READY</h2>
-                    <p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING AUTOMATED ARCHIVE SCAN...</p>
+                    <div id="startup-message" style="text-align: center; padding: 40px;">
+                        <h2 class="force-blue">> SYSTEM_READY</h2>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.</p>
+                    </div>
                 </article>
                 <div class="comment-module" style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
                     <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async></script>
@@ -72,13 +74,21 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
 
-        // BRUTE FORCE BRANDING: This hunts for ** and forces them to be Blue Spans
+        // This cleans the main screen when switching channels
+        function clearStage(message = "CHANNEL_SELECTED") {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h2 class="force-blue">> ${message}</h2>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING DATA STREAM...</p>
+                </div>`;
+        }
+
         function applyBlueBranding(container) {
             const elements = container.querySelectorAll('p, li, div, strong, b');
             elements.forEach(el => {
                 let html = el.innerHTML;
                 if (html.includes('**')) {
-                    // This Regex finds **text** and wraps it in our force-blue class
                     el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
                 }
             });
@@ -90,18 +100,13 @@
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
+                if (txt.startsWith('---')) txt = txt.split('---').slice(2).join('---').trim();
                 
-                if (txt.startsWith('---')) {
-                    txt = txt.split('---').slice(2).join('---').trim();
-                }
-
                 marked.setOptions({ gfm: true, breaks: true });
                 content.innerHTML = `<div class="blog-post-body">${marked.parse(txt)}</div>`;
                 
-                // Run branding twice to ensure it catches everything
                 applyBlueBranding(content);
                 setTimeout(() => applyBlueBranding(content), 150);
-                
                 window.scrollTo({top: 0, behavior: 'smooth'});
             } catch (e) { 
                 content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
@@ -110,6 +115,10 @@
 
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
+            
+            // WIPE STAGE ON FOLDER CLICK
+            clearStage(`${folder.toUpperCase()}_CHANNEL`);
+
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             
@@ -119,7 +128,6 @@
                 const files = await r.json();
                 list.innerHTML = "";
                 
-                // Sort by date/name descending
                 files.filter(f => f.name.endsWith('.md')).sort((a,b) => b.name.localeCompare(a.name)).forEach(f => {
                     const li = document.createElement('li');
                     let name = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
@@ -129,9 +137,12 @@
             } catch (e) { list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; }
         }
 
-        // STARTUP SCAN: Finds all logs from the last 7 days across all folders
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
+            
+            // WIPE STAGE ON RESCAN
+            clearStage("SYSTEM_READY");
+
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['chow', 'coord', 'gear', 'system_logs'];
             const sevenDaysAgo = new Date();
@@ -169,7 +180,6 @@
             }
         }
 
-        // Theme Toggle
         document.getElementById('theme-toggle').addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
             const target = current === 'light' ? 'dark' : 'light';
@@ -177,7 +187,6 @@
             localStorage.setItem('theme', target);
         });
 
-        // Clock
         setInterval(() => { 
             const clock = document.getElementById('stardate');
             if(clock) clock.innerText = new Date().toLocaleTimeString(); 
