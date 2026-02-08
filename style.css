@@ -123,10 +123,12 @@ header {
     transition: 0.2s;
 }
 
+/* ACTIVE HIGHLIGHT LOGIC */
 .submit-btn:hover, .submit-btn.active {
     background: var(--accent);
-    color: #000;
+    color: #000 !important;
     box-shadow: 0 0 15px var(--accent);
+    border-color: var(--accent);
 }
 
 /* 6. VAULT LAYOUT (Single Column Stack) */
@@ -142,8 +144,23 @@ header {
     padding-bottom: 25px;
 }
 
-.log-display {
-    width: 100%;
+.log-list {
+    list-style: none;
+    padding: 0;
+}
+
+.log-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: block;
+    padding: 5px 0;
+}
+
+.log-link:hover {
+    color: var(--accent);
+    padding-left: 5px;
+    transition: 0.2s;
 }
 
 /* 7. TYPEWRITER ANIMATION */
@@ -195,11 +212,6 @@ header {
     opacity: 0.12;
 }
 
-.highlight-blue {
-    color: var(--data-blue) !important;
-    text-shadow: 0 0 8px var(--blue-glow);
-}
-
 /* 10. FOOTER */
 footer {
     margin-top: 50px;
@@ -210,15 +222,12 @@ footer {
 }
 
 /* 11. LOG DISPLAY: TECHNICAL DATA BLUE OVERRIDES */
-
-/* High-priority class for JS injection */
 .force-blue {
     color: var(--data-blue) !important;
     text-shadow: 0 0 8px var(--blue-glow) !important;
     font-weight: bold !important;
 }
 
-/* Status line at top of log */
 .blog-post-body p:first-child {
     color: var(--data-blue) !important;
     font-weight: bold;
@@ -228,7 +237,6 @@ footer {
     margin-bottom: 15px;
 }
 
-/* Headers and Bold tags */
 .blog-post-body h1, .blog-post-body h2, .blog-post-body h3,
 .blog-post-body strong, .blog-post-body b {
     color: var(--data-blue) !important;
