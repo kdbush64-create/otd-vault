@@ -36,10 +36,11 @@
 
         <nav class="vault-nav-container">
             <div class="secondary-filters">
-                <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
-                <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
+                <button id="btn-dispatch" onclick="loadLogs('dispatch', false, this)" class="submit-btn">THE DISPATCH</button>
+                <button id="btn-transit" onclick="loadLogs('transit', false, this)" class="submit-btn">TRANSIT</button>
                 <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
-                <button id="btn-system_logs" onclick="loadLogs('system_logs', false, this)" class="submit-btn">SYSTEM_LOGS</button>
+                <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
+                <button id="btn-table" onclick="loadLogs('table', false, this)" class="submit-btn">THE TABLE</button>
             </div>
         </nav>
 
@@ -105,7 +106,6 @@
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
                 
-                // SEO: Update Page Title based on file name
                 let cleanName = path.split('/').pop().replace('.md', '').toUpperCase().replace(/-/g, ' ');
                 document.title = `${cleanName} | OTD Vault`;
 
@@ -113,7 +113,6 @@
                     txt = txt.split('---').slice(2).join('---').trim();
                 }
 
-                // SEO: Detect if it is a recipe for Schema mapping
                 let isRecipe = path.toLowerCase().includes('recipe');
                 let schemaType = isRecipe ? "https://schema.org/Recipe" : "https://schema.org/Article";
 
@@ -137,6 +136,7 @@
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
             clearStage(`${folder.toUpperCase()}_CHANNEL`);
+            
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             
@@ -158,8 +158,12 @@
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
             clearStage("SYSTEM_READY");
+            
+            document.querySelectorAll('.secondary-filters .submit-btn').forEach(b => b.classList.remove('active'));
+
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
-            const folders = ['chow', 'coord', 'gear', 'system_logs'];
+            // UPDATED FOLDERS: dispatch, transit, gear, coord, table
+            const folders = ['dispatch', 'transit', 'gear', 'coord', 'table'];
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             let recentFiles = [];
