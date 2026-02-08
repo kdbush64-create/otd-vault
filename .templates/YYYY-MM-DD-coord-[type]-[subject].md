@@ -33,7 +33,7 @@ SUMMARY: [What is actually there to do or see? Describe the terrain, the key poi
 ---
 
 ### THE_VERDICT
->**FINAL_ANALYSIS:** [Top Tier Destination / Worth a Stop / Skip this Sector].
+> **FINAL_ANALYSIS:** [Top Tier Destination / Worth a Stop / Skip this Sector]. 
 
 [Final thoughts on whether these coordinates are a business asset or a waste of fuel.]
 
