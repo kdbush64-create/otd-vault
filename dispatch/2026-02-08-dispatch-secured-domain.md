@@ -19,17 +19,17 @@ ROOT_CAUSE: Detail the "Why" (Analysis).
 VERDICT: The "Legacy Takeaway" (One-sentence wisdom). -->
 
 ---
-type: dispatch
-status: STABLE
-vigilance_level: CRITICAL
-category: WATCH_TOWER
-subject: ACQUIRED DOMAIN NAME
+**type:** Dispatch
+**status:** STABLE
+**vigilance_level:** CRITICAL
+**category:** WATCH_TOWER
+**subject:** ACQUIRED DOMAIN NAME
 ---
 
 # LOG: WATCH_TOWER_REPORT
-**DATE:** 2026-02-08
-**VIGILANCE:** CRITICAL
-**INTEL_TYPE:** TECH_UPDATE
+**DATE:** 2026-02-08  
+**VIGILANCE:** CRITICAL  
+**INTEL_TYPE:** TECH_UPDATE  
 
 ---
 
