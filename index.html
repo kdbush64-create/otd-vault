@@ -64,7 +64,7 @@
                         <p style="font-size: 0.8rem; opacity: 0.7;">SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.</p>
                     </div>
                 </article>
-                <div id="comment-wrapper" class="comment-module" style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
+                <div id="comment-wrapper" class="comment-module" style="display:none; margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
                     <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async></script>
                 </div>
             </section>
@@ -104,18 +104,19 @@
             const content = document.getElementById('content');
             const commentWrapper = document.getElementById('comment-wrapper');
             
-            // Hide comments if we are loading something from the 'about' path
-            if (path.toLowerCase().includes('about/')) {
-                commentWrapper.style.display = 'none';
-            } else {
-                commentWrapper.style.display = 'block';
-            }
-
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
+            
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
                 
+                // Only show comments if NOT in the "about" folder
+                if (path.toLowerCase().includes('about/')) {
+                    commentWrapper.style.display = 'none';
+                } else {
+                    commentWrapper.style.display = 'block';
+                }
+
                 let cleanName = path.split('/').pop().replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                 document.title = `${cleanName} | OTD Vault`;
 
@@ -124,7 +125,6 @@
                 }
 
                 marked.setOptions({ gfm: true, breaks: true });
-                
                 const isAbout = path.toLowerCase().includes('the-man') || path.toLowerCase().includes('the_man');
 
                 content.innerHTML = `
@@ -151,6 +151,7 @@
                 setTimeout(() => applyBlueBranding(content), 150);
             } catch (e) { 
                 content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
+                commentWrapper.style.display = 'none';
             }
         }
 
@@ -161,17 +162,16 @@
             const isTransitButton = btn && btn.id === 'btn-transit';
             const isCoordButton = btn && btn.id === 'btn-coord';
             
-            // SIDEBAR & COMMENT TOGGLE: Hide if 'about' folder selected
             if (folder === 'about') {
                 sidebar.style.display = 'none';
                 commentWrapper.style.display = 'none';
             } else {
                 sidebar.style.display = 'block';
-                commentWrapper.style.display = 'block';
+                // Note: commentWrapper stays hidden until loadPost is called
+                commentWrapper.style.display = 'none'; 
             }
 
             clearStage(`${isTransitButton ? 'TRANSIT' : folder.toUpperCase()}_CHANNEL`);
-            
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             
@@ -209,7 +209,7 @@
 
         async function runGlobalScan() {
             document.getElementById('sidebar').style.display = 'block';
-            document.getElementById('comment-wrapper').style.display = 'block';
+            document.getElementById('comment-wrapper').style.display = 'none'; 
             const list = document.getElementById('log-list');
             clearStage("SYSTEM_READY");
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
@@ -225,10 +225,9 @@
                     if (Array.isArray(data)) {
                         data.forEach(file => {
                             if (file.name.endsWith('.md')) {
-                                const match = file.name.match(/\d{4}-\d{2}-\d{2}/);
-                                if (match && new Date(match[0]) >= sevenDaysAgo) {
-                                    recentFiles.push(file);
-                                }
+                                const match = file.name.match(/\d{4}-\d.md/);
+                                // Simplified recent check for the scan
+                                recentFiles.push(file);
                             }
                         });
                     }
@@ -237,8 +236,8 @@
 
             if (recentFiles.length > 0) {
                 list.innerHTML = '';
-                recentFiles.sort((a, b) => b.name.localeCompare(a.name));
-                recentFiles.forEach(f => {
+                // Limit to most recent 10 for the global scan
+                recentFiles.sort((a, b) => b.name.localeCompare(a.name)).slice(0, 10).forEach(f => {
                     const li = document.createElement('li');
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
