@@ -163,7 +163,7 @@
             document.querySelectorAll('.secondary-filters .submit-btn').forEach(b => b.classList.remove('active'));
 
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
-            const folders = ['dispatch', 'transit', 'gear', 'coord', 'table'];
+            const folders = ['dispatch', 'gear', 'coord', 'table'];
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             let recentFiles = [];
@@ -232,3 +232,4 @@
     <script type="module" src="https://w.behold.so/widget.js"></script>
 </body>
 </html>
+
