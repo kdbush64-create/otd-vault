@@ -2,11 +2,11 @@
 :root {
     --bg: #1a1a1a;
     --container-bg: rgba(0, 0, 0, 0.95);
-    --primary: #ffb000;         /* Amber Gold */
+    --primary: #ffb000;          /* Amber Gold */
     --primary-dim: rgba(255, 176, 0, 0.7);
-    --secondary: #00eeff;       /* Terminal Cyan */
-    --accent: #00ff41;          /* Neon Green */
-    --border: #5c3d2e;          /* Chassis Brown */
+    --secondary: #00eeff;        /* Terminal Cyan */
+    --accent: #00ff41;           /* Neon Green */
+    --border: #5c3d2e;           /* Chassis Brown */
     --shadow: rgba(0, 0, 0, 0.8);
     --data-blue: #00d4ff;       
     --blue-glow: rgba(0, 212, 255, 0.5);
@@ -55,7 +55,7 @@ body {
     overflow: hidden;
 }
 
-/* 4. HEADER & HERO (Centering Fix for "By" line) */
+/* 4. HEADER & HERO */
 header {
     text-align: center;
     border-bottom: 2px dashed var(--border);
@@ -209,11 +209,18 @@ footer {
     font-size: 0.8rem;
 }
 
-/* 11. LOG DISPLAY: TECHNICAL DATA BLUE OVERRIDES */
+/* 11. LOG DISPLAY: TECHNICAL DATA BLUE OVERRIDES (CORRECTED) */
 
-/* Targets the 'TOTAL SYSTEM STABILITY' or status line at top of log */
-.log-display p:first-child {
-    color: var(--data-blue);
+/* Force blue on specific classes used by JavaScript */
+.force-blue, .highlight-blue {
+    color: var(--data-blue) !important;
+    text-shadow: 0 0 8px var(--blue-glow);
+    font-weight: bold;
+}
+
+/* Status line at top of log */
+.blog-post-body p:first-child {
+    color: var(--data-blue) !important;
     font-weight: bold;
     text-transform: uppercase;
     border-bottom: 1px solid var(--border);
@@ -222,8 +229,8 @@ footer {
     letter-spacing: 1px;
 }
 
-/* Targets Section Headers (e.g. ### FIELD_REPORT) */
-.log-display h3, .log-display h2 {
+/* Section Headers */
+.blog-post-body h1, .blog-post-body h2, .blog-post-body h3 {
     color: var(--data-blue) !important;
     font-size: 1.1rem;
     text-shadow: 0 0 5px var(--blue-glow);
@@ -232,21 +239,15 @@ footer {
     text-transform: uppercase;
 }
 
-/* Targets Line Titles/Labels inside paragraphs or lists (**Bold Text**) */
-.log-display strong, .log-display b {
+/* Bold text parsed by the engine */
+.blog-post-body strong, .blog-post-body b {
     color: var(--data-blue) !important;
     text-shadow: 0 0 4px var(--blue-glow);
-}
-
-/* Targets List Markers (Bullets/Numbers) */
-.log-display ul li::marker, .log-display ol li::marker {
-    color: var(--data-blue);
     font-weight: bold;
 }
 
-/* SAFETY NET: Targets lines that might have failed to parse bold tags */
-/* This catches the raw ** text and applies the blue branding anyway */
-.log-display p:contains("**"), 
-.log-display li:contains("**") {
+/* List Markers */
+.blog-post-body ul li::marker, .blog-post-body ol li::marker {
     color: var(--data-blue);
+    font-weight: bold;
 }
