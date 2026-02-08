@@ -42,7 +42,7 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 3. THE CHASSIS (Vintage64 Narrow Layout) */
+/* 3. THE CHASSIS */
 .container {
     width: 100%;
     max-width: 650px; 
@@ -102,7 +102,7 @@ header {
     text-align: center;
 }
 
-/* 5. NAVIGATION & INTERACTIVE BUTTONS */
+/* 5. NAVIGATION */
 .system-nav, .secondary-filters {
     display: flex;
     justify-content: center;
@@ -123,7 +123,6 @@ header {
     transition: 0.2s;
 }
 
-/* ACTIVE HIGHLIGHT LOGIC */
 .submit-btn:hover, .submit-btn.active {
     background: var(--accent);
     color: #000 !important;
@@ -131,7 +130,7 @@ header {
     border-color: var(--accent);
 }
 
-/* 6. VAULT LAYOUT (Single Column Stack) */
+/* 6. LAYOUT */
 .vault-layout {
     display: flex;
     flex-direction: column;
@@ -144,17 +143,16 @@ header {
     padding-bottom: 25px;
 }
 
-/* 6a. DIRECTORY LIST STYLING (The Fix) */
 .file-list {
-    list-style-type: none; /* Kills the bullet dots */
+    list-style-type: none; 
     padding: 0;
     margin: 0;
 }
 
 .file-list li {
-    display: flex;        /* Puts [NEW] and Link on one line */
-    align-items: center;  /* Centers them vertically */
-    margin-bottom: 8px;   /* Space between entries */
+    display: flex;        
+    align-items: center;  
+    margin-bottom: 8px;   
 }
 
 .log-link {
@@ -171,7 +169,7 @@ header {
     padding-left: 5px;
 }
 
-/* 7. TYPEWRITER ANIMATION */
+/* 7. ANIMATIONS */
 .main-title {
     font-size: 1.4rem;
     margin: 0;
@@ -193,23 +191,10 @@ header {
     to { width: 100%; }
 }
 
-/* 8. SURVEILLANCE & VISUAL WIDGETS */
-.surveillance-wrapper {
-    margin-top: 30px;
-    background: rgba(20, 20, 20, 0.6);
-    padding: 15px;
-    border: 1px solid var(--border);
-}
-
-.surveillance-wrapper:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 15px var(--accent);
-}
-
 .blink { animation: blinker 1.5s linear infinite; }
 @keyframes blinker { 50% { opacity: 0; } }
 
-/* 9. OVERLAYS & HIGHLIGHTS */
+/* 8. OVERLAYS */
 .terminal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -220,7 +205,7 @@ header {
     opacity: 0.12;
 }
 
-/* 10. FOOTER */
+/* 9. FOOTER */
 footer {
     margin-top: 50px;
     text-align: center;
@@ -229,28 +214,30 @@ footer {
     font-size: 0.8rem;
 }
 
-/* 11. LOG DISPLAY: TECHNICAL DATA BLUE OVERRIDES */
+/* 10. LOG DISPLAY: DATA BLUE ACCENTS */
+
+/* Default: Headers in posts are Blue */
+.blog-post-body h1, 
+.blog-post-body h2, 
+.blog-post-body h3 {
+    color: var(--data-blue);
+    text-shadow: 0 0 5px var(--blue-glow);
+    text-transform: uppercase;
+}
+
+/* Standard Paragraph Text stays Amber Gold */
+.blog-post-body p, 
+.blog-post-body li {
+    color: var(--primary);
+}
+
+/* Specific Blue Accent for labels inside asterisks (Top Headers) */
 .force-blue {
     color: var(--data-blue) !important;
     text-shadow: 0 0 8px var(--blue-glow) !important;
     font-weight: bold !important;
 }
 
-.blog-post-body p:first-child {
-    color: var(--data-blue) !important;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
-    margin-bottom: 15px;
-}
-
-.blog-post-body h1, .blog-post-body h2, .blog-post-body h3,
-.blog-post-body strong, .blog-post-body b {
-    color: var(--data-blue) !important;
-    text-shadow: 0 0 5px var(--blue-glow);
-}
-
 .blog-post-body ul li::marker {
-    color: var(--data-blue);
+    color: var(--accent);
 }
