@@ -64,7 +64,7 @@
                         <p style="font-size: 0.8rem; opacity: 0.7;">SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.</p>
                     </div>
                 </article>
-                <div class="comment-module" style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
+                <div id="comment-wrapper" class="comment-module" style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
                     <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async></script>
                 </div>
             </section>
@@ -91,12 +91,10 @@
         }
 
         function applyBlueBranding(container) {
-            // Updated to include headers so headers with **bolding** get the blue accent correctly
             const elements = container.querySelectorAll('p, li, div, h1, h2, h3, h4, strong, b');
             elements.forEach(el => {
                 let html = el.innerHTML;
                 if (html.includes('**')) {
-                    // Refined regex to only wrap content inside asterisks
                     el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
                 }
             });
@@ -104,6 +102,15 @@
 
         async function loadPost(path) {
             const content = document.getElementById('content');
+            const commentWrapper = document.getElementById('comment-wrapper');
+            
+            // Hide comments if we are loading something from the 'about' path
+            if (path.toLowerCase().includes('about/')) {
+                commentWrapper.style.display = 'none';
+            } else {
+                commentWrapper.style.display = 'block';
+            }
+
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
@@ -150,14 +157,17 @@
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
             const sidebar = document.getElementById('sidebar');
+            const commentWrapper = document.getElementById('comment-wrapper');
             const isTransitButton = btn && btn.id === 'btn-transit';
             const isCoordButton = btn && btn.id === 'btn-coord';
             
-            // SIDEBAR TOGGLE: Hide if 'about', Show for everything else
+            // SIDEBAR & COMMENT TOGGLE: Hide if 'about' folder selected
             if (folder === 'about') {
                 sidebar.style.display = 'none';
+                commentWrapper.style.display = 'none';
             } else {
                 sidebar.style.display = 'block';
+                commentWrapper.style.display = 'block';
             }
 
             clearStage(`${isTransitButton ? 'TRANSIT' : folder.toUpperCase()}_CHANNEL`);
@@ -198,8 +208,8 @@
         }
 
         async function runGlobalScan() {
-            // Restore sidebar on scan
             document.getElementById('sidebar').style.display = 'block';
+            document.getElementById('comment-wrapper').style.display = 'block';
             const list = document.getElementById('log-list');
             clearStage("SYSTEM_READY");
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
@@ -259,4 +269,3 @@
     </script>
 </body>
 </html>
-
