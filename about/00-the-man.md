@@ -8,7 +8,7 @@
 In an era of algorithmic noise and "sponsored content," **The Watch Tower** serves as a singular point of signal. My objective is simple: to provide a technical and culinary vault for the modern Texan and the wandering traveler.
 
 ### THE OPERATOR
-I am a lifelong observer of the Texas landscape, currently operating out of **North Fort Worth**. While the days of constant global transit are behind me, the mission remains active. My field reports primarily cover the **Texas Triangle** and neighboring states, with occasional long-range deployments to other domestic and international locales for culinary and gear evaluation.
+I am a lifelong observer of the Texas landscape, currently operating out of **North Fort Worth**. While the days of constant global transit are behind me, the mission remains active. My field reports primarily cover the **Texas Triangle** and neighboring states, with occasional long-range deployments to **Europe** for international culinary and gear evaluation.
 
 ### THE INTERFACE: WHY VINTAGE?
 You’ll notice the lack of high-resolution hero videos, tracking cookies, and "modern" web bloat. This site is built on a **Vintage Terminal** aesthetic for the following reasons:
@@ -29,9 +29,9 @@ Every review, coordinate, and recipe housed in this vault is vetted against thre
 ### COMMUNICATION PROTOCOLS
 This vault allows for community intel sharing, provided the following protocols are met:
 
-* **INTEL SHARING:** To contribute to a data thread or leave a comment on a field report, you must authenticate via a **GitHub account**. 
-* **ENGAGEMENT STANDARDS:** Keep transmissions professional. We value technical insight and constructive debate. 
-* **FILTERING:** Profanity and low-effort noise will be purged from the stream. This is a high-signal environment; help us keep it that way.
+1. **INTEL SHARING:** To contribute to a data thread or leave a comment on a field report, you must authenticate via a **GitHub account**. 
+2. **ENGAGEMENT STANDARDS:** Keep transmissions professional. We value technical insight and constructive debate. 
+3. **FILTERING:** Profanity and low-effort noise will be purged from the stream. This is a high-signal environment; help us keep it that way.
 
 ### PARTNERSHIP & INQUIRIES
 I am willing to evaluate products or services provided for review under strict conditions of unfiltered honesty. To discuss a potential evaluation or partnership, initiate a secure transmission using the **Inquiry Submission Form** below.
