@@ -35,8 +35,13 @@
         </section>
 
         <nav class="vault-nav-container">
+            <div class="primary-nav" style="margin-bottom: 15px; width: 100%;">
+                <button id="btn-about" onclick="loadLogs('about', false, this)" class="submit-btn" style="width: 100%; padding: 12px; border-color: var(--accent); color: var(--accent); font-weight: bold; font-size: 1rem;">
+                    [ ABOUT: OLD TEXAS DUDE ]
+                </button>
+            </div>
+
             <div class="secondary-filters">
-                <button id="btn-about" onclick="loadLogs('about', false, this)" class="submit-btn" style="border-color: var(--accent); color: var(--accent);">THE_MAN</button>
                 <button id="btn-dispatch" onclick="loadLogs('dispatch', false, this)" class="submit-btn">THE DISPATCH</button>
                 <button id="btn-transit" onclick="loadLogs('coord', false, this)" class="submit-btn">TRANSIT</button>
                 <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
@@ -218,3 +223,4 @@
     </script>
 </body>
 </html>
+
