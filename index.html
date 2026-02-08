@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Old Texas Dude | The Vault</title>
+    
+    <meta name="description" content="The Culinary and Technical Vault of Old Texas Dude: Featuring personal heritage recipes, culinary destinations, and field reports on gear and travel coordinates.">
+    <meta name="keywords" content="Old Texas Dude, Product Evaluations, Independent Reviews, Travel Destinations, Heritage Recipes, Field Reports">
+    <meta name="author" content="Old Texas Dude">
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
 </head>
@@ -35,6 +40,7 @@
                     [ ABOUT: OLD TEXAS DUDE ]
                 </button>
             </div>
+
             <div class="secondary-filters">
                 <button id="btn-dispatch" onclick="loadLogs('dispatch', false, this)" class="submit-btn">THE DISPATCH</button>
                 <button id="btn-transit" onclick="loadLogs('coord', false, this)" class="submit-btn">TRANSIT</button>
@@ -77,13 +83,21 @@
 
         function clearStage(message = "CHANNEL_SELECTED") {
             const content = document.getElementById('content');
-            content.innerHTML = `<div style="text-align: center; padding: 40px;"><h2 class="force-blue">> ${message}</h2><p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING DATA STREAM...</p></div>`;
+            content.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h2 class="force-blue">> ${message}</h2>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING DATA STREAM...</p>
+                </div>`;
         }
 
         function applyBlueBranding(container) {
-            container.querySelectorAll('p, li, div, strong, b').forEach(el => {
-                if (el.innerHTML.includes('**')) {
-                    el.innerHTML = el.innerHTML.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
+            // Updated to include headers so headers with **bolding** get the blue accent correctly
+            const elements = container.querySelectorAll('p, li, div, h1, h2, h3, h4, strong, b');
+            elements.forEach(el => {
+                let html = el.innerHTML;
+                if (html.includes('**')) {
+                    // Refined regex to only wrap content inside asterisks
+                    el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
                 }
             });
         }
@@ -94,7 +108,14 @@
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
-                if (txt.startsWith('---')) txt = txt.split('---').slice(2).join('---').trim();
+                
+                let cleanName = path.split('/').pop().replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
+                document.title = `${cleanName} | OTD Vault`;
+
+                if (txt.startsWith('---')) {
+                    txt = txt.split('---').slice(2).join('---').trim();
+                }
+
                 marked.setOptions({ gfm: true, breaks: true });
                 
                 const isAbout = path.toLowerCase().includes('the-man') || path.toLowerCase().includes('the_man');
@@ -118,16 +139,19 @@
                             </div>
                         ` : ''}
                     </div>`;
+                
                 applyBlueBranding(content);
                 setTimeout(() => applyBlueBranding(content), 150);
-            } catch (e) { content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; }
+            } catch (e) { 
+                content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
+            }
         }
 
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
             const sidebar = document.getElementById('sidebar');
-            const isTransit = btn && btn.id === 'btn-transit';
-            const isCoord = btn && btn.id === 'btn-coord';
+            const isTransitButton = btn && btn.id === 'btn-transit';
+            const isCoordButton = btn && btn.id === 'btn-coord';
             
             // SIDEBAR TOGGLE: Hide if 'about', Show for everything else
             if (folder === 'about') {
@@ -136,7 +160,8 @@
                 sidebar.style.display = 'block';
             }
 
-            clearStage(folder.toUpperCase() + "_CHANNEL");
+            clearStage(`${isTransitButton ? 'TRANSIT' : folder.toUpperCase()}_CHANNEL`);
+            
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             
@@ -144,6 +169,7 @@
             try {
                 const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
+                
                 if (!Array.isArray(files) || files.length === 0) {
                     list.innerHTML = "<li>[ NO_FILES_FOUND ]</li>";
                     return;
@@ -159,8 +185,9 @@
                 .sort((a,b) => b.name.localeCompare(a.name))
                 .forEach(f => {
                     const name = f.name.toLowerCase();
-                    if (isTransit && !name.includes('transit')) return;
-                    if (isCoord && name.includes('transit')) return;
+                    if (isTransitButton && !name.includes('transit')) return;
+                    if (isCoordButton && name.includes('transit')) return;
+                    
                     const li = document.createElement('li');
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
@@ -171,6 +198,7 @@
         }
 
         async function runGlobalScan() {
+            // Restore sidebar on scan
             document.getElementById('sidebar').style.display = 'block';
             const list = document.getElementById('log-list');
             clearStage("SYSTEM_READY");
@@ -179,6 +207,7 @@
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             let recentFiles = [];
+
             for (const fld of folders) {
                 try {
                     const r = await fetch(`https://api.github.com/repos/${repo}/contents/${fld}?t=${Date.now()}`);
@@ -187,26 +216,33 @@
                         data.forEach(file => {
                             if (file.name.endsWith('.md')) {
                                 const match = file.name.match(/\d{4}-\d{2}-\d{2}/);
-                                if (match && new Date(match[0]) >= sevenDaysAgo) recentFiles.push(file);
+                                if (match && new Date(match[0]) >= sevenDaysAgo) {
+                                    recentFiles.push(file);
+                                }
                             }
                         });
                     }
                 } catch (err) {}
             }
+
             if (recentFiles.length > 0) {
                 list.innerHTML = '';
-                recentFiles.sort((a, b) => b.name.localeCompare(a.name)).forEach(f => {
+                recentFiles.sort((a, b) => b.name.localeCompare(a.name));
+                recentFiles.forEach(f => {
                     const li = document.createElement('li');
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                     li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
-            } else { list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>'; }
+            } else {
+                list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
+            }
         }
 
         document.getElementById('theme-toggle').addEventListener('click', () => {
-            const target = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', target);
             localStorage.setItem('theme', target);
         });
