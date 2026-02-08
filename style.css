@@ -220,19 +220,20 @@ footer {
 .blog-post-body h1, 
 .blog-post-body h2, 
 .blog-post-body h3 {
-    color: var(--data-blue);
+    color: var(--data-blue) !important;
     text-shadow: 0 0 5px var(--blue-glow);
     text-transform: uppercase;
 }
 
 /* Standard Paragraph Text stays Amber Gold */
 .blog-post-body p, 
-.blog-post-body li {
+.blog-post-body li,
+.blog-post-body div {
     color: var(--primary);
 }
 
-/* Specific Blue Accent for labels inside asterisks (Top Headers) */
-.force-blue {
+/* Specific Blue Accent for labels: Forced to Blue even inside Amber containers */
+.blog-post-body .force-blue {
     color: var(--data-blue) !important;
     text-shadow: 0 0 8px var(--blue-glow) !important;
     font-weight: bold !important;
