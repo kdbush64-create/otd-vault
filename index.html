@@ -37,7 +37,12 @@
             }
         }
 
-        /* Ensure the surveillance wrapper looks clean at the bottom */
+        /* Branding for bold/titles */
+        .highlight-blue {
+            color: var(--data-blue) !important;
+            font-weight: bold !important;
+        }
+
         .surveillance-wrapper {
             margin-top: 40px;
             width: 100%;
@@ -87,10 +92,7 @@
 
         <main class="vault-layout">
             <aside class="log-directory">
-                <button id="re-scan-btn" onclick="runGlobalScan()" class="submit-btn">
-                    RESCAN
-                </button>
-
+                <button id="re-scan-btn" onclick="runGlobalScan()" class="submit-btn">RESCAN</button>
                 <h3>> LOG_DIRECTORY</h3>
                 <p class="archive-note">[ AUTO_ARCHIVE: ACTIVE (>7 DAYS) ]</p>
                 <ul class="file-list" id="log-list"><li>[ INITIALIZING_SCAN... ]</li></ul>
@@ -133,6 +135,7 @@
         const repo = "kdbush64-create/otd-vault";
         const DISPLAY_LIMIT = 10;
 
+        // Theme Toggle Logic
         const toggleBtn = document.getElementById('theme-toggle');
         const modeText = document.getElementById('mode-text');
         const savedTheme = localStorage.getItem('theme');
@@ -151,15 +154,17 @@
         }
         setInterval(updateClock, 1000);
 
+        // ADVANCED HIGHLIGHTER: Catching the edge cases
         function highlightLogLabels(container) {
-            const blueKeywords = ["SUMMARY:", "OBSERVATION:", "WATCH_TOWER REPORT", "Old Texas Dude™", "TOTAL SYSTEM STABILITY:"];
+            const blueKeywords = ["SUMMARY:", "OBSERVATION:", "WATCH_TOWER REPORT", "TOTAL SYSTEM STABILITY:", "V64_COMFORT_INDEX:"];
             const greenKeywords = ["STATUS:", "THE_VERDICT:", "RATING:"];
-            const targets = container.querySelectorAll('h1, h2, h3, strong, li, p, span');
+            const targets = container.querySelectorAll('h1, h2, h3, strong, li, p, span, b');
             
             targets.forEach(el => {
                 let html = el.innerHTML;
                 let changed = false;
 
+                // Handle literal asterisks if the engine fails
                 if (html.includes('**')) {
                     html = html.replace(/\*\*(.*?)\*\*/g, '<span class="highlight-blue">$1</span>');
                     changed = true;
@@ -190,16 +195,29 @@
             const contentArea = document.getElementById('content');
             contentArea.innerHTML = "<p class='blink' style='color: var(--accent);'>EXTRACTING_DATA_STREAM...</p>";
             history.replaceState(null, null, '#' + filePath);
+            
             try {
                 const response = await fetch(`https://raw.githubusercontent.com/${repo}/main/${filePath}?t=${new Date().getTime()}`);
                 if (!response.ok) throw new Error('File not found');
                 const text = await response.text();
+                
                 let cleanMarkdown = text;
                 if (text.startsWith('---')) {
                     cleanMarkdown = text.split('---').slice(2).join('---').trim();
                 }
+
+                // CONFIGURE MARKDOWN ENGINE
+                marked.setOptions({
+                    gfm: true,
+                    breaks: true,
+                    mangle: false,
+                    headerIds: false
+                });
+
                 let finalHTML = marked.parse(cleanMarkdown);
                 contentArea.innerHTML = `<div class="blog-post-body">${finalHTML}</div>`;
+                
+                // Post-process styling
                 setTimeout(() => highlightLogLabels(contentArea), 50);
             } catch (err) { 
                 contentArea.innerHTML = "<p>[!] ERROR: LINK_SEVERED - FILE_NOT_FOUND</p>"; 
@@ -216,30 +234,21 @@
                 const files = await response.json();
                 const mdFiles = files.filter(f => f.name.toLowerCase().endsWith('.md')).sort((a, b) => b.name.localeCompare(a.name));
                 list.innerHTML = '';
-                if (mdFiles.length === 0) {
-                    list.innerHTML = '<li>[ NO_LOGS_FOUND ]</li>';
-                    return;
-                }
-                const sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                
                 mdFiles.forEach((f, i) => {
                     const li = document.createElement('li');
-                    if (i >= DISPLAY_LIMIT) { 
-                        li.style.display = "none"; 
-                        li.classList.add('older-log'); 
-                    }
+                    if (i >= DISPLAY_LIMIT) { li.style.display = "none"; li.classList.add('older-log'); }
                     const dateMatch = f.name.match(/\d{4}-\d{2}-\d{2}/);
-                    const isNew = dateMatch && new Date(dateMatch[0]) >= sevenDaysAgo;
+                    const isNew = dateMatch && new Date(dateMatch[0]) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
                     const badge = isNew ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span>` : '';
                     let displayName = f.name.replace(/\.[^/.]+$/, "").toUpperCase().replace(/-/g, ' ');
                     li.innerHTML = `${badge}<a href="#${f.path}" class="log-link" onclick="loadPost('${f.path}', true, event)">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
+                
                 document.getElementById('load-more-btn').style.display = mdFiles.length > DISPLAY_LIMIT ? "block" : "none";
                 if (autoLoadFirst && mdFiles.length > 0) loadPost(mdFiles[0].path);
-            } catch (e) { 
-                list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; 
-            }
+            } catch (e) { list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; }
         }
 
         function showAllLogs() { 
@@ -250,18 +259,11 @@
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
             const contentArea = document.getElementById('content');
-            history.replaceState(null, null, ' '); 
-            document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
-            contentArea.innerHTML = `
-                <div style="text-align: center; margin-top: 50px;">
-                    <h2 class="highlight-blue">> SYSTEM_READY</h2>
-                    <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">SELECT A DATA_CHANNEL TO INITIALIZE FULL ARCHIVE SCAN.</p>
-                </div>`;
+            contentArea.innerHTML = `<div style="text-align: center; margin-top: 50px;"><h2 class="highlight-blue">> SYSTEM_READY</h2><p>SELECT A DATA_CHANNEL TO INITIALIZE FULL ARCHIVE SCAN.</p></div>`;
             list.innerHTML = '<li>[ INITIALIZING_SCAN... ]</li>';
             const folders = ['chow', 'coord', 'gear', 'system_logs'];
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             let globalNewFiles = [];
+            
             for (const fld of folders) {
                 try {
                     const r = await fetch(`https://api.github.com/repos/${repo}/contents/${fld}?nocache=${new Date().getTime()}`);
@@ -270,13 +272,11 @@
                         data.forEach(file => {
                             if (file.name.endsWith('.md')) {
                                 const match = file.name.match(/\d{4}-\d{2}-\d{2}/);
-                                if (match && new Date(match[0]) >= sevenDaysAgo) {
-                                    globalNewFiles.push(file);
-                                }
+                                if (match && new Date(match[0]) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) globalNewFiles.push(file);
                             }
                         });
                     }
-                } catch (err) { console.warn("Folder check failed:", fld); }
+                } catch (err) {}
             }
             if (globalNewFiles.length > 0) {
                 list.innerHTML = '';
@@ -290,7 +290,6 @@
             } else {
                 list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
             }
-            document.getElementById('load-more-btn').style.display = "none";
         }
 
         window.onload = async () => {
