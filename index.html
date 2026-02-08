@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Old Texas Dude | The Vault</title>
+    
+    <meta name="description" content="The Culinary and Technical Vault of Old Texas Dude: Featuring personal heritage recipes, culinary destinations, and field reports on gear and travel coordinates.">
+    <meta name="keywords" content="Old Texas Dude, Product Evaluations, Independent Reviews, Travel Destinations, Heritage Recipes, Field Reports">
+    <meta name="author" content="Old Texas Dude">
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
 </head>
@@ -99,14 +104,31 @@
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
-                if (txt.startsWith('---')) txt = txt.split('---').slice(2).join('---').trim();
                 
+                // SEO: Update Page Title based on file name
+                let cleanName = path.split('/').pop().replace('.md', '').toUpperCase().replace(/-/g, ' ');
+                document.title = `${cleanName} | OTD Vault`;
+
+                if (txt.startsWith('---')) {
+                    txt = txt.split('---').slice(2).join('---').trim();
+                }
+
+                // SEO: Detect if it is a recipe for Schema mapping
+                let isRecipe = path.toLowerCase().includes('recipe');
+                let schemaType = isRecipe ? "https://schema.org/Recipe" : "https://schema.org/Article";
+
                 marked.setOptions({ gfm: true, breaks: true });
-                content.innerHTML = `<div class="blog-post-body">${marked.parse(txt)}</div>`;
+                
+                content.innerHTML = `
+                    <div class="blog-post-body" itemscope itemtype="${schemaType}">
+                        <meta itemprop="author" content="Old Texas Dude">
+                        <div itemprop="articleBody">
+                            ${marked.parse(txt)}
+                        </div>
+                    </div>`;
                 
                 applyBlueBranding(content);
                 setTimeout(() => applyBlueBranding(content), 150);
-                // SCROLL_TO_TOP REMOVED TO PREVENT JUMPING
             } catch (e) { 
                 content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
             }
