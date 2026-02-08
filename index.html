@@ -11,9 +11,9 @@
     <div class="terminal-overlay"></div>
     <div class="container">
         <header>
-            <div class="warning-banner">
+            <div class="warning-banner" style="text-align: center; margin-bottom: 20px;">
                 <span class="blink" style="font-weight: bold; color: var(--accent);">!! WARNING: !!</span><br>
-                <span>UNFILTERED OPINIONS AHEAD</span>
+                <span style="font-size: 0.85em;">UNFILTERED OPINIONS AHEAD</span>
                 <div style="margin-top:15px;">
                     <button id="theme-toggle" class="submit-btn" style="font-size:0.75em;">VISUAL_MODE</button>
                 </div>
@@ -31,10 +31,10 @@
 
         <nav class="vault-nav-container">
             <div class="secondary-filters">
-                <button onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
-                <button onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
-                <button onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
-                <button onclick="loadLogs('system_logs', false, this)" class="submit-btn">SYSTEM_LOGS</button>
+                <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
+                <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
+                <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
+                <button id="btn-system_logs" onclick="loadLogs('system_logs', false, this)" class="submit-btn">SYSTEM_LOGS</button>
             </div>
         </nav>
 
@@ -47,7 +47,7 @@
 
             <section class="log-display">
                 <article id="content" class="blog-post">
-                    <h2 class="highlight-blue">> SYSTEM_READY</h2>
+                    <h2 class="force-blue">> SYSTEM_READY</h2>
                     <p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING AUTOMATED ARCHIVE SCAN...</p>
                 </article>
                 <div class="comment-module" style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
@@ -59,7 +59,9 @@
         <div class="surveillance-wrapper">
             <h3>> VISUAL_UPLINK</h3>
             <div style="font-size:0.7rem; margin-bottom:10px;"><span class="blink">● REC</span> <span id="stardate"></span></div>
-            <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+            <div class="feed-container">
+                <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+            </div>
         </div>
 
         <footer>
@@ -70,11 +72,13 @@
     <script>
         const repo = "kdbush64-create/otd-vault";
 
+        // BRUTE FORCE BRANDING: This hunts for ** and forces them to be Blue Spans
         function applyBlueBranding(container) {
-            const targets = container.querySelectorAll('p, li, strong, b');
-            targets.forEach(el => {
+            const elements = container.querySelectorAll('p, li, div, strong, b');
+            elements.forEach(el => {
                 let html = el.innerHTML;
                 if (html.includes('**')) {
+                    // This Regex finds **text** and wraps it in our force-blue class
                     el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
                 }
             });
@@ -82,18 +86,26 @@
 
         async function loadPost(path) {
             const content = document.getElementById('content');
-            content.innerHTML = "<p class='blink'>EXTRACTING...</p>";
+            content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
-                if (txt.startsWith('---')) txt = txt.split('---').slice(2).join('---').trim();
                 
+                if (txt.startsWith('---')) {
+                    txt = txt.split('---').slice(2).join('---').trim();
+                }
+
                 marked.setOptions({ gfm: true, breaks: true });
                 content.innerHTML = `<div class="blog-post-body">${marked.parse(txt)}</div>`;
                 
+                // Run branding twice to ensure it catches everything
                 applyBlueBranding(content);
                 setTimeout(() => applyBlueBranding(content), 150);
-            } catch (e) { content.innerHTML = "[!] DATA_LINK_ERROR"; }
+                
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            } catch (e) { 
+                content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
+            }
         }
 
         async function loadLogs(folder, auto = false, btn = null) {
@@ -101,24 +113,26 @@
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             
-            list.innerHTML = "<li>SCANNING...</li>";
+            list.innerHTML = "<li>[ SCANNING_CHANNEL... ]</li>";
             try {
                 const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
                 list.innerHTML = "";
+                
+                // Sort by date/name descending
                 files.filter(f => f.name.endsWith('.md')).sort((a,b) => b.name.localeCompare(a.name)).forEach(f => {
                     const li = document.createElement('li');
                     let name = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     li.innerHTML = `<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${name}</a>`;
                     list.appendChild(li);
                 });
-            } catch (e) { list.innerHTML = "<li>SCAN_FAILED</li>"; }
+            } catch (e) { list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; }
         }
 
-        // RESTORED GLOBAL SCAN LOGIC
+        // STARTUP SCAN: Finds all logs from the last 7 days across all folders
         async function runGlobalScan() {
             const list = document.getElementById('log-list');
-            list.innerHTML = '<li>[ SCANNING_ALL_CHANNELS... ]</li>';
+            list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['chow', 'coord', 'gear', 'system_logs'];
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -133,13 +147,12 @@
                             if (file.name.endsWith('.md')) {
                                 const match = file.name.match(/\d{4}-\d{2}-\d{2}/);
                                 if (match && new Date(match[0]) >= sevenDaysAgo) {
-                                    file.folder = fld;
                                     recentFiles.push(file);
                                 }
                             }
                         });
                     }
-                } catch (err) { console.error("Scan error in:", fld); }
+                } catch (err) {}
             }
 
             if (recentFiles.length > 0) {
@@ -164,6 +177,7 @@
             localStorage.setItem('theme', target);
         });
 
+        // Clock
         setInterval(() => { 
             const clock = document.getElementById('stardate');
             if(clock) clock.innerText = new Date().toLocaleTimeString(); 
@@ -171,7 +185,7 @@
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-            runGlobalScan(); // Automatically scan on load
+            runGlobalScan();
         };
     </script>
     <script type="module" src="https://w.behold.so/widget.js"></script>
