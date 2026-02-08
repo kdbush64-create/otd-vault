@@ -144,9 +144,17 @@ header {
     padding-bottom: 25px;
 }
 
-.log-list {
-    list-style: none;
+/* 6a. DIRECTORY LIST STYLING (The Fix) */
+.file-list {
+    list-style-type: none; /* Kills the bullet dots */
     padding: 0;
+    margin: 0;
+}
+
+.file-list li {
+    display: flex;        /* Puts [NEW] and Link on one line */
+    align-items: center;  /* Centers them vertically */
+    margin-bottom: 8px;   /* Space between entries */
 }
 
 .log-link {
@@ -155,12 +163,12 @@ header {
     font-size: 0.9rem;
     display: block;
     padding: 5px 0;
+    transition: 0.2s;
 }
 
 .log-link:hover {
     color: var(--accent);
     padding-left: 5px;
-    transition: 0.2s;
 }
 
 /* 7. TYPEWRITER ANIMATION */
