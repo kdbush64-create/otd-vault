@@ -1,4 +1,4 @@
-\---
+---
 type: transit-log
 status: FUBAR
 category: TXDOT_RECON
