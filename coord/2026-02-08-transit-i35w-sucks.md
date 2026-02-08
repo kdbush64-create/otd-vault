@@ -1,9 +1,9 @@
 \---
 type: transit-log
-status: [OPEN / COMPLETED]
-category: [FLIGHT / RENTAL / TXDOT_RECON]
-subject: [Hwy-35 / AA-Flight-123 / Hertz-Tahoe]
-location: [City/Region]
+status: FUBAR
+category: TXDOT_RECON
+subject: n/a
+location: Ft Worth, TX
 ---
 
 # TRANSIT_LOG: Downtown Ft Worth from N Tarrant county
