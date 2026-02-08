@@ -148,6 +148,7 @@
                 
                 files.filter(f => f.name.endsWith('.md')).sort((a,b) => b.name.localeCompare(a.name)).forEach(f => {
                     const li = document.createElement('li');
+                    li.style.listStyle = "none";
                     let name = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
                     li.innerHTML = `<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${name}</a>`;
                     list.appendChild(li);
@@ -162,7 +163,6 @@
             document.querySelectorAll('.secondary-filters .submit-btn').forEach(b => b.classList.remove('active'));
 
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
-            // UPDATED FOLDERS: dispatch, transit, gear, coord, table
             const folders = ['dispatch', 'transit', 'gear', 'coord', 'table'];
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -190,12 +190,25 @@
                 recentFiles.sort((a, b) => b.name.localeCompare(a.name));
                 recentFiles.forEach(f => {
                     const li = document.createElement('li');
+                    
+                    // FIX: Force horizontal alignment and remove bullet
+                    li.style.listStyle = "none";
+                    li.style.display = "flex";
+                    li.style.alignItems = "center";
+                    li.style.gap = "8px";
+                    li.style.marginBottom = "10px";
+
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ');
-                    li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW] </span><a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                    
+                    // NEW TAG and FILENAME on one line
+                    li.innerHTML = `
+                        <span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold; flex-shrink:0;">[NEW]</span>
+                        <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link" style="margin:0;">> ${displayName}</a>
+                    `;
                     list.appendChild(li);
                 });
             } else {
-                list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
+                list.innerHTML = '<li style="list-style:none;">[ NO_RECENT_ACTIVITY ]</li>';
             }
         }
 
