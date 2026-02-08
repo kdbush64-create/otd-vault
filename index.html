@@ -12,7 +12,7 @@
         /* DATA-BLUE RESCAN BUTTON STYLING */
         #re-scan-btn {
             background-color: #000000 !important;
-            color: #00eeff !important; /* Data Blue / Cyan */
+            color: #00eeff !important; 
             border: 1px solid #00eeff !important;
             width: 100%;
             padding: 10px;
@@ -25,7 +25,6 @@
             font-family: inherit;
         }
 
-        /* Clicking or Tapping effect: Inverts to solid Blue with Black text */
         #re-scan-btn:active, #re-scan-btn:focus {
             background-color: #00eeff !important;
             color: #000000 !important;
@@ -34,8 +33,14 @@
         
         @media (hover: hover) {
             #re-scan-btn:hover {
-                background-color: #003333; /* Darker blue tint on hover */
+                background-color: #003333;
             }
+        }
+
+        /* Ensure the surveillance wrapper looks clean at the bottom */
+        .surveillance-wrapper {
+            margin-top: 40px;
+            width: 100%;
         }
     </style>
 </head>
@@ -92,14 +97,6 @@
                 <button id="load-more-btn" onclick="showAllLogs()" class="submit-btn" style="display:none; width: 100%; margin-top: 10px;">
                     [ SHOW_FULL_ARCHIVE ]
                 </button>
-                
-                <div class="surveillance-wrapper">
-                    <h3>> VISUAL_UPLINK</h3>
-                    <div class="feed-header"><span class="blink">● REC</span><span id="stardate"></span></div>
-                    <div class="feed-container">
-                        <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
-                    </div>
-                </div>
             </aside>
 
             <section class="log-display">
@@ -109,11 +106,19 @@
                         <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">SELECT A DATA_CHANNEL TO INITIALIZE FULL ARCHIVE SCAN.</p>
                     </div>
                 </article>
-                <div class="comment-module">
+                <div class="comment-module" style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
                     <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async></script>
                 </div>
             </section>
         </main>
+
+        <div class="surveillance-wrapper">
+            <h3>> VISUAL_UPLINK</h3>
+            <div class="feed-header"><span class="blink">● REC</span> <span id="stardate"></span></div>
+            <div class="feed-container">
+                <behold-widget feed-id="9Bgo9cQPytudmTM356WP"></behold-widget>
+            </div>
+        </div>
 
         <footer>
             <div class="footer-grid">
@@ -147,12 +152,19 @@
         setInterval(updateClock, 1000);
 
         function highlightLogLabels(container) {
-            const blueKeywords = ["SUMMARY:", "OBSERVATION:", "WATCH_TOWER REPORT", "Old Texas Dude™"];
+            const blueKeywords = ["SUMMARY:", "OBSERVATION:", "WATCH_TOWER REPORT", "Old Texas Dude™", "TOTAL SYSTEM STABILITY:"];
             const greenKeywords = ["STATUS:", "THE_VERDICT:", "RATING:"];
             const targets = container.querySelectorAll('h1, h2, h3, strong, li, p, span');
+            
             targets.forEach(el => {
                 let html = el.innerHTML;
                 let changed = false;
+
+                if (html.includes('**')) {
+                    html = html.replace(/\*\*(.*?)\*\*/g, '<span class="highlight-blue">$1</span>');
+                    changed = true;
+                }
+
                 blueKeywords.forEach(k => { 
                     if(html.includes(k) && !html.includes('highlight-blue')) {
                         const regex = new RegExp(`(${k})`, 'g');
@@ -160,6 +172,7 @@
                         changed = true;
                     }
                 });
+
                 greenKeywords.forEach(k => { 
                     if(html.includes(k) && !html.includes('highlight-green')) {
                         const regex = new RegExp(`(${k})`, 'g');
@@ -167,6 +180,7 @@
                         changed = true;
                     }
                 });
+
                 if (changed) el.innerHTML = html;
             });
         }
@@ -292,4 +306,3 @@
     </script>
 </body>
 </html>
-
