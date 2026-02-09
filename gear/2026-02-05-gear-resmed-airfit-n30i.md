@@ -47,9 +47,9 @@ durability: "Medium"
 
 ### > FIELD_REPORT: THE_HOLLOW_FRAME_PROBLEM
 The ResMed N30i is an engineering marvel that fails at the **Physical Interface Layer**. By routing the air through a hollow silicone frame that doubles as the "Headgear," ResMed has introduced an ingenious solution for the average CPAP user.
-#### ROOT_CAUSE_ANALYSIS: "THE SLIP-ZONE"
+#### ROOT_CAUSE_ANALYSIS: "THE SLIP-ZONE."
 1. **The Accordion Failure:** The rear strap is a simple elastic band with an "accordion" fold. While comfortable, it provides zero vertical stability. In a restless sleep cycle, the top-of-head swivel acts as a "Lever Arm," pulling the mask up and away from the nose. This gave me many weeks of restless nights. I would have been better off sleeping without the mask.
-2. **Nasal Cradle Displacement:** Unlike masks that "cup" the nose, the N30i "cradles" it. From a Systems Engineering perspective, this is a **Low-Tolerance Interface**. If the frame moves even 3mm due to pillow friction, the seal breaches, causing an "Air Jet" event that wakes the user. This cushion however is quite comfortable and would be even better if RESMED fixed the headgear.
+2. **Nasal Cradle Displacement:** Unlike masks that "cup" the nose, the N30i "cradles" it. From a Systems Engineering perspective, this is a **Low-Tolerance Interface**. Suppose the frame moves even 3mm due to pillow friction, the seal breaches, causing an "Air Jet" event that wakes the user. This cushion, however, is quite comfortable and would be even better if RESMED fixed the headgear.
 
 #### PROPOSED_PATCH (REDESIGN_REQS)
 * **Rigid Rear Spine:** RESMED needs to redesign the strap much like Philips did and introduce angled and rigid arms that make the band sit lower on the back of the head and balance the fit of the frame.
@@ -58,8 +58,8 @@ The ResMed N30i is an engineering marvel that fails at the **Physical Interface 
 ---
 
 ### > THE_VERDICT
-**STATUS:** Problem solved - Swap out RESMED's headgear for Philips' Dreamwear headgear. Although not made to be interchangeable, the Philips Dreamwear mask works on the RESMED n30i frame.   
-**SUMMARY:** Brilliant "Pneumatic Routing" and comfort, but the "headgear" is insufficient for high-movement personas. 
+**STATUS:** Problem solved - Swap out RESMED's headgear for Philips' Dreamwear headgear. Although not made to be interchangeable, the Philips Dreamwear headgear will work on the RESMED n30i frame. I highly recommend the swap and have slept better since doing so.   
+**SUMMARY:** Brilliant "Pneumatic Routing" and comfort, but the "headgear" is insufficient for any movement while sleeping. 
 
 ---
 ### > BRAND_TAGS
