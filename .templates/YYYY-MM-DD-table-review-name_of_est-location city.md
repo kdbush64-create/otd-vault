@@ -28,7 +28,7 @@ The "meat" of the review goes here. How was the service? What stood out? Did the
 ---
 
 ### THE_VERDICT
-> **FINAL_ANALYSIS:** [Worth the drive / Only if you're desperate / Avoid at all costs]. 
+>**FINAL_ANALYSIS:** [Worth the drive / Only if you're desperate / Avoid at all costs].
 
 [Final closing thoughts on whether you'll be returning for a second extraction.]
 
