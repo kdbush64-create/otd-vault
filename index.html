@@ -94,13 +94,18 @@
             return diffInDays >= 0 && diffInDays <= 7;
         }
 
-        function clearStage(message = "CHANNEL_SELECTED") {
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <div style="text-align: center; padding: 40px;">
-                    <h2 class="force-blue">> ${message}</h2>
-                    <p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING DATA STREAM...</p>
-                </div>`;
+        function clearStage(message = "SYSTEM_READY", instruction = "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.") {
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px;">
+            <h2 class="force-blue" style="letter-spacing: 2px;">> ${message}</h2>
+            <p class="blink" style="font-size: 0.85rem; color: #00d4ff; text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); margin-bottom: 25px; font-family: monospace;">
+                [ INITIALIZING_DATA_STREAM... ]
+            </p>
+            <div style="width: 40px; height: 2px; background: var(--secondary); margin: 0 auto; opacity: 0.3;"></div>
+            <p class="instruction-text">${instruction}</p>
+        </div>`;
+};
         }
 
         function applyBlueBranding(container) {
@@ -262,5 +267,6 @@
     </script>
 </body>
 </html>
+
 
 
