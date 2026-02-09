@@ -278,6 +278,33 @@ footer {
     box-shadow: 0 0 8px var(--error);
 }
 
+/* --- V64 LINK ACCESSIBILITY & BRANDING --- */
+
+/* Standard Link State */
+.blog-post a, .v64-link {
+    color: #00d4ff !important; /* Bright Cyan - High Visibility */
+    text-decoration: underline !important;
+    font-weight: bold;
+}
+
+/* Visited Link State - FIXES THE DARK PURPLE ISSUE */
+.blog-post a:visited, .v64-link:visited {
+    color: #008fb3 !important; /* Lighter Blue - Still Readable */
+}
+
+/* Hover State - Terminal Glow */
+.blog-post a:hover, .v64-link:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+/* Blue Branding Class */
+.force-blue {
+    color: #00d4ff !important;
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+}
 #contact-terminal {
     transition: background 0.3s ease;
 }
+
