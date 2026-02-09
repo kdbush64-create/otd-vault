@@ -26,7 +26,7 @@ OBSERVATION: Hundres of millions of dollars spent on improving I-35 only to crea
 ### FIELD_INTEL
 ![Transit View](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/transit-pic.jpg)
 
-SUMMARY: Gov Abbott should resign and all of TX_Dot needs to be fired
+SUMMARY: Gov Abbott should resign and all of TX_Dot needs to be fired.  Everyone should [file a complaint with TxDOT](https://www.txdot.gov/about/contact-us/complaints.html)
 
 ---
 
