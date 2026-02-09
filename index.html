@@ -61,11 +61,7 @@
 
             <section class="log-display">
                 <article id="content" class="blog-post">
-                    <div id="startup-message" style="text-align: center; padding: 40px;">
-                        <h2 class="force-blue">> SYSTEM_READY</h2>
-                        <p style="font-size: 0.8rem; opacity: 0.7;">SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.</p>
-                    </div>
-                </article>
+                    </article>
                 <div id="comment-wrapper" class="comment-module" style="display:none; margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
                     <script src="https://utteranc.es/client.js" repo="kdbush64-create/otd-vault" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async></script>
                 </div>
@@ -94,33 +90,36 @@
             return diffInDays >= 0 && diffInDays <= 7;
         }
 
-        function clearStage(message = "CHANNEL_SELECTED") {
+        // Updated clearStage to handle dynamic messages and instructions
+        function clearStage(message = "SYSTEM_READY", instruction = "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.") {
             const content = document.getElementById('content');
             content.innerHTML = `
-                <div style="text-align: center; padding: 40px;">
-                    <h2 class="force-blue">> ${message}</h2>
-                    <p style="font-size: 0.8rem; opacity: 0.7;">INITIALIZING DATA STREAM...</p>
+                <div style="text-align: center; padding: 60px 20px;">
+                    <h2 class="force-blue" style="letter-spacing: 2px;">> ${message}</h2>
+                    <p class="blink" style="font-size: 0.85rem; color: #00d4ff; text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); margin-bottom: 25px; font-family: monospace;">
+                        [ INITIALIZING_DATA_STREAM... ]
+                    </p>
+                    <div style="width: 40px; height: 2px; background: var(--secondary); margin: 0 auto; opacity: 0.3;"></div>
+                    <p class="instruction-text">${instruction}</p>
                 </div>`;
         }
 
         function applyBlueBranding(container) {
-    // 1. Existing Bold Branding
-    const elements = container.querySelectorAll('p, li, div, h1, h2, h3, h4, strong, b');
-    elements.forEach(el => {
-        let html = el.innerHTML;
-        if (html.includes('**')) {
-            el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
-        }
-    });
+            const elements = container.querySelectorAll('p, li, div, h1, h2, h3, h4, strong, b');
+            elements.forEach(el => {
+                let html = el.innerHTML;
+                if (html.includes('**')) {
+                    el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
+                }
+            });
 
-    // 2. NEW: Link Branding Logic
-    const links = container.querySelectorAll('a');
-    links.forEach(link => {
-        link.style.color = "#00d4ff"; // Forces High-Visibility Cyan
-        link.style.textDecoration = "underline";
-        link.classList.add('v64-link'); // Hooks into the CSS we added
-    });
-}
+            const links = container.querySelectorAll('a');
+            links.forEach(link => {
+                link.style.color = "#00d4ff"; 
+                link.style.textDecoration = "underline";
+                link.classList.add('v64-link'); 
+            });
+        }
 
         async function handleFormSubmit(event) {
             event.preventDefault();
@@ -190,7 +189,10 @@
             const commentWrapper = document.getElementById('comment-wrapper');
             sidebar.style.display = folder === 'about' ? 'none' : 'block';
             commentWrapper.style.display = 'none';
-            clearStage(`${folder.toUpperCase()}_CHANNEL`);
+            
+            // CHANNEL SPECIFIC MESSAGE
+            clearStage(`${folder.toUpperCase()}_CHANNEL`, "SELECT A LOG FROM THE DIRECTORY TO VIEW CONTENT.");
+            
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             try {
@@ -198,7 +200,6 @@
                 const files = await r.json();
                 list.innerHTML = "";
                 files.filter(f => f.name.endsWith('.md'))
-                    // SORT BY FILENAME DATE (DESCENDING)
                     .sort((a, b) => b.name.substring(0, 10).localeCompare(a.name.substring(0, 10)))
                     .forEach(f => {
                         const li = document.createElement('li');
@@ -218,7 +219,13 @@
         async function runGlobalScan() {
             document.getElementById('sidebar').style.display = 'block';
             const list = document.getElementById('log-list');
-            clearStage("SYSTEM_READY");
+            
+            // Fix sticky button highlights
+            document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
+            
+            // LANDING PAGE MESSAGE
+            clearStage("SYSTEM_READY", "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.");
+            
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['dispatch', 'gear', 'coord', 'table'];
             let recentFiles = [];
@@ -230,7 +237,6 @@
                 } catch (err) {}
             }
             list.innerHTML = '';
-            // STACK ALL RECENT FILES BY DATE
             recentFiles.sort((a, b) => b.name.substring(0, 10).localeCompare(a.name.substring(0, 10)))
                 .slice(0, 10)
                 .forEach(f => {
@@ -262,5 +268,3 @@
     </script>
 </body>
 </html>
-
-
