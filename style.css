@@ -304,10 +304,12 @@ footer {
     color: #00d4ff !important;
     text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
 }
+
 #contact-terminal {
     transition: background 0.3s ease;
 }
 
+/* 12. DYNAMIC INSTRUCTION TEXT */
 .instruction-text {
     font-size: 1.15rem; 
     color: var(--secondary); 
@@ -315,5 +317,6 @@ footer {
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-top: 20px;
+    /* Etched shadow for depth and visibility */
     text-shadow: 1px 1px 2px black, 0 0 5px rgba(0, 212, 255, 0.2); 
 }
