@@ -14,6 +14,27 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+
+    <style>
+        /* IN-LINE CSS FIX FOR FORM VISIBILITY */
+        .form-input {
+            background: #000 !important;
+            color: var(--accent) !important;
+            border: 1px solid var(--accent);
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .form-input:focus {
+            box-shadow: 0 0 5px var(--accent);
+        }
+        .form-input::placeholder {
+            color: rgba(0, 255, 65, 0.3);
+        }
+    </style>
 </head>
 <body id="personal-identity">
     <div class="terminal-overlay"></div>
@@ -135,15 +156,15 @@
                         ${isAbout ? `
                             <div id="contact-terminal" style="margin-top:40px; border:1px solid var(--accent); padding:20px; background: rgba(0,255,65,0.05);">
                                 <h3 class="force-blue">> INQUIRY_SUBMISSION_FORM</h3>
-                                <form action="https://formspree.io/f/admin@v64otd.com" method="POST" style="display:flex; flex-direction:column; gap:15px;">
+                                <form id="vault-contact-form" action="https://formspree.io/f/admin@v64otd.com" method="POST" style="display:flex; flex-direction:column; gap:15px;">
                                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                                        <input type="text" name="first_name" placeholder="FIRST_NAME" required class="submit-btn" style="text-align:left; background:black;">
-                                        <input type="text" name="last_name" placeholder="LAST_NAME" required class="submit-btn" style="text-align:left; background:black;">
+                                        <input type="text" name="first_name" placeholder="FIRST_NAME" required minlength="2" class="form-input">
+                                        <input type="text" name="last_name" placeholder="LAST_NAME" required minlength="2" class="form-input">
                                     </div>
-                                    <input type="email" name="email" placeholder="EMAIL_ADDRESS" required class="submit-btn" style="text-align:left; background:black;">
-                                    <input type="tel" name="phone" placeholder="PHONE_NUMBER" class="submit-btn" style="text-align:left; background:black;">
-                                    <textarea name="message" maxlength="1000" placeholder="MESSAGE_DETAILS (MAX 1000 CHARS)" required class="submit-btn" style="text-align:left; background:black; min-height:100px; font-family:monospace;"></textarea>
-                                    <button type="submit" class="submit-btn" style="background:var(--accent); color:black; font-weight:bold;">[ SEND_TRANSMISSION ]</button>
+                                    <input type="email" name="email" placeholder="EMAIL_ADDRESS" required class="form-input">
+                                    <input type="tel" id="phone-input" name="phone" placeholder="PHONE_NUMBER (NNN-NNN-NNNN)" required class="form-input" maxlength="12">
+                                    <textarea name="message" maxlength="1000" placeholder="MESSAGE_DETAILS (MAX 1000 CHARS)" required class="form-input" style="min-height:100px;"></textarea>
+                                    <button type="submit" class="submit-btn" style="background:var(--accent); color:black; font-weight:bold; cursor:pointer;">[ SEND_TRANSMISSION ]</button>
                                 </form>
                             </div>
                         ` : ''}
@@ -215,8 +236,6 @@
             clearStage("SYSTEM_READY");
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['dispatch', 'gear', 'coord', 'table'];
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             let recentFiles = [];
 
             for (const fld of folders) {
@@ -246,6 +265,13 @@
                 list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
             }
         }
+
+        document.addEventListener('input', function (e) {
+            if (e.target.id === 'phone-input') {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+            }
+        });
 
         document.getElementById('theme-toggle').addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
