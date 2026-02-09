@@ -34,7 +34,7 @@ This vault allows for community intel sharing, provided the following protocols 
 3. **FILTERING:** Profanity and low-effort noise will be purged from the stream. This is a high-signal environment; help us keep it that way.
 
 ### PARTNERSHIP & INQUIRIES
-I am willing to evaluate products or services provided for review under strict conditions of unfiltered honesty. To discuss a potential evaluation or partnership, initiate a secure transmission using the **Inquiry Submission Form** below.
+I am willing to evaluate products or services provided for review under strict conditions of unfiltered honesty. To discuss a potential evaluation or partnership, initiate a secure transmission using the **Inquiry Submission Form** below or contact the operator directly at **admin@v64otd.com**.
 
 The information here is my own. It is unfiltered. It is tested.
 
