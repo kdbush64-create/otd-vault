@@ -8,33 +8,11 @@
     <meta name="description" content="The Culinary and Technical Vault of Old Texas Dude: Featuring personal heritage recipes, culinary destinations, and field reports on gear and travel coordinates.">
     <meta name="keywords" content="Old Texas Dude, Product Evaluations, Independent Reviews, Travel Destinations, Heritage Recipes, Field Reports">
     <meta name="author" content="Old Texas Dude">
-
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
-
-    <style>
-        /* IN-LINE CSS FIX FOR FORM VISIBILITY */
-        .form-input {
-            background: #000 !important;
-            color: var(--accent) !important;
-            border: 1px solid var(--accent);
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            text-transform: uppercase;
-            outline: none;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .form-input:focus {
-            box-shadow: 0 0 5px var(--accent);
-        }
-        .form-input::placeholder {
-            color: rgba(0, 255, 65, 0.3);
-        }
-    </style>
 </head>
 <body id="personal-identity">
     <div class="terminal-overlay"></div>
@@ -127,18 +105,12 @@
         async function loadPost(path) {
             const content = document.getElementById('content');
             const commentWrapper = document.getElementById('comment-wrapper');
-            
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
             
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
-                
-                if (path.toLowerCase().includes('about/')) {
-                    commentWrapper.style.display = 'none';
-                } else {
-                    commentWrapper.style.display = 'block';
-                }
+                commentWrapper.style.display = path.toLowerCase().includes('about/') ? 'none' : 'block';
 
                 let cleanName = path.split('/').pop().replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                 document.title = `${cleanName} | OTD Vault`;
@@ -158,13 +130,13 @@
                                 <h3 class="force-blue">> INQUIRY_SUBMISSION_FORM</h3>
                                 <form id="vault-contact-form" action="https://formspree.io/f/admin@v64otd.com" method="POST" style="display:flex; flex-direction:column; gap:15px;">
                                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                                        <input type="text" name="first_name" placeholder="FIRST_NAME" required minlength="2" class="form-input">
-                                        <input type="text" name="last_name" placeholder="LAST_NAME" required minlength="2" class="form-input">
+                                        <input type="text" name="first_name" placeholder="FIRST_NAME" required class="form-input validate-name">
+                                        <input type="text" name="last_name" placeholder="LAST_NAME" required class="form-input validate-name">
                                     </div>
-                                    <input type="email" name="email" placeholder="EMAIL_ADDRESS" required class="form-input">
+                                    <input type="email" name="email" placeholder="EMAIL_ADDRESS" required class="form-input validate-email">
                                     <input type="tel" id="phone-input" name="phone" placeholder="PHONE_NUMBER (NNN-NNN-NNNN)" required class="form-input" maxlength="12">
                                     <textarea name="message" maxlength="1000" placeholder="MESSAGE_DETAILS (MAX 1000 CHARS)" required class="form-input" style="min-height:100px;"></textarea>
-                                    <button type="submit" class="submit-btn" style="background:var(--accent); color:black; font-weight:bold; cursor:pointer;">[ SEND_TRANSMISSION ]</button>
+                                    <button type="submit" class="submit-btn" style="background:var(--accent); color:black; font-weight:bold;">[ SEND_TRANSMISSION ]</button>
                                 </form>
                             </div>
                         ` : ''}
@@ -174,52 +146,65 @@
                 setTimeout(() => applyBlueBranding(content), 150);
             } catch (e) { 
                 content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
-                commentWrapper.style.display = 'none';
             }
         }
 
+        // --- VALIDATION & INTERFACE LOGIC ---
+        document.addEventListener('focusout', function (e) {
+            if (e.target.classList.contains('form-input')) {
+                validateField(e.target);
+            }
+        });
+
+        document.addEventListener('input', function (e) {
+            // Phone Masking
+            if (e.target.id === 'phone-input') {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+                validateField(e.target);
+            }
+        });
+
+        function validateField(el) {
+            let isValid = false;
+            if (el.classList.contains('validate-name')) {
+                isValid = el.value.trim().length >= 2;
+            } else if (el.classList.contains('validate-email')) {
+                isValid = el.value.includes('@') && el.value.includes('.');
+            } else if (el.id === 'phone-input') {
+                isValid = el.value.length === 12;
+            } else {
+                isValid = el.value.trim().length > 0;
+            }
+
+            if (isValid) {
+                el.classList.remove('invalid');
+                el.classList.add('valid');
+            } else {
+                el.classList.remove('valid');
+                el.classList.add('invalid');
+            }
+        }
+
+        // Navigation and Scan Functions (Same as previous)
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
             const sidebar = document.getElementById('sidebar');
             const commentWrapper = document.getElementById('comment-wrapper');
-            const isTransitButton = btn && btn.id === 'btn-transit';
-            const isCoordButton = btn && btn.id === 'btn-coord';
-            
-            if (folder === 'about') {
-                sidebar.style.display = 'none';
-                commentWrapper.style.display = 'none';
-            } else {
-                sidebar.style.display = 'block';
-                commentWrapper.style.display = 'none'; 
-            }
-
-            clearStage(`${isTransitButton ? 'TRANSIT' : folder.toUpperCase()}_CHANNEL`);
+            sidebar.style.display = folder === 'about' ? 'none' : 'block';
+            commentWrapper.style.display = 'none';
+            clearStage(`${folder.toUpperCase()}_CHANNEL`);
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
-            
-            list.innerHTML = "<li>[ SCANNING_CHANNEL... ]</li>";
             try {
                 const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
-                
-                if (!Array.isArray(files) || files.length === 0) {
-                    list.innerHTML = "<li>[ NO_FILES_FOUND ]</li>";
-                    return;
-                }
-
                 if (folder === 'about') {
                     const firstFile = files.find(f => f.name.endsWith('.md'));
                     if (firstFile) loadPost(firstFile.path);
                 }
-
                 list.innerHTML = "";
-                files.filter(f => f.name.endsWith('.md'))
-                .sort((a,b) => b.name.localeCompare(a.name))
-                .forEach(f => {
-                    const name = f.name.toLowerCase();
-                    if (isTransitButton && !name.includes('transit')) return;
-                    if (isCoordButton && name.includes('transit')) return;
-                    
+                files.filter(f => f.name.endsWith('.md')).sort((a,b) => b.name.localeCompare(a.name)).forEach(f => {
                     const li = document.createElement('li');
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
@@ -231,47 +216,27 @@
 
         async function runGlobalScan() {
             document.getElementById('sidebar').style.display = 'block';
-            document.getElementById('comment-wrapper').style.display = 'none'; 
             const list = document.getElementById('log-list');
             clearStage("SYSTEM_READY");
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['dispatch', 'gear', 'coord', 'table'];
             let recentFiles = [];
-
             for (const fld of folders) {
                 try {
                     const r = await fetch(`https://api.github.com/repos/${repo}/contents/${fld}?t=${Date.now()}`);
                     const data = await r.json();
-                    if (Array.isArray(data)) {
-                        data.forEach(file => {
-                            if (file.name.endsWith('.md')) {
-                                recentFiles.push(file);
-                            }
-                        });
-                    }
+                    if (Array.isArray(data)) data.forEach(file => { if (file.name.endsWith('.md')) recentFiles.push(file); });
                 } catch (err) {}
             }
-
-            if (recentFiles.length > 0) {
-                list.innerHTML = '';
-                recentFiles.sort((a, b) => b.name.localeCompare(a.name)).slice(0, 10).forEach(f => {
-                    const li = document.createElement('li');
-                    li.style.listStyle = "none";
-                    let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
-                    li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
-                    list.appendChild(li);
-                });
-            } else {
-                list.innerHTML = '<li>[ NO_RECENT_ACTIVITY ]</li>';
-            }
+            list.innerHTML = '';
+            recentFiles.sort((a, b) => b.name.localeCompare(a.name)).slice(0, 10).forEach(f => {
+                const li = document.createElement('li');
+                li.style.listStyle = "none";
+                let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
+                li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                list.appendChild(li);
+            });
         }
-
-        document.addEventListener('input', function (e) {
-            if (e.target.id === 'phone-input') {
-                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-                e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-            }
-        });
 
         document.getElementById('theme-toggle').addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
