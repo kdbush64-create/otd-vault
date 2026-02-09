@@ -108,7 +108,6 @@
             event.preventDefault();
             const form = event.target;
             const btn = form.querySelector('button');
-            const originalText = btn.innerText;
             
             btn.innerText = "[ SENDING... ]";
             btn.disabled = true;
@@ -118,26 +117,32 @@
 
             try {
                 const response = await fetch(WORKER_URL, {
-    method: 'POST',
-    mode: 'cors', // Add this line
-    body: JSON.stringify(data),
-    headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
-});
+                    method: 'POST',
+                    mode: 'cors', 
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
 
                 if (response.ok) {
                     form.innerHTML = `<h2 class="force-blue">> TRANSMISSION_SUCCESS</h2><p>The Vault has received your data. Stand by for response.</p>`;
                 } else {
+                    const errorText = await response.text();
+                    console.error("Robot Response Error:", errorText);
                     throw new Error('Line Busy');
                 }
             } catch (err) {
+                console.error("Connection Error:", err);
                 btn.innerText = "[ ERROR_RETRY ]";
                 btn.disabled = false;
                 alert("Critical Error: Communication Link Failed.");
             }
-        }
+        } // <--- THIS BRACE ENDS THE FORM SUBMIT
+
+        async function loadPost(path) { // <--- THIS STARTS THE NEXT SECTION
+            const content = document.getElementById('content');
 
         async function loadPost(path) {
             const content = document.getElementById('content');
@@ -292,6 +297,7 @@
     </script>
 </body>
 </html>
+
 
 
 
