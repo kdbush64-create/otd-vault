@@ -104,14 +104,23 @@
         }
 
         function applyBlueBranding(container) {
-            const elements = container.querySelectorAll('p, li, div, h1, h2, h3, h4, strong, b');
-            elements.forEach(el => {
-                let html = el.innerHTML;
-                if (html.includes('**')) {
-                    el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
-                }
-            });
+    // 1. Existing Bold Branding
+    const elements = container.querySelectorAll('p, li, div, h1, h2, h3, h4, strong, b');
+    elements.forEach(el => {
+        let html = el.innerHTML;
+        if (html.includes('**')) {
+            el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
         }
+    });
+
+    // 2. NEW: Link Branding Logic
+    const links = container.querySelectorAll('a');
+    links.forEach(link => {
+        link.style.color = "#00d4ff"; // Forces High-Visibility Cyan
+        link.style.textDecoration = "underline";
+        link.classList.add('v64-link'); // Hooks into the CSS we added
+    });
+}
 
         async function handleFormSubmit(event) {
             event.preventDefault();
@@ -253,3 +262,4 @@
     </script>
 </body>
 </html>
+
