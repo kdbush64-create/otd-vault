@@ -10,6 +10,7 @@
     --shadow: rgba(0, 0, 0, 0.8);
     --data-blue: #00d4ff;       
     --blue-glow: rgba(0, 212, 255, 0.5);
+    --error: #ff0000;
 }
 
 [data-theme="light"] {
@@ -21,6 +22,7 @@
     --accent: #008522;
     --border: #a3a3a3;
     --shadow: rgba(0, 0, 0, 0.1);
+    --error: #cc0000;
 }
 
 /* 2. GLOBAL RESET & CENTERING */
@@ -215,8 +217,6 @@ footer {
 }
 
 /* 10. LOG DISPLAY: DATA BLUE ACCENTS */
-
-/* Default: Headers in posts are Blue */
 .blog-post-body h1, 
 .blog-post-body h2, 
 .blog-post-body h3 {
@@ -225,14 +225,12 @@ footer {
     text-transform: uppercase;
 }
 
-/* Standard Paragraph Text stays Amber Gold */
 .blog-post-body p, 
 .blog-post-body li,
 .blog-post-body div {
     color: var(--primary);
 }
 
-/* Specific Blue Accent for labels: Captured via Class OR bold tags */
 .blog-post-body .force-blue,
 .blog-post-body strong,
 .blog-post-body b {
@@ -243,4 +241,43 @@ footer {
 
 .blog-post-body ul li::marker {
     color: var(--accent);
+}
+
+/* 11. FORM INPUTS & VALIDATION */
+.form-input {
+    background: #000 !important;
+    color: var(--accent) !important;
+    border: 1.5px solid var(--border);
+    padding: 12px;
+    font-family: inherit;
+    text-transform: uppercase;
+    outline: none;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+[data-theme="light"] .form-input {
+    background: #fff !important;
+    color: var(--accent) !important;
+    border: 1.5px solid var(--border);
+}
+
+.form-input::placeholder {
+    color: var(--primary-dim);
+    opacity: 0.5;
+}
+
+/* Field Level Validation Styles */
+.form-input.valid {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.form-input.invalid {
+    border-color: var(--error) !important;
+    box-shadow: 0 0 8px var(--error);
+}
+
+#contact-terminal {
+    transition: background 0.3s ease;
 }
