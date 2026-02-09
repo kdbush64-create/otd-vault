@@ -82,7 +82,6 @@
 
     <script>
         const repo = "kdbush64-create/otd-vault";
-        // LINKED TO YOUR PRIVATE CLOUDFLARE WORKER
         const WORKER_URL = 'https://vault-mail-bot.kdbush64.workers.dev';
 
         function clearStage(message = "CHANNEL_SELECTED") {
@@ -139,10 +138,7 @@
                 btn.disabled = false;
                 alert("Critical Error: Communication Link Failed.");
             }
-        } // <--- THIS BRACE ENDS THE FORM SUBMIT
-
-        async function loadPost(path) { // <--- THIS STARTS THE NEXT SECTION
-            const content = document.getElementById('content');
+        }
 
         async function loadPost(path) {
             const content = document.getElementById('content');
@@ -191,7 +187,6 @@
             }
         }
 
-        // --- VALIDATION & INTERFACE LOGIC ---
         document.addEventListener('focusout', function (e) {
             if (e.target.classList.contains('form-input')) {
                 validateField(e.target);
@@ -297,7 +292,3 @@
     </script>
 </body>
 </html>
-
-
-
-
