@@ -84,6 +84,16 @@
         const repo = "kdbush64-create/otd-vault";
         const WORKER_URL = 'https://vault-mail-bot.kdbush64.workers.dev';
 
+        // Logic to check for [NEW] status (Last 7 Days)
+        function isNew(filename) {
+            const dateMatch = filename.match(/^(\d{4})[_-](\d{2})[_-](\d{2})/);
+            if (!dateMatch) return false;
+            const postDate = new Date(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`);
+            const now = new Date();
+            const diffInDays = (now - postDate) / (1000 * 60 * 60 * 24);
+            return diffInDays >= 0 && diffInDays <= 7;
+        }
+
         function clearStage(message = "CHANNEL_SELECTED") {
             const content = document.getElementById('content');
             content.innerHTML = `
@@ -107,33 +117,21 @@
             event.preventDefault();
             const form = event.target;
             const btn = form.querySelector('button');
-            
             btn.innerText = "[ SENDING... ]";
             btn.disabled = true;
-
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
-
             try {
                 const response = await fetch(WORKER_URL, {
                     method: 'POST',
                     mode: 'cors', 
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(data)
                 });
-
                 if (response.ok) {
-                    form.innerHTML = `<h2 class="force-blue">> TRANSMISSION_SUCCESS</h2><p>The Vault has received your data. Stand by for response.</p>`;
-                } else {
-                    const errorText = await response.text();
-                    console.error("Robot Response Error:", errorText);
-                    throw new Error('Line Busy');
-                }
+                    form.innerHTML = `<h2 class="force-blue">> TRANSMISSION_SUCCESS</h2><p>The Vault has received your data.</p>`;
+                } else { throw new Error('Line Busy'); }
             } catch (err) {
-                console.error("Connection Error:", err);
                 btn.innerText = "[ ERROR_RETRY ]";
                 btn.disabled = false;
                 alert("Critical Error: Communication Link Failed.");
@@ -144,22 +142,15 @@
             const content = document.getElementById('content');
             const commentWrapper = document.getElementById('comment-wrapper');
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
-            
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
                 commentWrapper.style.display = path.toLowerCase().includes('about/') ? 'none' : 'block';
-
                 let cleanName = path.split('/').pop().replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                 document.title = `${cleanName} | OTD Vault`;
-
-                if (txt.startsWith('---')) {
-                    txt = txt.split('---').slice(2).join('---').trim();
-                }
-
+                if (txt.startsWith('---')) { txt = txt.split('---').slice(2).join('---').trim(); }
                 marked.setOptions({ gfm: true, breaks: true });
                 const isAbout = path.toLowerCase().includes('the-man') || path.toLowerCase().includes('the_man');
-
                 content.innerHTML = `
                     <div class="blog-post-body">
                         <div>${marked.parse(txt)}</div>
@@ -173,53 +164,15 @@
                                     </div>
                                     <input type="email" name="email" placeholder="EMAIL_ADDRESS" required class="form-input validate-email">
                                     <input type="tel" id="phone-input" name="phone" placeholder="PHONE_NUMBER (NNN-NNN-NNNN)" required class="form-input" maxlength="12">
-                                    <textarea name="message" maxlength="1000" placeholder="MESSAGE_DETAILS (MAX 1000 CHARS)" required class="form-input" style="min-height:100px;"></textarea>
+                                    <textarea name="message" maxlength="1000" placeholder="MESSAGE_DETAILS" required class="form-input" style="min-height:100px;"></textarea>
                                     <button type="submit" class="submit-btn" style="background:var(--accent); color:black; font-weight:bold;">[ SEND_TRANSMISSION ]</button>
                                 </form>
                             </div>
                         ` : ''}
                     </div>`;
-                
                 applyBlueBranding(content);
                 setTimeout(() => applyBlueBranding(content), 150);
-            } catch (e) { 
-                content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; 
-            }
-        }
-
-        document.addEventListener('focusout', function (e) {
-            if (e.target.classList.contains('form-input')) {
-                validateField(e.target);
-            }
-        });
-
-        document.addEventListener('input', function (e) {
-            if (e.target.id === 'phone-input') {
-                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-                e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-                validateField(e.target);
-            }
-        });
-
-        function validateField(el) {
-            let isValid = false;
-            if (el.classList.contains('validate-name')) {
-                isValid = el.value.trim().length >= 2;
-            } else if (el.classList.contains('validate-email')) {
-                isValid = el.value.includes('@') && el.value.includes('.');
-            } else if (el.id === 'phone-input') {
-                isValid = el.value.length === 12;
-            } else {
-                isValid = el.value.trim().length > 0;
-            }
-
-            if (isValid) {
-                el.classList.remove('invalid');
-                el.classList.add('valid');
-            } else {
-                el.classList.remove('valid');
-                el.classList.add('invalid');
-            }
+            } catch (e) { content.innerHTML = "<p class='force-blue'>[!] ERROR: DATA_LINK_SEVERED</p>"; }
         }
 
         async function loadLogs(folder, auto = false, btn = null) {
@@ -234,18 +187,22 @@
             try {
                 const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
+                list.innerHTML = "";
+                files.filter(f => f.name.endsWith('.md'))
+                    // SORT BY FILENAME DATE (DESCENDING)
+                    .sort((a, b) => b.name.substring(0, 10).localeCompare(a.name.substring(0, 10)))
+                    .forEach(f => {
+                        const li = document.createElement('li');
+                        li.style.listStyle = "none";
+                        let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
+                        const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
+                        li.innerHTML = `${newTag}<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                        list.appendChild(li);
+                    });
                 if (folder === 'about') {
                     const firstFile = files.find(f => f.name.endsWith('.md'));
                     if (firstFile) loadPost(firstFile.path);
                 }
-                list.innerHTML = "";
-                files.filter(f => f.name.endsWith('.md')).sort((a,b) => b.name.localeCompare(a.name)).forEach(f => {
-                    const li = document.createElement('li');
-                    li.style.listStyle = "none";
-                    let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
-                    li.innerHTML = `<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
-                    list.appendChild(li);
-                });
             } catch (e) { list.innerHTML = "<li>[ SCAN_FAILED ]</li>"; }
         }
 
@@ -264,13 +221,17 @@
                 } catch (err) {}
             }
             list.innerHTML = '';
-            recentFiles.sort((a, b) => b.name.localeCompare(a.name)).slice(0, 10).forEach(f => {
-                const li = document.createElement('li');
-                li.style.listStyle = "none";
-                let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
-                li.innerHTML = `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> <a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
-                list.appendChild(li);
-            });
+            // STACK ALL RECENT FILES BY DATE
+            recentFiles.sort((a, b) => b.name.substring(0, 10).localeCompare(a.name.substring(0, 10)))
+                .slice(0, 10)
+                .forEach(f => {
+                    const li = document.createElement('li');
+                    li.style.listStyle = "none";
+                    let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
+                    const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
+                    li.innerHTML = `${newTag}<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                    list.appendChild(li);
+                });
         }
 
         document.getElementById('theme-toggle').addEventListener('click', () => {
