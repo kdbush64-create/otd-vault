@@ -8,6 +8,7 @@
     <meta name="description" content="The Culinary and Technical Vault of Old Texas Dude: Featuring personal heritage recipes, culinary destinations, and field reports on gear and travel coordinates.">
     <meta name="keywords" content="Old Texas Dude, Product Evaluations, Independent Reviews, Travel Destinations, Heritage Recipes, Field Reports">
     <meta name="author" content="Old Texas Dude">
+
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
@@ -112,7 +113,6 @@
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
                 
-                // Only show comments if NOT in the "about" folder
                 if (path.toLowerCase().includes('about/')) {
                     commentWrapper.style.display = 'none';
                 } else {
@@ -135,7 +135,7 @@
                         ${isAbout ? `
                             <div id="contact-terminal" style="margin-top:40px; border:1px solid var(--accent); padding:20px; background: rgba(0,255,65,0.05);">
                                 <h3 class="force-blue">> INQUIRY_SUBMISSION_FORM</h3>
-                                <form action="https://formspree.io/f/YOUR_FORMSPREE_ID_HERE" method="POST" style="display:flex; flex-direction:column; gap:15px;">
+                                <form action="https://formspree.io/f/admin@v64otd.com" method="POST" style="display:flex; flex-direction:column; gap:15px;">
                                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                                         <input type="text" name="first_name" placeholder="FIRST_NAME" required class="submit-btn" style="text-align:left; background:black;">
                                         <input type="text" name="last_name" placeholder="LAST_NAME" required class="submit-btn" style="text-align:left; background:black;">
@@ -169,7 +169,6 @@
                 commentWrapper.style.display = 'none';
             } else {
                 sidebar.style.display = 'block';
-                // Note: commentWrapper stays hidden until loadPost is called
                 commentWrapper.style.display = 'none'; 
             }
 
@@ -227,8 +226,6 @@
                     if (Array.isArray(data)) {
                         data.forEach(file => {
                             if (file.name.endsWith('.md')) {
-                                const match = file.name.match(/\d{4}-\d.md/);
-                                // Simplified recent check for the scan
                                 recentFiles.push(file);
                             }
                         });
@@ -238,7 +235,6 @@
 
             if (recentFiles.length > 0) {
                 list.innerHTML = '';
-                // Limit to most recent 10 for the global scan
                 recentFiles.sort((a, b) => b.name.localeCompare(a.name)).slice(0, 10).forEach(f => {
                     const li = document.createElement('li');
                     li.style.listStyle = "none";
@@ -270,4 +266,3 @@
     </script>
 </body>
 </html>
-
