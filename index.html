@@ -82,6 +82,8 @@
 
     <script>
         const repo = "kdbush64-create/otd-vault";
+        // LINKED TO YOUR PRIVATE CLOUDFLARE WORKER
+        const WORKER_URL = 'https://vault-mail-bot.kbush64.workers.dev';
 
         function clearStage(message = "CHANNEL_SELECTED") {
             const content = document.getElementById('content');
@@ -100,6 +102,37 @@
                     el.innerHTML = html.replace(/\*\*(.*?)\*\*/g, '<span class="force-blue">$1</span>');
                 }
             });
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const btn = form.querySelector('button');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "[ SENDING... ]";
+            btn.disabled = true;
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    form.innerHTML = `<h2 class="force-blue">> TRANSMISSION_SUCCESS</h2><p>The Vault has received your data. Stand by for response.</p>`;
+                } else {
+                    throw new Error('Line Busy');
+                }
+            } catch (err) {
+                btn.innerText = "[ ERROR_RETRY ]";
+                btn.disabled = false;
+                alert("Critical Error: Communication Link Failed.");
+            }
         }
 
         async function loadPost(path) {
@@ -128,7 +161,7 @@
                         ${isAbout ? `
                             <div id="contact-terminal" style="margin-top:40px; border:1px solid var(--accent); padding:20px; background: rgba(0,255,65,0.05);">
                                 <h3 class="force-blue">> INQUIRY_SUBMISSION_FORM</h3>
-                                <form id="vault-contact-form" action="https://formspree.io/f/admin@v64otd.com" method="POST" style="display:flex; flex-direction:column; gap:15px;">
+                                <form id="vault-contact-form" onsubmit="handleFormSubmit(event)" style="display:flex; flex-direction:column; gap:15px;">
                                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                                         <input type="text" name="first_name" placeholder="FIRST_NAME" required class="form-input validate-name">
                                         <input type="text" name="last_name" placeholder="LAST_NAME" required class="form-input validate-name">
@@ -157,7 +190,6 @@
         });
 
         document.addEventListener('input', function (e) {
-            // Phone Masking
             if (e.target.id === 'phone-input') {
                 let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
                 e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
@@ -186,7 +218,6 @@
             }
         }
 
-        // Navigation and Scan Functions (Same as previous)
         async function loadLogs(folder, auto = false, btn = null) {
             const list = document.getElementById('log-list');
             const sidebar = document.getElementById('sidebar');
