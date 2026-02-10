@@ -13,11 +13,45 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+
+    <style>
+        /* Updated Social Styling for v1.6.3 */
+        .top-social-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+        .top-social-nav a {
+            opacity: 0.5; /* Dimmed by default */
+            transition: opacity 0.3s ease, transform 0.2s;
+        }
+        .top-social-nav a:hover {
+            opacity: 1; /* Full color on hover */
+            transform: translateY(-2px);
+        }
+        .top-social-nav img {
+            height: 22px; /* Slightly smaller to be less intrusive */
+        }
+    </style>
 </head>
 <body id="personal-identity">
     <div class="terminal-overlay"></div>
     <div class="container">
         <header>
+            <div class="top-social-nav">
+                <a href="https://x.com/Old_Texas_Dude" target="_blank">
+                    <img src="https://img.shields.io/badge/Watch_Tower-000000?style=for-the-badge&logo=x&logoColor=white" alt="Watch Tower on X">
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61587629078907" target="_blank">
+                    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook">
+                </a>
+                <a href="https://www.instagram.com/old_texas_dude/" target="_blank">
+                    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram">
+                </a>
+            </div>
+
             <div class="warning-banner" style="text-align: center; margin-bottom: 20px;">
                 <span class="blink" style="font-weight: bold; color: var(--accent);">!! WARNING: !!</span><br>
                 <span style="font-size: 0.85em;">UNFILTERED OPINIONS AHEAD</span>
@@ -72,7 +106,7 @@
             <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
                 SYSTEM_TIME: <span id="stardate"></span>
             </div>
-            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.2 // DEEP_LINK_ENABLED</p>
+            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.3 // DEEP_LINK_ENABLED</p>
         </footer>
     </div>
 
@@ -149,7 +183,6 @@
             const commentWrapper = document.getElementById('comment-wrapper');
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
             
-            // UPDATE URL WITHOUT RELOAD
             const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?log=' + path;
             window.history.pushState({path: path}, '', newUrl);
 
@@ -209,7 +242,6 @@
                         li.style.listStyle = "none";
                         let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                         const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                        // UPDATED LINK STRUCTURE
                         li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                         list.appendChild(li);
                     });
@@ -243,7 +275,6 @@
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                     const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                    // UPDATED LINK STRUCTURE
                     li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
@@ -263,15 +294,10 @@
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-            
-            // DEEP LINK LISTENER
             const urlParams = new URLSearchParams(window.location.search);
-            const logPath = urlParams.get('log'); // Usage: v64otd.com/?log=gear/filename.md
-            
+            const logPath = urlParams.get('log');
             if (logPath) {
-                // Load the specific post if a path is provided in the URL
                 loadPost(logPath);
-                // Also load the sidebar for that category so the UI looks correct
                 const category = logPath.split('/')[0];
                 if (category) {
                     loadLogs(category);
@@ -283,4 +309,3 @@
     </script>
 </body>
 </html>
-
