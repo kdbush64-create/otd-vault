@@ -148,6 +148,11 @@
             const content = document.getElementById('content');
             const commentWrapper = document.getElementById('comment-wrapper');
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
+            
+            // UPDATE URL WITHOUT RELOAD
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?log=' + path;
+            window.history.pushState({path: path}, '', newUrl);
+
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
@@ -204,7 +209,8 @@
                         li.style.listStyle = "none";
                         let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                         const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                        li.innerHTML = `${newTag}<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                        // UPDATED LINK STRUCTURE
+                        li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                         list.appendChild(li);
                     });
                 if (folder === 'about') {
@@ -237,7 +243,8 @@
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                     const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                    li.innerHTML = `${newTag}<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                    // UPDATED LINK STRUCTURE
+                    li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
         }
@@ -276,3 +283,4 @@
     </script>
 </body>
 </html>
+
