@@ -72,7 +72,7 @@
             <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
                 SYSTEM_TIME: <span id="stardate"></span>
             </div>
-            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.5 // NEON_MODULE_STABLE</p>
+            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6 // NEON_MODULE_STABLE</p>
         </footer>
     </div>
 
@@ -80,7 +80,6 @@
         const repo = "kdbush64-create/otd-vault";
         const WORKER_URL = 'https://vault-mail-bot.kdbush64.workers.dev';
 
-        // Logic to check for [NEW] status (Last 7 Days)
         function isNew(filename) {
             const dateMatch = filename.match(/^(\d{4})[_-](\d{2})[_-](\d{2})/);
             if (!dateMatch) return false;
@@ -90,7 +89,6 @@
             return diffInDays >= 0 && diffInDays <= 7;
         }
 
-        // Updated clearStage to handle dynamic messages and instructions
         function clearStage(message = "SYSTEM_READY", instruction = "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.") {
             const content = document.getElementById('content');
             content.innerHTML = `
@@ -167,11 +165,14 @@
                                 <h3 class="force-blue">> INQUIRY_SUBMISSION_FORM</h3>
                                 <form id="vault-contact-form" onsubmit="handleFormSubmit(event)" style="display:flex; flex-direction:column; gap:15px;">
                                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                                        <input type="text" name="first_name" placeholder="FIRST_NAME" required class="form-input validate-name">
-                                        <input type="text" name="last_name" placeholder="LAST_NAME" required class="form-input validate-name">
+                                        <input type="text" name="first_name" placeholder="FIRST_NAME" required class="form-input" maxlength="50">
+                                        <input type="text" name="last_name" placeholder="LAST_NAME" required class="form-input" maxlength="50">
                                     </div>
-                                    <input type="email" name="email" placeholder="EMAIL_ADDRESS" required class="form-input validate-email">
-                                    <input type="tel" id="phone-input" name="phone" placeholder="PHONE_NUMBER (NNN-NNN-NNNN)" required class="form-input" maxlength="12">
+                                    <input type="email" name="email" placeholder="EMAIL_ADDRESS" required class="form-input" maxlength="100" 
+                                           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" 
+                                           title="Please enter a valid email address (e.g., name@domain.com)">
+                                    <input type="tel" id="phone-input" name="phone" placeholder="PHONE_NUMBER (10 DIGITS)" required class="form-input" 
+                                           maxlength="10" minlength="10" pattern="[0-9]{10}" title="Please enter exactly 10 digits.">
                                     <textarea name="message" maxlength="1000" placeholder="MESSAGE_DETAILS" required class="form-input" style="min-height:100px;"></textarea>
                                     <button type="submit" class="submit-btn" style="background:var(--accent); color:black; font-weight:bold;">[ SEND_TRANSMISSION ]</button>
                                 </form>
@@ -189,10 +190,7 @@
             const commentWrapper = document.getElementById('comment-wrapper');
             sidebar.style.display = folder === 'about' ? 'none' : 'block';
             commentWrapper.style.display = 'none';
-            
-            // CHANNEL SPECIFIC MESSAGE
             clearStage(`${folder.toUpperCase()}_CHANNEL`, "SELECT A LOG FROM THE DIRECTORY TO VIEW CONTENT.");
-            
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             try {
@@ -219,13 +217,8 @@
         async function runGlobalScan() {
             document.getElementById('sidebar').style.display = 'block';
             const list = document.getElementById('log-list');
-            
-            // Fix sticky button highlights
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
-            
-            // LANDING PAGE MESSAGE
             clearStage("SYSTEM_READY", "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.");
-            
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
             const folders = ['dispatch', 'gear', 'coord', 'table'];
             let recentFiles = [];
