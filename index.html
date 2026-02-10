@@ -13,19 +13,62 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+
+    <style>
+        /* Updated Social Styling for v1.6.3 */
+        .top-social-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+        .top-social-nav a {
+            opacity: 0.5; /* Dimmed by default */
+            transition: opacity 0.3s ease, transform 0.2s;
+        }
+        .top-social-nav a:hover {
+            opacity: 1; /* Full color on hover */
+            transform: translateY(-2px);
+        }
+        .top-social-nav img {
+            height: 22px; /* Slightly smaller to be less intrusive */
+        }
+    </style>
 </head>
 <body id="personal-identity">
     <div class="terminal-overlay"></div>
     <div class="container">
-        <header>
-            <div class="warning-banner" style="text-align: center; margin-bottom: 20px;">
-                <span class="blink" style="font-weight: bold; color: var(--accent);">!! WARNING: !!</span><br>
-                <span style="font-size: 0.85em;">UNFILTERED OPINIONS AHEAD</span>
-                <div style="margin-top:15px;">
-                    <button id="theme-toggle" class="submit-btn" style="font-size:0.75em;">VISUAL_MODE</button>
-                </div>
-            </div>
-        </header>
+       <header>
+    <div class="social-header-container" style="text-align: center; padding: 25px 0 15px 0;">
+        <p style="color: var(--secondary); font-size: 0.85rem; letter-spacing: 2px; font-family: monospace; margin-bottom: 15px; opacity: 0.8;">
+            // FOLLOW_THE_WATCH_TOWER
+        </p>
+        <div class="top-social-nav" style="display: flex; justify-content: center; align-items: center; gap: 30px;">
+            
+            <a href="https://x.com/Old_Texas_Dude" target="_blank" title="Watch Tower on X">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="X" style="height: 30px; filter: invert(1) drop-shadow(0 0 5px rgba(255,255,255,0.5));">
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=61587629078907" target="_blank" title="Old Texas Dude on Facebook">
+                <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" style="height: 36px;">
+            </a>
+
+            <a href="https://www.instagram.com/old_texas_dude/" target="_blank" title="Watch Tower on Instagram">
+                <img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram" style="height: 36px;">
+            </a>
+            
+        </div>
+    </div>
+
+    <div class="warning-banner" style="text-align: center; margin-bottom: 25px; border-top: 1px solid rgba(0,255,65,0.1); padding-top: 20px;">
+        <span class="blink" style="font-weight: bold; color: var(--accent);">!! WARNING: !!</span><br>
+        <span style="font-size: 0.85em;">UNFILTERED OPINIONS AHEAD</span>
+        <div style="margin-top:15px;">
+            <button id="theme-toggle" class="submit-btn" style="font-size:0.75em;">VISUAL_MODE</button>
+        </div>
+    </div>
+</header>
 
         <section class="hero-container">
             <div class="hero-text-block">
@@ -72,7 +115,7 @@
             <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
                 SYSTEM_TIME: <span id="stardate"></span>
             </div>
-            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.2 // DEEP_LINK_ENABLED</p>
+            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.3 // DEEP_LINK_ENABLED</p>
         </footer>
     </div>
 
@@ -149,7 +192,6 @@
             const commentWrapper = document.getElementById('comment-wrapper');
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
             
-            // UPDATE URL WITHOUT RELOAD
             const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?log=' + path;
             window.history.pushState({path: path}, '', newUrl);
 
@@ -209,7 +251,6 @@
                         li.style.listStyle = "none";
                         let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                         const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                        // UPDATED LINK STRUCTURE
                         li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                         list.appendChild(li);
                     });
@@ -243,7 +284,6 @@
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                     const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                    // UPDATED LINK STRUCTURE
                     li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
@@ -263,15 +303,10 @@
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-            
-            // DEEP LINK LISTENER
             const urlParams = new URLSearchParams(window.location.search);
-            const logPath = urlParams.get('log'); // Usage: v64otd.com/?log=gear/filename.md
-            
+            const logPath = urlParams.get('log');
             if (logPath) {
-                // Load the specific post if a path is provided in the URL
                 loadPost(logPath);
-                // Also load the sidebar for that category so the UI looks correct
                 const category = logPath.split('/')[0];
                 if (category) {
                     loadLogs(category);
@@ -283,4 +318,6 @@
     </script>
 </body>
 </html>
+
+
 
