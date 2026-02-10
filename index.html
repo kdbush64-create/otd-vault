@@ -72,7 +72,7 @@
             <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
                 SYSTEM_TIME: <span id="stardate"></span>
             </div>
-            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.1 // NEON_MODULE_STABLE</p>
+            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.2 // DEEP_LINK_ENABLED</p>
         </footer>
     </div>
 
@@ -256,9 +256,23 @@
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-            runGlobalScan();
+            
+            // DEEP LINK LISTENER
+            const urlParams = new URLSearchParams(window.location.search);
+            const logPath = urlParams.get('log'); // Usage: v64otd.com/?log=gear/filename.md
+            
+            if (logPath) {
+                // Load the specific post if a path is provided in the URL
+                loadPost(logPath);
+                // Also load the sidebar for that category so the UI looks correct
+                const category = logPath.split('/')[0];
+                if (category) {
+                    loadLogs(category);
+                }
+            } else {
+                runGlobalScan();
+            }
         };
     </script>
 </body>
 </html>
-
