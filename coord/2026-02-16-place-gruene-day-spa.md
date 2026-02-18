@@ -4,8 +4,8 @@ status: published
 category: SPA
 subject: GRUENE DAY SPA
 location: NEW BRAUNFELS, TX
-address: "1633 New Braunfels StNew Braunfels, TX, 78130"
-website: "[https://en.wikipedia.org/wiki/Website](https://www.gruenedayspa.com/)"
+address: "1633 New Braunfels St, New Braunfels, TX, 78130"
+website: "[Visit Gruene Day Spa](http://www.gruenedayspa.com/)"
 ---
 
 # COORD_REPORT: GRUENE DAY SPA
@@ -25,7 +25,7 @@ OBSERVATION: LOVE THIS SPA.  BARB THE OWNER IS GREAT, AND A TOTAL SWEETHEART.
 ---
 
 ### MISSION_OBJECTIVES
-![Barb and Joe](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/gruene-day-spa.png)
+![Barb and Joe](https://github.com/kdbush64-create/otd-vault/blob/main/guene-day-spa.png)
 *Visual survey of the coordinates.*
 
 SUMMARY: The wife of yours truely, Old Texas Dude in case you forgot, scheduled a couples massage in the spirit of Valentine's Day. Was my first time getting a message here and my first one in just over 30 years.
