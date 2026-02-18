@@ -26,7 +26,7 @@ OBSERVATION: LOVE THIS SPA.  BARB THE OWNER IS GREAT, AND A TOTAL SWEETHEART.
 
 ### MISSION_OBJECTIVES
 ![Barb and Joe](https://github.com/kdbush64-create/otd-vault/blob/main/guene-day-spa.png)
-*Visual survey of the coordinates.*
+*Massage Therapists: Barb, the Spa Owner and Joe*
 
 SUMMARY: The wife of yours truely, Old Texas Dude in case you forgot, scheduled a couples massage in the spirit of Valentine's Day. Was my first time getting a message here and my first one in just over 30 years.
 Joe worked me over, and Barb worked on Mrs. OTD.  We both wobbled out of there totally relaxed and ready for the drive back to Fort Worth. In fact, I am still relaxed 2 days later. Thank you Barb and Joe.
