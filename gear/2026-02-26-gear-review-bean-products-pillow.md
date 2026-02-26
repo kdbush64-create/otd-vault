@@ -26,6 +26,8 @@ OBSERVATION: The King-size pillow which I purchased is heavy. It feels like some
 ---
 
 ### FIELD_TEST_DATA
+![[multigrainpillow.webp|100%]]
+*Close-up survey of the hardware (16:9 Ultrawide).*
 ![Gear Profile](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/MultigrainPillow.webp)
 *Close-up survey of the hardware.*
 
