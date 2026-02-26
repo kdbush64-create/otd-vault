@@ -26,7 +26,7 @@ OBSERVATION: The King-size pillow which I purchased is heavy. It feels like some
 ---
 
 ### FIELD_TEST_DATA
-![[MultigrainPillow.webp|100%]]
+<img src="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/MultigrainPillow.webp" alt="Gear Profile" style="width:100%; height:auto; display:block; margin: 0 auto;">
 ![Gear Profile](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/MultigrainPillow.webp)
 *Close-up survey of the hardware.*
 
