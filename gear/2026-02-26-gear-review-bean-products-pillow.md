@@ -26,7 +26,7 @@ OBSERVATION: The King-size pillow which I purchased is heavy. It feels like some
 ---
 
 ### FIELD_TEST_DATA
-![Gear Profile](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/multigrainpillow.webp)
+![Gear Profile](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/MultigrainPillow.webp)
 *Close-up survey of the hardware.*
 
 SUMMARY: I was getting tired of waking up with a sore neck every morning.  My 3 year old 'MyPillow' just wasn't cutting it anymore. Also as a CPAP user, it is hard to get good support and not fight the hose hose all night long.
