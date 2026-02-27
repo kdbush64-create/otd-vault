@@ -321,13 +321,14 @@
                     loadLogs(category);
                 }
             } else if (channel) {
-                // Deep link to a channel from external site (e.g. vintage64tx.com Watch Tower buttons)
-                const channelBtn = document.getElementById(`btn-${channel}`);
-                loadLogs(channel, false, channelBtn);
-            } else {
-                runGlobalScan();
-            }
+    const channelBtn = document.getElementById(`btn-${channel}`);
+    loadLogs(channel, false, channelBtn);
+    setTimeout(() => {
+        document.querySelector('.vault-layout').scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+}
         };
     </script>
 </body>
 </html>
+
