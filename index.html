@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
 
     <style>
-        /* Updated Social Styling for v1.6.3 */
+        /* Updated Social Styling for v1.6.4 */
         .top-social-nav {
             display: flex;
             justify-content: center;
@@ -88,10 +88,11 @@
 
             <div class="secondary-filters">
                 <button id="btn-dispatch" onclick="loadLogs('dispatch', false, this)" class="submit-btn">THE DISPATCH</button>
-                <button id="btn-transit" onclick="loadLogs('coord', false, this)" class="submit-btn">TRANSIT</button>
+                <button id="btn-transit" onclick="loadLogs('transit', false, this)" class="submit-btn">TRANSIT</button>
                 <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
                 <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
                 <button id="btn-table" onclick="loadLogs('table', false, this)" class="submit-btn">THE TABLE</button>
+                <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
             </div>
         </nav>
 
@@ -115,7 +116,7 @@
             <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
                 SYSTEM_TIME: <span id="stardate"></span>
             </div>
-            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.3 // DEEP_LINK_ENABLED</p>
+            <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.4 // DEEP_LINK_ENABLED</p>
         </footer>
     </div>
 
@@ -240,6 +241,11 @@
             clearStage(`${folder.toUpperCase()}_CHANNEL`, "SELECT A LOG FROM THE DIRECTORY TO VIEW CONTENT.");
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
+
+            // Update URL to reflect channel for deep-linking from external sites
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?channel=' + folder;
+            window.history.pushState({channel: folder}, '', newUrl);
+
             try {
                 const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
@@ -267,7 +273,8 @@
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             clearStage("SYSTEM_READY", "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.");
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
-            const folders = ['dispatch', 'gear', 'coord', 'table'];
+            // All six content channels
+            const folders = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
             let recentFiles = [];
             for (const fld of folders) {
                 try {
@@ -305,12 +312,18 @@
             if(localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
             const urlParams = new URLSearchParams(window.location.search);
             const logPath = urlParams.get('log');
+            const channel = urlParams.get('channel');
             if (logPath) {
+                // Deep link to a specific post — load post and activate its channel sidebar
                 loadPost(logPath);
                 const category = logPath.split('/')[0];
                 if (category) {
                     loadLogs(category);
                 }
+            } else if (channel) {
+                // Deep link to a channel from external site (e.g. vintage64tx.com Watch Tower buttons)
+                const channelBtn = document.getElementById(`btn-${channel}`);
+                loadLogs(channel, false, channelBtn);
             } else {
                 runGlobalScan();
             }
@@ -318,8 +331,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
