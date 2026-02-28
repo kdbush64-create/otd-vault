@@ -20,7 +20,7 @@ I have been successful at creating a new UI that allows me to make a post for an
 am able to now download up to 10 pictures per post which should be plenty.  Lets check the social media push.
 
 ### > THE_V64_VERDICT
->**FINAL_ANALYSIS:** we will see
+>**FINAL_ANALYSIS:** I can declare 100% success for all Social Media pushes on my OTD posts on the website
 
 ---
 **[ END_OF_DISPATCH ]**
