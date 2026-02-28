@@ -17,7 +17,7 @@ location: 121 Rufe Snow Dr Suite 127, Keller, TX 76248
 ### THE_ATMOSPHERE
 **FLAVOR_PROFILE:** Bland
 
-OBSERVATION: Went to join some other couples for music bingo. Had a good time. The place is on the small side, but cozy, and well lit.
+OBSERVATION: Went to join some other couples for music bingo. Had a good time. The place is on the small side, but cozy, and well lit.  Others in the restaurant were also having a good time.
 
 ---
 
@@ -35,6 +35,8 @@ Service was good the staff was very friendly. The food was so-so. I had the Ray'
 My verdict is perhaps a bit generous, but when I started giving reviews, I set up only 3 choices. This is not an "Avoid" place, nor is it "only if you're deparate". It will satisfy. They do have a decent menu, the place was somewhat busy, so perhaps we just got the wrong things tonight. Others had street tacos with rice and beans and it looked good. I'll go back and give them another chance. They are local and I like supporting local joints over chains any day.
 
 I'm giving them a 7 out of 10. Giving an extra point because we had a good time and anytime there is music bingo, I am a sucker.
+
+You can find their menu on their website:  https://jrsbbqnmore.com/
 
 ---
 **V64_UPLINK_COMPLETE**
