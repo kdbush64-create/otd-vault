@@ -1,10 +1,11 @@
-\---
+---
 type: gear-report
 status: published
 category: [TECH / MEDICAL / AUTO / TOOLS / HOUSEHOLD]
 subject: [PRODUCT_NAME]
 brand: [BRAND_NAME]
 purchase_link: "[URL_HERE]"
+media_ratio: 3/2
 ---
 
 # GEAR_REPORT: [PRODUCT_NAME]
@@ -25,9 +26,12 @@ OBSERVATION: [Describe the build quality, materials used, and the "out-of-the-bo
 ---
 
 ### FIELD_TEST_DATA
-![Gear Profile](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/gear-pic.jpg)
-*Close-up survey of the hardware.*
-
+<div style="max-width: 800px; margin: 0 auto; aspect-ratio: 3 / 2; overflow: hidden; border: 1px solid #333; background-color: #f4f4f4;">
+    <img src="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/[FILENAME].webp" 
+         alt="Gear Profile" 
+         style="width: 100%; height: 100%; object-fit: contain; display: block;">
+</div>
+<p align="center"><em>[IMAGE_CAPTION_HERE]</em></p>
 SUMMARY: [Performance under actual use. Does it solve a problem or create one? Mention any tactical advantages or mechanical failures encountered during the testing phase.]
 
 ---

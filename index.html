@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Old Texas Dude | The Vault</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     
     <meta name="description" content="The Culinary and Technical Vault of Old Texas Dude: Featuring personal heritage recipes, culinary destinations, and field reports on gear and travel coordinates.">
     <meta name="keywords" content="Old Texas Dude, Product Evaluations, Independent Reviews, Travel Destinations, Heritage Recipes, Field Reports">
@@ -13,19 +14,62 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+
+    <style>
+        /* Updated Social Styling for v1.6.4 */
+        .top-social-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+        .top-social-nav a {
+            opacity: 0.5; /* Dimmed by default */
+            transition: opacity 0.3s ease, transform 0.2s;
+        }
+        .top-social-nav a:hover {
+            opacity: 1; /* Full color on hover */
+            transform: translateY(-2px);
+        }
+        .top-social-nav img {
+            height: 22px; /* Slightly smaller to be less intrusive */
+        }
+    </style>
 </head>
 <body id="personal-identity">
     <div class="terminal-overlay"></div>
     <div class="container">
-        <header>
-            <div class="warning-banner" style="text-align: center; margin-bottom: 20px;">
-                <span class="blink" style="font-weight: bold; color: var(--accent);">!! WARNING: !!</span><br>
-                <span style="font-size: 0.85em;">UNFILTERED OPINIONS AHEAD</span>
-                <div style="margin-top:15px;">
-                    <button id="theme-toggle" class="submit-btn" style="font-size:0.75em;">VISUAL_MODE</button>
-                </div>
-            </div>
-        </header>
+       <header>
+    <div class="social-header-container" style="text-align: center; padding: 25px 0 15px 0;">
+        <p style="color: var(--secondary); font-size: 0.85rem; letter-spacing: 2px; font-family: monospace; margin-bottom: 15px; opacity: 0.8;">
+            // FOLLOW_THE_WATCH_TOWER
+        </p>
+        <div class="top-social-nav" style="display: flex; justify-content: center; align-items: center; gap: 30px;">
+            
+            <a href="https://x.com/Old_Texas_Dude" target="_blank" title="Watch Tower on X">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="X" style="height: 30px; filter: invert(1) drop-shadow(0 0 5px rgba(255,255,255,0.5));">
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=61587629078907" target="_blank" title="Old Texas Dude on Facebook">
+                <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" style="height: 36px;">
+            </a>
+
+            <a href="https://www.instagram.com/old_texas_dude/" target="_blank" title="Watch Tower on Instagram">
+                <img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram" style="height: 36px;">
+            </a>
+            
+        </div>
+    </div>
+
+    <div class="warning-banner" style="text-align: center; margin-bottom: 25px; border-top: 1px solid rgba(0,255,65,0.1); padding-top: 20px;">
+        <span class="blink" style="font-weight: bold; color: var(--accent);">!! WARNING: !!</span><br>
+        <span style="font-size: 0.85em;">UNFILTERED OPINIONS AHEAD</span>
+        <div style="margin-top:15px;">
+            <button id="theme-toggle" class="submit-btn" style="font-size:0.75em;">VISUAL_MODE</button>
+        </div>
+    </div>
+</header>
 
         <section class="hero-container">
             <div class="hero-text-block">
@@ -33,7 +77,7 @@
                 <span class="by-line">by</span>
                 <h1 class="main-title"><span class="typewriter delay-type">Old Texas Dude&trade;</span></h1>
             </div>
-            <img src="telescope2.png" alt="The Watch Tower">
+            <img src="telescope2.jpg" alt="The Watch Tower">
         </section>
 
         <nav class="vault-nav-container">
@@ -45,10 +89,11 @@
 
             <div class="secondary-filters">
                 <button id="btn-dispatch" onclick="loadLogs('dispatch', false, this)" class="submit-btn">THE DISPATCH</button>
-                <button id="btn-transit" onclick="loadLogs('coord', false, this)" class="submit-btn">TRANSIT</button>
+                <button id="btn-transit" onclick="loadLogs('transit', false, this)" class="submit-btn">TRANSIT</button>
                 <button id="btn-gear" onclick="loadLogs('gear', false, this)" class="submit-btn">GEAR</button>
                 <button id="btn-coord" onclick="loadLogs('coord', false, this)" class="submit-btn">COORD</button>
                 <button id="btn-table" onclick="loadLogs('table', false, this)" class="submit-btn">THE TABLE</button>
+                <button id="btn-chow" onclick="loadLogs('chow', false, this)" class="submit-btn">CHOW</button>
             </div>
         </nav>
 
@@ -74,7 +119,16 @@
             </div>
             <p class="footer-tag blink">PERSONAL_THOUGHTS_V1.6.1 // NEON_MODULE_STABLE</p>
         </footer>
+    <div style="text-align:center; margin-bottom:15px; font-size:0.8rem; letter-spacing: 1px;">
+        <span style="color:var(--secondary); opacity: 0.7;">LOOKING FOR PROFESSIONAL IT RESTORATION?</span> 
+        <a href="https://vintage64tx.com" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:bold; border-bottom: 1px dashed var(--accent);">VISIT_VINTAGE64TX</a>
     </div>
+
+    <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
+        SYSTEM_TIME: <span id="stardate"></span>
+    </div>
+    <p class="footer-tag blink">PERSONAL_THOUGHTS_V2.0.0 // DEEP_LINK_ENABLED</p>
+</footer>
 
     <script>
         const repo = "kdbush64-create/otd-vault";
@@ -148,6 +202,10 @@
             const content = document.getElementById('content');
             const commentWrapper = document.getElementById('comment-wrapper');
             content.innerHTML = "<p class='blink' style='color:var(--accent)'>EXTRACTING_DATA_STREAM...</p>";
+            
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?log=' + path;
+            window.history.pushState({path: path}, '', newUrl);
+
             try {
                 const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
                 let txt = await r.text();
@@ -193,6 +251,11 @@
             clearStage(`${folder.toUpperCase()}_CHANNEL`, "SELECT A LOG FROM THE DIRECTORY TO VIEW CONTENT.");
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
+
+            // Update URL to reflect channel for deep-linking from external sites
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?channel=' + folder;
+            window.history.pushState({channel: folder}, '', newUrl);
+
             try {
                 const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
                 const files = await r.json();
@@ -204,7 +267,7 @@
                         li.style.listStyle = "none";
                         let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                         const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                        li.innerHTML = `${newTag}<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                        li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                         list.appendChild(li);
                     });
                 if (folder === 'about') {
@@ -220,7 +283,8 @@
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             clearStage("SYSTEM_READY", "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.");
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
-            const folders = ['dispatch', 'gear', 'coord', 'table'];
+            // All six content channels
+            const folders = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
             let recentFiles = [];
             for (const fld of folders) {
                 try {
@@ -237,7 +301,7 @@
                     li.style.listStyle = "none";
                     let displayName = f.name.replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                     const newTag = isNew(f.name) ? `<span class="blink" style="color:#ff0000; font-size:0.7em; font-weight:bold;">[NEW]</span> ` : "";
-                    li.innerHTML = `${newTag}<a href="javascript:void(0)" onclick="loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
+                    li.innerHTML = `${newTag}<a href="?log=${f.path}" onclick="event.preventDefault(); loadPost('${f.path}')" class="log-link">> ${displayName}</a>`;
                     list.appendChild(li);
                 });
         }
@@ -256,9 +320,30 @@
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-            runGlobalScan();
+            const urlParams = new URLSearchParams(window.location.search);
+            const logPath = urlParams.get('log');
+            const channel = urlParams.get('channel');
+            if (logPath) {
+                // Deep link to a specific post — load post and activate its channel sidebar
+                loadPost(logPath);
+                const category = logPath.split('/')[0];
+                if (category) {
+                    loadLogs(category);
+                }
+            } else if (channel) {
+    const channelBtn = document.getElementById(`btn-${channel}`);
+    loadLogs(channel, false, channelBtn);
+    setTimeout(() => {
+        document.querySelector('.vault-layout').scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+}
         };
     </script>
 </body>
 </html>
+
+
+
+
+
 
