@@ -25,15 +25,15 @@
             flex-wrap: wrap;
         }
         .top-social-nav a {
-            opacity: 0.5; /* Dimmed by default */
+            opacity: 0.5;
             transition: opacity 0.3s ease, transform 0.2s;
         }
         .top-social-nav a:hover {
-            opacity: 1; /* Full color on hover */
+            opacity: 1;
             transform: translateY(-2px);
         }
         .top-social-nav img {
-            height: 22px; /* Slightly smaller to be less intrusive */
+            height: 22px;
         }
     </style>
 </head>
@@ -126,8 +126,9 @@
         </footer>
 
     <script>
+        const WORKER_URL = 'https://otd-content-api.kdbush64.workers.dev';
+        const MAIL_WORKER_URL = 'https://vault-mail-bot.kdbush64.workers.dev';
         const repo = "kdbush64-create/otd-vault";
-        const WORKER_URL = 'https://vault-mail-bot.kdbush64.workers.dev';
 
         function isNew(filename) {
             const dateMatch = filename.match(/^(\d{4})[_-](\d{2})[_-](\d{2})/);
@@ -177,7 +178,7 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             try {
-                const response = await fetch(WORKER_URL, {
+                const response = await fetch(MAIL_WORKER_URL, {
                     method: 'POST',
                     mode: 'cors', 
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -202,8 +203,9 @@
             window.history.pushState({path: path}, '', newUrl);
 
             try {
-                const r = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`);
-                let txt = await r.text();
+                const r = await fetch(`${WORKER_URL}?file=${path}`);
+                const data = await r.json();
+                let txt = data.content;
                 commentWrapper.style.display = path.toLowerCase().includes('about/') ? 'none' : 'block';
                 let cleanName = path.split('/').pop().replace('.md', '').toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ');
                 document.title = `${cleanName} | OTD Vault`;
@@ -247,12 +249,11 @@
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
 
-            // Update URL to reflect channel for deep-linking from external sites
             const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?channel=' + folder;
             window.history.pushState({channel: folder}, '', newUrl);
 
             try {
-                const r = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}?t=${Date.now()}`);
+                const r = await fetch(`${WORKER_URL}?folder=${folder}`);
                 const files = await r.json();
                 list.innerHTML = "";
                 files.filter(f => f.name.endsWith('.md'))
@@ -278,12 +279,11 @@
             document.querySelectorAll('.submit-btn').forEach(b => b.classList.remove('active'));
             clearStage("SYSTEM_READY", "SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.");
             list.innerHTML = '<li>[ GLOBAL_SCAN_ACTIVE... ]</li>';
-            // All six content channels
             const folders = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
             let recentFiles = [];
             for (const fld of folders) {
                 try {
-                    const r = await fetch(`https://api.github.com/repos/${repo}/contents/${fld}?t=${Date.now()}`);
+                    const r = await fetch(`${WORKER_URL}?folder=${fld}`);
                     const data = await r.json();
                     if (Array.isArray(data)) data.forEach(file => { if (file.name.endsWith('.md')) recentFiles.push(file); });
                 } catch (err) {}
@@ -319,29 +319,19 @@
             const logPath = urlParams.get('log');
             const channel = urlParams.get('channel');
             if (logPath) {
-                // Deep link to a specific post — load post and activate its channel sidebar
                 loadPost(logPath);
                 const category = logPath.split('/')[0];
                 if (category) {
                     loadLogs(category);
                 }
             } else if (channel) {
-    const channelBtn = document.getElementById(`btn-${channel}`);
-    loadLogs(channel, false, channelBtn);
-    setTimeout(() => {
-        document.querySelector('.vault-layout').scrollIntoView({ behavior: 'smooth' });
-    }, 300);
-}
+                const channelBtn = document.getElementById(`btn-${channel}`);
+                loadLogs(channel, false, channelBtn);
+                setTimeout(() => {
+                    document.querySelector('.vault-layout').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
         };
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
