@@ -325,11 +325,14 @@
                     loadLogs(category);
                 }
             } else if (channel) {
-                const channelBtn = document.getElementById(`btn-${channel}`);
-                loadLogs(channel, false, channelBtn);
-                setTimeout(() => {
-                    document.querySelector('.vault-layout').scrollIntoView({ behavior: 'smooth' });
-                }, 300);
+            const channelBtn = document.getElementById(`btn-${channel}`);
+            loadLogs(channel, false, channelBtn);
+            setTimeout(() => {
+                document.querySelector('.vault-layout').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+            } else {
+                const aboutBtn = document.getElementById('btn-about');
+                loadLogs('about', false, aboutBtn);
             }
         };
     </script>
