@@ -1,23 +1,75 @@
 ---
-const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
-const currentPath = Astro.url.pathname;
+interface Props {
+  showHero?: boolean;
+}
+const { showHero = false } = Astro.props;
 ---
-<header class="site-header">
-  <a href="/" class="site-logo">v64otd.com</a>
-  <nav class="main-nav">
-    {channels.map(ch => (
-      <a
-        href={`/${ch}`}
-        class:list={['nav-link', { active: currentPath.startsWith(`/${ch}`) }]}
-      >
-        {ch}
+<header>
+  <div style="text-align: center; padding: 25px 0 15px 0;">
+    <p style="color: var(--secondary); font-size: 0.85rem; letter-spacing: 2px; font-family: monospace; margin-bottom: 15px; opacity: 0.8;">
+      // FOLLOW_THE_WATCH_TOWER
+    </p>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 30px;">
+      <a href="https://x.com/Old_Texas_Dude" target="_blank" rel="noopener" class="social-icon-link">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="X / Twitter" style="height: 30px; filter: invert(1) drop-shadow(0 0 5px rgba(255,255,255,0.5));" />
       </a>
-    ))}
-    <a
-      href="/newsletter"
-      class:list={['nav-link', { active: currentPath === '/newsletter' }]}
-    >
-      newsletter
-    </a>
-  </nav>
+      <a href="https://www.facebook.com/profile.php?id=61587629078907" target="_blank" rel="noopener" class="social-icon-link">
+        <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" style="height: 36px;" />
+      </a>
+      <a href="https://www.instagram.com/old_texas_dude/" target="_blank" rel="noopener" class="social-icon-link">
+        <img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram" style="height: 36px;" />
+      </a>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 25px; border-top: 1px solid rgba(0,255,65,0.1); padding-top: 20px;">
+    <span class="blink" style="font-weight: bold; color: var(--accent);">!! WARNING: !!</span><br />
+    <span style="font-size: 0.85em;">UNFILTERED OPINIONS AHEAD</span>
+    <div style="margin-top: 15px;">
+      <button id="theme-toggle" class="submit-btn" style="font-size: 0.75em;">VISUAL_MODE</button>
+    </div>
+  </div>
+
+  {showHero && (
+    <section class="hero-container">
+      <div class="hero-text-block">
+        <h1 class="main-title"><span class="typewriter">The Watch Tower</span></h1>
+        <span class="by-line">by</span>
+        <h1 class="main-title"><span class="typewriter delay-type">Old Texas Dude&trade;</span></h1>
+      </div>
+      <img src="/telescope2.jpg" alt="The Watch Tower splash" />
+    </section>
+  )}
+
+  {!showHero && (
+    <div style="text-align: center; padding: 8px 0 18px 0; border-top: 1px dashed var(--border);">
+      <a href="/" style="color: var(--primary); text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; font-family: monospace;">
+        &laquo; WATCH_TOWER_HOME
+      </a>
+    </div>
+  )}
 </header>
+
+<style>
+  .social-icon-link {
+    opacity: 0.5;
+    transition: opacity 0.3s ease, transform 0.2s;
+    display: inline-block;
+  }
+  .social-icon-link:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const b = document.body;
+      b.getAttribute('data-theme') === 'light'
+        ? b.removeAttribute('data-theme')
+        : b.setAttribute('data-theme', 'light');
+    });
+  }
+</script>

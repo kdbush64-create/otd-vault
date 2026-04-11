@@ -7,9 +7,10 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  showHero?: boolean;
 }
 
-const { title, description = 'v64otd.com — Vintage64TX', ogImage } = Astro.props;
+const { title, description = 'v64otd.com — Vintage64TX', ogImage, showHero = false } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -20,11 +21,14 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage } = Astro.pro
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/style.css" />
   </head>
-  <body>
-    <Header />
-    <main>
-      <slot />
-    </main>
-    <Footer />
+  <body id="personal-identity">
+    <div class="terminal-overlay"></div>
+    <div class="container">
+      <Header showHero={showHero} />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
   </body>
 </html>

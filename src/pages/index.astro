@@ -2,36 +2,64 @@
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import PostCard from '../components/PostCard.astro';
 
-const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
-const dispatchPosts = await getCollection('dispatch');
-const latestPosts = dispatchPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 5);
+const dispatches = await getCollection('dispatch');
+const transits = await getCollection('transit');
+const gears = await getCollection('gear');
+const coords = await getCollection('coord');
+const tables = await getCollection('table');
+
+const allPosts = [
+  ...dispatches.map(p => ({ title: p.data.title, date: p.data.date, ch: 'dispatch', slug: p.slug })),
+  ...transits.map(p => ({ title: p.data.title, date: p.data.date, ch: 'transit', slug: p.slug })),
+  ...gears.map(p => ({ title: p.data.title, date: p.data.date, ch: 'gear', slug: p.slug })),
+  ...coords.map(p => ({ title: p.data.title, date: p.data.date, ch: 'coord', slug: p.slug })),
+  ...tables.map(p => ({ title: p.data.title, date: p.data.date, ch: 'table', slug: p.slug })),
+].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
-<BaseLayout title="v64otd.com" description="Vintage64TX â Dispatch, Transit, Gear, Coord, Table, Chow.">
-  <section class="homepage">
-    <h1 class="site-title">v64otd.com</h1>
-    <p class="site-tagline">Vintage64TX</p>
-    <nav class="channel-overview">
-      {channels.map(ch => (
-        <a href={`/${ch}`} class="channel-card">{ch}</a>
-      ))}
-    </nav>
-    {latestPosts.length > 0 && (
-      <section class="latest-dispatch">
-        <h2>Latest from Dispatch</h2>
-        {latestPosts.map(post => (
-          <PostCard
-            title={post.data.title}
-            date={post.data.date}
-            description={post.data.description}
-            href={`/dispatch/${post.slug}`}
-          />
+<BaseLayout title="OTD Vault | The Watch Tower" description="Vintage64TX — Dispatch, Transit, Gear, Coord, Table." showHero={true}>
+
+  <nav class="vault-nav-container">
+    <div class="primary-nav" style="margin-bottom: 15px; width: 100%;">
+      <a href="/about" class="submit-btn" style="display:block; width:100%; padding:12px; border-color:var(--accent); color:var(--accent); font-weight:bold; font-size:1rem; text-align:center; text-decoration:none; box-sizing:border-box;">
+        ABOUT: OLD TEXAS DUDE
+      </a>
+    </div>
+    <div class="secondary-filters">
+      <a href="/dispatch" class="submit-btn" style="text-decoration:none;">THE DISPATCH</a>
+      <a href="/transit" class="submit-btn" style="text-decoration:none;">TRANSIT</a>
+      <a href="/gear" class="submit-btn" style="text-decoration:none;">GEAR</a>
+      <a href="/coord" class="submit-btn" style="text-decoration:none;">COORD</a>
+      <a href="/table" class="submit-btn" style="text-decoration:none;">THE TABLE</a>
+    </div>
+  </nav>
+
+  <div class="vault-layout">
+    <aside class="log-directory">
+      <h3>&gt; LOG_DIRECTORY</h3>
+      <ul class="file-list">
+        {allPosts.map(post => (
+          <li>
+            <a href={`/${post.ch}/${post.slug}`} class="log-link">
+              [{post.ch.toUpperCase()}] {post.title}
+            </a>
+          </li>
         ))}
-        <a href="/dispatch" class="view-all">All dispatch posts â</a>
-      </section>
-    )}
-  </section>
+      </ul>
+    </aside>
+
+    <section class="log-display">
+      <article id="content" class="blog-post">
+        <div style="text-align: center; padding: 60px 20px;">
+          <h2 class="force-blue" style="letter-spacing: 2px;">&gt; SYSTEM_READY</h2>
+          <p class="blink" style="font-size: 0.85rem; color: #00d4ff; text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); margin-bottom: 25px; font-family: monospace;">
+            [ INITIALIZING_DATA_STREAM... ]
+          </p>
+          <div style="width: 40px; height: 2px; background: var(--secondary); margin: 0 auto; opacity: 0.3;"></div>
+          <p class="instruction-text">SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.</p>
+        </div>
+      </article>
+    </section>
+  </div>
+
 </BaseLayout>

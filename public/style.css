@@ -320,3 +320,35 @@ footer {
     /* Etched shadow for depth and visibility */
     text-shadow: 1px 1px 2px black, 0 0 5px rgba(0, 212, 255, 0.2); 
 }
+
+
+/* 13. TYPEWRITER DELAY */
+.delay-type {
+    animation-delay: 3.5s;
+}
+
+/* 14. NAV CONTAINERS */
+.vault-nav-container {
+    margin: 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.primary-nav {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* 15. FOOTER TAG */
+.footer-tag {
+    color: var(--secondary);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* 16. CHANNEL POST LIST */
+.post-list {
+    width: 100%;
+}

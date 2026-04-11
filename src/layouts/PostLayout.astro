@@ -7,18 +7,41 @@ interface Props {
   date?: string;
   channel?: string;
 }
-
 const { title, description, date, channel } = Astro.props;
+
+const channelMap: Record<string, string> = {
+  dispatch: 'THE DISPATCH',
+  transit: 'TRANSIT',
+  gear: 'GEAR',
+  coord: 'COORD',
+  table: 'THE TABLE',
+  chow: 'CHOW',
+};
+const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
 ---
-<BaseLayout title={title} description={description}>
-  <article class="post">
-    <header class="post-header">
-      {channel && <a href={`/${channel}`} class="channel-back">← {channel}</a>}
-      <h1 class="post-title">{title}</h1>
-      {date && <time class="post-date">{date}</time>}
-    </header>
-    <div class="post-body">
-      <slot />
-    </div>
-  </article>
+<BaseLayout title={`${title} | OTD Vault`} description={description}>
+
+  <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
+    <a href="/" class="submit-btn" style="text-decoration:none;">HOME</a>
+    {channel && (
+      <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">
+        &laquo; {channelLabel}
+      </a>
+    )}
+  </nav>
+
+  <div class="vault-layout">
+    <section class="log-display" style="width:100%;">
+      <article class="blog-post">
+        <div class="blog-post-body">
+          {channel && <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">[{channel.toUpperCase()}_LOG]</p>}
+          <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
+          {date && <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:20px;">{date}</time>}
+          <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
+          <slot />
+        </div>
+      </article>
+    </section>
+  </div>
+
 </BaseLayout>

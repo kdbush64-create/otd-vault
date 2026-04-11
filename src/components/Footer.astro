@@ -1,16 +1,20 @@
 ---
-const year = new Date().getFullYear();
 ---
-<footer class="site-footer">
-  <nav class="footer-nav">
-    <a href="/about">About</a>
-    <a href="/privacy">Privacy Policy</a>
-    <a href="/affiliate-disclosure">Affiliate Disclosure</a>
-    <a href="/newsletter">Newsletter</a>
-  </nav>
-  <p class="footer-copy">© {year} Vintage64TX · v64otd.com</p>
-  <p class="affiliate-note">
-    <em>Some links on gear and chow pages are affiliate links. See the
-    <a href="/affiliate-disclosure">Affiliate Disclosure</a> for details.</em>
-  </p>
+<footer>
+  <div style="text-align:center; margin-bottom:15px; font-size:0.8rem; letter-spacing: 1px;">
+    <span style="color:var(--secondary); opacity: 0.7;">LOOKING FOR PROFESSIONAL IT RESTORATION?&nbsp;</span>
+    <a href="https://vintage64tx.com" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:bold; border-bottom: 1px dashed var(--accent);">VISIT_VINTAGE64TX</a>
+  </div>
+  <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
+    SYSTEM_TIME: <span id="stardate"></span>
+  </div>
+  <p class="footer-tag blink">PERSONAL_THOUGHTS_V2.0.0 // DEEP_LINK_ENABLED</p>
 </footer>
+
+<script>
+  const el = document.getElementById('stardate');
+  if (el) {
+    const now = new Date();
+    el.textContent = now.toISOString().replace('T', ' ').split('.')[0] + ' UTC';
+  }
+</script>

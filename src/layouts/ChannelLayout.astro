@@ -1,18 +1,42 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import ChannelNav from '../components/ChannelNav.astro';
 
 interface Props {
   title: string;
   description?: string;
 }
-
 const { title, description } = Astro.props;
+
+const channelMap: Record<string, string> = {
+  dispatch: 'THE DISPATCH',
+  transit: 'TRANSIT',
+  gear: 'GEAR',
+  coord: 'COORD',
+  table: 'THE TABLE',
+  chow: 'CHOW',
+  xposts: 'X_POSTS',
+};
+const displayLabel = channelMap[title.toLowerCase()] ?? title.toUpperCase();
 ---
-<BaseLayout title={title} description={description}>
-  <ChannelNav activeChannel={title.toLowerCase()} />
-  <section class="channel-listing">
-    <h1 class="channel-title">{title}</h1>
-    <slot />
-  </section>
+<BaseLayout title={`${displayLabel} | OTD Vault`} description={description}>
+
+  <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
+    <a href="/dispatch" class="submit-btn" style="text-decoration:none;">DISPATCH</a>
+    <a href="/transit" class="submit-btn" style="text-decoration:none;">TRANSIT</a>
+    <a href="/gear" class="submit-btn" style="text-decoration:none;">GEAR</a>
+    <a href="/coord" class="submit-btn" style="text-decoration:none;">COORD</a>
+    <a href="/table" class="submit-btn" style="text-decoration:none;">TABLE</a>
+  </nav>
+
+  <div class="vault-layout">
+    <section style="width: 100%;">
+      <h2 style="color: var(--secondary); letter-spacing: 2px; margin-bottom: 20px; font-size: 1rem;">
+        &gt; {displayLabel}_CHANNEL
+      </h2>
+      <div class="post-list">
+        <slot />
+      </div>
+    </section>
+  </div>
+
 </BaseLayout>

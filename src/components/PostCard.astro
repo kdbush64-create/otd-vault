@@ -5,14 +5,16 @@ interface Props {
   description?: string;
   href: string;
 }
-
 const { title, date, description, href } = Astro.props;
 ---
-<article class="post-card">
-  <a href={href} class="post-card-link">
-    <h2 class="post-card-title">{title}</h2>
+<div style="border-bottom: 1px dashed var(--border); padding: 10px 0; margin-bottom: 4px;">
+  <a href={href} class="log-link">
+    &gt; {title}
   </a>
-  <time class="post-card-date">{date}</time>
-  {description && <p class="post-card-excerpt">{description}</p>}
-  <a href={href} class="read-more">Read →</a>
-</article>
+  <div>
+    <span style="color: var(--secondary); font-size: 0.75rem; opacity: 0.7; font-family: monospace;">{date}</span>
+  </div>
+  {description && (
+    <p style="color: var(--primary-dim); font-size: 0.82rem; margin-top: 4px; line-height: 1.4;">{description}</p>
+  )}
+</div>
