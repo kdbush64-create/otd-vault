@@ -12,7 +12,9 @@ date: "2024-01-01"
 
 # GEAR_RECON: RESMED_N30I_SYSTEM_AUDIT
 
-![[ResMed N30i Front View]](images/resmed-n30i-main.jpg)
+<!-- IMAGE: resmed-n30i-main.jpg
+     To add: place the image at public/images/gear/resmed-n30i-main.jpg
+     Then replace this comment with: ![ResMed N30i Front View](/images/gear/resmed-n30i-main.jpg) -->
 
 ### > SYSTEM_RATING
 
