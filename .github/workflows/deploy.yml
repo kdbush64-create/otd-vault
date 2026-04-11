@@ -1,4 +1,4 @@
-# Astro + Cloudflare Workers deploy — replaces static.yml (GitHub Pages)
+# Astro + Cloudflare Workers deploy
 name: Deploy to Cloudflare Workers
 
 on:
@@ -16,7 +16,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
       - run: npm install
       - run: npm run build
       - uses: cloudflare/wrangler-action@v3
