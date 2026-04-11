@@ -1,0 +1,18 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ChannelNav from '../components/ChannelNav.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <ChannelNav activeChannel={title.toLowerCase()} />
+  <section class="channel-listing">
+    <h1 class="channel-title">{title}</h1>
+    <slot />
+  </section>
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+interface Props {
+  title: string;
+  date: string;
+  description?: string;
+  href: string;
+}
+
+const { title, date, description, href } = Astro.props;
+---
+<article class="post-card">
+  <a href={href} class="post-card-link">
+    <h2 class="post-card-title">{title}</h2>
+  </a>
+  <time class="post-card-date">{date}</time>
+  {description && <p class="post-card-excerpt">{description}</p>}
+  <a href={href} class="read-more">Read →</a>
+</article>

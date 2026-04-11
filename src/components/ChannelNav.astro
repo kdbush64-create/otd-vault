@@ -1,0 +1,18 @@
+---
+interface Props {
+  activeChannel?: string;
+}
+
+const { activeChannel } = Astro.props;
+const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
+---
+<nav class="channel-nav">
+  {channels.map(ch => (
+    <a
+      href={`/${ch}`}
+      class:list={['channel-nav-link', { active: activeChannel === ch }]}
+    >
+      {ch}
+    </a>
+  ))}
+</nav>

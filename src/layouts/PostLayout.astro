@@ -1,0 +1,24 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  date?: string;
+  channel?: string;
+}
+
+const { title, description, date, channel } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <article class="post">
+    <header class="post-header">
+      {channel && <a href={`/${channel}`} class="channel-back">← {channel}</a>}
+      <h1 class="post-title">{title}</h1>
+      {date && <time class="post-date">{date}</time>}
+    </header>
+    <div class="post-body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

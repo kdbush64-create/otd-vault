@@ -1,0 +1,27 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'] as const;
+  const paths = [];
+  for (const channel of channels) {
+    const posts = await getCollection(channel);
+    for (const post of posts) {
+      paths.push({ params: { channel, post: post.slug }, props: { post, channel } });
+    }
+  }
+  return paths;
+}
+
+const { post, channel } = Astro.props;
+const { Content } = await post.render();
+---
+<PostLayout
+  title={post.data.title}
+  description={post.data.description}
+  date={post.data.date}
+  channel={channel}
+>
+  <Content />
+</PostLayout>

@@ -1,0 +1,23 @@
+---
+const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
+const currentPath = Astro.url.pathname;
+---
+<header class="site-header">
+  <a href="/" class="site-logo">v64otd.com</a>
+  <nav class="main-nav">
+    {channels.map(ch => (
+      <a
+        href={`/${ch}`}
+        class:list={['nav-link', { active: currentPath.startsWith(`/${ch}`) }]}
+      >
+        {ch}
+      </a>
+    ))}
+    <a
+      href="/newsletter"
+      class:list={['nav-link', { active: currentPath === '/newsletter' }]}
+    >
+      newsletter
+    </a>
+  </nav>
+</header>

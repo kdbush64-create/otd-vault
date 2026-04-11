@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import PostCard from '../components/PostCard.astro';
+
+const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'];
+const dispatchPosts = await getCollection('dispatch');
+const latestPosts = dispatchPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 5);
+---
+<BaseLayout title="v64otd.com" description="Vintage64TX — Dispatch, Transit, Gear, Coord, Table, Chow.">
+  <section class="homepage">
+    <h1 class="site-title">v64otd.com</h1>
+    <p class="site-tagline">Vintage64TX</p>
+    <nav class="channel-overview">
+      {channels.map(ch => (
+        <a href={`/${ch}`} class="channel-card">{ch}</a>
+      ))}
+    </nav>
+    {latestPosts.length > 0 && (
+      <section class="latest-dispatch">
+        <h2>Latest from Dispatch</h2>
+        {latestPosts.map(post => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            href={`/dispatch/${post.slug}`}
+          />
+        ))}
+        <a href="/dispatch" class="view-all">All dispatch posts →</a>
+      </section>
+    )}
+  </section>
+</BaseLayout>
