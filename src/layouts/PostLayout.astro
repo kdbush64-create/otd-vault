@@ -22,7 +22,6 @@ const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : 
 <BaseLayout title={`${title} | OTD Vault`} description={description}>
 
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
-    <a href="/" class="submit-btn" style="text-decoration:none;">HOME</a>
     {channel && (
       <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">
         &laquo; {channelLabel}
