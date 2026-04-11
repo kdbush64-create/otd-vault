@@ -12,7 +12,7 @@ date: "2024-01-01"
 
 # GEAR_RECON: RESMED_N30I_SYSTEM_AUDIT
 
-![ResMed N30i Front View](https://raw.githubusercontent.com/kdbush64-create/otd-vault/dev/media/resmed-n30i-main.jpg)
+![ResMed N30i Front View](/media/resmed-n30i-main.jpg)
 
 ### > SYSTEM_RATING
 

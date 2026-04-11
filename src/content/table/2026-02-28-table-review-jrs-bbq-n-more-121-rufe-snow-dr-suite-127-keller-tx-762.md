@@ -29,15 +29,15 @@ OBSERVATION: Went to join some other couples for music bingo. Had a good time. T
 ### THE_MISSION_SUMMARY
 <div style="max-width: 800px; margin: 0 auto 16px auto; display: flex; flex-wrap: wrap; gap: 8px;">
     <div style="flex: 1 1 calc(50% - 8px); min-width: 240px; overflow: hidden; border: 1px solid #333;">
-        <img src="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/2026-02-28-20260227-181949.jpg" 
+        <img src="/media/2026-02-28-20260227-181949.jpg" 
              alt="JR'S-BBQ-N-MORE" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
     </div>
     <div style="flex: 1 1 calc(50% - 8px); min-width: 240px; overflow: hidden; border: 1px solid #333;">
-        <img src="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/2026-02-28-20260227-182031.jpg" 
+        <img src="/media/2026-02-28-20260227-182031.jpg" 
              alt="JR'S-BBQ-N-MORE" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
     </div>
     <div style="flex: 1 1 calc(50% - 8px); min-width: 240px; overflow: hidden; border: 1px solid #333;">
-        <img src="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/2026-02-28-20260227-182047.jpg" 
+        <img src="/media/2026-02-28-20260227-182047.jpg" 
              alt="JR'S-BBQ-N-MORE" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
     </div>
 </div>

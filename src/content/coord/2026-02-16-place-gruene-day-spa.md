@@ -15,7 +15,7 @@ website: "[Visit Gruene Day Spa](http://www.gruenedayspa.com/)"
 
 # COORD_REPORT: GRUENE DAY SPA
 **DATE:** 2026-02-16
-**MAP_LINK:** [ð Open in GPS](https://maps.app.goo.gl/WwYHZqpGHNyzJnWA7)
+**MAP_LINK:** [Ã°ÂÂÂ Open in GPS](https://maps.app.goo.gl/WwYHZqpGHNyzJnWA7)
 **OFFICIAL_SITE:** [Visit Website](https://www.gruenedayspa.com/)
 **COST:** COMPETITIVE
 **RATING:** 10/10
@@ -30,7 +30,7 @@ OBSERVATION: LOVE THIS SPA.  BARB THE OWNER IS GREAT, AND A TOTAL SWEETHEART.
 ---
 
 ### MISSION_OBJECTIVES
-![Barb and Joe](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/gruene-day-spa.png)
+![Barb and Joe](/media/gruene-day-spa.png)
 *Massage Therapists: Barb, the Spa Owner and Joe*
 
 SUMMARY: The wife of yours truely, Old Texas Dude in case you forgot, scheduled a couples massage in the spirit of Valentine's Day. Was my first time getting a message here and my first one in just over 30 years.
@@ -39,7 +39,7 @@ I will be back for another one.   Call them up and make an appt. Tell them Court
 ---
 
 ### THE_VERDICT
-> **FINAL_ANALYSIS:** Top Tier Destination / Get the deep tissue massage if you know what is good for you.Â Don't skip this place.
+> **FINAL_ANALYSIS:** Top Tier Destination / Get the deep tissue massage if you know what is good for you.ÃÂ Don't skip this place.
 
 Gruene is a tourist stop while in the New Braunfels area. You can walk around and everything is close by including the historic Gruene Dance Hall which is Texas' oldest (https://gruenehall.com/).
 So worth the stop.  

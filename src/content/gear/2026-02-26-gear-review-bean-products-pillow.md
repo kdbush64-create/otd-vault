@@ -29,7 +29,7 @@ OBSERVATION: The King-size pillow which I purchased is heavy. It feels like some
 
 ### FIELD_TEST_DATA
 <div style="max-width: 800px; margin: 0 auto; aspect-ratio: 3 / 2; overflow: hidden; border: 1px solid #333; background-color: #f4f4f4;">
-    <img src="https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/MultigrainPillow.webp" 
+    <img src="/media/MultigrainPillow.webp" 
          alt="Bean Products Multigrain Pillow" 
          style="width: 100%; height: 100%; object-fit: contain; display: block;">
 </div>

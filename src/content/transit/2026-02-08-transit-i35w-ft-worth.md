@@ -27,7 +27,7 @@ OBSERVATION: Hundreds of millions of dollars spent on improving I-35 only to cre
 ---
 
 ### FIELD_INTEL
-![Transit View](https://raw.githubusercontent.com/kdbush64-create/otd-vault/main/media/transit-pic.jpg)
+![Transit View](/media/transit-pic.jpg)
 
 SUMMARY: Gov Abbott should investigate how this flawed design failed to account for heavier traffic and appears to have been designed for less traffic, and all of TX_Dot needs to be fired.  Everyone should [file a complaint with TxDOT](https://www.txdot.gov/about/contact-us/complaints.html)
 
