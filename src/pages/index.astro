@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import PostCard from '../components/PostCard.astro';
@@ -9,7 +10,7 @@ const latestPosts = dispatchPosts
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 5);
 ---
-<BaseLayout title="v64otd.com" description="Vintage64TX — Dispatch, Transit, Gear, Coord, Table, Chow.">
+<BaseLayout title="v64otd.com" description="Vintage64TX â Dispatch, Transit, Gear, Coord, Table, Chow.">
   <section class="homepage">
     <h1 class="site-title">v64otd.com</h1>
     <p class="site-tagline">Vintage64TX</p>
@@ -29,7 +30,7 @@ const latestPosts = dispatchPosts
             href={`/dispatch/${post.slug}`}
           />
         ))}
-        <a href="/dispatch" class="view-all">All dispatch posts →</a>
+        <a href="/dispatch" class="view-all">All dispatch posts â</a>
       </section>
     )}
   </section>

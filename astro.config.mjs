@@ -3,7 +3,7 @@ import cloudflare from '@astrojs/cloudflare';
 import keystatic from '@keystatic/astro';
 
 export default defineConfig({
-  output: 'hybrid',
+  output: 'server',
   adapter: cloudflare(),
   integrations: [keystatic()],
   site: 'https://v64otd.com',
