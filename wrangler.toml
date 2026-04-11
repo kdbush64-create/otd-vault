@@ -1,5 +1,6 @@
 name = "otd-worker"
 compatibility_date = "2026-03-11"
+main = "dist/_worker.js"
 assets = { directory = "./dist" }
 
 [build]
