@@ -1,12 +1,10 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-
 interface Props {
   title: string;
   description?: string;
 }
 const { title, description } = Astro.props;
-
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
@@ -16,18 +14,22 @@ const channelMap: Record<string, string> = {
   chow: 'CHOW',
   xposts: 'X_POSTS',
 };
-const displayLabel = channelMap[title.toLowerCase()] ?? title.toUpperCase();
+const activeChannel = title.toLowerCase();
+const displayLabel = channelMap[activeChannel] ?? title.toUpperCase();
+const navChannels = ['dispatch', 'transit', 'gear', 'coord', 'table'] as const;
 ---
 <BaseLayout title={`${displayLabel} | OTD Vault`} description={description}>
-
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
-    <a href="/dispatch" class="submit-btn" style="text-decoration:none;">DISPATCH</a>
-    <a href="/transit" class="submit-btn" style="text-decoration:none;">TRANSIT</a>
-    <a href="/gear" class="submit-btn" style="text-decoration:none;">GEAR</a>
-    <a href="/coord" class="submit-btn" style="text-decoration:none;">COORD</a>
-    <a href="/table" class="submit-btn" style="text-decoration:none;">TABLE</a>
+    {navChannels.map(ch => (
+      <a
+        href={`/${ch}`}
+        class="submit-btn"
+        style={`text-decoration:none;${activeChannel === ch ? ' border-color:var(--accent); color:var(--accent); background:rgba(0,255,65,0.08);' : ''}`}
+      >
+        {channelMap[ch]}
+      </a>
+    ))}
   </nav>
-
   <div class="vault-layout">
     <section style="width: 100%;">
       <h2 style="color: var(--secondary); letter-spacing: 2px; margin-bottom: 20px; font-size: 1rem;">
@@ -38,5 +40,4 @@ const displayLabel = channelMap[title.toLowerCase()] ?? title.toUpperCase();
       </div>
     </section>
   </div>
-
 </BaseLayout>

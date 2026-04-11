@@ -1,19 +1,16 @@
 ---
 interface Props {
   title: string;
-  date: string;
+  date?: string;
   description?: string;
   href: string;
 }
-const { title, date, description, href } = Astro.props;
+const { title, description, href } = Astro.props;
 ---
 <div style="border-bottom: 1px dashed var(--border); padding: 10px 0; margin-bottom: 4px;">
   <a href={href} class="log-link">
     &gt; {title}
   </a>
-  <div>
-    <span style="color: var(--secondary); font-size: 0.75rem; opacity: 0.7; font-family: monospace;">{date}</span>
-  </div>
   {description && (
     <p style="color: var(--primary-dim); font-size: 0.82rem; margin-top: 4px; line-height: 1.4;">{description}</p>
   )}
