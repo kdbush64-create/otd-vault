@@ -1,6 +1,5 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-
 interface Props {
   title: string;
   description?: string;
@@ -8,7 +7,6 @@ interface Props {
   channel?: string;
 }
 const { title, description, date, channel } = Astro.props;
-
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
@@ -18,9 +16,9 @@ const channelMap: Record<string, string> = {
   chow: 'CHOW',
 };
 const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
+const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(Astro.url.href)}`;
 ---
 <BaseLayout title={`${title} | OTD Vault`} description={description}>
-
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
     {channel && (
       <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">
@@ -28,7 +26,6 @@ const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : 
       </a>
     )}
   </nav>
-
   <div class="vault-layout">
     <section class="log-display" style="width:100%;">
       <article class="blog-post">
@@ -38,9 +35,12 @@ const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : 
           {date && <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:20px;">{date}</time>}
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
           <slot />
+          <hr style="border:none; border-top:1px dashed var(--border); margin-top:30px; margin-bottom:16px;" />
+          <a href={shareUrl} target="_blank" rel="noopener noreferrer" class="submit-btn" style="text-decoration:none; font-size:0.8rem;">
+            POST TO X
+          </a>
         </div>
       </article>
     </section>
   </div>
-
 </BaseLayout>
