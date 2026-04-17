@@ -5,12 +5,15 @@ interface Props {
   description?: string;
   href: string;
 }
-const { title, description, href } = Astro.props;
+const { title, date, description, href } = Astro.props;
 ---
 <div style="border-bottom: 1px dashed var(--border); padding: 10px 0; margin-bottom: 4px;">
   <a href={href} class="log-link">
     &gt; {title}
   </a>
+  {date && (
+    <p style="color: var(--primary-dim); font-size: 0.75rem; margin-top: 2px;">{date}</p>
+  )}
   {description && (
     <p style="color: var(--primary-dim); font-size: 0.82rem; margin-top: 4px; line-height: 1.4;">{description}</p>
   )}
