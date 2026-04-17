@@ -5,11 +5,21 @@ const postSchema = z.object({
   date: z.coerce.string(),
   description: z.string().optional(),
   tags: z.array(z.string()).optional(),
+  gallery: z.array(z.object({ image: z.string(), caption: z.string().max(50).optional() })).max(10).optional(),
+});
+
+const locationSchema = postSchema.extend({
+  address: z.string().optional(),
+  website: z.string().optional(),
+});
+
+const gearSchema = postSchema.extend({
   affiliate: z.boolean().optional(),
-  gallery: z.array(z.object({
-    image: z.string(),
-    caption: z.string().max(50).optional(),
-  })).max(10).optional(),
+  website: z.string().optional(),
+});
+
+const affiliateSchema = postSchema.extend({
+  affiliate: z.boolean().optional(),
 });
 
 const xpostSchema = z.object({
@@ -27,10 +37,10 @@ const pageSchema = z.object({
 export const collections = {
   dispatch: defineCollection({ schema: postSchema }),
   transit:  defineCollection({ schema: postSchema }),
-  gear:     defineCollection({ schema: postSchema }),
-  coord:    defineCollection({ schema: postSchema }),
-  table:    defineCollection({ schema: postSchema }),
-  chow:     defineCollection({ schema: postSchema }),
+  gear:     defineCollection({ schema: gearSchema }),
+  coord:    defineCollection({ schema: locationSchema }),
+  table:    defineCollection({ schema: locationSchema }),
+  chow:     defineCollection({ schema: affiliateSchema }),
   xposts:   defineCollection({ schema: xpostSchema }),
   pages:    defineCollection({ schema: pageSchema }),
 };
