@@ -16,7 +16,6 @@ const channelMap: Record<string, string> = {
   chow: 'CHOW',
 };
 const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
-const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(Astro.url.href)}`;
 ---
 <BaseLayout title={`${title} | OTD Vault`} description={description}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
@@ -36,7 +35,13 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tit
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
           <slot />
           <hr style="border:none; border-top:1px dashed var(--border); margin-top:30px; margin-bottom:16px;" />
-          <a href={shareUrl} target="_blank" rel="noopener noreferrer" class="submit-btn" style="text-decoration:none; font-size:0.8rem;">
+          
+            id="x-share-btn"
+            data-text={title}
+            data-url={Astro.url.href}
+            class="submit-btn"
+            style="text-decoration:none; font-size:0.8rem; cursor:pointer;"
+          >
             POST TO X
           </a>
         </div>
@@ -44,3 +49,17 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tit
     </section>
   </div>
 </BaseLayout>
+
+<script>
+  const btn = document.getElementById('x-share-btn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const text = btn.dataset.text;
+      const url = btn.dataset.url;
+      const appUrl = `twitter://post?message=${encodeURIComponent(text + ' ' + url)}`;
+      const webUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+      window.location.href = appUrl;
+      setTimeout(() => { window.open(webUrl, '_blank'); }, 500);
+    });
+  }
+</script>
