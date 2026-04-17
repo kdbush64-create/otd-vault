@@ -37,12 +37,12 @@ try {
   <ul class="substack-feed">
     {posts.map(post => (
       <li class="feed-item">
-        <a href={post.link} target="_blank" rel="noopener noreferrer">
-          <h3 class="feed-title">{post.title}</h3>
+        <a href={post.link} target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none;">
+          <h3 class="feed-title" style="color: var(--accent);">{post.title}</h3>
         </a>
-        <time class="feed-date">{post.date}</time>
+        <time class="feed-date" style="color: var(--secondary);">{post.date}</time>
         <p class="feed-excerpt">{post.description}</p>
-        <a class="read-link" href={post.link} target="_blank" rel="noopener noreferrer">
+        <a class="read-link" href={post.link} target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none;">
           Read on Substack →
         </a>
       </li>
