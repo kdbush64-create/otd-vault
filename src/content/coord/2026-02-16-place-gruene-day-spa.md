@@ -1,6 +1,6 @@
 ---
-title: "2026 02 16 Place Gruene Day Spa"
-date: "2024-01-01"
+title: "Gruene Day Spa"
+date: "2026-02-16"
 ---
 
 \---
@@ -33,7 +33,7 @@ OBSERVATION: LOVE THIS SPA.  BARB THE OWNER IS GREAT, AND A TOTAL SWEETHEART.
 ![Barb and Joe](/media/gruene-day-spa.png)
 *Massage Therapists: Barb, the Spa Owner and Joe*
 
-SUMMARY: The wife of yours truely, Old Texas Dude in case you forgot, scheduled a couples massage in the spirit of Valentine's Day. Was my first time getting a message here and my first one in just over 30 years.
+SUMMARY: The wife of yours truely (Old Texas Dude in case you forgot) scheduled a couples massage in the spirit of Valentine's Day. Was my first time getting a message here and my first one in just over 30 years.
 Joe worked me over, and Barb worked on Mrs. OTD.  We both wobbled out of there totally relaxed and ready for the drive back to Fort Worth. In fact, I am still relaxed 2 days later. Thank you Barb and Joe.
 I will be back for another one.   Call them up and make an appt. Tell them Courtney's Dad sent you via his blog. Their number is +1-830-832-5599 
 ---
