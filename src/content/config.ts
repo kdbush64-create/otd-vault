@@ -12,6 +12,13 @@ const postSchema = z.object({
   })).max(10).optional(),
 });
 
+const xpostSchema = z.object({
+  title: z.string(),
+  date: z.coerce.string(),
+  xhandle: z.string().optional(),
+  approved: z.boolean().optional(),
+});
+
 const pageSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
@@ -24,6 +31,6 @@ export const collections = {
   coord:    defineCollection({ schema: postSchema }),
   table:    defineCollection({ schema: postSchema }),
   chow:     defineCollection({ schema: postSchema }),
-  xposts:   defineCollection({ schema: postSchema }),
+  xposts:   defineCollection({ schema: xpostSchema }),
   pages:    defineCollection({ schema: pageSchema }),
 };
