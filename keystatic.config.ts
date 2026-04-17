@@ -53,6 +53,8 @@ export default config({
     xposts:   collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
       date: fields.date({ label: 'Date', validation: { isRequired: true } }),
+      xhandle: fields.text({ label: 'X Handle', description: 'X username of the poster' }),
+      approved: fields.checkbox({ label: 'Approved — publish to site', defaultValue: false }),
       content: fields.markdoc({ label: 'Content' }),
     }}),
     pages:    collection({ label: 'Pages',    slugField: 'title', path: 'src/content/pages/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
