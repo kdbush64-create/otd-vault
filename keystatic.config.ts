@@ -7,29 +7,25 @@ const postFields = {
   tags: fields.array(fields.text({ label: 'Tag' }), { label: 'Tags', itemLabel: (p) => p.value }),
   gallery: fields.array(
     fields.object({
-      image: fields.image({
-        label: 'Image',
-        directory: 'public/images/posts',
-        publicPath: '/images/posts/',
-      }),
-      caption: fields.text({
-        label: 'Caption',
-        description: 'Optional — up to 50 characters',
-        validation: { length: { max: 50 } },
-      }),
+      image: fields.image({ label: 'Image', directory: 'public/images/posts', publicPath: '/images/posts/' }),
+      caption: fields.text({ label: 'Caption', description: 'Optional — up to 50 characters', validation: { length: { max: 50 } } }),
     }),
-    {
-      label: 'Gallery',
-      itemLabel: (props) => props.fields.caption.value || 'Image',
-      validation: { length: { max: 10 } },
-    }
+    { label: 'Gallery', itemLabel: (props) => props.fields.caption.value || 'Image', validation: { length: { max: 10 } } }
   ),
   content: fields.markdoc({ label: 'Content' }),
 };
 
-const affiliateFields = {
+const affiliateFields = { ...postFields, affiliate: fields.checkbox({ label: 'Contains affiliate links', defaultValue: false }) };
+
+const locationFields = {
   ...postFields,
-  affiliate: fields.checkbox({ label: 'Contains affiliate links', defaultValue: false }),
+  address: fields.text({ label: 'Address' }),
+  website: fields.url({ label: 'Website URL' }),
+};
+
+const gearFields = {
+  ...affiliateFields,
+  website: fields.url({ label: 'Website URL' }),
 };
 
 export default config({
@@ -46,18 +42,18 @@ export default config({
   collections: {
     dispatch: collection({ label: 'Dispatch', slugField: 'title', path: 'src/content/dispatch/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: postFields }),
     transit:  collection({ label: 'Transit',  slugField: 'title', path: 'src/content/transit/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: postFields }),
-    gear:     collection({ label: 'Gear',     slugField: 'title', path: 'src/content/gear/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: affiliateFields }),
-    coord:    collection({ label: 'Coord',    slugField: 'title', path: 'src/content/coord/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: postFields }),
-    table:    collection({ label: 'Table',    slugField: 'title', path: 'src/content/table/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: postFields }),
+    gear:     collection({ label: 'Gear',     slugField: 'title', path: 'src/content/gear/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: gearFields }),
+    coord:    collection({ label: 'Coord',    slugField: 'title', path: 'src/content/coord/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: locationFields }),
+    table:    collection({ label: 'Table',    slugField: 'title', path: 'src/content/table/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: locationFields }),
     chow:     collection({ label: 'Chow',     slugField: 'title', path: 'src/content/chow/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: affiliateFields }),
     xposts:   collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
       date: fields.date({ label: 'Date', validation: { isRequired: true } }),
-      xhandle: fields.text({ label: 'X Handle', description: 'X username of the poster' }),
+      xhandle: fields.text({ label: 'X Handle' }),
       approved: fields.checkbox({ label: 'Approved — publish to site', defaultValue: false }),
       content: fields.markdoc({ label: 'Content' }),
     }}),
-    pages:    collection({ label: 'Pages',    slugField: 'title', path: 'src/content/pages/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
+    pages: collection({ label: 'Pages', slugField: 'title', path: 'src/content/pages/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
       description: fields.text({ label: 'Description', multiline: true }),
       content: fields.markdoc({ label: 'Content' }),
