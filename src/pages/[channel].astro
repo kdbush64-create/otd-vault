@@ -15,7 +15,7 @@ const posts = await getCollection(channel);
 
 // Sort descending by slug — all content slugs are date-prefixed (2026-02-08-title)
 // so reverse alpha = newest first
-const sortedPosts = [...posts].sort((a, b) => b.slug.localeCompare(a.slug));
+const sortedPosts = [...posts].sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 <ChannelLayout title={channel} description={`All posts in ${channel}`}>
   <div class="post-list">
