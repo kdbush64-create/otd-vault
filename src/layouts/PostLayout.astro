@@ -31,35 +31,11 @@ const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : 
         <div class="blog-post-body">
           {channel && <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">[{channel.toUpperCase()}_LOG]</p>}
           <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
-          {date && <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:20px;">{date}</time>}
+          {date && <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:20px;">{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</time>}
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
           <slot />
-          <hr style="border:none; border-top:1px dashed var(--border); margin-top:30px; margin-bottom:16px;" />
-          
-            id="x-share-btn"
-            data-text={title}
-            data-url={Astro.url.href}
-            class="submit-btn"
-            style="text-decoration:none; font-size:0.8rem; cursor:pointer;"
-          >
-            POST TO X
-          </a>
         </div>
       </article>
     </section>
   </div>
 </BaseLayout>
-
-<script>
-  const btn = document.getElementById('x-share-btn');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      const text = btn.dataset.text;
-      const url = btn.dataset.url;
-      const appUrl = `twitter://post?message=${encodeURIComponent(text + ' ' + url)}`;
-      const webUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-      window.location.href = appUrl;
-      setTimeout(() => { window.open(webUrl, '_blank'); }, 500);
-    });
-  }
-</script>
