@@ -5,6 +5,25 @@ const postFields = {
   date: fields.date({ label: 'Date', validation: { isRequired: true } }),
   description: fields.text({ label: 'Description', multiline: true }),
   tags: fields.array(fields.text({ label: 'Tag' }), { label: 'Tags', itemLabel: (p) => p.value }),
+  gallery: fields.array(
+    fields.object({
+      image: fields.image({
+        label: 'Image',
+        directory: 'public/images/posts',
+        publicPath: '/images/posts/',
+      }),
+      caption: fields.text({
+        label: 'Caption',
+        description: 'Optional — up to 50 characters',
+        validation: { length: { max: 50 } },
+      }),
+    }),
+    {
+      label: 'Gallery',
+      itemLabel: (props) => props.fields.caption.value || 'Image',
+      validation: { length: { max: 10 } },
+    }
+  ),
   content: fields.markdoc({ label: 'Content' }),
 };
 
