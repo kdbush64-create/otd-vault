@@ -11,11 +11,16 @@ export async function getStaticPaths() {
 
 type Channel = 'dispatch' | 'transit' | 'gear' | 'coord' | 'table' | 'chow' | 'xposts';
 const { channel } = Astro.params as { channel: Channel };
-const posts = await getCollection(channel);
 
-// Sort descending by slug — all content slugs are date-prefixed (2026-02-08-title)
-// so reverse alpha = newest first
-const sortedPosts = [...posts].sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const allPosts = await getCollection(channel);
+
+const posts = channel === 'xposts'
+  ? allPosts.filter(post => post.data.approved === true)
+  : allPosts;
+
+const sortedPosts = [...posts].sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
 <ChannelLayout title={channel} description={`All posts in ${channel}`}>
   <div class="post-list">
@@ -26,7 +31,7 @@ const sortedPosts = [...posts].sort((a, b) => new Date(b.data.date).getTime() - 
         <PostCard
           title={post.data.title}
           date={post.data.date}
-          description={post.data.description}
+          description={'description' in post.data ? post.data.description : undefined}
           href={`/${channel}/${post.slug}`}
         />
       ))
