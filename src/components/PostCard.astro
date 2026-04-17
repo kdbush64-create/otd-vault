@@ -13,7 +13,7 @@ const { title, date, description, href } = Astro.props;
   </a>
   {date && (
   <p style="color: var(--primary-dim); font-size: 0.75rem; margin-top: 2px;">
-    {new Date(date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    {new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
   </p>
 )}
   {description && (
