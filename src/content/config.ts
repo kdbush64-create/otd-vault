@@ -6,6 +6,10 @@ const postSchema = z.object({
   description: z.string().optional(),
   tags: z.array(z.string()).optional(),
   affiliate: z.boolean().optional(),
+  gallery: z.array(z.object({
+    image: z.string(),
+    caption: z.string().max(50).optional(),
+  })).max(10).optional(),
 });
 
 const pageSchema = z.object({
