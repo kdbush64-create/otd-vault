@@ -14,7 +14,8 @@ const affiliateFields = {
 };
 
 export default config({
-  storage: { kind: 'github', repo: 'kdbush64-create/otd-vault', branchPrefix: 'keystatic/' },
+  storage: { kind: 'cloud' },
+  cloud: { project: 'otd-vault/otd-vault' },
   ui: {
     brand: { name: 'v64otd.com' },
     navigation: {
