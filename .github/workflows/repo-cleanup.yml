@@ -1,8 +1,6 @@
 name: Repository cleanup — remove stale files
-
 on:
   workflow_dispatch:
-
 jobs:
   cleanup:
     runs-on: ubuntu-latest
@@ -19,6 +17,23 @@ jobs:
           git rm -f sitemap.xml || true
           git rm -f .nojekyll || true
           git rm -f gear-policy.md || true
+          git rm -f style.css || true
+          git rm -f telescope2.jpg || true
+          git rm -f telescope2.png || true
+          git rm -f favicon.png || true
+
+      - name: Remove old site folders
+        run: |
+          git rm -rf about/ || true
+          git rm -rf chow/ || true
+          git rm -rf coord/ || true
+          git rm -rf dispatch/ || true
+          git rm -rf gear/ || true
+          git rm -rf media/ || true
+          git rm -rf rants/ || true
+          git rm -rf table/ || true
+          git rm -rf templates/ || true
+          git rm -rf transit/ || true
 
       - name: Remove one-time workflow files
         run: |
@@ -30,5 +45,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: remove stale pre-Astro files and one-time workflows" || echo "Nothing to remove"
+          git commit -m "chore: remove stale pre-Astro folders and root files" || echo "Nothing to remove"
           git push
