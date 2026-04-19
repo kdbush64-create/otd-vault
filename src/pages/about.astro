@@ -2,15 +2,22 @@
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
-
 let entry: any = null;
 try { entry = await getEntry('pages', '00-the-man'); } catch (_) {}
 let Content: any = null;
 if (entry) { const r = await entry.render(); Content = r.Content; }
 ---
-<BaseLayout title="About" description="About Vintage64TX and v64otd.com">
-  <article class="page">
-    <h1>About</h1>
-    {Content ? <Content /> : <p>About page coming soon.</p>}
-  </article>
+<BaseLayout title="About | OTD Vault" description="About Vintage64TX and v64otd.com">
+  <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
+    <a href="/" class="submit-btn" style="text-decoration:none;">&laquo; HOME</a>
+  </nav>
+  <div class="vault-layout">
+    <section style="width: 100%;">
+      <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:20px;">About</h1>
+      <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
+      <div style="color:var(--primary); font-size:0.9rem; line-height:1.7;">
+        {Content ? <Content /> : <p>About page coming soon.</p>}
+      </div>
+    </section>
+  </div>
 </BaseLayout>
