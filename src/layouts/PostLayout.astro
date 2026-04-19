@@ -1,12 +1,20 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+
 interface Props {
   title: string;
   description?: string;
   date?: string;
   channel?: string;
+  rating?: string;
+  cost?: string;
+  foodType?: string;
+  address?: string;
+  website?: string;
 }
-const { title, description, date, channel } = Astro.props;
+
+const { title, description, date, channel, rating, cost, foodType, address, website } = Astro.props;
+
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
@@ -16,22 +24,67 @@ const channelMap: Record<string, string> = {
   chow: 'CHOW',
 };
 const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
+
+const hasReviewMeta = rating || cost || foodType || address || website;
 ---
 <BaseLayout title={`${title} | OTD Vault`} description={description}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
     {channel && (
-      <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">
-        &laquo; {channelLabel}
-      </a>
+      <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">&laquo; {channelLabel}</a>
     )}
   </nav>
+
   <div class="vault-layout">
     <section class="log-display" style="width:100%;">
       <article class="blog-post">
         <div class="blog-post-body">
-          {channel && <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">[{channel.toUpperCase()}_LOG]</p>}
+          {channel && (
+            <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">[{channel.toUpperCase()}_LOG]</p>
+          )}
           <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
-          {date && <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:20px;">{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</time>}
+          {date && (
+            <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:16px;">
+              {new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+            </time>
+          )}
+
+          {hasReviewMeta && (
+            <div style="border: 1px dashed var(--border); padding: 10px 14px; margin-bottom: 20px; font-size: 0.82rem; display: flex; flex-wrap: wrap; gap: 16px;">
+              {rating && (
+                <span style="color:var(--primary);">
+                  <span style="color:var(--secondary); letter-spacing:1px;">RATING</span>&nbsp;
+                  <strong style="color:var(--accent);">{rating}/10</strong>
+                </span>
+              )}
+              {cost && (
+                <span style="color:var(--primary);">
+                  <span style="color:var(--secondary); letter-spacing:1px;">COST</span>&nbsp;
+                  <strong>{cost}</strong>
+                </span>
+              )}
+              {foodType && (
+                <span style="color:var(--primary);">
+                  <span style="color:var(--secondary); letter-spacing:1px;">TYPE</span>&nbsp;
+                  <strong>{foodType}</strong>
+                </span>
+              )}
+              {address && (
+                <span style="color:var(--primary);">
+                  <span style="color:var(--secondary); letter-spacing:1px;">LOCATION</span>&nbsp;
+                  {website
+                    ? <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none;">{address}</a>
+                    : <span>{address}</span>
+                  }
+                </span>
+              )}
+              {website && !address && (
+                <span>
+                  <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; letter-spacing:1px;">WEBSITE →</a>
+                </span>
+              )}
+            </div>
+          )}
+
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
           <slot />
         </div>
