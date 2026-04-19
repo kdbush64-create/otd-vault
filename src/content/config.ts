@@ -11,6 +11,12 @@ const postSchema = z.object({
 const locationSchema = postSchema.extend({
   address: z.string().optional(),
   website: z.string().optional(),
+  rating: z.string().optional(),
+  cost: z.string().optional(),
+});
+
+const tableSchema = locationSchema.extend({
+  foodType: z.string().max(50).optional(),
 });
 
 const gearSchema = postSchema.extend({
@@ -39,7 +45,7 @@ export const collections = {
   transit:  defineCollection({ schema: postSchema }),
   gear:     defineCollection({ schema: gearSchema }),
   coord:    defineCollection({ schema: locationSchema }),
-  table:    defineCollection({ schema: locationSchema }),
+  table:    defineCollection({ schema: tableSchema }),
   chow:     defineCollection({ schema: affiliateSchema }),
   xposts:   defineCollection({ schema: xpostSchema }),
   pages:    defineCollection({ schema: pageSchema }),
