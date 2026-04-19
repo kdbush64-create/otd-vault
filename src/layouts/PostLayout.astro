@@ -51,35 +51,35 @@ const hasReviewMeta = rating || cost || foodType || address || website;
           {hasReviewMeta && (
             <div style="border: 1px dashed var(--border); padding: 10px 14px; margin-bottom: 20px; font-size: 0.82rem; display: flex; flex-wrap: wrap; gap: 16px;">
               {rating && (
-                <span style="color:var(--primary);">
-                  <span style="color:var(--secondary); letter-spacing:1px;">RATING</span>&nbsp;
-                  <strong style="color:var(--accent);">{rating}/10</strong>
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">RATING</span>&nbsp;
+                  <strong style="color:var(--secondary);">{rating}/10</strong>
                 </span>
               )}
               {cost && (
-                <span style="color:var(--primary);">
-                  <span style="color:var(--secondary); letter-spacing:1px;">COST</span>&nbsp;
-                  <strong>{cost}</strong>
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">COST</span>&nbsp;
+                  <strong style="color:var(--secondary);">{cost}</strong>
                 </span>
               )}
               {foodType && (
-                <span style="color:var(--primary);">
-                  <span style="color:var(--secondary); letter-spacing:1px;">TYPE</span>&nbsp;
-                  <strong>{foodType}</strong>
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">TYPE</span>&nbsp;
+                  <strong style="color:var(--secondary);">{foodType}</strong>
                 </span>
               )}
               {address && (
-                <span style="color:var(--primary);">
-                  <span style="color:var(--secondary); letter-spacing:1px;">LOCATION</span>&nbsp;
-                  {website
-                    ? <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none;">{address}</a>
-                    : <span>{address}</span>
-                  }
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
+                  <span style="color:var(--secondary);">{address}</span>
                 </span>
               )}
-              {website && !address && (
+              {website && (
                 <span>
-                  <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; letter-spacing:1px;">WEBSITE →</a>
+                  <span style="color:var(--primary); letter-spacing:1px;">WEBSITE</span>&nbsp;
+                  <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--secondary); text-decoration:none;">
+                    {website.replace(/^https?:\/\//, '').replace(/\/$/, '')} →
+                  </a>
                 </span>
               )}
             </div>
