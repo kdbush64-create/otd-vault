@@ -1,5 +1,28 @@
 import { config, fields, collection } from '@keystatic/core';
 
+const ratingOptions = [
+  { label: '— not rated —', value: '' },
+  { label: '1/10', value: '1' },
+  { label: '2/10', value: '2' },
+  { label: '3/10', value: '3' },
+  { label: '4/10', value: '4' },
+  { label: '5/10', value: '5' },
+  { label: '6/10', value: '6' },
+  { label: '7/10', value: '7' },
+  { label: '8/10', value: '8' },
+  { label: '9/10', value: '9' },
+  { label: '10/10', value: '10' },
+];
+
+const costOptions = [
+  { label: '— not set —', value: '' },
+  { label: 'Budget', value: 'Budget' },
+  { label: 'Moderate', value: 'Moderate' },
+  { label: 'Competitive', value: 'Competitive' },
+  { label: 'Premium', value: 'Premium' },
+  { label: 'Upscale', value: 'Upscale' },
+];
+
 const postFields = {
   title: fields.slug({ name: { label: 'Title' } }),
   date: fields.date({ label: 'Date', validation: { isRequired: true } }),
@@ -15,12 +38,23 @@ const postFields = {
   content: fields.markdoc({ label: 'Content' }),
 };
 
-const affiliateFields = { ...postFields, affiliate: fields.checkbox({ label: 'Contains affiliate links', defaultValue: false }) };
+const affiliateFields = {
+  ...postFields,
+  affiliate: fields.checkbox({ label: 'Contains affiliate links', defaultValue: false }),
+};
 
 const locationFields = {
   ...postFields,
   address: fields.text({ label: 'Address' }),
   website: fields.url({ label: 'Website URL' }),
+  rating: fields.select({ label: 'Rating (out of 10)', options: ratingOptions, defaultValue: '' }),
+  cost: fields.select({ label: 'Cost', options: costOptions, defaultValue: '' }),
+  content: fields.markdoc({ label: 'Summary' }),
+};
+
+const tableFields = {
+  ...locationFields,
+  foodType: fields.text({ label: 'Food Type', description: 'e.g. BBQ, Italian, Tex-Mex (50 chars max)', validation: { length: { max: 50 } } }),
 };
 
 const gearFields = {
@@ -44,7 +78,7 @@ export default config({
     transit:  collection({ label: 'Transit',  slugField: 'title', path: 'src/content/transit/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: postFields }),
     gear:     collection({ label: 'Gear',     slugField: 'title', path: 'src/content/gear/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: gearFields }),
     coord:    collection({ label: 'Coord',    slugField: 'title', path: 'src/content/coord/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: locationFields }),
-    table:    collection({ label: 'Table',    slugField: 'title', path: 'src/content/table/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: locationFields }),
+    table:    collection({ label: 'Table',    slugField: 'title', path: 'src/content/table/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: tableFields }),
     chow:     collection({ label: 'Chow',     slugField: 'title', path: 'src/content/chow/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: affiliateFields }),
     xposts:   collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
