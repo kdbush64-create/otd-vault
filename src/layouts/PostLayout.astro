@@ -12,9 +12,10 @@ interface Props {
   address?: string;
   website?: string;
   gallery?: { image: string; caption?: string }[];
+  affiliate?: boolean;
 }
 
-const { title, description, date, channel, rating, cost, foodType, address, website, gallery } = Astro.props;
+const { title, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate } = Astro.props;
 
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
@@ -46,6 +47,13 @@ const hasReviewMeta = rating || cost || foodType || address || website;
             <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:16px;">
               {new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
             </time>
+          )}
+
+          {affiliate && (
+            <div style="border: 1px dashed var(--secondary); padding: 8px 14px; margin-bottom: 16px; font-size: 0.78rem; color: var(--secondary); opacity: 0.8;">
+              ⚠ This post contains affiliate links. If you purchase through these links, I may earn a small commission at no extra cost to you.
+              <a href="/pages/gear-policy" style="color:var(--secondary); margin-left:6px;">Affiliate Policy →</a>
+            </div>
           )}
 
           {hasReviewMeta && (
