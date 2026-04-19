@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description = 'v64otd.com — Vintage64TX', ogImage } = Astro.props;
+const siteTitle = title.includes('v64otd') ? title : `${title} | v64otd.com`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://v64otd.com');
+---
+<title>{siteTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={siteTitle} />
+<meta property="og:description" content={description} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@Vintage64TX" />
+<meta name="twitter:title" content={siteTitle} />
+<meta name="twitter:description" content={description} />

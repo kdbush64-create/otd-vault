@@ -1,0 +1,35 @@
+---
+export const prerender = true;
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="OTD Vault | The Watch Tower" description="Vintage64TX — Dispatch, Transit, Gear, Coord, Table." showHero={true}>
+  <nav class="vault-nav-container">
+    <div class="primary-nav" style="margin-bottom: 15px; width: 100%;">
+      <a href="/about" class="submit-btn" style="display:block; width:100%; padding:12px; border-color:var(--accent); color:var(--accent); font-weight:bold; font-size:1rem; text-align:center; text-decoration:none; box-sizing:border-box;">
+        ABOUT: OLD TEXAS DUDE
+      </a>
+    </div>
+    <div class="secondary-filters">
+      <a href="/dispatch" class="submit-btn" style="text-decoration:none;">THE DISPATCH</a>
+      <a href="/transit" class="submit-btn" style="text-decoration:none;">TRANSIT</a>
+      <a href="/gear" class="submit-btn" style="text-decoration:none;">GEAR</a>
+      <a href="/coord" class="submit-btn" style="text-decoration:none;">COORD</a>
+      <a href="/table" class="submit-btn" style="text-decoration:none;">THE TABLE</a>
+      <a href="/substack" class="submit-btn" style="text-decoration:none;">SUBSTACK FEED</a>
+    </div>
+  </nav>
+  <div class="vault-layout">
+    <section class="log-display">
+      <article id="content" class="blog-post">
+        <div style="text-align: center; padding: 60px 20px;">
+          <h2 class="force-blue" style="letter-spacing: 2px;">&gt; SYSTEM_READY</h2>
+          <p class="blink" style="font-size: 0.85rem; color: #00d4ff; text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); margin-bottom: 25px; font-family: monospace;">
+            [ INITIALIZING_DATA_STREAM... ]
+          </p>
+          <div style="width: 40px; height: 2px; background: var(--secondary); margin: 0 auto; opacity: 0.3;"></div>
+          <p class="instruction-text">SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.</p>
+        </div>
+      </article>
+    </section>
+  </div>
+</BaseLayout>

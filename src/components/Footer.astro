@@ -1,0 +1,24 @@
+---
+---
+<footer>
+  <div style="text-align:center; margin-bottom:15px; font-size:0.8rem; letter-spacing: 1px;">
+    <span style="color:var(--secondary); opacity: 0.7;">LOOKING FOR PROFESSIONAL IT RESTORATION?&nbsp;</span>
+    <a href="https://vintage64tx.com" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:bold; border-bottom: 1px dashed var(--accent);">VISIT_VINTAGE64TX</a>
+  </div>
+  <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
+    SYSTEM_TIME: <span id="stardate"></span>
+  </div>
+  <div style="text-align:center; margin-bottom:10px; font-size:0.65rem; opacity: 0.6; letter-spacing: 1px;">
+    <a href="/pages/privacy-policy" style="color:var(--secondary); text-decoration:none;">PRIVACY_POLICY</a>
+    <span style="color:var(--secondary); margin: 0 8px;">|</span>
+    <a href="/pages/gear-policy" style="color:var(--secondary); text-decoration:none;">AFFILIATE_POLICY</a>
+  </div>
+  <p class="footer-tag blink">THE_WATCH_TOWER_V3.0.0 // DEEP_LINK_ENABLED</p>
+</footer>
+<script>
+  const el = document.getElementById('stardate');
+  if (el) {
+    const now = new Date();
+    el.textContent = now.toISOString().replace('T', ' ').split('.')[0] + ' UTC';
+  }
+</script>

@@ -1,0 +1,11 @@
+---
+export const prerender = true;
+import ChannelLayout from '../layouts/ChannelLayout.astro';
+import SubstackFeed from '../components/SubstackFeed.astro';
+---
+<ChannelLayout
+  title="Substack"
+  description="Selected articles from the OTD newsletter on Substack."
+>
+  <SubstackFeed />
+</ChannelLayout>

@@ -1,0 +1,362 @@
+/* 1. THEME VARIABLES */
+:root {
+    --bg: #1a1a1a;
+    --container-bg: rgba(0, 0, 0, 0.95);
+    --primary: #ffb000;          /* Amber Gold */
+    --primary-dim: rgba(255, 176, 0, 0.7);
+    --secondary: #00eeff;        /* Terminal Cyan */
+    --accent: #00ff41;           /* Neon Green */
+    --border: #5c3d2e;           /* Chassis Brown */
+    --shadow: rgba(0, 0, 0, 0.8);
+    --data-blue: #00d4ff;       
+    --blue-glow: rgba(0, 212, 255, 0.5);
+    --error: #ff0000;
+}
+
+[data-theme="light"] {
+    --bg: #f4f4f4;
+    --container-bg: #ffffff;
+    --primary: #7a5400;
+    --primary-dim: #5c5c5c;
+    --secondary: #005f6b;
+    --accent: #008522;
+    --border: #a3a3a3;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --error: #cc0000;
+}
+
+/* 2. GLOBAL RESET & CENTERING */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--primary);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    padding: 20px;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 3. THE CHASSIS */
+.container {
+    width: 100%;
+    max-width: 650px; 
+    border: 2px solid var(--border);
+    padding: 25px;
+    background: var(--container-bg);
+    box-shadow: 0 0 20px var(--shadow);
+    position: relative;
+    z-index: 5;
+    overflow: hidden;
+}
+
+/* 4. HEADER & HERO */
+header {
+    text-align: center;
+    border-bottom: 2px dashed var(--border);
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-container {
+    border: 2px solid var(--border);
+    margin: 20px 0;
+    background: #000;
+    width: 100%;
+}
+
+.hero-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: grayscale(0.3) brightness(0.8);
+}
+
+.hero-text-block {
+    width: 100%;
+    padding: 25px 10px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+}
+
+.by-line {
+    display: block;
+    width: 100%;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.8;
+    margin: 8px 0;
+    text-align: center;
+}
+
+/* 5. NAVIGATION */
+.system-nav, .secondary-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.submit-btn {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--border);
+    padding: 10px 18px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: inherit;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.submit-btn:hover, .submit-btn.active {
+    background: var(--accent);
+    color: #000 !important;
+    box-shadow: 0 0 15px var(--accent);
+    border-color: var(--accent);
+}
+
+/* 6. LAYOUT */
+.vault-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.log-directory {
+    width: 240px;
+    min-width: 180px;
+    flex-shrink: 0;
+    border-right: 1px dashed var(--border);
+    padding-right: 20px;
+}
+
+.log-display {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-list {
+    list-style-type: none; 
+    padding: 0;
+    margin: 0;
+}
+
+.file-list li {
+    display: flex;        
+    align-items: center;  
+    margin-bottom: 8px;   
+}
+
+.log-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: block;
+    padding: 5px 0;
+    transition: 0.2s;
+}
+
+.log-link:hover {
+    color: var(--accent);
+    padding-left: 5px;
+}
+
+/* 7. ANIMATIONS */
+.main-title {
+    font-size: 1.4rem;
+    margin: 0;
+    line-height: 1.2;
+    display: flex;
+    justify-content: center;
+}
+
+.typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typing 3.5s steps(40, end) forwards;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+.blink { animation: blinker 1.5s linear infinite; }
+@keyframes blinker { 50% { opacity: 0; } }
+
+/* 8. OVERLAYS */
+.terminal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.12;
+}
+
+/* 9. FOOTER */
+footer {
+    margin-top: 50px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    font-size: 0.8rem;
+}
+
+/* 10. LOG DISPLAY: DATA BLUE ACCENTS */
+.blog-post-body h1, 
+.blog-post-body h2, 
+.blog-post-body h3 {
+    color: var(--data-blue) !important;
+    text-shadow: 0 0 5px var(--blue-glow);
+    text-transform: uppercase;
+}
+
+.blog-post-body p, 
+.blog-post-body li,
+.blog-post-body div {
+    color: var(--primary);
+}
+
+.blog-post-body .force-blue,
+.blog-post-body strong,
+.blog-post-body b {
+    color: var(--data-blue) !important;
+    text-shadow: 0 0 8px var(--blue-glow) !important;
+    font-weight: bold !important;
+}
+
+.blog-post-body ul li::marker {
+    color: var(--accent);
+}
+
+/* 11. FORM INPUTS & VALIDATION */
+.form-input {
+    background: #000 !important;
+    color: var(--accent) !important;
+    border: 1.5px solid var(--border);
+    padding: 12px;
+    font-family: inherit;
+    text-transform: uppercase;
+    outline: none;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+[data-theme="light"] .form-input {
+    background: #fff !important;
+    color: var(--accent) !important;
+    border: 1.5px solid var(--border);
+}
+
+.form-input::placeholder {
+    color: var(--primary-dim);
+    opacity: 0.5;
+}
+
+/* Field Level Validation Styles */
+.form-input.valid {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.form-input.invalid {
+    border-color: var(--error) !important;
+    box-shadow: 0 0 8px var(--error);
+}
+
+/* --- V64 LINK ACCESSIBILITY & BRANDING --- */
+
+/* Standard Link State */
+.blog-post a, .v64-link {
+    color: #00d4ff !important; /* Bright Cyan - High Visibility */
+    text-decoration: underline !important;
+    font-weight: bold;
+}
+
+/* Visited Link State - FIXES THE DARK PURPLE ISSUE */
+.blog-post a:visited, .v64-link:visited {
+    color: #008fb3 !important; /* Lighter Blue - Still Readable */
+}
+
+/* Hover State - Terminal Glow */
+.blog-post a:hover, .v64-link:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+/* Blue Branding Class */
+.force-blue {
+    color: #00d4ff !important;
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+}
+
+#contact-terminal {
+    transition: background 0.3s ease;
+}
+
+/* 12. DYNAMIC INSTRUCTION TEXT */
+.instruction-text {
+    font-size: 1.15rem; 
+    color: var(--secondary); 
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 20px;
+    /* Etched shadow for depth and visibility */
+    text-shadow: 1px 1px 2px black, 0 0 5px rgba(0, 212, 255, 0.2); 
+}
+
+
+/* 13. TYPEWRITER DELAY */
+.delay-type {
+    animation-delay: 3.5s;
+}
+
+/* 14. NAV CONTAINERS */
+.vault-nav-container {
+    margin: 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.primary-nav {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* 15. FOOTER TAG */
+.footer-tag {
+    color: var(--secondary);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* 16. CHANNEL POST LIST */
+.post-list {
+    width: 100%;
+}

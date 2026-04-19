@@ -1,0 +1,51 @@
+---
+const SUBSTACK_URL = 'https://v64otd.substack.com';
+let posts: Array<{ title: string; link: string; description: string; date: string }> = [];
+let error: string | null = null;
+try {
+  const res = await fetch(`${SUBSTACK_URL}/feed`);
+  const xml = await res.text();
+  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
+  posts = items.map(([, block]) => {
+    const get = (tag: string) => {
+      const m = block.match(
+        new RegExp(
+          `<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>` +
+          `|<${tag}[^>]*>([^<]*)<\\/${tag}>`
+        )
+      );
+      return m ? (m[1] || m[2] || '').trim() : '';
+    };
+    const link = block.match(/<link>([^<]+)<\/link>/)?.[1]?.trim() ?? '';
+    const pubDate = block.match(/<pubDate>([^<]+)<\/pubDate>/)?.[1]?.trim() ?? '';
+    return {
+      title: get('title'),
+      link,
+      description: get('description').replace(/<[^>]+>/g, '').slice(0, 240) + '...',
+      date: pubDate
+        ? new Date(pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        : '',
+    };
+  });
+} catch (_e) {
+  error = 'Unable to load newsletter feed. Visit Substack directly.';
+}
+---
+{error ? (
+  <p class="feed-error">{error}</p>
+) : (
+  <ul class="substack-feed">
+    {posts.map(post => (
+      <li class="feed-item">
+        <a href={post.link} target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none;">
+          <h3 class="feed-title" style="color: var(--accent);">{post.title}</h3>
+        </a>
+        <time class="feed-date" style="color: var(--secondary);">{post.date}</time>
+        <p class="feed-excerpt">{post.description}</p>
+        <a class="read-link" href={post.link} target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none;">
+          Read on Substack →
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

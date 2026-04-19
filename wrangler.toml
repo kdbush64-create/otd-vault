@@ -1,3 +1,5 @@
-name = "otd-worker"
+name = "dev-otd-worker"
 compatibility_date = "2026-03-11"
-assets = { directory = "./" }
+compatibility_flags = ["nodejs_compat"]
+main = "dist/_worker.js"
+assets = { directory = "./dist" }

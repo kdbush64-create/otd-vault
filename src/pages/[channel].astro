@@ -1,0 +1,40 @@
+---
+export const prerender = true;
+import ChannelLayout from '../layouts/ChannelLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'] as const;
+  return channels.map(channel => ({ params: { channel } }));
+}
+
+type Channel = 'dispatch' | 'transit' | 'gear' | 'coord' | 'table' | 'chow' | 'xposts';
+const { channel } = Astro.params as { channel: Channel };
+
+const allPosts = await getCollection(channel);
+
+const posts = channel === 'xposts'
+  ? allPosts.filter(post => post.data.approved === true)
+  : allPosts;
+
+const sortedPosts = [...posts].sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+<ChannelLayout title={channel} description={`All posts in ${channel}`}>
+  <div class="post-list">
+    {sortedPosts.length === 0 ? (
+      <p class="empty-channel">No posts yet in this channel.</p>
+    ) : (
+      sortedPosts.map(post => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          description={'description' in post.data ? post.data.description : undefined}
+          href={`/${channel}/${post.slug}`}
+        />
+      ))
+    )}
+  </div>
+</ChannelLayout>

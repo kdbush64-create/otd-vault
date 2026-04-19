@@ -1,0 +1,121 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  date?: string;
+  channel?: string;
+  rating?: string;
+  cost?: string;
+  foodType?: string;
+  address?: string;
+  website?: string;
+  gallery?: { image: string; caption?: string }[];
+  affiliate?: boolean;
+}
+
+const { title, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate } = Astro.props;
+
+const channelMap: Record<string, string> = {
+  dispatch: 'THE DISPATCH',
+  transit: 'TRANSIT',
+  gear: 'GEAR',
+  coord: 'COORD',
+  table: 'THE TABLE',
+  chow: 'CHOW',
+};
+const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
+const hasReviewMeta = rating || cost || foodType || address || website;
+---
+<BaseLayout title={`${title} | OTD Vault`} description={description}>
+  <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
+    {channel && (
+      <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">&laquo; {channelLabel}</a>
+    )}
+  </nav>
+
+  <div class="vault-layout">
+    <section class="log-display" style="width:100%;">
+      <article class="blog-post">
+        <div class="blog-post-body">
+          {channel && (
+            <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">[{channel.toUpperCase()}_LOG]</p>
+          )}
+          <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
+          {date && (
+            <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:16px;">
+              {new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+            </time>
+          )}
+
+          {affiliate && (
+            <div style="border: 1px dashed var(--secondary); padding: 8px 14px; margin-bottom: 16px; font-size: 0.78rem; color: var(--secondary); opacity: 0.8;">
+              ⚠ This post contains affiliate links. If you purchase through these links, I may earn a small commission at no extra cost to you.
+              <a href="/pages/gear-policy" style="color:var(--secondary); margin-left:6px;">Affiliate Policy →</a>
+            </div>
+          )}
+
+          {hasReviewMeta && (
+            <div style="border: 1px dashed var(--border); padding: 10px 14px; margin-bottom: 20px; font-size: 0.82rem; display: flex; flex-wrap: wrap; gap: 16px;">
+              {rating && (
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">RATING</span>&nbsp;
+                  <strong style="color:var(--secondary);">{rating}/10</strong>
+                </span>
+              )}
+              {cost && (
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">COST</span>&nbsp;
+                  <strong style="color:var(--secondary);">{cost}</strong>
+                </span>
+              )}
+              {foodType && (
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">TYPE</span>&nbsp;
+                  <strong style="color:var(--secondary);">{foodType}</strong>
+                </span>
+              )}
+              {address && (
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
+                  <span style="color:var(--secondary);">{address}</span>
+                </span>
+              )}
+              {website && (
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">WEBSITE</span>&nbsp;
+                  <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--secondary); text-decoration:none;">
+                    {website.replace(/^https?:\/\//, '').replace(/\/$/, '')} →
+                  </a>
+                </span>
+              )}
+            </div>
+          )}
+
+          {gallery && gallery.length > 0 && (
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px;">
+              {gallery.map(item => (
+                <figure style="margin: 0;">
+                  <img
+                    src={item.image}
+                    alt={item.caption || title}
+                    style="width: 100%; height: 180px; object-fit: cover; border: 1px dashed var(--border); display: block;"
+                  />
+                  {item.caption && (
+                    <figcaption style="color: var(--secondary); font-size: 0.72rem; margin-top: 4px; text-align: center;">
+                      {item.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          )}
+
+          <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
+          <slot />
+        </div>
+      </article>
+    </section>
+  </div>
+</BaseLayout>
