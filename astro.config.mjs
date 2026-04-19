@@ -8,6 +8,13 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   output: 'server',
   adapter: cloudflare({ imageService: 'compile' }),
-  integrations: [react(), markdoc(), keystatic(), sitemap()],
+  integrations: [
+    react(),
+    markdoc(),
+    keystatic(),
+    sitemap({
+      filter: (page) => !page.includes('/xposts/'),
+    }),
+  ],
   site: 'https://v64otd.com',
 });
