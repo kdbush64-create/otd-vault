@@ -11,9 +11,10 @@ interface Props {
   foodType?: string;
   address?: string;
   website?: string;
+  gallery?: { image: string; caption?: string }[];
 }
 
-const { title, description, date, channel, rating, cost, foodType, address, website } = Astro.props;
+const { title, description, date, channel, rating, cost, foodType, address, website, gallery } = Astro.props;
 
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
@@ -24,7 +25,6 @@ const channelMap: Record<string, string> = {
   chow: 'CHOW',
 };
 const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
-
 const hasReviewMeta = rating || cost || foodType || address || website;
 ---
 <BaseLayout title={`${title} | OTD Vault`} description={description}>
@@ -82,6 +82,25 @@ const hasReviewMeta = rating || cost || foodType || address || website;
                   <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; letter-spacing:1px;">WEBSITE →</a>
                 </span>
               )}
+            </div>
+          )}
+
+          {gallery && gallery.length > 0 && (
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px;">
+              {gallery.map(item => (
+                <figure style="margin: 0;">
+                  <img
+                    src={item.image}
+                    alt={item.caption || title}
+                    style="width: 100%; height: 180px; object-fit: cover; border: 1px dashed var(--border); display: block;"
+                  />
+                  {item.caption && (
+                    <figcaption style="color: var(--secondary); font-size: 0.72rem; margin-top: 4px; text-align: center;">
+                      {item.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
             </div>
           )}
 
