@@ -19,6 +19,7 @@ const cost     = 'cost'     in post.data ? post.data.cost     : undefined;
 const foodType = 'foodType' in post.data ? post.data.foodType : undefined;
 const address  = 'address'  in post.data ? post.data.address  : undefined;
 const website  = 'website'  in post.data ? post.data.website  : undefined;
+const gallery  = 'gallery'  in post.data ? post.data.gallery  : undefined;
 ---
 <PostLayout
   title={post.data.title}
@@ -30,6 +31,7 @@ const website  = 'website'  in post.data ? post.data.website  : undefined;
   foodType={foodType}
   address={address}
   website={website}
+  gallery={gallery}
 >
   <Content />
 </PostLayout>
