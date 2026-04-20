@@ -80,7 +80,7 @@ const hasReviewMeta = rating || cost || foodType || address || website;
               <span>
                 <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
                 
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+                  <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style="color:var(--accent); text-decoration:none;"
