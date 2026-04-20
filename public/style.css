@@ -233,6 +233,14 @@ footer {
     text-transform: uppercase;
 }
 
+.blog-post-body h3 {
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.blog-post-body ul {
+    padding-left: 24px;
+}
 .blog-post-body p, 
 .blog-post-body li,
 .blog-post-body div {
@@ -361,4 +369,13 @@ footer {
 /* 16. CHANNEL POST LIST */
 .post-list {
     width: 100%;
+}
+
+/* 17. ABOUT PAGE / BLOG POST BODY SPACING */
+.blog-post-body h3 {
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+.blog-post-body ul {
+    padding-left: 24px;
 }
