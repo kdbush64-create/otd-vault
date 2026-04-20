@@ -41,7 +41,7 @@ const SUBSTACK_URL = 'https://v64otd.substack.com';
       });
 
       container.innerHTML = `<ul class="substack-feed">${posts.map(post => `
-        <li class="feed-item">
+        <li class="feed-item" style="margin-bottom:30px;">
           <a href="${post.link}" target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none;">
             <h3 class="feed-title" style="color:var(--accent);">${post.title}</h3>
           </a>
