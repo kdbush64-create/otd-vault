@@ -3,7 +3,7 @@ export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
 let entry: any = null;
-try { entry = await getEntry('pages', '00-the-man'); } catch (_) {}
+try { entry = await getEntry('pages', 'the-man'); } catch (_) {}
 let Content: any = null;
 if (entry) { const r = await entry.render(); Content = r.Content; }
 ---
