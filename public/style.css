@@ -289,19 +289,19 @@ footer {
 /* --- V64 LINK ACCESSIBILITY & BRANDING --- */
 
 /* Standard Link State */
-.blog-post a, .v64-link {
+.blog-post a, .blog-post-body a, .v64-link {
     color: var(--accent) !important; /* Neon Green */
     text-decoration: underline !important;
     font-weight: bold;
 }
 
 /* Visited Link State - FIXES THE DARK PURPLE ISSUE */
-.blog-post a:visited, .v64-link:visited {
+.blog-post a:visited, .blog-post-body a, .v64-link:visited {
     color: #00cc33 !important; /* Slightly dimmer green */
 }
 
 /* Hover State - Terminal Glow */
-.blog-post a:hover, .v64-link:hover {
+.blog-post a:hover, .blog-post-body a, .v64-link:hover {
     color: #ffffff !important;
     text-shadow: 0 0 10px var(--accent);
     background: rgba(0, 255, 65, 0.1);
