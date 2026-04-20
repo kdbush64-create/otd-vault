@@ -55,11 +55,8 @@ const gearFields = {
   website: fields.url({ label: 'Website URL' }),
 };
 export default config({
-  storage: {
-    kind: 'github',
-    repo: { owner: 'kdbush64-create', name: 'otd-vault' },
-    defaultBranch: 'main',
-  },
+  storage: { kind: 'cloud' },
+  cloud: { project: 'otd-vault/otd-vault' },
   ui: {
     brand: { name: 'v64otd.com' },
     navigation: {
