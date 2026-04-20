@@ -306,7 +306,9 @@ footer {
     text-shadow: 0 0 10px var(--accent);
     background: rgba(0, 255, 65, 0.1);
 }
-
+ .blog-post a, .blog-post-body a {
+    text-shadow: none !important;
+}
 /* Blue Branding Class */
 .force-blue {
     color: #00d4ff !important;
