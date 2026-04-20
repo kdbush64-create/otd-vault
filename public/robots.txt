@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://v64otd.com/sitemap-index.xml
