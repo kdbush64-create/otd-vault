@@ -77,11 +77,18 @@ const hasReviewMeta = rating || cost || foodType || address || website;
                 </span>
               )}
               {address && (
-                <span>
-                  <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
-                  <span style="color:var(--secondary);">{address}</span>
-                </span>
-              )}
+              <span>
+                <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
+                
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style="color:var(--accent); text-decoration:none;"
+                >
+                  {address} →
+                </a>
+              </span>
+            )}
               {website && (
                 <span>
                   <span style="color:var(--primary); letter-spacing:1px;">WEBSITE</span>&nbsp;
