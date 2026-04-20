@@ -1,5 +1,4 @@
 import { config, fields, collection } from '@keystatic/core';
-
 const ratingOptions = [
   { label: '— not rated —', value: '' },
   { label: '1/10', value: '1' },
@@ -13,7 +12,6 @@ const ratingOptions = [
   { label: '9/10', value: '9' },
   { label: '10/10', value: '10' },
 ];
-
 const costOptions = [
   { label: '— not set —', value: '' },
   { label: 'Budget', value: 'Budget' },
@@ -22,11 +20,15 @@ const costOptions = [
   { label: 'Premium', value: 'Premium' },
   { label: 'Upscale', value: 'Upscale' },
 ];
-
 const postFields = {
   title: fields.slug({ name: { label: 'Title' } }),
   date: fields.date({ label: 'Date', validation: { isRequired: true } }),
-  description: fields.text({ label: 'Description', multiline: true }),
+  description: fields.text({
+    label: 'Description for SEO',
+    multiline: true,
+    description: 'SEO only — not shown on page. 150–160 chars, plain text, no quotes or markdown.',
+    validation: { length: { min: 50, max: 160 } },
+  }),
   tags: fields.array(fields.text({ label: 'Tag' }), { label: 'Tags', itemLabel: (p) => p.value }),
   gallery: fields.array(
     fields.object({
@@ -37,12 +39,10 @@ const postFields = {
   ),
   content: fields.markdoc({ label: 'Content' }),
 };
-
 const affiliateFields = {
   ...postFields,
   affiliate: fields.checkbox({ label: 'Contains affiliate links', defaultValue: false }),
 };
-
 const locationFields = {
   ...postFields,
   address: fields.text({ label: 'Address' }),
@@ -51,17 +51,14 @@ const locationFields = {
   cost: fields.select({ label: 'Cost', options: costOptions, defaultValue: '' }),
   content: fields.markdoc({ label: 'Summary' }),
 };
-
 const tableFields = {
   ...locationFields,
   foodType: fields.text({ label: 'Food Type', description: 'e.g. BBQ, Italian, Tex-Mex (50 chars max)', validation: { length: { max: 50 } } }),
 };
-
 const gearFields = {
   ...affiliateFields,
   website: fields.url({ label: 'Website URL' }),
 };
-
 export default config({
   storage: { kind: 'cloud' },
   cloud: { project: 'otd-vault/otd-vault' },
@@ -89,7 +86,12 @@ export default config({
     }}),
     pages: collection({ label: 'Pages', slugField: 'title', path: 'src/content/pages/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
-      description: fields.text({ label: 'Description', multiline: true }),
+      description: fields.text({
+        label: 'Description for SEO',
+        multiline: true,
+        description: 'SEO only — not shown on page. 150–160 chars, plain text, no quotes or markdown.',
+        validation: { length: { min: 50, max: 160 } },
+      }),
       content: fields.markdoc({ label: 'Content' }),
     }}),
   },
