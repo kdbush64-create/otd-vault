@@ -23,7 +23,12 @@ const costOptions = [
 const postFields = {
   title: fields.slug({ name: { label: 'Title' } }),
   date: fields.date({ label: 'Date', validation: { isRequired: true } }),
-  description: fields.text({ label: 'Description', multiline: true }),
+  description: fields.text({
+    label: 'Description for SEO',
+    multiline: true,
+    description: 'SEO only — not shown on page. 150–160 chars, plain text, no quotes or markdown.',
+    validation: { length: { min: 50, max: 160 } },
+  }),
   tags: fields.array(fields.text({ label: 'Tag' }), { label: 'Tags', itemLabel: (p) => p.value }),
   gallery: fields.array(
     fields.object({
@@ -81,7 +86,12 @@ export default config({
     }}),
     pages: collection({ label: 'Pages', slugField: 'title', path: 'src/content/pages/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
-      description: fields.text({ label: 'Description', multiline: true }),
+      description: fields.text({
+        label: 'Description for SEO',
+        multiline: true,
+        description: 'SEO only — not shown on page. 150–160 chars, plain text, no quotes or markdown.',
+        validation: { length: { min: 50, max: 160 } },
+      }),
       content: fields.markdoc({ label: 'Content' }),
     }}),
   },
