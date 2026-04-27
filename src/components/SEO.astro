@@ -7,7 +7,8 @@ interface Props {
 
 const { title, description = 'v64otd.com — Vintage64TX', ogImage } = Astro.props;
 const siteTitle = title.includes('v64otd') ? title : `${title} | v64otd.com`;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://v64otd.com');
+const pathname = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
+const canonicalURL = new URL(pathname, Astro.site ?? 'https://v64otd.com');
 ---
 <title>{siteTitle}</title>
 <meta name="description" content={description} />
