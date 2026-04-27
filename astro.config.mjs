@@ -7,7 +7,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   output: 'server',
-  trailingSlash: 'always',
   adapter: cloudflare({ imageService: 'compile' }),
   integrations: [
     react(),
