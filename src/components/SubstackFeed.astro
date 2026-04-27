@@ -9,7 +9,7 @@ const SUBSTACK_URL = 'https://v64otd.substack.com';
   async function loadFeed() {
     const container = document.getElementById('substack-feed-container');
     try {
-      const res = await fetch('/api/substack/');
+      const res = await fetch('/api/substack');
       const xml = await res.text();
       const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
 
