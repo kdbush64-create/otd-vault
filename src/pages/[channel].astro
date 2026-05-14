@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import ChannelLayout from '../layouts/ChannelLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
@@ -6,127 +8,115 @@ import { getCollection } from 'astro:content';
 type Channel = 'dispatch' | 'transit' | 'gear' | 'coord' | 'table' | 'chow' | 'xposts';
 const validChannels: Channel[] = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'];
 
-const { channel } = Astro.params as { channel: string };
+const { channel } = Astro.params;
 
-if (!validChannels.includes(channel as Channel)) {
-  return Astro.redirect('/404');
+if (!channel || !validChannels.includes(channel as Channel)) {
+  return Astro.redirect('/');
 }
 
 const typedChannel = channel as Channel;
-const allPosts = await getCollection(typedChannel);
+
+let allPosts: any[] = [];
+try {
+  allPosts = await getCollection(typedChannel);
+} catch (e) {
+  allPosts = [];
+}
 
 const posts = typedChannel === 'xposts'
-  ? allPosts.filter(post => post.data.approved === true)
+  ? allPosts.filter((post: any) => post.data.approved === true)
   : allPosts;
 
-// Sort newest first — ISO strings sort correctly as strings
-const sortedPosts = [...posts].sort((a, b) =>
-  b.data.date.localeCompare(a.data.date)
-);
+const sortedPosts = [...posts].sort((a: any, b: any) => {
+  const da = String(a.data.date ?? '');
+  const db = String(b.data.date ?? '');
+  return db.localeCompare(da);
+});
 
 // ── Dispatch helpers ─────────────────────────────────────────────────────────
-
 function nthSundayOf(year: number, month: number, n: number): Date {
   const first = new Date(year, month - 1, 1);
   const daysUntilSunday = (7 - first.getDay()) % 7;
   return new Date(year, month - 1, 1 + daysUntilSunday + (n - 1) * 7);
 }
-
 function isInCDT(datePart: string): boolean {
   const [year, month, day] = datePart.split('-').map(Number);
-  const dstStart = nthSundayOf(year, 3, 2);  // 2nd Sunday March
-  const dstEnd   = nthSundayOf(year, 11, 1); // 1st Sunday November
   const d = new Date(year, month - 1, day);
-  return d >= dstStart && d < dstEnd;
+  return d >= nthSundayOf(year, 3, 2) && d < nthSundayOf(year, 11, 1);
 }
-
-// "2026-05-14T18:05" → "06:05PM-CDT"
 function formatDispatchTime(dateStr: string): string | null {
   if (!dateStr || !dateStr.includes('T')) return null;
-  const timePart = dateStr.split('T')[1];
-  const [hourStr, minuteStr] = timePart.split(':');
-  const hour = parseInt(hourStr, 10);
-  const minute = parseInt(minuteStr, 10);
-  const hour12 = hour % 12 || 12;
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const hrStr = hour12.toString().padStart(2, '0');
-  const minStr = minute.toString().padStart(2, '0');
-  const tz = isInCDT(dateStr.split('T')[0]) ? 'CDT' : 'CST';
-  return `${hrStr}:${minStr}${ampm}-${tz}`;
+  try {
+    const [hourStr, minuteStr] = dateStr.split('T')[1].split(':');
+    const hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+    const hour12 = hour % 12 || 12;
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const tz = isInCDT(dateStr.split('T')[0]) ? 'CDT' : 'CST';
+    return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
+  } catch { return null; }
 }
-
-// Today's date string in US Central time (server runs UTC)
 function getCentralToday(): string {
   const now = new Date();
-  const [y, m, d] = [now.getUTCFullYear(), now.getUTCMonth() + 1, now.getUTCDate()];
+  const y = now.getUTCFullYear(), m = now.getUTCMonth() + 1, d = now.getUTCDate();
   const utcStr = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  const offsetHours = isInCDT(utcStr) ? -5 : -6;
-  const central = new Date(now.getTime() + offsetHours * 60 * 60 * 1000);
+  const offset = isInCDT(utcStr) ? -5 : -6;
+  const central = new Date(now.getTime() + offset * 3600000);
   return central.toISOString().split('T')[0];
 }
 
-// Cutoff = today minus 2 days (string comparison works for ISO dates)
+const isDispatch = typedChannel === 'dispatch';
 const todayStr = getCentralToday();
 const [ty, tm, td] = todayStr.split('-').map(Number);
-const cutoffDate = new Date(ty, tm - 1, td - 2);
-const cutoffStr = `${cutoffDate.getFullYear()}-${String(cutoffDate.getMonth()+1).padStart(2,'0')}-${String(cutoffDate.getDate()).padStart(2,'0')}`;
+const co = new Date(ty, tm - 1, td - 2);
+const cutoffStr = `${co.getFullYear()}-${String(co.getMonth()+1).padStart(2,'0')}-${String(co.getDate()).padStart(2,'0')}`;
 
-const dailyPosts = typedChannel === 'dispatch'
-  ? sortedPosts.filter(p => p.data.date.split('T')[0] >= cutoffStr)
-  : [];
-
-const archivePosts = typedChannel === 'dispatch'
-  ? sortedPosts.filter(p => p.data.date.split('T')[0] < cutoffStr)
-  : sortedPosts;
+const dailyPosts  = isDispatch ? sortedPosts.filter((p: any) => String(p.data.date ?? '').split('T')[0] >= cutoffStr) : [];
+const archivePosts = isDispatch ? sortedPosts.filter((p: any) => String(p.data.date ?? '').split('T')[0] < cutoffStr) : sortedPosts;
 ---
 
 <ChannelLayout channel={typedChannel}>
-  {typedChannel === 'dispatch' ? (
-    <>
-      <section>
-        <h2 style="font-size: 0.8rem; color: var(--primary-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">
-          Daily Dispatches
-        </h2>
-        {dailyPosts.length === 0 ? (
-          <p style="color: var(--primary-dim); font-size: 0.82rem;">No dispatches in the last 2 days.</p>
-        ) : (
-          dailyPosts.map(post => (
-            <PostCard
-              title={post.data.title}
-              date={post.data.date}
-              time={formatDispatchTime(post.data.date) ?? undefined}
-              description={post.data.description}
-              href={`/${typedChannel}/${post.slug}/`}
-            />
-          ))
-        )}
-      </section>
-
+  {isDispatch && (
+    <div>
+      <h2 style="font-size:0.8rem;color:var(--primary-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Daily Dispatches</h2>
+      {dailyPosts.length === 0 && (
+        <p style="color:var(--primary-dim);font-size:0.82rem;">No dispatches in the last 2 days.</p>
+      )}
+      {dailyPosts.map((post: any) => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          time={formatDispatchTime(String(post.data.date ?? '')) ?? undefined}
+          description={post.data.description}
+          href={`/${typedChannel}/${post.slug}/`}
+        />
+      ))}
       {archivePosts.length > 0 && (
-        <section style="margin-top: 32px;">
-          <h2 style="font-size: 0.8rem; color: var(--primary-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">
-            Dispatch Archive
-          </h2>
-          {archivePosts.map(post => (
+        <div style="margin-top:32px;">
+          <h2 style="font-size:0.8rem;color:var(--primary-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Dispatch Archive</h2>
+          {archivePosts.map((post: any) => (
             <PostCard
               title={post.data.title}
               date={post.data.date}
-              time={formatDispatchTime(post.data.date) ?? undefined}
+              time={formatDispatchTime(String(post.data.date ?? '')) ?? undefined}
               description={post.data.description}
               href={`/${typedChannel}/${post.slug}/`}
             />
           ))}
-        </section>
+        </div>
       )}
-    </>
-  ) : (
-    sortedPosts.map(post => (
-      <PostCard
-        title={post.data.title}
-        date={post.data.date}
-        description={post.data.description}
-        href={`/${typedChannel}/${post.slug}/`}
-      />
-    ))
+    </div>
+  )}
+  {!isDispatch && (
+    <div>
+      {sortedPosts.map((post: any) => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          description={post.data.description}
+          href={`/${typedChannel}/${post.slug}/`}
+        />
+      ))}
+    </div>
   )}
 </ChannelLayout>
