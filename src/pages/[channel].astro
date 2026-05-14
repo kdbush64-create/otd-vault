@@ -43,74 +43,16 @@ function formatDispatchTime(dateStr: string): string | null {
     return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
   } catch { return null; }
 }
-
-const isDispatch = channel === 'dispatch';
 ---
 
 <ChannelLayout title={channel}>
-  {isDispatch && (
-    <div id="dispatch-list">
-      {sortedPosts.map(post => (
-        <div data-postdate={String(post.data.date ?? '').split('T')[0]}>
-          <PostCard
-            title={post.data.title}
-            date={post.data.date}
-            time={formatDispatchTime(String(post.data.date ?? '')) ?? undefined}
-            description={post.data.description}
-            href={`/${channel}/${post.slug}/`}
-          />
-        </div>
-      ))}
-    </div>
-  )}
-  {!isDispatch && sortedPosts.map(post => (
+  {sortedPosts.map(post => (
     <PostCard
       title={post.data.title}
       date={post.data.date}
+      time={channel === 'dispatch' ? formatDispatchTime(String(post.data.date ?? '')) ?? undefined : undefined}
       description={post.data.description}
       href={`/${channel}/${post.slug}/`}
     />
   ))}
 </ChannelLayout>
-
-<script>
-  (function () {
-    const list = document.getElementById('dispatch-list');
-    if (!list) return; // not the dispatch page, do nothing
-
-    // Today's date in the browser's local timezone (user's device — CDT/CST)
-    const now = new Date();
-    const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-    const [ty, tm, td] = today.split('-').map(Number);
-    const co = new Date(ty, tm - 1, td - 2);
-    const cutoff = `${co.getFullYear()}-${String(co.getMonth()+1).padStart(2,'0')}-${String(co.getDate()).padStart(2,'0')}`;
-
-    const items = Array.from(list.querySelectorAll('[data-postdate]')) as HTMLElement[];
-    const daily   = items.filter(el => (el.dataset.postdate ?? '') >= cutoff);
-    const archive = items.filter(el => (el.dataset.postdate ?? '') <  cutoff);
-
-    list.innerHTML = '';
-
-    const makeHeader = (text: string, topMargin = false) => {
-      const h = document.createElement('h2');
-      h.style.cssText = `font-size:0.8rem;color:var(--primary-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;${topMargin ? 'margin-top:32px;' : 'margin-top:0;'}`;
-      h.textContent = text;
-      return h;
-    };
-
-    list.appendChild(makeHeader('Daily Dispatches'));
-    if (daily.length === 0) {
-      const p = document.createElement('p');
-      p.style.cssText = 'color:var(--primary-dim);font-size:0.82rem;';
-      p.textContent = 'No dispatches in the last 2 days.';
-      list.appendChild(p);
-    } else {
-      daily.forEach(el => list.appendChild(el));
-    }
-
-    if (archive.length > 0) {
-      list.appendChild(makeHeader('Dispatch Archive', true));
-      archive.forEach(el => list.appendChild(el));
-    }
-  })();
-</script>
