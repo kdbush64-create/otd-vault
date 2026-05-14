@@ -22,7 +22,10 @@ const costOptions = [
 ];
 const postFields = {
   title: fields.slug({ name: { label: 'Title' } }),
-  date: fields.date({ label: 'Date', validation: { isRequired: true } }),
+  date: fields.datetime({
+  label: 'Date & Time',
+  validation: { isRequired: true }
+}),
   description: fields.text({
     label: 'Description for SEO',
     multiline: true,
