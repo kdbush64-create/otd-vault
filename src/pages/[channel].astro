@@ -1,43 +1,30 @@
 ---
-export const prerender = false;
+export const prerender = true;
 
 import ChannelLayout from '../layouts/ChannelLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
+export async function getStaticPaths() {
+  const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'] as const;
+  return channels.map(channel => ({ params: { channel } }));
+}
+
 type Channel = 'dispatch' | 'transit' | 'gear' | 'coord' | 'table' | 'chow' | 'xposts';
-const validChannels: Channel[] = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'];
+const { channel } = Astro.params as { channel: Channel };
 
-const { channel } = Astro.params;
-
-if (!channel || !validChannels.includes(channel as Channel)) {
-  return Astro.redirect('/');
-}
-
-const typedChannel = channel as Channel;
-
-let allPosts: any[] = [];
-try {
-  allPosts = await getCollection(typedChannel);
-} catch (e) {
-  allPosts = [];
-}
-
-const posts = typedChannel === 'xposts'
-  ? allPosts.filter((post: any) => post.data.approved === true)
+const allPosts = await getCollection(channel);
+const posts = channel === 'xposts'
+  ? allPosts.filter(post => post.data.approved === true)
   : allPosts;
 
-const sortedPosts = [...posts].sort((a: any, b: any) => {
-  const da = String(a.data.date ?? '');
-  const db = String(b.data.date ?? '');
-  return db.localeCompare(da);
-});
+const sortedPosts = [...posts].sort((a, b) =>
+  String(b.data.date ?? '').localeCompare(String(a.data.date ?? ''))
+);
 
-// ── Dispatch helpers ─────────────────────────────────────────────────────────
 function nthSundayOf(year: number, month: number, n: number): Date {
   const first = new Date(year, month - 1, 1);
-  const daysUntilSunday = (7 - first.getDay()) % 7;
-  return new Date(year, month - 1, 1 + daysUntilSunday + (n - 1) * 7);
+  return new Date(year, month - 1, 1 + (7 - first.getDay()) % 7 + (n - 1) * 7);
 }
 function isInCDT(datePart: string): boolean {
   const [year, month, day] = datePart.split('-').map(Number);
@@ -56,67 +43,74 @@ function formatDispatchTime(dateStr: string): string | null {
     return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
   } catch { return null; }
 }
-function getCentralToday(): string {
-  const now = new Date();
-  const y = now.getUTCFullYear(), m = now.getUTCMonth() + 1, d = now.getUTCDate();
-  const utcStr = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  const offset = isInCDT(utcStr) ? -5 : -6;
-  const central = new Date(now.getTime() + offset * 3600000);
-  return central.toISOString().split('T')[0];
-}
 
-const isDispatch = typedChannel === 'dispatch';
-const todayStr = getCentralToday();
-const [ty, tm, td] = todayStr.split('-').map(Number);
-const co = new Date(ty, tm - 1, td - 2);
-const cutoffStr = `${co.getFullYear()}-${String(co.getMonth()+1).padStart(2,'0')}-${String(co.getDate()).padStart(2,'0')}`;
-
-const dailyPosts  = isDispatch ? sortedPosts.filter((p: any) => String(p.data.date ?? '').split('T')[0] >= cutoffStr) : [];
-const archivePosts = isDispatch ? sortedPosts.filter((p: any) => String(p.data.date ?? '').split('T')[0] < cutoffStr) : sortedPosts;
+const isDispatch = channel === 'dispatch';
 ---
 
-<ChannelLayout channel={typedChannel}>
+<ChannelLayout channel={channel}>
   {isDispatch && (
-    <div>
-      <h2 style="font-size:0.8rem;color:var(--primary-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Daily Dispatches</h2>
-      {dailyPosts.length === 0 && (
-        <p style="color:var(--primary-dim);font-size:0.82rem;">No dispatches in the last 2 days.</p>
-      )}
-      {dailyPosts.map((post: any) => (
-        <PostCard
-          title={post.data.title}
-          date={post.data.date}
-          time={formatDispatchTime(String(post.data.date ?? '')) ?? undefined}
-          description={post.data.description}
-          href={`/${typedChannel}/${post.slug}/`}
-        />
-      ))}
-      {archivePosts.length > 0 && (
-        <div style="margin-top:32px;">
-          <h2 style="font-size:0.8rem;color:var(--primary-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Dispatch Archive</h2>
-          {archivePosts.map((post: any) => (
-            <PostCard
-              title={post.data.title}
-              date={post.data.date}
-              time={formatDispatchTime(String(post.data.date ?? '')) ?? undefined}
-              description={post.data.description}
-              href={`/${typedChannel}/${post.slug}/`}
-            />
-          ))}
+    <div id="dispatch-list">
+      {sortedPosts.map(post => (
+        <div data-postdate={String(post.data.date ?? '').split('T')[0]}>
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            time={formatDispatchTime(String(post.data.date ?? '')) ?? undefined}
+            description={post.data.description}
+            href={`/${channel}/${post.slug}/`}
+          />
         </div>
-      )}
-    </div>
-  )}
-  {!isDispatch && (
-    <div>
-      {sortedPosts.map((post: any) => (
-        <PostCard
-          title={post.data.title}
-          date={post.data.date}
-          description={post.data.description}
-          href={`/${typedChannel}/${post.slug}/`}
-        />
       ))}
     </div>
   )}
+  {!isDispatch && sortedPosts.map(post => (
+    <PostCard
+      title={post.data.title}
+      date={post.data.date}
+      description={post.data.description}
+      href={`/${channel}/${post.slug}/`}
+    />
+  ))}
 </ChannelLayout>
+
+<script>
+  (function () {
+    const list = document.getElementById('dispatch-list');
+    if (!list) return; // not the dispatch page, do nothing
+
+    // Today's date in the browser's local timezone (user's device — CDT/CST)
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const [ty, tm, td] = today.split('-').map(Number);
+    const co = new Date(ty, tm - 1, td - 2);
+    const cutoff = `${co.getFullYear()}-${String(co.getMonth()+1).padStart(2,'0')}-${String(co.getDate()).padStart(2,'0')}`;
+
+    const items = Array.from(list.querySelectorAll('[data-postdate]')) as HTMLElement[];
+    const daily   = items.filter(el => (el.dataset.postdate ?? '') >= cutoff);
+    const archive = items.filter(el => (el.dataset.postdate ?? '') <  cutoff);
+
+    list.innerHTML = '';
+
+    const makeHeader = (text: string, topMargin = false) => {
+      const h = document.createElement('h2');
+      h.style.cssText = `font-size:0.8rem;color:var(--primary-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;${topMargin ? 'margin-top:32px;' : 'margin-top:0;'}`;
+      h.textContent = text;
+      return h;
+    };
+
+    list.appendChild(makeHeader('Daily Dispatches'));
+    if (daily.length === 0) {
+      const p = document.createElement('p');
+      p.style.cssText = 'color:var(--primary-dim);font-size:0.82rem;';
+      p.textContent = 'No dispatches in the last 2 days.';
+      list.appendChild(p);
+    } else {
+      daily.forEach(el => list.appendChild(el));
+    }
+
+    if (archive.length > 0) {
+      list.appendChild(makeHeader('Dispatch Archive', true));
+      archive.forEach(el => list.appendChild(el));
+    }
+  })();
+</script>
