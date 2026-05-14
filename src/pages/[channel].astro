@@ -47,7 +47,7 @@ function formatDispatchTime(dateStr: string): string | null {
 const isDispatch = channel === 'dispatch';
 ---
 
-<ChannelLayout channel={channel}>
+<ChannelLayout title={channel}>
   {isDispatch && (
     <div id="dispatch-list">
       {sortedPosts.map(post => (
