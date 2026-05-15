@@ -1,6 +1,5 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-
 interface Props {
   title: string;
   description?: string;
@@ -14,9 +13,7 @@ interface Props {
   gallery?: { image: string; caption?: string }[];
   affiliate?: boolean;
 }
-
 const { title, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate } = Astro.props;
-
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
@@ -41,7 +38,6 @@ function formatDispatchTime(dateStr: string): string | null {
   if (!dateStr || !dateStr.includes('T')) return null;
   try {
     let hour: number, minute: number, datePart: string;
-
     if (dateStr.endsWith('Z') || dateStr.includes('+')) {
       const d = new Date(dateStr);
       const utcY = d.getUTCFullYear();
@@ -58,13 +54,14 @@ function formatDispatchTime(dateStr: string): string | null {
       minute = parseInt(minuteStr, 10);
       datePart = dateStr.split('T')[0];
     }
-
     const hour12 = hour % 12 || 12;
     const ampm = hour >= 12 ? 'PM' : 'AM';
     const tz = isInCDT(datePart) ? 'CDT' : 'CST';
     return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
   } catch { return null; }
 }
+const datePart = date ? date.split('T')[0] : undefined;
+const dispatchTime = channel === 'dispatch' ? formatDispatchTime(date ?? '') : null;
 ---
 <BaseLayout title={`${title} | OTD Vault`} description={description}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
@@ -72,7 +69,6 @@ function formatDispatchTime(dateStr: string): string | null {
       <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">&laquo; {channelLabel}</a>
     )}
   </nav>
-
   <div class="vault-layout">
     <section class="log-display" style="width:100%;">
       <article class="blog-post">
@@ -82,21 +78,19 @@ function formatDispatchTime(dateStr: string): string | null {
           )}
           <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
           {datePart && (
-          <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:16px;">
-          {new Date(datePart + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-          {dispatchTime && (
-            <span style="margin-left: 8px; opacity: 0.75;">{dispatchTime}</span>
-      )}
-  </time>
-)}
-
+            <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:16px;">
+              {new Date(datePart + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {dispatchTime && (
+                <span style="margin-left: 8px; opacity: 0.75;">{dispatchTime}</span>
+              )}
+            </time>
+          )}
           {affiliate && (
             <div style="border: 1px dashed var(--secondary); padding: 8px 14px; margin-bottom: 16px; font-size: 0.78rem; color: var(--secondary); opacity: 0.8;">
               ⚠ This post contains affiliate links. If you purchase through these links, I may earn a small commission at no extra cost to you.
               <a href="/pages/gear-policy" style="color:var(--secondary); margin-left:6px;">Affiliate Policy →</a>
             </div>
           )}
-
           {hasReviewMeta && (
             <div style="border: 1px dashed var(--border); padding: 10px 14px; margin-bottom: 20px; font-size: 0.82rem; display: flex; flex-wrap: wrap; gap: 16px;">
               {rating && (
@@ -118,18 +112,17 @@ function formatDispatchTime(dateStr: string): string | null {
                 </span>
               )}
               {address && (
-              <span>
-                <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
-                
+                <span>
+                  <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
                   <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style="color:var(--accent); text-decoration:none;"
-                >
-                  {address} →
-                </a>
-              </span>
-            )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="color:var(--accent); text-decoration:none;"
+                  >
+                    {address} →
+                  </a>
+                </span>
+              )}
               {website && (
                 <span>
                   <span style="color:var(--primary); letter-spacing:1px;">WEBSITE</span>&nbsp;
@@ -140,7 +133,6 @@ function formatDispatchTime(dateStr: string): string | null {
               )}
             </div>
           )}
-
           {gallery && gallery.length > 0 && (
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px;">
               {gallery.map(item => (
@@ -159,7 +151,6 @@ function formatDispatchTime(dateStr: string): string | null {
               ))}
             </div>
           )}
-
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
           <slot />
         </div>
