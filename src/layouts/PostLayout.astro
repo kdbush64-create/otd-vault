@@ -37,18 +37,34 @@ function isInCDT(datePart: string): boolean {
   const d = new Date(year, month - 1, day);
   return d >= nthSundayOf(year, 3, 2) && d < nthSundayOf(year, 11, 1);
 }
-function formatDispatchTime(dateStr: string | undefined): string | null {
+function formatDispatchTime(dateStr: string): string | null {
   if (!dateStr || !dateStr.includes('T')) return null;
-  const [hourStr, minuteStr] = dateStr.split('T')[1].split(':');
-  const hour = parseInt(hourStr, 10);
-  const minute = parseInt(minuteStr, 10);
-  const hour12 = hour % 12 || 12;
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const tz = isInCDT(dateStr.split('T')[0]) ? 'CDT' : 'CST';
-  return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
+  try {
+    let hour: number, minute: number, datePart: string;
+
+    if (dateStr.endsWith('Z') || dateStr.includes('+')) {
+      const d = new Date(dateStr);
+      const utcY = d.getUTCFullYear();
+      const utcM = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const utcD = String(d.getUTCDate()).padStart(2, '0');
+      const offsetHours = isInCDT(`${utcY}-${utcM}-${utcD}`) ? -5 : -6;
+      const central = new Date(d.getTime() + offsetHours * 3600000);
+      hour = central.getUTCHours();
+      minute = central.getUTCMinutes();
+      datePart = `${central.getUTCFullYear()}-${String(central.getUTCMonth() + 1).padStart(2,'0')}-${String(central.getUTCDate()).padStart(2,'0')}`;
+    } else {
+      const [hourStr, minuteStr] = dateStr.split('T')[1].split(':');
+      hour = parseInt(hourStr, 10);
+      minute = parseInt(minuteStr, 10);
+      datePart = dateStr.split('T')[0];
+    }
+
+    const hour12 = hour % 12 || 12;
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const tz = isInCDT(datePart) ? 'CDT' : 'CST';
+    return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
+  } catch { return null; }
 }
-const dispatchTime = channel === 'dispatch' ? formatDispatchTime(date) : null;
-const datePart = date ? date.split('T')[0] : undefined;
 ---
 <BaseLayout title={`${title} | OTD Vault`} description={description}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
