@@ -1,6 +1,5 @@
 ---
 export const prerender = true;
-
 import ChannelLayout from '../layouts/ChannelLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
@@ -26,15 +25,16 @@ function nthSundayOf(year: number, month: number, n: number): Date {
   const first = new Date(year, month - 1, 1);
   return new Date(year, month - 1, 1 + (7 - first.getDay()) % 7 + (n - 1) * 7);
 }
+
 function isInCDT(datePart: string): boolean {
   const [year, month, day] = datePart.split('-').map(Number);
   const d = new Date(year, month - 1, day);
   return d >= nthSundayOf(year, 3, 2) && d < nthSundayOf(year, 11, 1);
 }
+
 function formatDispatchTime(dateStr: string): string | null {
   if (!dateStr || !dateStr.includes('T')) return null;
   try {
-    // Strip milliseconds and Z — Keystatic appends Z but stores local time, not UTC
     const clean = dateStr.split('.')[0].replace('Z', '');
     const [hourStr, minuteStr] = clean.split('T')[1].split(':');
     const hour = parseInt(hourStr, 10);
@@ -45,13 +45,6 @@ function formatDispatchTime(dateStr: string): string | null {
     const tz = isInCDT(datePart) ? 'CDT' : 'CST';
     return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
   } catch (e) { return null; }
-}
-
-    const hour12 = hour % 12 || 12;
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const tz = isInCDT(datePart) ? 'CDT' : 'CST';
-    return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
-  } catch { return null; }
 }
 ---
 
