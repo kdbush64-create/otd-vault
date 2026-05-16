@@ -34,24 +34,18 @@ function isInCDT(datePart: string): boolean {
 function formatDispatchTime(dateStr: string): string | null {
   if (!dateStr || !dateStr.includes('T')) return null;
   try {
-    let hour: number, minute: number, datePart: string;
-
-    if (dateStr.endsWith('Z') || dateStr.includes('+')) {
-      const d = new Date(dateStr);
-      const utcY = d.getUTCFullYear();
-      const utcM = String(d.getUTCMonth() + 1).padStart(2, '0');
-      const utcD = String(d.getUTCDate()).padStart(2, '0');
-      const offsetHours = isInCDT(`${utcY}-${utcM}-${utcD}`) ? -5 : -6;
-      const central = new Date(d.getTime() + offsetHours * 3600000);
-      hour = central.getUTCHours();
-      minute = central.getUTCMinutes();
-      datePart = `${central.getUTCFullYear()}-${String(central.getUTCMonth() + 1).padStart(2,'0')}-${String(central.getUTCDate()).padStart(2,'0')}`;
-    } else {
-      const [hourStr, minuteStr] = dateStr.split('T')[1].split(':');
-      hour = parseInt(hourStr, 10);
-      minute = parseInt(minuteStr, 10);
-      datePart = dateStr.split('T')[0];
-    }
+    // Strip milliseconds and Z — Keystatic appends Z but stores local time, not UTC
+    const clean = dateStr.split('.')[0].replace('Z', '');
+    const [hourStr, minuteStr] = clean.split('T')[1].split(':');
+    const hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+    const datePart = clean.split('T')[0];
+    const hour12 = hour % 12 || 12;
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const tz = isInCDT(datePart) ? 'CDT' : 'CST';
+    return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
+  } catch { return null; }
+}
 
     const hour12 = hour % 12 || 12;
     const ampm = hour >= 12 ? 'PM' : 'AM';
