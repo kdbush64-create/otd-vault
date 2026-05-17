@@ -2,14 +2,12 @@
 import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
   showHero?: boolean;
 }
-
 const { title, description = 'v64otd.com — Vintage64TX', ogImage, showHero = false } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -21,14 +19,14 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, showHero = f
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/style.css" />
     <link rel="manifest" href="/manifest.webmanifest" />
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BHFJD28SFL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-BHFJD28SFL');
-</script>
+    <!-- Google Analytics -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-BHFJD28SFL"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BHFJD28SFL');
+    </script>
   </head>
   <body id="personal-identity">
     <div class="terminal-overlay"></div>
