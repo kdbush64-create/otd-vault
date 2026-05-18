@@ -22,9 +22,10 @@ const costOptions = [
 ];
 const postFields = {
   title: fields.slug({ name: { label: 'Title' } }),
-  date: fields.datetime({
+  date: fields.text({
   label: 'Date & Time',
-  validation: { isRequired: true }
+  description: 'Format: YYYY-MM-DDTHH:MM (e.g. 2026-05-18T14:30)',
+  validation: { isRequired: true },
 }),
   description: fields.text({
     label: 'Description for SEO',
