@@ -68,14 +68,12 @@ const chowFields = {
   affiliateLinks: fields.array(
     fields.object({
       label: fields.text({ 
-        label: 'Product Name', 
-        description: 'e.g. Lodge Cast Iron Dutch Oven',
-        validation: { isRequired: true }
-      }),
+  label: 'Product Name', 
+  description: 'e.g. Lodge Cast Iron Dutch Oven',
+}),
       url: fields.url({ 
-        label: 'Affiliate URL',
-        validation: { isRequired: true }
-      }),
+  label: 'Affiliate URL',
+}),
     }),
     { 
       label: 'Shop This Recipe / Affiliate Links',
