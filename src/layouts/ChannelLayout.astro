@@ -11,13 +11,13 @@ const channelMap: Record<string, string> = {
   gear: 'GEAR',
   coord: 'COORD',
   table: 'THE TABLE',
-  chow: 'CHOW',
+  chow: 'THE KITCHEN',
   xposts: 'X_POSTS',
   substack: 'SUBSTACK FEED',
 };
 const activeChannel = title.toLowerCase();
 const displayLabel = channelMap[activeChannel] ?? title.toUpperCase();
-const navChannels = ['dispatch', 'transit', 'gear', 'coord', 'table'] as const;
+const navChannels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'] as const;
 ---
 <BaseLayout title={`${displayLabel} | OTD Vault`} description={description}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
