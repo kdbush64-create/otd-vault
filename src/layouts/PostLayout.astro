@@ -12,15 +12,16 @@ interface Props {
   website?: string;
   gallery?: { image: string; caption?: string }[];
   affiliate?: boolean;
+  affiliateLinks?: { label: string; url: string }[];
 }
-const { title, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate } = Astro.props;
+const { title, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks } = Astro.props;
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
   gear: 'GEAR',
   coord: 'COORD',
   table: 'THE TABLE',
-  chow: 'CHOW',
+  chow: 'THE KITCHEN',
 };
 const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
 const hasReviewMeta = rating || cost || foodType || address || website;
@@ -37,7 +38,6 @@ function isInCDT(datePart: string): boolean {
 function formatDispatchTime(dateStr: string): string | null {
   if (!dateStr || !dateStr.includes('T')) return null;
   try {
-    // Strip milliseconds and Z — Keystatic appends Z but stores local time, not UTC
     const clean = dateStr.split('.')[0].replace('Z', '');
     const [hourStr, minuteStr] = clean.split('T')[1].split(':');
     const hour = parseInt(hourStr, 10);
@@ -142,6 +142,29 @@ const dispatchTime = channel === 'dispatch' ? formatDispatchTime(date ?? '') : n
           )}
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
           <slot />
+          {affiliateLinks && affiliateLinks.length > 0 && (
+            <div style="margin-top: 32px; border: 1px dashed var(--secondary); padding: 16px 20px;">
+              <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">[ SHOP_THIS_RECIPE ]</p>
+              <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
+                {affiliateLinks.map(link => (
+                  <li>
+                    
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      style="color:var(--accent); text-decoration:none; font-size:0.88rem;"
+                    >
+                      &gt; {link.label} →
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p style="color:var(--secondary); font-size:0.72rem; opacity:0.7; margin-top:12px;">
+                ⚠ Affiliate links — I may earn a small commission at no extra cost to you.
+                <a href="/pages/gear-policy" style="color:var(--secondary); margin-left:4px;">Affiliate Policy →</a>
+              </p>
+            </div>
+          )}
         </div>
       </article>
     </section>
