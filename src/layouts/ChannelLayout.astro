@@ -15,8 +15,12 @@ const channelMap: Record<string, string> = {
   xposts: 'X_POSTS',
   substack: 'SUBSTACK FEED',
 };
+const channelDescMap: Record<string, string> = {
+  chow: 'A curation of some of my favorite recipes.',
+};
 const activeChannel = title.toLowerCase();
 const displayLabel = channelMap[activeChannel] ?? title.toUpperCase();
+const channelDesc = channelDescMap[activeChannel] ?? null;
 const navChannels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'] as const;
 ---
 <BaseLayout title={`${displayLabel} | OTD Vault`} description={description}>
@@ -28,9 +32,14 @@ const navChannels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'] as
   </nav>
   <div class="vault-layout">
     <section style="width: 100%;">
-      <h2 style="color: var(--secondary); letter-spacing: 2px; margin-bottom: 20px; font-size: 1rem;">
+      <h2 style="color: var(--secondary); letter-spacing: 2px; margin-bottom: 8px; font-size: 1rem;">
         &gt; {displayLabel}_CHANNEL
       </h2>
+      {channelDesc && (
+        <p style="color: var(--primary-dim); font-size: 0.82rem; margin-bottom: 20px; font-family: monospace;">
+          {channelDesc}
+        </p>
+      )}
       <div class="post-list">
         <slot />
       </div>
