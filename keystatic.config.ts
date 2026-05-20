@@ -100,7 +100,7 @@ export default config({
     gear:     collection({ label: 'Gear',     slugField: 'title', path: 'src/content/gear/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: gearFields }),
     coord:    collection({ label: 'Coord',    slugField: 'title', path: 'src/content/coord/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: locationFields }),
     table:    collection({ label: 'Table',    slugField: 'title', path: 'src/content/table/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: tableFields }),
-    chow:     collection({ label: 'Chow',     slugField: 'title', path: 'src/content/chow/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: chowFields }),
+    chow:     collection({ label: 'Recipes',     slugField: 'title', path: 'src/content/chow/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: chowFields }),
     xposts:   collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
       date: fields.date({ label: 'Date', validation: { isRequired: true } }),
