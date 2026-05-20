@@ -63,6 +63,26 @@ const gearFields = {
   ...affiliateFields,
   website: fields.url({ label: 'Website URL' }),
 };
+const chowFields = {
+  ...affiliateFields,
+  affiliateLinks: fields.array(
+    fields.object({
+      label: fields.text({ 
+        label: 'Product Name', 
+        description: 'e.g. Lodge Cast Iron Dutch Oven',
+        validation: { isRequired: true }
+      }),
+      url: fields.url({ 
+        label: 'Affiliate URL',
+        validation: { isRequired: true }
+      }),
+    }),
+    { 
+      label: 'Shop This Recipe / Affiliate Links',
+      itemLabel: (props) => props.fields.label.value || 'Link',
+    }
+  ),
+};
 export default config({
   storage: { kind: 'cloud' },
   cloud: { project: 'otd-vault/otd-vault' },
@@ -80,7 +100,7 @@ export default config({
     gear:     collection({ label: 'Gear',     slugField: 'title', path: 'src/content/gear/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: gearFields }),
     coord:    collection({ label: 'Coord',    slugField: 'title', path: 'src/content/coord/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: locationFields }),
     table:    collection({ label: 'Table',    slugField: 'title', path: 'src/content/table/*',    format: { frontmatter: 'yaml', contentField: 'content' }, schema: tableFields }),
-    chow:     collection({ label: 'Chow',     slugField: 'title', path: 'src/content/chow/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: affiliateFields }),
+    chow:     collection({ label: 'Chow',     slugField: 'title', path: 'src/content/chow/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: chowFields }),
     xposts:   collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
       date: fields.date({ label: 'Date', validation: { isRequired: true } }),
