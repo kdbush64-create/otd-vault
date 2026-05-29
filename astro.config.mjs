@@ -6,7 +6,7 @@ import markdoc from '@astrojs/markdoc';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  output: 'server',
+  output: 'hybrid',
   adapter: cloudflare({ imageService: 'compile' }),
   integrations: [
     react(),
