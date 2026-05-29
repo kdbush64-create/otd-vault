@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="404 | OTD Vault" description="Page not found.">
+  <div class="vault-layout">
+    <section class="log-display" style="width:100%;">
+      <article class="blog-post">
+        <div class="blog-post-body" style="text-align:center; padding: 40px 20px;">
+          <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">
+            [ SYSTEM_ERROR ]
+          </p>
+          <h1 style="color:var(--primary); font-size:3rem; margin-bottom:8px; letter-spacing:4px;">
+            4 0 4
+          </h1>
+          <h2 style="color:var(--secondary); font-size:1rem; letter-spacing:2px; margin-bottom:24px;">
+            &gt; SIGNAL_LOST
+          </h2>
+          <p style="color:var(--primary-dim); font-size:0.85rem; font-family:monospace; margin-bottom:32px;">
+            [ THE DATA_CHANNEL YOU ARE LOOKING FOR DOES NOT EXIST OR HAS BEEN RELOCATED ]
+          </p>
+          <div style="display:flex; flex-direction:column; gap:12px; max-width:300px; margin:0 auto;">
+            <a href="/" class="submit-btn" style="text-decoration:none; text-align:center;">
+              &laquo; RETURN TO WATCH_TOWER
+            </a>
+            <a href="/dispatch" class="submit-btn" style="text-decoration:none; text-align:center;">
+              DISPATCH ARCHIVES
+            </a>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+</BaseLayout>
