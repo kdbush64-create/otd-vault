@@ -57,7 +57,7 @@ const shareText = encodeURIComponent(`${title} — ${siteUrl}`);
 const xShareUrl = `https://x.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(postUrl)}`;
 const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
 ---
-<BaseLayout title={`${title} | OTD Vault`} description={description}>
+<BaseLayout title={`${title} | OTD Vault`} description={description} ogImage={gallery?.[0]?.image} isArticle={true}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
     {channel && (
       <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">&laquo; {channelLabel}</a>
