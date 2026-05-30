@@ -7,8 +7,9 @@ interface Props {
   description?: string;
   ogImage?: string;
   showHero?: boolean;
+  isArticle?: boolean;
 }
-const { title, description = 'v64otd.com — Vintage64TX', ogImage, showHero = false } = Astro.props;
+const { title, description = 'v64otd.com — Vintage64TX', ogImage, showHero = false, isArticle = false } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -19,12 +20,11 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, showHero = f
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-BHFJD28SFL');
 </script>   
 <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO title={title} description={description} ogImage={ogImage} />
+    <SEO title={title} description={description} ogImage={ogImage} isArticle={isArticle} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/style.css" />
     <link rel="manifest" href="/manifest.webmanifest" />
