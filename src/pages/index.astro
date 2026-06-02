@@ -2,7 +2,6 @@
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-
 const allDispatch = await getCollection('dispatch');
 const dispatchPosts = [...allDispatch]
   .sort((a, b) => String(b.data.date ?? '').localeCompare(String(a.data.date ?? '')))
@@ -53,7 +52,6 @@ const dispatchPosts = [...allDispatch]
       </article>
     </section>
   </div>
-
   <script define:vars={{ dispatchPosts }}>
     (function () {
       function nthSundayOf(year, month, n) {
@@ -79,6 +77,11 @@ const dispatchPosts = [...allDispatch]
           return String(hour12).padStart(2,'0') + ':' + String(minute).padStart(2,'0') + ampm + '-' + tz;
         } catch (e) { return null; }
       }
+      function renderStars(avg) {
+        if (avg === null) return '☆☆☆☆☆';
+        const full = Math.round(avg);
+        return '★'.repeat(full) + '☆'.repeat(5 - full);
+      }
 
       const now = new Date();
       const today = now.getFullYear() + '-' +
@@ -99,6 +102,7 @@ const dispatchPosts = [...allDispatch]
         return;
       }
 
+      // Render cards first, with a placeholder for ratings
       container.innerHTML = recent.map(post => {
         const datePart = post.date.split('T')[0];
         const time = formatTime(post.date);
@@ -110,11 +114,31 @@ const dispatchPosts = [...allDispatch]
           ? '<p style="color:var(--primary-dim);font-size:0.82rem;margin-top:4px;line-height:1.4;">' + post.description + '</p>'
           : '';
         return '<div style="border-bottom:1px dashed var(--border);padding:10px 0;margin-bottom:4px;">' +
-          '<a href="/dispatch/' + post.slug + '/" class="log-link">&gt; ' + post.title + '</a>' +
+          '<a href="/dispatch/' + post.slug + '/" style="color:var(--accent);" class="log-link">&gt; ' + post.title + '</a>' +
           '<p style="color:var(--primary-dim);font-size:0.75rem;margin-top:2px;">' + dateDisplay + timeSpan + '</p>' +
+          '<div id="rating-' + post.slug + '" style="font-size:0.82rem;color:var(--primary-dim);margin:2px 0 4px;"></div>' +
           desc +
           '</div>';
       }).join('');
+
+      // Fetch ratings for each card and inject
+      recent.forEach(post => {
+        const ratingEl = document.getElementById('rating-' + post.slug);
+        if (!ratingEl) return;
+        fetch('/api/rate?slug=dispatch/' + post.slug)
+          .then(r => r.json())
+          .then(data => {
+            if (data.count > 0) {
+              ratingEl.innerHTML =
+                '<span style="color:#f0c040;letter-spacing:2px;">' + renderStars(data.average) + '</span>' +
+                ' <span>' + data.average.toFixed(1) + '</span>' +
+                ' <span style="opacity:0.7;">(' + data.count + ' ' + (data.count === 1 ? 'rating' : 'ratings') + ')</span>';
+            } else {
+              ratingEl.innerHTML = '<span style="opacity:0.5;">No ratings yet <span style="color:#888;">☆☆☆☆☆</span></span>';
+            }
+          })
+          .catch(() => {});
+      });
     })();
   </script>
 </BaseLayout>
