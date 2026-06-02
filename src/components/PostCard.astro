@@ -1,17 +1,19 @@
 ---
+import StarRating from './StarRating.astro';
+
 interface Props {
   title: string;
   date?: string;
   time?: string;
   description?: string;
   href: string;
+  channel?: string;
 }
-const { title, date, time, description, href } = Astro.props;
-
+const { title, date, time, description, href, channel } = Astro.props;
 // Use only the date portion — handles both "2026-05-14" and "2026-05-14T18:05"
 const datePart = date ? date.split('T')[0] : undefined;
+const showRating = channel === 'dispatch' || channel === 'chow';
 ---
-
 <div style="border-bottom: 1px dashed var(--border); padding: 10px 0; margin-bottom: 4px;">
   <a href={href} class="log-link">> {title}</a>
   {datePart && (
@@ -23,6 +25,9 @@ const datePart = date ? date.split('T')[0] : undefined;
         <span style="margin-left: 8px; opacity: 0.75;">{time}</span>
       )}
     </p>
+  )}
+  {showRating && (
+    <StarRating slug={href} interactive={false} />
   )}
   {description && (
     <p style="color: var(--primary-dim); font-size: 0.82rem; margin-top: 4px; line-height: 1.4;">{description}</p>
