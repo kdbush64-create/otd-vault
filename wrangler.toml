@@ -7,3 +7,8 @@ main = "dist/_worker.js"
 directory = "./dist"
 binding = "ASSETS"
 serve_directly = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "otd-ratings"
+database_id = "eaa5debd-d63e-4d41-af2b-6eaf94b66066"
