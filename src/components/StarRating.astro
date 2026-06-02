@@ -1,0 +1,122 @@
+---
+interface Props {
+  slug: string;
+  interactive?: boolean; // true on post pages, false on listing cards
+}
+const { slug, interactive = false } = Astro.props;
+---
+
+<div class="star-rating" data-slug={slug} data-interactive={interactive ? 'true' : 'false'}>
+  <span class="stars-display">
+    <span class="star-avg">—</span>
+    <span class="star-icons">☆☆☆☆☆</span>
+    <span class="star-count"></span>
+  </span>
+  {interactive && (
+    <div class="star-input" style="display:none;">
+      <span>Rate this: </span>
+      {[1,2,3,4,5].map(n => (
+        <button class="star-btn" data-val={n} aria-label={`${n} star`}>☆</button>
+      ))}
+    </div>
+  )}
+  {interactive && (
+    <div class="star-voted" style="display:none;">
+      <span class="star-voted-msg">Thanks for rating!</span>
+    </div>
+  )}
+</div>
+
+<style>
+  .star-rating { font-size: 0.82rem; color: var(--primary-dim); margin: 4px 0; }
+  .star-icons { color: #f0c040; letter-spacing: 2px; }
+  .star-count { margin-left: 6px; opacity: 0.7; }
+  .star-input { margin-top: 6px; }
+  .star-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 1.2rem; color: #888; padding: 0 2px;
+    transition: color 0.1s;
+  }
+  .star-btn:hover, .star-btn.hovered { color: #f0c040; }
+  .star-voted-msg { color: var(--primary-dim); font-size: 0.78rem; }
+</style>
+
+<script>
+  function renderStars(avg: number | null): string {
+    if (avg === null) return '☆☆☆☆☆';
+    const full = Math.round(avg);
+    return '★'.repeat(full) + '☆'.repeat(5 - full);
+  }
+
+  document.querySelectorAll<HTMLElement>('.star-rating').forEach(widget => {
+    const slug = widget.dataset.slug!;
+    const interactive = widget.dataset.interactive === 'true';
+    const display = widget.querySelector('.star-avg') as HTMLElement;
+    const icons = widget.querySelector('.star-icons') as HTMLElement;
+    const countEl = widget.querySelector('.star-count') as HTMLElement;
+    const input = widget.querySelector('.star-input') as HTMLElement | null;
+    const voted = widget.querySelector('.star-voted') as HTMLElement | null;
+
+    const storageKey = `rated_${slug}`;
+    const hasVoted = localStorage.getItem(storageKey);
+
+    // Fetch current rating
+    fetch(`/api/rate?slug=${encodeURIComponent(slug)}`)
+      .then(r => r.json())
+      .then((data: any) => {
+        if (data.count > 0) {
+          display.textContent = data.average.toFixed(1);
+          icons.textContent = renderStars(data.average);
+          countEl.textContent = `(${data.count} ${data.count === 1 ? 'rating' : 'ratings'})`;
+        } else {
+          display.textContent = 'No ratings yet';
+          icons.textContent = '☆☆☆☆☆';
+        }
+        if (interactive && input && voted) {
+          if (hasVoted) {
+            voted.style.display = 'block';
+          } else {
+            input.style.display = 'block';
+          }
+        }
+      })
+      .catch(() => {
+        display.textContent = '';
+      });
+
+    // Star hover effect
+    if (interactive && input) {
+      const btns = input.querySelectorAll<HTMLElement>('.star-btn');
+      btns.forEach((btn, i) => {
+        btn.addEventListener('mouseenter', () => {
+          btns.forEach((b, j) => b.classList.toggle('hovered', j <= i));
+        });
+        btn.addEventListener('mouseleave', () => {
+          btns.forEach(b => b.classList.remove('hovered'));
+        });
+        btn.addEventListener('click', () => {
+          const stars = parseInt(btn.dataset.val!);
+          fetch('/api/rate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug, stars })
+          })
+            .then(r => r.json())
+            .then((data: any) => {
+              localStorage.setItem(storageKey, '1');
+              if (data.count > 0) {
+                display.textContent = data.average.toFixed(1);
+                icons.textContent = renderStars(data.average);
+                countEl.textContent = `(${data.count} ${data.count === 1 ? 'rating' : 'ratings'})`;
+              }
+              if (input && voted) {
+                input.style.display = 'none';
+                voted.style.display = 'block';
+              }
+            })
+            .catch(() => {});
+        });
+      });
+    }
+  });
+</script>
