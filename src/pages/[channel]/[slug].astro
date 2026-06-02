@@ -2,6 +2,7 @@
 export const prerender = true;
 import PostLayout from '../../layouts/PostLayout.astro';
 import { getCollection } from 'astro:content';
+
 export async function getStaticPaths() {
   const paths = [];
   for (const channel of ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'] as const) {
@@ -12,17 +13,23 @@ export async function getStaticPaths() {
   }
   return paths;
 }
+
 const { post, channel } = Astro.props;
 const { Content } = await post.render();
-const rating   = 'rating'   in post.data ? post.data.rating   : undefined;
-const cost     = 'cost'     in post.data ? post.data.cost     : undefined;
-const foodType = 'foodType' in post.data ? post.data.foodType : undefined;
-const address  = 'address'  in post.data ? post.data.address  : undefined;
-const website  = 'website'  in post.data ? post.data.website  : undefined;
-const gallery  = 'gallery'  in post.data ? post.data.gallery  : undefined;
+
+const rating        = 'rating'        in post.data ? post.data.rating        : undefined;
+const cost          = 'cost'          in post.data ? post.data.cost          : undefined;
+const foodType      = 'foodType'      in post.data ? post.data.foodType      : undefined;
+const address       = 'address'       in post.data ? post.data.address       : undefined;
+const website       = 'website'       in post.data ? post.data.website       : undefined;
+const gallery       = 'gallery'       in post.data ? post.data.gallery       : undefined;
+const affiliate     = 'affiliate'     in post.data ? post.data.affiliate     : undefined;
+const affiliateLinks = 'affiliateLinks' in post.data ? post.data.affiliateLinks : undefined;
 ---
+
 <PostLayout
   title={post.data.title}
+  slug={`${channel}/${post.slug}`}
   date={post.data.date}
   description={'description' in post.data ? post.data.description : undefined}
   channel={channel}
@@ -32,6 +39,8 @@ const gallery  = 'gallery'  in post.data ? post.data.gallery  : undefined;
   address={address}
   website={website}
   gallery={gallery}
+  affiliate={affiliate}
+  affiliateLinks={affiliateLinks}
 >
   <Content />
 </PostLayout>
