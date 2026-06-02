@@ -1,7 +1,10 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import StarRating from '../components/StarRating.astro';
+
 interface Props {
   title: string;
+  slug?: string;
   description?: string;
   date?: string;
   channel?: string;
@@ -14,7 +17,8 @@ interface Props {
   affiliate?: boolean;
   affiliateLinks?: { label: string; url: string }[];
 }
-const { title, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks } = Astro.props;
+const { title, slug, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks } = Astro.props;
+
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
@@ -25,6 +29,7 @@ const channelMap: Record<string, string> = {
 };
 const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
 const hasReviewMeta = rating || cost || foodType || address || website;
+
 function nthSundayOf(year: number, month: number, n: number): Date {
   const first = new Date(year, month - 1, 1);
   const daysUntilSunday = (7 - first.getDay()) % 7;
@@ -49,14 +54,21 @@ function formatDispatchTime(dateStr: string): string | null {
     return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
   } catch (e) { return null; }
 }
+
 const datePart = date ? date.split('T')[0] : undefined;
 const dispatchTime = channel === 'dispatch' ? formatDispatchTime(date ?? '') : null;
+
 const siteUrl = 'https://v64otd.com';
 const postUrl = `${siteUrl}/${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
 const shareText = encodeURIComponent(`${title} — ${siteUrl}`);
 const xShareUrl = `https://x.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(postUrl)}`;
 const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
+
+// Use passed slug, or fall back to title-derived slug
+const ratingSlug = slug ?? `${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
+const showRating = channel === 'dispatch' || channel === 'chow';
 ---
+
 <BaseLayout title={`${title} | OTD Vault`} description={description} ogImage={gallery?.[0]?.image} isArticle={true}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
     {channel && (
@@ -72,12 +84,17 @@ const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComp
           )}
           <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
           {datePart && (
-            <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:16px;">
+            <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:8px;">
               {new Date(datePart + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
               {dispatchTime && (
                 <span style="margin-left: 8px; opacity: 0.75;">{dispatchTime}</span>
               )}
             </time>
+          )}
+          {showRating && (
+            <div style="margin-bottom: 16px;">
+              <StarRating slug={ratingSlug} interactive={true} />
+            </div>
           )}
           {affiliate && (
             <div style="border: 1px dashed var(--secondary); padding: 8px 14px; margin-bottom: 16px; font-size: 0.78rem; color: var(--secondary); opacity: 0.8;">
@@ -165,7 +182,7 @@ const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComp
           <div style="margin-top: 32px; border: 1px dashed var(--border); padding: 16px 20px;">
             <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">[ SHARE_THIS_DISPATCH ]</p>
             <div style="display:flex; gap:16px; flex-wrap:wrap;">
-              <a
+              
                 href={xShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -173,7 +190,7 @@ const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComp
               >
                 𝕏 Post to X →
               </a>
-              <a
+              
                 href={fbShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -189,7 +206,7 @@ const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComp
               <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
                 {affiliateLinks.map(link => (
                   <li>
-                    <a
+                    
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
