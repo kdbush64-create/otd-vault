@@ -11,8 +11,8 @@ export async function getStaticPaths() {
 
 type Channel = 'dispatch' | 'transit' | 'gear' | 'coord' | 'table' | 'chow' | 'xposts';
 const { channel } = Astro.params as { channel: Channel };
-
 const allPosts = await getCollection(channel);
+
 const posts = channel === 'xposts'
   ? allPosts.filter(post => post.data.approved === true)
   : allPosts;
@@ -25,13 +25,11 @@ function nthSundayOf(year: number, month: number, n: number): Date {
   const first = new Date(year, month - 1, 1);
   return new Date(year, month - 1, 1 + (7 - first.getDay()) % 7 + (n - 1) * 7);
 }
-
 function isInCDT(datePart: string): boolean {
   const [year, month, day] = datePart.split('-').map(Number);
   const d = new Date(year, month - 1, day);
   return d >= nthSundayOf(year, 3, 2) && d < nthSundayOf(year, 11, 1);
 }
-
 function formatDispatchTime(dateStr: string): string | null {
   if (!dateStr || !dateStr.includes('T')) return null;
   try {
@@ -56,6 +54,7 @@ function formatDispatchTime(dateStr: string): string | null {
       time={channel === 'dispatch' ? formatDispatchTime(String(post.data.date ?? '')) ?? undefined : undefined}
       description={post.data.description}
       href={`/${channel}/${post.slug}/`}
+      channel={channel}
     />
   ))}
 </ChannelLayout>
