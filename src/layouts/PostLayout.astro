@@ -17,6 +17,7 @@ interface Props {
   affiliate?: boolean;
   affiliateLinks?: { label: string; url: string }[];
 }
+
 const { title, slug, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks } = Astro.props;
 
 const channelMap: Record<string, string> = {
@@ -64,7 +65,6 @@ const shareText = encodeURIComponent(`${title} — ${siteUrl}`);
 const xShareUrl = `https://x.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(postUrl)}`;
 const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
 
-// Use passed slug, or fall back to title-derived slug
 const ratingSlug = slug ?? `${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
 const showRating = channel === 'dispatch' || channel === 'chow';
 ---
