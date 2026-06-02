@@ -183,6 +183,7 @@ const showRating = channel === 'dispatch' || channel === 'chow';
             <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">[ SHARE_THIS_DISPATCH ]</p>
             <div style="display:flex; gap:16px; flex-wrap:wrap;">
               
+                <a>
                 href={xShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -191,7 +192,7 @@ const showRating = channel === 'dispatch' || channel === 'chow';
                 𝕏 Post to X →
               </a>
               
-                href={fbShareUrl}
+                <a>href={fbShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style="color:var(--accent); text-decoration:none; font-size:0.88rem; border: 1px dashed var(--accent); padding: 6px 14px;"
@@ -207,7 +208,7 @@ const showRating = channel === 'dispatch' || channel === 'chow';
                 {affiliateLinks.map(link => (
                   <li>
                     
-                      href={link.url}
+                      <a>href={link.url}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
                       style="color:var(--accent); text-decoration:none; font-size:0.88rem;"
