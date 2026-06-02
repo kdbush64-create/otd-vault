@@ -27,8 +27,8 @@ const showRating = channel === 'dispatch' || channel === 'chow';
     </p>
   )}
   {showRating && (
-    <StarRating slug={href} interactive={false} />
-  )}
+  <StarRating slug={href.replace(/^\//, '').replace(/\/$/, '')} interactive={false} />
+)}
   {description && (
     <p style="color: var(--primary-dim); font-size: 0.82rem; margin-top: 4px; line-height: 1.4;">{description}</p>
   )}
