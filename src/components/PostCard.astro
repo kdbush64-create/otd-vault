@@ -15,7 +15,7 @@ const datePart = date ? date.split('T')[0] : undefined;
 const showRating = channel === 'dispatch' || channel === 'chow';
 ---
 <div style="border-bottom: 1px dashed var(--border); padding: 10px 0; margin-bottom: 4px;">
-  <a href={href} class="log-link">> {title}</a>
+  <a href={href} class="log-link" style="color: var(--accent);">> {title}</a>
   {datePart && (
     <p style="color: var(--primary-dim); font-size: 0.75rem; margin-top: 2px;">
       {new Date(datePart + 'T00:00:00').toLocaleDateString('en-US', {
