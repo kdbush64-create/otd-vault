@@ -182,23 +182,8 @@ const showRating = channel === 'dispatch' || channel === 'chow';
           <div style="margin-top: 32px; border: 1px dashed var(--border); padding: 16px 20px;">
             <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">[ SHARE_THIS_DISPATCH ]</p>
             <div style="display:flex; gap:16px; flex-wrap:wrap;">
-              
-                <a>
-                href={xShareUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style="color:var(--accent); text-decoration:none; font-size:0.88rem; border: 1px dashed var(--accent); padding: 6px 14px;"
-              >
-                𝕏 Post to X →
-              </a>
-              
-                <a>href={fbShareUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style="color:var(--accent); text-decoration:none; font-size:0.88rem; border: 1px dashed var(--accent); padding: 6px 14px;"
-              >
-                f Share on Facebook →
-              </a>
+              <a href={xShareUrl} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; font-size:0.88rem; border: 1px dashed var(--accent); padding: 6px 14px;">𝕏 Post to X →</a>
+              <a href={fbShareUrl} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; font-size:0.88rem; border: 1px dashed var(--accent); padding: 6px 14px;">f Share on Facebook →</a>
             </div>
           </div>
           {affiliateLinks && affiliateLinks.length > 0 && (
@@ -207,14 +192,7 @@ const showRating = channel === 'dispatch' || channel === 'chow';
               <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
                 {affiliateLinks.map(link => (
                   <li>
-                    
-                      <a>href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                      style="color:var(--accent); text-decoration:none; font-size:0.88rem;"
-                    >
-                      &gt; {link.label} →
-                    </a>
+                    <a href={link.url} target="_blank" rel="noopener noreferrer nofollow" style="color:var(--accent); text-decoration:none; font-size:0.88rem;">&gt; {link.label} →</a>
                   </li>
                 ))}
               </ul>
