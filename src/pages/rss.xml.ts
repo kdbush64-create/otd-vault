@@ -2,6 +2,14 @@ export const prerender = true;
 
 import { getCollection } from 'astro:content';
 
+function toRFC822(dateStr: string): string {
+  const clean = dateStr.split('.')[0].replace('Z', '');
+  const d = new Date(clean.includes('T') ? clean : clean + 'T00:00:00');
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${days[d.getUTCDay()]}, ${String(d.getUTCDate()).padStart(2,'0')} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()} ${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')} +0000`;
+}
+
 export async function GET() {
   const posts = await getCollection('dispatch');
   const sorted = [...posts].sort((a, b) =>
@@ -12,9 +20,7 @@ export async function GET() {
     const title = post.data.title;
     const description = post.data.description ?? '';
     const url = `https://v64otd.com/dispatch/${post.slug}/`;
-    const rawDate = String(post.data.date ?? '');
-    const cleanDate = rawDate.split('.')[0].replace('Z', '');
-    const pubDate = new Date(cleanDate.includes('T') ? cleanDate : cleanDate + 'T00:00:00').toUTCString();
+    const pubDate = toRFC822(String(post.data.date ?? ''));
     const body = post.body ?? '';
 
     return `
@@ -38,7 +44,7 @@ export async function GET() {
     <description>Daily dispatches from Vintage64TX at v64otd.com</description>
     <language>en-us</language>
     <atom:link href="https://v64otd.com/rss.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${toRFC822(new Date().toISOString())}</lastBuildDate>
     ${items}
   </channel>
 </rss>`;
