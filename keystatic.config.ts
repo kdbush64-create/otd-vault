@@ -33,7 +33,7 @@ const postFields = {
     description: 'SEO only — not shown on page. 150–160 chars, plain text, no quotes or markdown.',
     validation: { length: { min: 50, max: 160 } },
   }),
-  tags: fields.array(fields.text({ label: 'Tag' }), { label: 'Tags', itemLabel: (p) => p.value }),
+  tags: fields.text({ label: 'Tags', description: 'Space-separated keywords, e.g. texas food bbq' }),
   gallery: fields.array(
     fields.object({
       image: fields.image({ label: 'Image', directory: 'public/images/posts', publicPath: '/images/posts/' }),
