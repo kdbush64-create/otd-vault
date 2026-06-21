@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import StarRating from '../components/StarRating.astro';
-
 interface Props {
   title: string;
   slug?: string;
@@ -16,10 +15,10 @@ interface Props {
   gallery?: { image: string; caption?: string }[];
   affiliate?: boolean;
   affiliateLinks?: { label: string; url: string }[];
+  tags?: string;
 }
-
-const { title, slug, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks } = Astro.props;
-
+const { title, slug, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks, tags } = Astro.props;
+const tagList = tags ? tags.trim().split(/\s+/).filter(Boolean) : [];
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
@@ -30,7 +29,6 @@ const channelMap: Record<string, string> = {
 };
 const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
 const hasReviewMeta = rating || cost || foodType || address || website;
-
 function nthSundayOf(year: number, month: number, n: number): Date {
   const first = new Date(year, month - 1, 1);
   const daysUntilSunday = (7 - first.getDay()) % 7;
@@ -55,20 +53,16 @@ function formatDispatchTime(dateStr: string): string | null {
     return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
   } catch (e) { return null; }
 }
-
 const datePart = date ? date.split('T')[0] : undefined;
 const dispatchTime = channel === 'dispatch' ? formatDispatchTime(date ?? '') : null;
-
 const siteUrl = 'https://v64otd.com';
 const postUrl = `${siteUrl}/${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
 const shareText = encodeURIComponent(`${title} — ${siteUrl}`);
 const xShareUrl = `https://x.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(postUrl)}`;
 const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
-
 const ratingSlug = slug ?? `${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
 const showRating = channel === 'dispatch' || channel === 'chow';
 ---
-
 <BaseLayout title={`${title} | OTD Vault`} description={description} ogImage={gallery?.[0]?.image} isArticle={true}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
     {channel && (
@@ -179,6 +173,13 @@ const showRating = channel === 'dispatch' || channel === 'chow';
           )}
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
           <slot />
+          {tagList.length > 0 && (
+            <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
+              {tagList.map(tag => (
+                <a href={`/tags/${tag}`} style="color:var(--accent); font-size:0.75rem; border: 1px dashed var(--accent); padding: 3px 10px; text-decoration:none; letter-spacing:1px;">#{tag}</a>
+              ))}
+            </div>
+          )}
           <div style="margin-top: 32px; border: 1px dashed var(--border); padding: 16px 20px;">
             <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">[ SHARE_THIS_DISPATCH ]</p>
             <div style="display:flex; gap:16px; flex-wrap:wrap;">
