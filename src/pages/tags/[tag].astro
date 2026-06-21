@@ -1,0 +1,66 @@
+---
+export const prerender = true;
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'] as const;
+  const tagMap: Record<string, { title: string; slug: string; channel: string; date?: string }[]> = {};
+
+  for (const channel of channels) {
+    const posts = await getCollection(channel);
+    for (const post of posts) {
+      const raw = 'tags' in post.data && post.data.tags ? (post.data.tags as string) : '';
+      const tags = raw.trim().split(/\s+/).filter(Boolean);
+      for (const tag of tags) {
+        if (!tagMap[tag]) tagMap[tag] = [];
+        tagMap[tag].push({
+          title: post.data.title,
+          slug: post.slug,
+          channel,
+          date: 'date' in post.data ? String(post.data.date) : undefined,
+        });
+      }
+    }
+  }
+
+  return Object.entries(tagMap).map(([tag, posts]) => ({
+    params: { tag },
+    props: { posts, tag },
+  }));
+}
+
+const { posts, tag } = Astro.props;
+posts.sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+
+const channelMap: Record<string, string> = {
+  dispatch: 'DISPATCH', transit: 'TRANSIT', gear: 'GEAR',
+  coord: 'COORD', table: 'TABLE', chow: 'CHOW',
+};
+---
+<BaseLayout title={`#${tag} | v64otd.com`} description={`Posts tagged ${tag} on v64otd.com`}>
+  <nav style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
+    <a href="/" style="color:var(--accent); text-decoration:none; font-size:0.85rem;">&laquo; Home</a>
+  </nav>
+  <div class="vault-layout">
+    <section class="log-display" style="width:100%;">
+      <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:4px;">[TAG_INDEX]</p>
+      <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:20px;">#{tag}</h1>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        {posts.map(post => (
+          <div style="border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
+            <span style="color:var(--secondary); font-size:0.72rem; letter-spacing:1px;">[{channelMap[post.channel] ?? post.channel.toUpperCase()}]</span>
+            <div>
+              <a href={`/${post.channel}/${post.slug}`} style="color:var(--accent); text-decoration:none; font-size:0.95rem;">{post.title}</a>
+            </div>
+            {post.date && (
+              <time style="color:var(--secondary); font-size:0.75rem; opacity:0.7;">
+                {new Date(post.date.split('T')[0] + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
