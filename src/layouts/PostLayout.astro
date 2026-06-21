@@ -18,7 +18,9 @@ interface Props {
   tags?: string;
 }
 const { title, slug, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks, tags } = Astro.props;
-const tagList = tags ? tags.trim().split(/\s+/).filter(Boolean) : [];
+const tagList = tags
+  ? (Array.isArray(tags) ? (tags as string[]) : String(tags).trim().split(/\s+/)).filter(Boolean)
+  : [];
 const channelMap: Record<string, string> = {
   dispatch: 'THE DISPATCH',
   transit: 'TRANSIT',
