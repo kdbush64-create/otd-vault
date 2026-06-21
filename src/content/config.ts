@@ -3,7 +3,9 @@ const postSchema = z.object({
   title: z.string(),
   date: z.coerce.string(),
   description: z.string().optional(),
-  tags: z.string().optional(),
+  tags: z.union([z.string(), z.array(z.string())]).optional().transform(val =>
+  Array.isArray(val) ? val.join(' ') : val
+),
   gallery: z.array(z.object({ image: z.string(), caption: z.string().max(50).optional() })).max(10).optional(),
 });
 const locationSchema = postSchema.extend({
