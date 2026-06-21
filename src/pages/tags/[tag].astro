@@ -10,7 +10,11 @@ export async function getStaticPaths() {
   for (const channel of channels) {
     const posts = await getCollection(channel);
     for (const post of posts) {
-      const raw = 'tags' in post.data && post.data.tags ? (post.data.tags as string) : '';
+      const raw = 'tags' in post.data && post.data.tags
+  ? (Array.isArray(post.data.tags)
+      ? (post.data.tags as string[]).join(' ')
+      : String(post.data.tags))
+  : '';
       const tags = raw.trim().split(/\s+/).filter(Boolean);
       for (const tag of tags) {
         if (!tagMap[tag]) tagMap[tag] = [];
