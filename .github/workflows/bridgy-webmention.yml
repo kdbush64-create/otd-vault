@@ -1,0 +1,42 @@
+name: Notify Bridgy Fed of new dispatches
+
+on:
+  deployment_status:
+
+jobs:
+  notify:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for CDN to settle
+        run: sleep 20
+
+      - name: Install feedparser
+        run: pip install feedparser
+
+      - name: Send webmentions for latest dispatches
+        run: |
+          python3 << 'EOF'
+          import feedparser
+          import urllib.request
+          import urllib.parse
+
+          feed = feedparser.parse("https://v64otd.com/rss.xml")
+          latest = feed.entries[:3]  # pings the 3 most recent items every deploy
+
+          for entry in latest:
+              url = entry.link
+              print(f"Sending webmention for: {url}")
+              data = urllib.parse.urlencode({
+                  "source": url,
+                  "target": "https://fed.brid.gy",
+              }).encode()
+              req = urllib.request.Request(
+                  "https://fed.brid.gy/webmention", data=data, method="POST"
+              )
+              try:
+                  with urllib.request.urlopen(req) as resp:
+                      print(resp.status, resp.read().decode())
+              except Exception as e:
+                  print(f"Error for {url}: {e}")
+          EOF
