@@ -258,7 +258,8 @@ footer {
     padding-left: 16px;
     border-left: 2px dashed var(--border);
 }
-.blog-post-body ul {
+.blog-post-body ul,
+.blog-post-body ol {
     padding-left: 24px;
 }
 .blog-post-body p, 
