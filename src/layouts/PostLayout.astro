@@ -184,11 +184,11 @@ const showRating = channel === 'dispatch' || channel === 'chow';
           </div>
           <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
           {tagList.length > 0 && (
-            <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
-              {tagList.map(tag => (
-                <a href={`/tags/${tag}`} style="color:var(--accent); font-size:0.75rem; border: 1px dashed var(--accent); padding: 3px 10px; text-decoration:none; letter-spacing:1px;">#{tag}</a>
-              ))}
-            </div>
-          )}
+  <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
+    {tagList.map(tag => (
+      <a href={`/tags/${tag}`} class="p-category" rel="tag" style="color:var(--accent); font-size:0.75rem; border: 1px dashed var(--accent); padding: 3px 10px; text-decoration:none; letter-spacing:1px;">#{tag}</a>
+    ))}
+  </div>
+)}
           <div style="margin-top: 32px; border: 1px dashed var(--border); padding: 16px 20px;">
             <p
