@@ -1,11 +1,13 @@
 name: Notify Bridgy Fed of new dispatches
 
 on:
-  deployment_status:
+  workflow_run:
+    workflows: ["Deploy to Cloudflare Workers"]
+    types: [completed]
 
 jobs:
   notify:
-    if: github.event.deployment_status.state == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Wait for CDN to settle
@@ -22,7 +24,7 @@ jobs:
           import urllib.parse
 
           feed = feedparser.parse("https://v64otd.com/rss.xml")
-          latest = feed.entries[:3]  # pings the 3 most recent items every deploy
+          latest = feed.entries[:3]
 
           for entry in latest:
               url = entry.link
