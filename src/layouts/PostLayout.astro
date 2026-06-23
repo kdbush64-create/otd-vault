@@ -62,6 +62,7 @@ const datePart = date ? date.split('T')[0] : undefined;
 const dispatchTime = channel === 'dispatch' ? formatDispatchTime(date ?? '') : null;
 const siteUrl = 'https://v64otd.com';
 const postUrl = `${siteUrl}/${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
+const permalink = Astro.url.href;
 const shareText = encodeURIComponent(`${title} — ${siteUrl}`);
 const xShareUrl = `https://x.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(postUrl)}`;
 const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
@@ -76,14 +77,15 @@ const showRating = channel === 'dispatch' || channel === 'chow';
   </nav>
   <div class="vault-layout">
     <section class="log-display" style="width:100%;">
-      <article class="blog-post">
+      <article class="blog-post h-entry">
         <div class="blog-post-body">
+          <a href={permalink} class="u-url" hidden></a>
           {channel && (
             <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">[{channel.toUpperCase()}_LOG]</p>
           )}
-          <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
+          <h1 class="p-name" style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
           {datePart && (
-            <time style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:8px;">
+            <time class="dt-published" datetime={date} style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:8px;">
               {new Date(datePart + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
               {dispatchTime && (
                 <span style="margin-left: 8px; opacity: 0.75;">{dispatchTime}</span>
@@ -177,7 +179,9 @@ const showRating = channel === 'dispatch' || channel === 'chow';
             )
           )}
           <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
-          <slot />
+          <div class="e-content">
+            <slot />
+          </div>
           {tagList.length > 0 && (
             <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
               {tagList.map(tag => (
@@ -186,30 +190,4 @@ const showRating = channel === 'dispatch' || channel === 'chow';
             </div>
           )}
           <div style="margin-top: 32px; border: 1px dashed var(--border); padding: 16px 20px;">
-            <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">[ SHARE_THIS_DISPATCH ]</p>
-            <div style="display:flex; gap:16px; flex-wrap:wrap;">
-              <a href={xShareUrl} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; font-size:0.88rem; border: 1px dashed var(--accent); padding: 6px 14px;">𝕏 Post to X →</a>
-              <a href={fbShareUrl} target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; font-size:0.88rem; border: 1px dashed var(--accent); padding: 6px 14px;">f Share on Facebook →</a>
-            </div>
-          </div>
-          {affiliateLinks && affiliateLinks.length > 0 && (
-            <div style="margin-top: 32px; border: 1px dashed var(--secondary); padding: 16px 20px;">
-              <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">[ SHOP_THIS_RECIPE ]</p>
-              <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
-                {affiliateLinks.map(link => (
-                  <li>
-                    <a href={link.url} target="_blank" rel="noopener noreferrer nofollow" style="color:var(--accent); text-decoration:none; font-size:0.88rem;">&gt; {link.label} →</a>
-                  </li>
-                ))}
-              </ul>
-              <p style="color:var(--secondary); font-size:0.72rem; opacity:0.7; margin-top:12px;">
-                ⚠ Affiliate links — I may earn a small commission at no extra cost to you.
-                <a href="/pages/gear-policy" style="color:var(--secondary); margin-left:4px;">Affiliate Policy →</a>
-              </p>
-            </div>
-          )}
-        </div>
-      </article>
-    </section>
-  </div>
-</BaseLayout>
+            <p
