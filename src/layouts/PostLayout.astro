@@ -1,194 +1,470 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import StarRating from '../components/StarRating.astro';
+
 interface Props {
   title: string;
-  slug?: string;
-  description?: string;
   date?: string;
+  description?: string;
+  tags?: string;
   channel?: string;
+  image?: string;
   rating?: string;
   cost?: string;
-  foodType?: string;
-  address?: string;
-  website?: string;
-  gallery?: { image: string; caption?: string }[];
-  affiliate?: boolean;
   affiliateLinks?: { label: string; url: string }[];
-  tags?: string;
+  callToAction?: string[];
 }
-const { title, slug, description, date, channel, rating, cost, foodType, address, website, gallery, affiliate, affiliateLinks, tags } = Astro.props;
+
+const {
+  title,
+  date,
+  description,
+  tags,
+  channel = 'dispatch',
+  image,
+  rating,
+  cost,
+  affiliateLinks,
+  callToAction,
+} = Astro.props;
+
+// Parse tags — handles both old array format and new space-separated string
 const tagList = tags
   ? (Array.isArray(tags)
       ? (tags as string[]).flatMap(t => t.trim().split(/\s+/))
       : String(tags).trim().split(/\s+/))
     .filter(Boolean)
   : [];
-const channelMap: Record<string, string> = {
-  dispatch: 'THE DISPATCH',
-  transit: 'TRANSIT',
-  gear: 'GEAR',
-  coord: 'COORD',
-  table: 'THE TABLE',
-  chow: 'THE KITCHEN',
+
+// Format date
+const formattedDate = date
+  ? new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric',
+    })
+  : null;
+
+const isDispatch = channel === 'dispatch';
+const isReview = ['gear', 'table', 'chow', 'transit', 'coord'].includes(channel);
+
+// Channel label map
+const channelLabels: Record<string, string> = {
+  dispatch: 'Dispatch',
+  gear: 'Gear',
+  table: 'The Table',
+  chow: 'The Kitchen',
+  transit: 'Travel',
+  coord: 'Travel',
 };
-const channelLabel = channel ? (channelMap[channel] ?? channel.toUpperCase()) : null;
-const hasReviewMeta = rating || cost || foodType || address || website;
-function nthSundayOf(year: number, month: number, n: number): Date {
-  const first = new Date(year, month - 1, 1);
-  const daysUntilSunday = (7 - first.getDay()) % 7;
-  return new Date(year, month - 1, 1 + daysUntilSunday + (n - 1) * 7);
-}
-function isInCDT(datePart: string): boolean {
-  const [year, month, day] = datePart.split('-').map(Number);
-  const d = new Date(year, month - 1, day);
-  return d >= nthSundayOf(year, 3, 2) && d < nthSundayOf(year, 11, 1);
-}
-function formatDispatchTime(dateStr: string): string | null {
-  if (!dateStr || !dateStr.includes('T')) return null;
-  try {
-    const clean = dateStr.split('.')[0].replace('Z', '');
-    const [hourStr, minuteStr] = clean.split('T')[1].split(':');
-    const hour = parseInt(hourStr, 10);
-    const minute = parseInt(minuteStr, 10);
-    const datePart = clean.split('T')[0];
-    const hour12 = hour % 12 || 12;
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const tz = isInCDT(datePart) ? 'CDT' : 'CST';
-    return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
-  } catch (e) { return null; }
-}
-const datePart = date ? date.split('T')[0] : undefined;
-const dispatchTime = channel === 'dispatch' ? formatDispatchTime(date ?? '') : null;
-const siteUrl = 'https://v64otd.com';
-const postUrl = `${siteUrl}/${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
-const permalink = Astro.url.href;
-const shareText = encodeURIComponent(`${title} — ${siteUrl}`);
-const xShareUrl = `https://x.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(postUrl)}`;
-const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
-const ratingSlug = slug ?? `${channel}/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
-const showRating = channel === 'dispatch' || channel === 'chow';
+const channelLabel = channelLabels[channel] ?? channel;
+const channelHref = isDispatch ? '/dispatch' : '/reviews';
 ---
-<BaseLayout title={`${title} | OTD Vault`} description={description} ogImage={gallery?.[0]?.image} isArticle={true}>
-  <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
-    {channel && (
-      <a href={`/${channel}`} class="submit-btn" style="text-decoration:none;">&laquo; {channelLabel}</a>
-    )}
-  </nav>
-  <div class="vault-layout">
-    <section class="log-display" style="width:100%;">
-      <article class="blog-post h-entry">
-        <div class="blog-post-body">
-          <a href={permalink} class="u-url" hidden></a>
-          {channel && (
-            <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">[{channel.toUpperCase()}_LOG]</p>
+
+<BaseLayout title={title} description={description}>
+  <article class={`post-article channel-${channel}`}>
+
+    <!-- Breadcrumb -->
+    <nav class="post-breadcrumb" aria-label="breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">›</span>
+      <a href={channelHref}>{isDispatch ? 'Dispatch' : 'Reviews'}</a>
+      {!isDispatch && (
+        <>
+          <span aria-hidden="true">›</span>
+          <a href={`/${channel}`}>{channelLabel}</a>
+        </>
+      )}
+    </nav>
+
+    <!-- Post Header -->
+    <header class="post-header">
+      <h1 class="post-title">{title}</h1>
+
+      {isDispatch && (
+        <div class="dispatch-meta">
+          {formattedDate && (
+            <time class="post-date" datetime={date}>{formattedDate}</time>
           )}
-          <h1 class="p-name" style="color:var(--primary); font-size:1.3rem; margin-bottom:8px; line-height:1.3;">{title}</h1>
-          {datePart && (
-            <time class="dt-published" datetime={date} style="color:var(--secondary); font-size:0.78rem; opacity:0.7; display:block; margin-bottom:8px;">
-              {new Date(datePart + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-              {dispatchTime && (
-                <span style="margin-left: 8px; opacity: 0.75;">{dispatchTime}</span>
-              )}
-            </time>
-          )}
-          {showRating && (
-            <div style="margin-bottom: 16px;">
-              <StarRating slug={ratingSlug} interactive={true} />
-            </div>
-          )}
-          {affiliate && (
-            <div style="border: 1px dashed var(--secondary); padding: 8px 14px; margin-bottom: 16px; font-size: 0.78rem; color: var(--secondary); opacity: 0.8;">
-              ⚠ This post contains affiliate links. If you purchase through these links, I may earn a small commission at no extra cost to you.
-              <a href="/pages/gear-policy" style="color:var(--secondary); margin-left:6px;">Affiliate Policy →</a>
-            </div>
-          )}
-          {hasReviewMeta && (
-            <div style="border: 1px dashed var(--border); padding: 10px 14px; margin-bottom: 20px; font-size: 0.82rem; display: flex; flex-wrap: wrap; gap: 16px;">
-              {rating && (
-                <span>
-                  <span style="color:var(--primary); letter-spacing:1px;">RATING</span>&nbsp;
-                  <strong style="color:var(--secondary);">{rating}/10</strong>
-                </span>
-              )}
-              {cost && (
-                <span>
-                  <span style="color:var(--primary); letter-spacing:1px;">COST</span>&nbsp;
-                  <strong style="color:var(--secondary);">{cost}</strong>
-                </span>
-              )}
-              {foodType && (
-                <span>
-                  <span style="color:var(--primary); letter-spacing:1px;">TYPE</span>&nbsp;
-                  <strong style="color:var(--secondary);">{foodType}</strong>
-                </span>
-              )}
-              {address && (
-                <span>
-                  <span style="color:var(--primary); letter-spacing:1px;">LOCATION</span>&nbsp;
-                  <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style="color:var(--accent); text-decoration:none;"
-                  >
-                    {address} →
-                  </a>
-                </span>
-              )}
-              {website && (
-                <span>
-                  <span style="color:var(--primary); letter-spacing:1px;">WEBSITE</span>&nbsp;
-                  <a href={website} target="_blank" rel="noopener noreferrer" style="color:var(--secondary); text-decoration:none;">
-                    {website.replace(/^https?:\/\//, '').replace(/\/$/, '')} →
-                  </a>
-                </span>
-              )}
-            </div>
-          )}
-          {gallery && gallery.length > 0 && (
-            gallery.length === 1 ? (
-              <figure style="margin: 0 0 24px 0;">
-                <img
-                  src={gallery[0].image}
-                  alt={gallery[0].caption || title}
-                  style="width: 100%; max-height: 480px; object-fit: cover; border: 1px dashed var(--border); display: block;"
-                />
-                {gallery[0].caption && (
-                  <figcaption style="color: var(--secondary); font-size: 0.72rem; margin-top: 4px; text-align: center;">
-                    {gallery[0].caption}
-                  </figcaption>
-                )}
-              </figure>
-            ) : (
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px;">
-                {gallery.map(item => (
-                  <figure style="margin: 0;">
-                    <img
-                      src={item.image}
-                      alt={item.caption || title}
-                      style="width: 100%; height: 180px; object-fit: cover; border: 1px dashed var(--border); display: block;"
-                    />
-                    {item.caption && (
-                      <figcaption style="color: var(--secondary); font-size: 0.72rem; margin-top: 4px; text-align: center;">
-                        {item.caption}
-                      </figcaption>
-                    )}
-                  </figure>
-                ))}
-              </div>
-            )
-          )}
-          <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
-          <div class="e-content">
-            <slot />
+          <div class="case-file-stamp" aria-label="Case File V64OTD">
+            <svg viewBox="0 0 90 90" width="72" height="72" aria-hidden="true">
+              <circle cx="45" cy="45" r="42" fill="none" stroke="var(--clay)" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="var(--clay)" stroke-width="1"/>
+              <text x="45" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7.5" fill="var(--clay)" letter-spacing="2">CASE FILE</text>
+              <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--clay)">V64OTD</text>
+              <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--clay)" letter-spacing="1.5">VERIFIED</text>
+            </svg>
           </div>
-          <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
-          {tagList.length > 0 && (
-  <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
-    {tagList.map(tag => (
-      <a href={`/tags/${tag}`} class="p-category" rel="tag" style="color:var(--accent); font-size:0.75rem; border: 1px dashed var(--accent); padding: 3px 10px; text-decoration:none; letter-spacing:1px;">#{tag}</a>
-    ))}
-  </div>
-)}
-          <div style="margin-top: 32px; border: 1px dashed var(--border); padding: 16px 20px;">
-            <p
+        </div>
+      )}
+
+      {isReview && formattedDate && (
+        <time class="post-date" datetime={date}>{formattedDate}</time>
+      )}
+    </header>
+
+    <!-- Review: Hero Image with Field Tested stamp -->
+    {isReview && image && (
+      <div class="review-image-wrap">
+        <img src={image} alt={title} class="review-hero-img" loading="lazy" />
+        <div class="field-tested-stamp" aria-label="Field Tested V64OTD">
+          <svg viewBox="0 0 90 90" width="80" height="80" aria-hidden="true">
+            <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.92)" stroke="var(--cedar)" stroke-width="2.5"/>
+            <circle cx="45" cy="45" r="36" fill="none" stroke="var(--cedar)" stroke-width="1"/>
+            <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--cedar)" letter-spacing="1.5">FIELD TESTED</text>
+            <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--cedar)">V64OTD</text>
+            <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--cedar)" letter-spacing="1.5">VERIFIED</text>
+          </svg>
+        </div>
+      </div>
+    )}
+
+    <!-- Review: Verdict Box -->
+    {isReview && (rating || cost) && (
+      <div class="verdict-box">
+        {rating && (
+          <div class="verdict-item">
+            <span class="verdict-label">RATING</span>
+            <span class="verdict-value">{rating}</span>
+          </div>
+        )}
+        {cost && (
+          <div class="verdict-item">
+            <span class="verdict-label">COST</span>
+            <span class="verdict-value">{cost}</span>
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- Dispatch tagline -->
+    {isDispatch && (
+      <p class="dispatch-tagline">Add v64otd.com to your daily reading list — the ledger doesn't lie.</p>
+    )}
+
+    <!-- Article Body -->
+    <div class="post-body e-content prose">
+      <slot />
+    </div>
+
+    <!-- Dispatch: Call to Action block -->
+    {isDispatch && callToAction && callToAction.length > 0 && (
+      <div class="cta-block">
+        <p class="cta-label">CALL TO ACTION</p>
+        <ol class="cta-list">
+          {callToAction.map(item => <li>{item}</li>)}
+        </ol>
+      </div>
+    )}
+
+    <!-- Dispatch: Signoff -->
+    {isDispatch && (
+      <p class="dispatch-signoff">V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN'T.</p>
+    )}
+
+    <!-- Review: Affiliate CTA -->
+    {isReview && affiliateLinks && affiliateLinks.length > 0 && (
+      <div class="affiliate-block">
+        <p class="affiliate-label">WHERE TO GET IT</p>
+        <div class="affiliate-links">
+          {affiliateLinks.map(link => (
+            <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">
+              {link.label}
+            </a>
+          ))}
+        </div>
+        <p class="affiliate-disclosure">
+          Affiliate disclosure: links above may earn a small commission at no cost to you.
+          OTD only links products personally tested and recommended.
+        </p>
+      </div>
+    )}
+
+    <!-- Tags -->
+    {tagList.length > 0 && (
+      <div class="post-tags">
+        {tagList.map(tag => (
+          <a href={`/tags/${tag.toLowerCase()}`} class="tag-chip">#{tag}</a>
+        ))}
+      </div>
+    )}
+
+  </article>
+</BaseLayout>
+
+<style>
+  .post-article {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Breadcrumb */
+  .post-breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: rgba(43,37,32,0.55);
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .post-breadcrumb a {
+    color: rgba(43,37,32,0.55);
+    text-decoration: none;
+  }
+  .post-breadcrumb a:hover { color: var(--clay); }
+
+  /* Post header */
+  .post-header {
+    margin-bottom: 1.5rem;
+  }
+  .post-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+  .post-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: rgba(43,37,32,0.5);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Dispatch meta: date + stamp inline */
+  .dispatch-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .case-file-stamp {
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  /* Review image */
+  .review-image-wrap {
+    position: relative;
+    margin: 0 0 1.5rem;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .review-hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: cover;
+  }
+  .field-tested-stamp {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+
+  /* Verdict box */
+  .verdict-box {
+    display: flex;
+    gap: 2rem;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+  .verdict-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .verdict-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: rgba(43,37,32,0.5);
+    text-transform: uppercase;
+  }
+  .verdict-value {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ochre);
+  }
+
+  /* Dispatch tagline */
+  .dispatch-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: rgba(43,37,32,0.5);
+    font-style: italic;
+    margin: 0 0 2rem;
+    border-left: 3px solid var(--clay);
+    padding-left: 0.85rem;
+  }
+
+  /* Prose body */
+  .post-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--ink);
+    margin-bottom: 2.5rem;
+  }
+  .post-body :global(h2) {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.75rem;
+    color: var(--ink);
+  }
+  .post-body :global(h3) {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--ink);
+  }
+  .post-body :global(p) { margin: 0 0 1.25em; }
+  .post-body :global(a) { color: var(--clay); text-underline-offset: 3px; }
+  .post-body :global(a:hover) { opacity: 0.8; }
+  .post-body :global(blockquote) {
+    border-left: 3px solid var(--clay);
+    margin: 1.5rem 0;
+    padding: 0.5rem 1rem;
+    color: rgba(43,37,32,0.7);
+    font-style: italic;
+  }
+  .post-body :global(ul), .post-body :global(ol) {
+    padding-left: 1.5rem;
+    margin: 0 0 1.25em;
+  }
+  .post-body :global(li) { margin-bottom: 0.4em; }
+  .post-body :global(code) {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.88em;
+    background: rgba(43,37,32,0.07);
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+  }
+  .post-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 3px;
+    margin: 1.5rem 0;
+  }
+
+  /* CTA block */
+  .cta-block {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--clay);
+    border-radius: 3px;
+    padding: 1.25rem 1.5rem;
+    margin: 0 0 2rem;
+  }
+  .cta-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--clay);
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+  .cta-list {
+    margin: 0;
+    padding-left: 1.4rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .cta-list li { margin-bottom: 0.45em; }
+
+  /* Dispatch signoff */
+  .dispatch-signoff {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: rgba(43,37,32,0.45);
+    text-transform: uppercase;
+    text-align: right;
+    margin: 0 0 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Affiliate block */
+  .affiliate-block {
+    background: var(--ink);
+    color: var(--bg-limestone);
+    border-radius: 3px;
+    padding: 1.5rem;
+    margin: 0 0 2rem;
+  }
+  .affiliate-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--ochre);
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+  }
+  .affiliate-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .affiliate-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    background: var(--clay);
+    color: #fff;
+    text-decoration: none;
+    padding: 0.55rem 1rem;
+    border-radius: 2px;
+    transition: opacity 0.15s;
+  }
+  .affiliate-btn:hover { opacity: 0.85; }
+  .affiliate-disclosure {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(239,233,220,0.5);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Tags */
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .tag-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    background: rgba(107,122,94,0.12);
+    color: var(--cedar);
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .tag-chip:hover {
+    background: var(--cedar);
+    color: #fff;
+  }
+</style>
