@@ -1,44 +1,61 @@
 ---
-export const prerender = true;
+import { getCollection, getEntry, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
-import { getCollection } from 'astro:content';
+
+export const prerender = true;
+
+const REVIEW_CHANNELS = ['gear', 'table', 'chow', 'transit', 'coord'] as const;
+const DISPATCH_CHANNELS = ['dispatch'] as const;
+const ALL_CHANNELS = [...DISPATCH_CHANNELS, ...REVIEW_CHANNELS] as const;
+
+type Channel = typeof ALL_CHANNELS[number];
+
 export async function getStaticPaths() {
   const paths = [];
-  for (const channel of ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'] as const) {
-    const posts = await getCollection(channel);
-    for (const post of posts) {
-      paths.push({ params: { channel, slug: post.slug }, props: { post, channel } });
+  for (const channel of ALL_CHANNELS) {
+    const entries = await getCollection(channel as any);
+    for (const entry of entries) {
+      paths.push({
+        params: { channel, slug: entry.id },
+        props: { entry, channel },
+      });
     }
   }
   return paths;
 }
-const { post, channel } = Astro.props;
-const { Content } = await post.render();
-const rating         = 'rating'         in post.data ? post.data.rating         : undefined;
-const cost           = 'cost'           in post.data ? post.data.cost           : undefined;
-const foodType       = 'foodType'       in post.data ? post.data.foodType       : undefined;
-const address        = 'address'        in post.data ? post.data.address        : undefined;
-const website        = 'website'        in post.data ? post.data.website        : undefined;
-const gallery        = 'gallery'        in post.data ? post.data.gallery        : undefined;
-const affiliate      = 'affiliate'      in post.data ? post.data.affiliate      : undefined;
-const affiliateLinks = 'affiliateLinks' in post.data ? post.data.affiliateLinks : undefined;
-const tags           = 'tags'           in post.data ? post.data.tags           : undefined;
+
+const { channel, entry } = Astro.props as { channel: Channel; entry: any };
+const { Content } = await render(entry);
+
+const data = entry.data;
+
+// Extract common fields
+const title = data.title;
+const date = data.date;
+const description = data.description;
+const tags = 'tags' in data ? data.tags : undefined;
+const image = 'image' in data ? data.image : undefined;
+
+// Dispatch-only fields
+const callToAction = 'callToAction' in data ? data.callToAction : undefined;
+
+// Review-only fields
+const rating = 'rating' in data ? data.rating : undefined;
+const cost = 'cost' in data ? data.cost : undefined;
+const affiliateLinks = 'affiliateLinks' in data ? data.affiliateLinks : undefined;
 ---
+
 <PostLayout
-  title={post.data.title}
-  slug={`${channel}/${post.slug}`}
-  date={post.data.date}
-  description={'description' in post.data ? post.data.description : undefined}
+  title={title}
+  date={date}
+  description={description}
+  tags={tags}
   channel={channel}
+  image={image}
+  callToAction={callToAction}
   rating={rating}
   cost={cost}
-  foodType={foodType}
-  address={address}
-  website={website}
-  gallery={gallery}
-  affiliate={affiliate}
   affiliateLinks={affiliateLinks}
-  tags={tags}
 >
   <Content />
 </PostLayout>
