@@ -2,42 +2,42 @@
 import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
-  showHero?: boolean;
   isArticle?: boolean;
 }
-const { title, description = 'v64otd.com — Vintage64TX', ogImage, showHero = false, isArticle = false } = Astro.props;
+
+const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = false } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BHFJD28SFL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-BHFJD28SFL');
-</script>   
-<meta charset="UTF-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-BHFJD28SFL"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BHFJD28SFL');
+    </script>
     <SEO title={title} description={description} ogImage={ogImage} isArticle={isArticle} />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/style.css" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="application/rss+xml" title="OTD Vault — Daily Dispatch" href="/rss.xml" />
-      </head>
-  <body id="personal-identity">
-    <div class="terminal-overlay"></div>
-    <div class="container">
-      <Header showHero={showHero} />
-      <main>
-        <slot />
-      </main>
-      <Footer />
-    </div>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
