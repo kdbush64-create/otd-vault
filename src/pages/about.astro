@@ -114,7 +114,25 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
 </BaseLayout>
 
 <style>
-  .about-page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.about-portrait { margin: 0 0 2rem; }
+  .about-portrait-img {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 4px;
+    display: block;
+  }
+  .about-portrait-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: rgba(43,37,32,0.5);
+    margin-top: 0.5rem;
+    display: block;
+  }  
+.about-page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   .about-breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 2rem; }
   .about-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
   .about-breadcrumb a:hover { color: var(--clay); }
