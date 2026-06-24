@@ -7,182 +7,155 @@ try { entry = await getEntry('pages', 'the-man'); } catch (_) {}
 let Content: any = null;
 if (entry) { const r = await entry.render(); Content = r.Content; }
 ---
+
 <BaseLayout title="About | OTD Vault" description="About Vintage64TX and v64otd.com">
-  <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
-    <a href="/" class="submit-btn" style="text-decoration:none;">&laquo; HOME</a>
-  </nav>
-  <div class="vault-layout">
-    <section style="width: 100%;">
-      <h1 style="color:var(--primary); font-size:1.3rem; margin-bottom:20px;">About</h1>
-      <hr style="border:none; border-top:1px dashed var(--border); margin-bottom:20px;" />
-      <div class="blog-post-body" style="font-size:0.9rem; line-height:1.7;">
-        {Content ? <Content /> : <p>About page coming soon.</p>}
-      </div>
 
-      <hr style="border:none; border-top:1px dashed var(--border); margin: 30px 0;" />
+  <div class="about-page">
 
-      <h2 style="color:var(--data-blue); font-size:1rem; letter-spacing:1px; margin-bottom:20px; text-transform:uppercase;">// CONTACT THE OPERATOR</h2>
+    <nav class="about-breadcrumb">
+      <a href="/">← Home</a>
+    </nav>
 
-      <form id="contact-form" style="display:flex; flex-direction:column; gap:16px;">
-        <div style="display:flex; gap:16px; flex-wrap:wrap;">
-          <div style="flex:1; min-width:180px;">
-            <label style="display:block; color:var(--primary); font-size:0.75rem; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase;">First Name *</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              maxlength="50"
-              required
-              class="form-input"
-              placeholder="FIRST NAME"
-            />
-            <span class="field-counter" style="font-size:0.65rem; color:var(--secondary); opacity:0.6;" data-for="firstName">0 / 50</span>
+    <header class="about-header">
+      <p class="about-eyebrow">THE OPERATOR</p>
+      <h1 class="about-title">About: Old Texas Dude</h1>
+    </header>
+
+    <div class="about-body">
+      {Content ? <Content /> : <p>About page coming soon.</p>}
+    </div>
+
+    <hr class="about-rule" />
+
+    <section class="contact-section">
+      <h2 class="contact-heading">Contact the Operator</h2>
+      <form id="contact-form" class="contact-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="firstName" class="form-label">First Name <span class="required">*</span></label>
+            <input type="text" id="firstName" name="firstName" maxlength="50" required class="form-input" placeholder="First name" />
+            <span class="field-counter" data-for="firstName">0 / 50</span>
           </div>
-          <div style="flex:1; min-width:180px;">
-            <label style="display:block; color:var(--primary); font-size:0.75rem; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase;">Last Name *</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              maxlength="50"
-              required
-              class="form-input"
-              placeholder="LAST NAME"
-            />
-            <span class="field-counter" style="font-size:0.65rem; color:var(--secondary); opacity:0.6;" data-for="lastName">0 / 50</span>
+          <div class="form-field">
+            <label for="lastName" class="form-label">Last Name <span class="required">*</span></label>
+            <input type="text" id="lastName" name="lastName" maxlength="50" required class="form-input" placeholder="Last name" />
+            <span class="field-counter" data-for="lastName">0 / 50</span>
           </div>
         </div>
-
-        <div>
-          <label style="display:block; color:var(--primary); font-size:0.75rem; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase;">Email Address *</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            maxlength="254"
-            required
-            class="form-input"
-            placeholder="YOUR@EMAIL.COM"
-          />
+        <div class="form-field">
+          <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+          <input type="email" id="email" name="email" maxlength="254" required class="form-input" placeholder="your@email.com" />
         </div>
-
-        <div>
-          <label style="display:block; color:var(--primary); font-size:0.75rem; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase;">Message * <span id="msg-counter" style="font-size:0.65rem; color:var(--secondary); opacity:0.6;">0 / 1000</span></label>
-          <textarea
-            id="message"
-            name="message"
-            maxlength="1000"
-            minlength="10"
-            required
-            rows="6"
-            class="form-input"
-            placeholder="ENTER YOUR TRANSMISSION..."
-            style="resize:vertical; min-height:120px;"
-          ></textarea>
-          <span id="msg-hint" style="font-size:0.65rem; color:var(--secondary); opacity:0.6;">Minimum 10 characters</span>
+        <div class="form-field">
+          <label for="message" class="form-label">
+            Message <span class="required">*</span>
+            <span id="msg-counter" class="msg-counter">0 / 1000</span>
+          </label>
+          <textarea id="message" name="message" maxlength="1000" minlength="10" required rows="6" class="form-input" placeholder="Your message..."></textarea>
+          <span id="msg-hint" class="field-hint">Minimum 10 characters</span>
         </div>
-
-        <div>
-          <button
-            type="submit"
-            id="submit-btn"
-            disabled
-            class="submit-btn"
-            style="width:100%; opacity:0.4; cursor:not-allowed;"
-          >
-            TRANSMIT MESSAGE
-          </button>
+        <div class="form-field">
+          <button type="submit" id="submit-btn" disabled class="submit-btn">Send Message</button>
         </div>
-
-        <div id="form-status" style="display:none; padding:10px 14px; font-size:0.82rem; border:1px dashed var(--border);"></div>
+        <div id="form-status" class="form-status" style="display:none;"></div>
       </form>
     </section>
+
   </div>
+
 </BaseLayout>
 
+<style>
+  .about-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  .about-breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 2rem; }
+  .about-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
+  .about-breadcrumb a:hover { color: var(--clay); }
+  .about-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--cedar); text-transform: uppercase; margin: 0 0 0.5rem; }
+  .about-title { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; color: var(--ink); margin: 0 0 2rem; line-height: 1.15; }
+  .about-body { font-family: 'Inter', sans-serif; font-size: 1.02rem; line-height: 1.75; color: var(--ink); }
+  .about-body :global(p) { margin: 0 0 1.25em; }
+  .about-body :global(h2) { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600; margin: 2rem 0 0.5rem; color: var(--ink); }
+  .about-body :global(strong) { font-weight: 600; }
+  .about-body :global(a) { color: var(--clay); text-underline-offset: 3px; }
+  .about-rule { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+  .contact-heading { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); margin: 0 0 1.5rem; }
+  .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+  .form-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .form-row .form-field { flex: 1; min-width: 180px; }
+  .form-field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .form-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(43,37,32,0.65); display: flex; align-items: center; gap: 0.4rem; }
+  .required { color: var(--clay); }
+  .form-input { font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.65rem 0.9rem; border: 1.5px solid var(--border); border-radius: 2px; background: #fff; color: var(--ink); width: 100%; box-sizing: border-box; transition: border-color 0.15s; }
+  .form-input:focus { outline: 2px solid var(--clay); border-color: transparent; }
+  textarea.form-input { resize: vertical; min-height: 130px; }
+  .field-counter, .field-hint { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: rgba(43,37,32,0.45); }
+  .msg-counter { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: rgba(43,37,32,0.45); margin-left: auto; }
+  .submit-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; letter-spacing: 0.08em; background: var(--clay); color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2px; cursor: pointer; width: 100%; transition: opacity 0.15s; }
+  .submit-btn:hover:not(:disabled) { opacity: 0.88; }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .form-status { font-family: 'Inter', sans-serif; font-size: 0.88rem; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 2px; line-height: 1.5; }
+  .form-status.success { color: var(--cedar); border-color: var(--cedar); }
+  .form-status.error   { color: var(--clay);  border-color: var(--clay); }
+</style>
+
 <script>
-  const form = document.getElementById('contact-form') as HTMLFormElement;
-  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-  const msgCounter = document.getElementById('msg-counter') as HTMLSpanElement;
-  const msgHint = document.getElementById('msg-hint') as HTMLSpanElement;
-  const statusDiv = document.getElementById('form-status') as HTMLDivElement;
+  const form       = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn  = document.getElementById('submit-btn')   as HTMLButtonElement;
+  const msgCounter = document.getElementById('msg-counter')  as HTMLSpanElement;
+  const msgHint    = document.getElementById('msg-hint')     as HTMLSpanElement;
+  const statusDiv  = document.getElementById('form-status')  as HTMLDivElement;
+  const firstName  = document.getElementById('firstName')    as HTMLInputElement;
+  const lastName   = document.getElementById('lastName')     as HTMLInputElement;
+  const email      = document.getElementById('email')        as HTMLInputElement;
+  const message    = document.getElementById('message')      as HTMLTextAreaElement;
 
-  const firstName = document.getElementById('firstName') as HTMLInputElement;
-  const lastName  = document.getElementById('lastName')  as HTMLInputElement;
-  const email     = document.getElementById('email')     as HTMLInputElement;
-  const message   = document.getElementById('message')   as HTMLTextAreaElement;
-
-  // Character counters for name fields
   document.querySelectorAll('[data-for]').forEach(counter => {
     const fieldId = (counter as HTMLElement).dataset.for!;
     const field = document.getElementById(fieldId) as HTMLInputElement;
-    field.addEventListener('input', () => {
-      counter.textContent = `${field.value.length} / 50`;
-    });
+    field.addEventListener('input', () => { counter.textContent = `${field.value.length} / 50`; });
   });
 
-  // Message counter
   message.addEventListener('input', () => {
     const len = message.value.length;
     msgCounter.textContent = `${len} / 1000`;
-    msgHint.textContent = len < 10 ? `Minimum 10 characters (${10 - len} more needed)` : '';
+    msgHint.textContent = len < 10 ? `${10 - len} more characters needed` : '';
     validate();
   });
 
-  // Email validation
-  function isValidEmail(val: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-  }
-
+  function isValidEmail(val: string) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val); }
   function validate() {
-    const ok =
-      firstName.value.trim().length > 0 &&
-      lastName.value.trim().length > 0 &&
-      isValidEmail(email.value.trim()) &&
-      message.value.trim().length >= 10;
-
+    const ok = firstName.value.trim().length > 0 && lastName.value.trim().length > 0 &&
+      isValidEmail(email.value.trim()) && message.value.trim().length >= 10;
     submitBtn.disabled = !ok;
-    submitBtn.style.opacity = ok ? '1' : '0.4';
-    submitBtn.style.cursor = ok ? 'pointer' : 'not-allowed';
   }
-
   [firstName, lastName, email].forEach(f => f.addEventListener('input', validate));
 
-  // Submit
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     submitBtn.disabled = true;
-    submitBtn.textContent = 'TRANSMITTING...';
-
-    const formData = new FormData(form);
-
+    submitBtn.textContent = 'Sending...';
     try {
-      const res = await fetch('/api/contact', { method: 'POST', body: formData });
-      const json = await res.json();
-
+      const res = await fetch('/api/contact', { method: 'POST', body: new FormData(form) });
       statusDiv.style.display = 'block';
       if (res.ok) {
-        statusDiv.style.color = 'var(--accent)';
-        statusDiv.style.borderColor = 'var(--accent)';
-        statusDiv.textContent = '✅ TRANSMISSION RECEIVED — We will respond to your inquiry shortly.';
-        form.reset();
-        msgCounter.textContent = '0 / 1000';
-        validate();
-        submitBtn.textContent = 'TRANSMIT MESSAGE';
+        statusDiv.className = 'form-status success';
+        statusDiv.textContent = "Message received — we'll be in touch shortly.";
+        form.reset(); msgCounter.textContent = '0 / 1000'; validate();
+        submitBtn.textContent = 'Send Message';
       } else {
-        statusDiv.style.color = 'var(--error)';
-        statusDiv.style.borderColor = 'var(--error)';
-        statusDiv.textContent = '⚠ TRANSMISSION FAILED — Please try again or contact us directly.';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'TRANSMIT MESSAGE';
+        statusDiv.className = 'form-status error';
+        statusDiv.textContent = 'Something went wrong. Please try again.';
+        submitBtn.disabled = false; submitBtn.textContent = 'Send Message';
       }
     } catch {
       statusDiv.style.display = 'block';
-      statusDiv.style.color = 'var(--error)';
-      statusDiv.style.borderColor = 'var(--error)';
-      statusDiv.textContent = '⚠ TRANSMISSION FAILED — Network error. Please try again.';
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'TRANSMIT MESSAGE';
+      statusDiv.className = 'form-status error';
+      statusDiv.textContent = 'Network error. Please try again.';
+      submitBtn.disabled = false; submitBtn.textContent = 'Send Message';
     }
   });
 </script>
