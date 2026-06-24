@@ -5,7 +5,7 @@ import PostLayout from '../../layouts/PostLayout.astro';
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'] as const;
+  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'];
   const paths = [];
   for (const channel of channels) {
     const entries = await getCollection(channel as any);
@@ -20,12 +20,13 @@ const { channel, entry } = Astro.props as { channel: string; entry: any };
 const { Content } = await render(entry);
 const data = entry.data;
 
-const callToAction  = 'callToAction'  in data ? data.callToAction  : undefined;
-const rating        = 'rating'        in data ? data.rating        : undefined;
-const cost          = 'cost'          in data ? data.cost          : undefined;
+const callToAction   = 'callToAction'   in data ? data.callToAction   : undefined;
+const rating         = 'rating'         in data ? data.rating         : undefined;
+const cost           = 'cost'           in data ? data.cost           : undefined;
 const affiliateLinks = 'affiliateLinks' in data ? data.affiliateLinks : undefined;
-const image         = 'image'         in data ? data.image         : undefined;
-const tags          = 'tags'          in data ? data.tags          : undefined;
+const image          = 'image'          in data ? data.image          : undefined;
+const gallery        = 'gallery'        in data ? data.gallery        : undefined;
+const tags           = 'tags'           in data ? data.tags           : undefined;
 ---
 
 <PostLayout
@@ -35,6 +36,7 @@ const tags          = 'tags'          in data ? data.tags          : undefined;
   tags={tags}
   channel={channel}
   image={image}
+  gallery={gallery}
   callToAction={callToAction}
   rating={rating}
   cost={cost}
