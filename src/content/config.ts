@@ -15,12 +15,10 @@ const postSchema = z.object({
   })).max(10).optional(),
 });
 
-// Dispatch: no affiliate fields, adds callToAction
 const dispatchSchema = postSchema.extend({
   callToAction: z.array(z.string()).optional(),
 });
 
-// Location-based reviews (coord, table)
 const locationSchema = postSchema.extend({
   address: z.string().optional(),
   website: z.string().optional(),
@@ -28,32 +26,23 @@ const locationSchema = postSchema.extend({
   cost: z.string().optional(),
 });
 
-// Restaurant reviews
 const tableSchema = locationSchema.extend({
   foodType: z.string().max(50).optional(),
 });
 
-// Gear: affiliate + rating + cost + price
 const gearSchema = postSchema.extend({
   affiliate: z.boolean().optional(),
   website: z.string().optional(),
   rating: z.string().optional(),
   cost: z.string().optional(),
-  affiliateLinks: z.array(z.object({
-    label: z.string(),
-    url: z.string(),
-  })).optional(),
+  affiliateLinks: z.array(z.object({ label: z.string(), url: z.string() })).optional(),
 });
 
-// Recipes
 const chowSchema = postSchema.extend({
   affiliate: z.boolean().optional(),
   rating: z.string().optional(),
   cost: z.string().optional(),
-  affiliateLinks: z.array(z.object({
-    label: z.string(),
-    url: z.string(),
-  })).optional(),
+  affiliateLinks: z.array(z.object({ label: z.string(), url: z.string() })).optional(),
 });
 
 const xpostSchema = z.object({
@@ -70,4 +59,11 @@ const pageSchema = z.object({
 
 export const collections = {
   dispatch: defineCollection({ schema: dispatchSchema }),
-  transit:  defineCollection
+  transit:  defineCollection({ schema: postSchema }),
+  gear:     defineCollection({ schema: gearSchema }),
+  coord:    defineCollection({ schema: locationSchema }),
+  table:    defineCollection({ schema: tableSchema }),
+  chow:     defineCollection({ schema: chowSchema }),
+  xposts:   defineCollection({ schema: xpostSchema }),
+  pages:    defineCollection({ schema: pageSchema }),
+};
