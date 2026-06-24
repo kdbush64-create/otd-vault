@@ -21,6 +21,15 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
       <h1 class="about-title">About: Old Texas Dude</h1>
     </header>
 
+    <figure class="about-portrait">
+      <img
+        src="/images/profile/v64otd-mastodon-avatar.jpg"
+        alt="Old Texas Dude — I-35 South, Fort Worth"
+        class="about-portrait-img"
+      />
+      <figcaption class="about-portrait-caption">I-35 South. Fort Worth. The brisket was cold. The dispatch was not.</figcaption>
+    </figure>
+
     <div class="about-body">
       {Content ? <Content /> : <p>About page coming soon.</p>}
     </div>
