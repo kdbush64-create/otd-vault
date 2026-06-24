@@ -6,15 +6,67 @@ import PostCard from '../components/PostCard.astro';
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'] as const;
+  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'];
   return channels.map(channel => ({ params: { channel } }));
 }
 
-const { channel } = Astro.params as { channel: string };
+const { channel } = Astro.params;
 
 const channelMeta: Record<string, { title: string; description: string; eyebrow: string; heading: string }> = {
   dispatch: { title: 'Dispatch Archives — OTD Vault', description: 'Every dispatch. Plain-spoken coverage of money, power, and accountability.', eyebrow: 'INDEPENDENT DISPATCH', heading: 'Dispatch Archives' },
-  gear:     { title: 'Gear Reviews — OTD Vault',       description: 'Field-tested gear reviews.',              eyebrow: 'GEAR REVIEWS',        heading: 'Gear' },
+  gear:     { title: 'Gear Reviews — OTD Vault',       description: 'Field-tested gear reviews.',               eyebrow: 'GEAR REVIEWS',        heading: 'Gear' },
   table:    { title: 'The Table — OTD Vault',           description: 'Restaurant reviews from Texas and beyond.', eyebrow: 'RESTAURANT REVIEWS', heading: 'The Table' },
-  chow:     { title: 'The Kitchen — OTD Vault',         description: 'Recipes, techniques, and kitchen picks.', eyebrow: 'KITCHEN & RECIPES',   heading: 'The Kitchen' },
-  transit:  { title: 'Travel — OTD Vault',              description: 'Road dispatches and travel writing.',
+  chow:     { title: 'The Kitchen — OTD Vault',         description: 'Recipes, techniques, and kitchen picks.',  eyebrow: 'KITCHEN & RECIPES',   heading: 'The Kitchen' },
+  transit:  { title: 'Travel — OTD Vault',              description: 'Road dispatches and travel writing.',     eyebrow: 'TRAVEL WRITING',      heading: 'Travel' },
+  coord:    { title: 'Getaways — OTD Vault',            description: 'Weekend getaways and lodging reviews.',   eyebrow: 'GETAWAYS & LODGING',  heading: 'Getaways' },
+};
+
+const meta = channelMeta[channel] ?? channelMeta['dispatch'];
+const posts = (await getCollection(channel as any))
+  .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+const isDispatch = channel === 'dispatch';
+const sectionClass = isDispatch ? 'posts-section is-dispatch' : 'posts-section is-reviews';
+const listClass = isDispatch ? 'feed-list' : 'card-grid';
+const cardLayout = isDispatch ? 'feed' : 'card';
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <section class="channel-hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">{meta.eyebrow}</p>
+      <h1 class="hero-title">{meta.heading}</h1>
+      {isDispatch && <p class="hero-sub">Every dispatch. The file gets closed. The damage doesn't.</p>}
+    </div>
+  </section>
+
+  <section class={sectionClass}>
+    <div class={listClass}>
+      {posts.map((post: any) => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          description={post.data.description}
+          href={'/' + channel + '/' + post.id}
+          channel={channel}
+          layout={cardLayout}
+        />
+      ))}
+    </div>
+    {posts.length === 0 && <p class="empty-state">Nothing filed yet. Check back soon.</p>}
+  </section>
+</BaseLayout>
+
+<style>
+  .channel-hero { background: var(--ink); color: var(--bg-limestone); padding: 3rem 1.5rem 2.75rem; text-align: center; }
+  .hero-inner { max-width: 640px; margin: 0 auto; }
+  .hero-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ochre); margin: 0 0 0.75rem; text-transform: uppercase; }
+  .hero-title { font-family: 'Fraunces', serif; font-size: clamp(1.9rem, 5vw, 2.8rem); font-weight: 700; color: var(--bg-limestone); margin: 0 0 0.75rem; line-height: 1.1; }
+  .hero-sub { font-family: 'Inter', sans-serif; font-size: 0.95rem; color: rgba(239,233,220,0.7); margin: 0; }
+  .posts-section { padding: 2.5rem 1.5rem 4rem; margin: 0 auto; }
+  .is-dispatch { max-width: 720px; }
+  .is-reviews  { max-width: 960px; }
+  .feed-list { display: flex; flex-direction: column; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+  .empty-state { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: rgba(43,37,32,0.45); text-align: center; padding: 3rem 0; }
+</style>
