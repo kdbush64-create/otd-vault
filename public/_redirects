@@ -1,2 +1,6 @@
+# Bridgy Fed federation
 /.well-known/host-meta  https://fed.brid.gy/.well-known/host-meta  302
 /.well-known/webfinger  https://fed.brid.gy/.well-known/webfinger  302
+
+# Substack redirect
+/substack  https://v64otd.substack.com  302
