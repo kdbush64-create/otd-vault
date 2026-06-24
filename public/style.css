@@ -1,393 +1,319 @@
-/* 1. THEME VARIABLES */
+/* ================================================
+   V64OTD.COM — FIELD NOTEBOOK DESIGN SYSTEM
+   ================================================ */
+
+/* 1. DESIGN TOKENS */
 :root {
-    --bg: #1a1a1a;
-    --container-bg: rgba(0, 0, 0, 0.95);
-    --primary: #ffb000;          /* Amber Gold */
-    --primary-dim: rgba(255, 176, 0, 0.7);
-    --secondary: #00eeff;        /* Terminal Cyan */
-    --accent: #00ff41;           /* Neon Green */
-    --border: #5c3d2e;           /* Chassis Brown */
-    --shadow: rgba(0, 0, 0, 0.8);
-    --data-blue: #00d4ff;       
-    --blue-glow: rgba(0, 212, 255, 0.5);
-    --error: #ff0000;
+  --bg-limestone: #EFE9DC;
+  --ink: #2B2520;
+  --ink-soft: #5B5347;
+  --clay: #B5482E;
+  --clay-dark: #8E3A24;
+  --cedar: #6B7A5E;
+  --ochre: #C68A2E;
+  --card-bg: #FBF8F1;
+  --border: rgba(43, 37, 32, 0.14);
 }
 
-[data-theme="light"] {
-    --bg: #f4f4f4;
-    --container-bg: #ffffff;
-    --primary: #7a5400;
-    --primary-dim: #5c5c5c;
-    --secondary: #005f6b;
-    --accent: #008522;
-    --border: #a3a3a3;
-    --shadow: rgba(0, 0, 0, 0.1);
-    --error: #cc0000;
+/* 2. RESET */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* 2. GLOBAL RESET & CENTERING */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* 3. BASE */
 body {
-    background-color: var(--bg);
-    color: var(--primary);
-    font-family: 'Courier New', Courier, monospace;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    padding: 20px;
-    line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  background: var(--bg-limestone);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
 }
 
-/* 3. THE CHASSIS */
-.container {
-    width: 100%;
-    max-width: 650px; 
-    border: 2px solid var(--border);
-    padding: 25px;
-    background: var(--container-bg);
-    box-shadow: 0 0 20px var(--shadow);
-    position: relative;
-    z-index: 5;
-    overflow: hidden;
-}
-
-/* 4. HEADER & HERO */
+/* 4. HEADER */
 header {
-    text-align: center;
-    border-bottom: 2px dashed var(--border);
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  background: var(--bg-limestone);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 24px;
 }
 
-.hero-container {
-    border: 2px solid var(--border);
-    margin: 20px 0;
-    background: #000;
-    width: 100%;
+.nav-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
-.hero-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-    filter: grayscale(0.3) brightness(0.8);
+.brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.5px;
 }
 
-.hero-text-block {
-    width: 100%;
-    padding: 25px 10px;
-    text-align: center;
-    border-top: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center;
+.brand span { color: var(--clay); }
+
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+
+nav a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  padding: 8px 14px;
+  border-radius: 3px;
+  transition: background 0.15s, color 0.15s;
 }
 
-.by-line {
-    display: block;
-    width: 100%;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    opacity: 0.8;
-    margin: 8px 0;
-    text-align: center;
-}
+nav a:hover { background: rgba(43, 37, 32, 0.06); }
+nav a.active { background: var(--ink); color: var(--bg-limestone); }
 
-/* 5. NAVIGATION */
-.system-nav, .secondary-filters {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 20px 0;
-}
-
-.submit-btn {
-    background: transparent;
-    color: var(--primary);
-    border: 1.5px solid var(--border);
-    padding: 10px 18px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-family: inherit;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.submit-btn:hover, .submit-btn.active {
-    background: var(--accent);
-    color: #000 !important;
-    box-shadow: 0 0 15px var(--accent);
-    border-color: var(--accent);
-}
-
-/* 6. LAYOUT */
-.vault-layout {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    align-items: flex-start;
-}
-
-.log-directory {
-    width: 240px;
-    min-width: 180px;
-    flex-shrink: 0;
-    border-right: 1px dashed var(--border);
-    padding-right: 20px;
-}
-
-.log-display {
-    flex: 1;
-    min-width: 0;
-}
-
-.file-list {
-    list-style-type: none; 
-    padding: 0;
-    margin: 0;
-}
-
-.file-list li {
-    display: flex;        
-    align-items: center;  
-    margin-bottom: 8px;   
-}
-
-.log-link {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.9rem;
-    display: block;
-    padding: 5px 0;
-    transition: 0.2s;
-}
-
-.log-link:hover {
-    color: var(--accent);
-    padding-left: 5px;
-}
-
-/* 7. ANIMATIONS */
-.main-title {
-    font-size: 1.4rem;
-    margin: 0;
-    line-height: 1.2;
-    display: flex;
-    justify-content: center;
-}
-
-.typewriter {
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 0;
-    animation: typing 3.5s steps(40, end) forwards;
-}
-
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-.blink { animation: blinker 1.5s linear infinite; }
-@keyframes blinker { 50% { opacity: 0; } }
-
-/* 8. OVERLAYS */
-.terminal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-    background-size: 100% 4px;
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.12;
-}
-
-/* 9. FOOTER */
+/* 5. FOOTER */
 footer {
-    margin-top: 50px;
-    text-align: center;
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
-    font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  padding: 40px 24px 32px;
 }
 
-/* 10. LOG DISPLAY: DATA BLUE ACCENTS */
-.blog-post-body h1, 
-.blog-post-body h2, 
-.blog-post-body h3 {
-    color: var(--data-blue) !important;
-    text-shadow: 0 0 5px var(--blue-glow);
-    text-transform: uppercase;
+footer a { color: var(--clay); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* 6. PROSE — article body */
+.prose p { font-size: 16px; color: var(--ink); margin: 0 0 20px; line-height: 1.7; }
+.prose h2 { font-family: 'Fraunces', serif; font-size: 23px; margin: 36px 0 14px; color: var(--ink); }
+.prose h3 { font-family: 'Fraunces', serif; font-size: 19px; margin: 28px 0 10px; color: var(--ink); }
+.prose ul, .prose ol { padding-left: 24px; margin-bottom: 20px; font-size: 16px; line-height: 1.7; }
+.prose li { margin-bottom: 6px; }
+.prose blockquote {
+  border-left: 3px solid var(--clay);
+  padding-left: 16px;
+  margin: 24px 0;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--clay-dark);
+}
+.prose a { color: var(--clay); text-decoration: underline; }
+.prose a:hover { color: var(--clay-dark); }
+.prose strong { font-weight: 600; }
+.prose img { width: 100%; border-radius: 8px; margin: 16px 0; }
+
+/* 7. SECTION LABEL */
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--cedar);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.blog-post-body h1 {
-    margin-top: 32px;
-    margin-bottom: 12px;
-}
-.blog-post-body h2 {
-    margin-top: 28px;
-    margin-bottom: 10px;
-}
-.blog-post-body h3 {
-    margin-top: 24px;
-    margin-bottom: 8px;
-}
-.blog-post-body p {
-    margin-bottom: 16px;
-    line-height: 1.7;
-}
-.blog-post-body ul,
-.blog-post-body ol {
-    margin-bottom: 16px;
-}
-.blog-post-body blockquote {
-    margin: 16px 0;
-    padding-left: 16px;
-    border-left: 2px dashed var(--border);
-}
-.blog-post-body ul,
-.blog-post-body ol {
-    padding-left: 24px;
-}
-.blog-post-body p, 
-.blog-post-body li,
-.blog-post-body div {
-    color: var(--primary);
+.section-label a {
+  color: var(--clay);
+  text-decoration: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
 }
 
-.blog-post-body .force-blue,
-.blog-post-body strong,
-.blog-post-body b {
-    color: var(--data-blue) !important;
-    text-shadow: 0 0 8px var(--blue-glow) !important;
-    font-weight: bold !important;
+/* 8. EMAIL SIGNUP BLOCK */
+.signup-block {
+  background: var(--ink);
+  border-radius: 14px;
+  padding: 40px;
+  color: var(--bg-limestone);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.blog-post-body ul li::marker {
-    color: var(--accent);
+.signup-block h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  margin: 0 0 6px;
+  color: #fff;
 }
 
-/* 11. FORM INPUTS & VALIDATION */
-.form-input {
-    background: #000 !important;
-    color: var(--accent) !important;
-    border: 1.5px solid var(--border);
-    padding: 12px;
-    font-family: inherit;
-    text-transform: uppercase;
-    outline: none;
-    width: 100%;
-    transition: all 0.3s ease;
+.signup-block p { margin: 0; font-size: 13px; color: #C7BFAF; }
+
+.signup-form { display: flex; gap: 8px; }
+
+.signup-form input {
+  padding: 11px 14px;
+  border-radius: 6px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  min-width: 220px;
+  outline: none;
 }
 
-[data-theme="light"] .form-input {
-    background: #fff !important;
-    color: var(--accent) !important;
-    border: 1.5px solid var(--border);
+.signup-form button {
+  padding: 11px 20px;
+  border-radius: 6px;
+  border: none;
+  background: var(--clay);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
-.form-input::placeholder {
-    color: var(--primary-dim);
-    opacity: 0.5;
+.signup-form button:hover { background: var(--clay-dark); }
+
+/* 9. TAG PILLS */
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+
+.tag-list a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--cedar);
+  border: 1px solid var(--cedar);
+  border-radius: 20px;
+  padding: 5px 12px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
 }
 
-/* Field Level Validation Styles */
-.form-input.valid {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 8px var(--accent);
+.tag-list a:hover { background: var(--cedar); color: #fff; }
+
+/* 10. STAMP */
+.stamp {
+  border: 2px dashed var(--clay);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-10deg);
+  flex-shrink: 0;
 }
 
-.form-input.invalid {
-    border-color: var(--error) !important;
-    box-shadow: 0 0 8px var(--error);
+.stamp span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  color: var(--clay-dark);
+  text-align: center;
+  line-height: 1.3;
+  text-transform: uppercase;
 }
 
-/* --- V64 LINK ACCESSIBILITY & BRANDING --- */
-
-/* Standard Link State */
-.blog-post a, .blog-post-body a, .v64-link {
-    color: var(--accent) !important; /* Neon Green */
-    text-decoration: underline !important;
-    font-weight: bold;
+/* 11. CATEGORY CARDS (reviews landing) */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
 }
 
-/* Visited Link State - FIXES THE DARK PURPLE ISSUE */
-.blog-post a:visited, .blog-post-body a, .v64-link:visited {
-    color: #00cc33 !important; /* Slightly dimmer green */
+.cat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 16px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: box-shadow 0.15s;
+  display: block;
 }
 
-/* Hover State - Terminal Glow */
-.blog-post a:hover, .blog-post-body a, .v64-link:hover {
-    color: #ffffff !important;
-    text-shadow: 0 0 10px var(--accent);
-    background: rgba(0, 255, 65, 0.1);
-}
- .blog-post a, .blog-post-body a {
-    text-shadow: none !important;
-}
-/* Blue Branding Class */
-.force-blue {
-    color: #00d4ff !important;
-    text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+.cat-card:hover { box-shadow: 0 2px 12px rgba(43,37,32,0.1); }
+
+.cat-card .swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--cedar);
+  margin-bottom: 14px;
 }
 
-#contact-terminal {
-    transition: background 0.3s ease;
+.cat-card h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  margin: 0 0 6px;
 }
 
-/* 12. DYNAMIC INSTRUCTION TEXT */
-.instruction-text {
-    font-size: 1.15rem; 
-    color: var(--secondary); 
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-top: 20px;
-    /* Etched shadow for depth and visibility */
-    text-shadow: 1px 1px 2px black, 0 0 5px rgba(0, 212, 255, 0.2); 
+.cat-card p { font-size: 13px; color: var(--ink-soft); margin: 0; }
+
+/* 12. REVIEW CARDS (listings) */
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
-
-/* 13. TYPEWRITER DELAY */
-.delay-type {
-    animation-delay: 3.5s;
+.review-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+  color: var(--ink);
+  display: block;
+  transition: box-shadow 0.15s;
 }
 
-/* 14. NAV CONTAINERS */
-.vault-nav-container {
-    margin: 20px 0;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed var(--border);
+.review-card:hover { box-shadow: 0 2px 12px rgba(43,37,32,0.1); }
+
+.review-img {
+  height: 140px;
+  background: linear-gradient(135deg, #DCD3BE, #C7B89A);
+  object-fit: cover;
+  width: 100%;
+  display: block;
 }
 
-.primary-nav {
-    width: 100%;
-    margin-bottom: 15px;
+.review-body { padding: 16px; }
+
+.review-cat {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--clay);
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
-/* 15. FOOTER TAG */
-.footer-tag {
-    color: var(--secondary);
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-align: center;
-    margin-top: 5px;
+.review-card h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  margin: 0 0 8px;
+  line-height: 1.3;
 }
 
-/* 16. CHANNEL POST LIST */
-.post-list {
-    width: 100%;
+.rating-row {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ochre);
+}
+
+/* 13. RESPONSIVE */
+@media (max-width: 880px) {
+  .cat-grid { grid-template-columns: repeat(2, 1fr); }
+  .review-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .signup-block { flex-direction: column; align-items: flex-start; }
+  .signup-form { flex-direction: column; width: 100%; }
+  .signup-form input { min-width: unset; width: 100%; }
+  .review-grid { grid-template-columns: 1fr; }
+  .cat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  nav a { padding: 6px 10px; font-size: 11px; }
+  .cat-grid { grid-template-columns: 1fr; }
 }
