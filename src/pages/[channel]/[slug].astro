@@ -1,54 +1,37 @@
 ---
-import { getCollection, getEntry, render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 
 export const prerender = true;
 
-const REVIEW_CHANNELS = ['gear', 'table', 'chow', 'transit', 'coord'] as const;
-const DISPATCH_CHANNELS = ['dispatch'] as const;
-const ALL_CHANNELS = [...DISPATCH_CHANNELS, ...REVIEW_CHANNELS] as const;
-
-type Channel = typeof ALL_CHANNELS[number];
-
 export async function getStaticPaths() {
+  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'] as const;
   const paths = [];
-  for (const channel of ALL_CHANNELS) {
+  for (const channel of channels) {
     const entries = await getCollection(channel as any);
     for (const entry of entries) {
-      paths.push({
-        params: { channel, slug: entry.id },
-        props: { entry, channel },
-      });
+      paths.push({ params: { channel, slug: entry.id }, props: { entry, channel } });
     }
   }
   return paths;
 }
 
-const { channel, entry } = Astro.props as { channel: Channel; entry: any };
+const { channel, entry } = Astro.props as { channel: string; entry: any };
 const { Content } = await render(entry);
-
 const data = entry.data;
 
-// Extract common fields
-const title = data.title;
-const date = data.date;
-const description = data.description;
-const tags = 'tags' in data ? data.tags : undefined;
-const image = 'image' in data ? data.image : undefined;
-
-// Dispatch-only fields
-const callToAction = 'callToAction' in data ? data.callToAction : undefined;
-
-// Review-only fields
-const rating = 'rating' in data ? data.rating : undefined;
-const cost = 'cost' in data ? data.cost : undefined;
+const callToAction  = 'callToAction'  in data ? data.callToAction  : undefined;
+const rating        = 'rating'        in data ? data.rating        : undefined;
+const cost          = 'cost'          in data ? data.cost          : undefined;
 const affiliateLinks = 'affiliateLinks' in data ? data.affiliateLinks : undefined;
+const image         = 'image'         in data ? data.image         : undefined;
+const tags          = 'tags'          in data ? data.tags          : undefined;
 ---
 
 <PostLayout
-  title={title}
-  date={date}
-  description={description}
+  title={data.title}
+  date={data.date}
+  description={data.description}
   tags={tags}
   channel={channel}
   image={image}
