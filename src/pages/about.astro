@@ -27,6 +27,45 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
 
     <hr class="about-rule" />
 
+    <!-- Channel grid -->
+    <section class="channels-section">
+      <h2 class="channels-heading">What's in the Vault</h2>
+      <div class="channels-grid">
+        <a href="/dispatch" class="channel-card ch-ink">
+          <h3 class="ch-title">Dispatch</h3>
+          <p class="ch-desc">Long-form essays, cultural analysis, and the occasional thing that will make someone on the internet angry. If you read one channel, read this one.</p>
+          <span class="ch-link">Browse dispatches →</span>
+        </a>
+        <a href="/gear" class="channel-card ch-cedar">
+          <h3 class="ch-title">Gear</h3>
+          <p class="ch-desc">Tools, tech, and equipment worth owning. Not sponsored. Not curated for a demographic. Just things that work.</p>
+          <span class="ch-link">Browse gear →</span>
+        </a>
+        <a href="/table" class="channel-card ch-clay">
+          <h3 class="ch-title">The Table</h3>
+          <p class="ch-desc">Food culture and restaurant reviews. Brisket is taken seriously here. Fusion tacos are evaluated on a case-by-case basis.</p>
+          <span class="ch-link">Browse restaurants →</span>
+        </a>
+        <a href="/chow" class="channel-card ch-ochre">
+          <h3 class="ch-title">The Kitchen</h3>
+          <p class="ch-desc">Recipes. Real ones. The kind that work in a home kitchen without a culinary degree or a Vitamix.</p>
+          <span class="ch-link">Browse kitchen →</span>
+        </a>
+        <a href="/transit" class="channel-card ch-cedar">
+          <h3 class="ch-title">Travel</h3>
+          <p class="ch-desc">Roads, routes, road trips, and the American habit of going somewhere to figure out what you think.</p>
+          <span class="ch-link">Browse travel →</span>
+        </a>
+        <a href="/coord" class="channel-card ch-cedar">
+          <h3 class="ch-title">Getaways</h3>
+          <p class="ch-desc">Places. Fort Worth, DFW, Texas, and points beyond. Honest assessments from someone who has eaten bad barbecue in too many states to stay quiet.</p>
+          <span class="ch-link">Browse getaways →</span>
+        </a>
+      </div>
+    </section>
+
+    <hr class="about-rule" />
+
     <section class="contact-section">
       <h2 class="contact-heading">Contact the Operator</h2>
       <form id="contact-form" class="contact-form">
@@ -66,11 +105,7 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
 </BaseLayout>
 
 <style>
-  .about-page {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-  }
+  .about-page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   .about-breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 2rem; }
   .about-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
   .about-breadcrumb a:hover { color: var(--clay); }
@@ -82,6 +117,22 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   .about-body :global(strong) { font-weight: 600; }
   .about-body :global(a) { color: var(--clay); text-underline-offset: 3px; }
   .about-rule { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+  /* Channel grid */
+  .channels-section { margin-bottom: 0.5rem; }
+  .channels-heading { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); margin: 0 0 1.25rem; }
+  .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .channel-card { display: flex; flex-direction: column; gap: 0.4rem; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 4px; padding: 1.25rem; text-decoration: none; color: var(--ink); transition: transform 0.15s, box-shadow 0.15s; }
+  .channel-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(43,37,32,0.09); }
+  .ch-ink   { border-top: 3px solid var(--ink); }
+  .ch-cedar { border-top: 3px solid var(--cedar); }
+  .ch-clay  { border-top: 3px solid var(--clay); }
+  .ch-ochre { border-top: 3px solid var(--ochre); }
+  .ch-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; color: var(--ink); margin: 0; }
+  .ch-desc { font-family: 'Inter', sans-serif; font-size: 0.82rem; color: rgba(43,37,32,0.65); line-height: 1.5; margin: 0; flex: 1; }
+  .ch-link { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--clay); margin-top: 0.35rem; }
+
+  /* Contact form */
   .contact-heading { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); margin: 0 0 1.5rem; }
   .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
   .form-row { display: flex; gap: 1rem; flex-wrap: wrap; }
@@ -89,7 +140,7 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   .form-field { display: flex; flex-direction: column; gap: 0.3rem; }
   .form-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(43,37,32,0.65); display: flex; align-items: center; gap: 0.4rem; }
   .required { color: var(--clay); }
-  .form-input { font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.65rem 0.9rem; border: 1.5px solid var(--border); border-radius: 2px; background: #fff; color: var(--ink); width: 100%; box-sizing: border-box; transition: border-color 0.15s; }
+  .form-input { font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.65rem 0.9rem; border: 1.5px solid var(--border); border-radius: 2px; background: #fff; color: var(--ink); width: 100%; box-sizing: border-box; }
   .form-input:focus { outline: 2px solid var(--clay); border-color: transparent; }
   textarea.form-input { resize: vertical; min-height: 130px; }
   .field-counter, .field-hint { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: rgba(43,37,32,0.45); }
@@ -99,7 +150,7 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .form-status { font-family: 'Inter', sans-serif; font-size: 0.88rem; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 2px; line-height: 1.5; }
   .form-status.success { color: var(--cedar); border-color: var(--cedar); }
-  .form-status.error   { color: var(--clay);  border-color: var(--clay); }
+  .form-status.error { color: var(--clay); border-color: var(--clay); }
 </style>
 
 <script>
@@ -118,14 +169,12 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     const field = document.getElementById(fieldId) as HTMLInputElement;
     field.addEventListener('input', () => { counter.textContent = `${field.value.length} / 50`; });
   });
-
   message.addEventListener('input', () => {
     const len = message.value.length;
     msgCounter.textContent = `${len} / 1000`;
     msgHint.textContent = len < 10 ? `${10 - len} more characters needed` : '';
     validate();
   });
-
   function isValidEmail(val: string) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val); }
   function validate() {
     const ok = firstName.value.trim().length > 0 && lastName.value.trim().length > 0 &&
@@ -133,7 +182,6 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     submitBtn.disabled = !ok;
   }
   [firstName, lastName, email].forEach(f => f.addEventListener('input', validate));
-
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     submitBtn.disabled = true;
