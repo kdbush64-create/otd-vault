@@ -1,60 +1,159 @@
 ---
-export const prerender = true;
-import ChannelLayout from '../layouts/ChannelLayout.astro';
-import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+export const prerender = true;
+
+const CHANNELS = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'] as const;
+type Channel = typeof CHANNELS[number];
 
 export async function getStaticPaths() {
-  const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'xposts'] as const;
-  return channels.map(channel => ({ params: { channel } }));
+  return CHANNELS.map(channel => ({ params: { channel } }));
 }
 
-type Channel = 'dispatch' | 'transit' | 'gear' | 'coord' | 'table' | 'chow' | 'xposts';
 const { channel } = Astro.params as { channel: Channel };
-const allPosts = await getCollection(channel);
 
-const posts = channel === 'xposts'
-  ? allPosts.filter(post => post.data.approved === true)
-  : allPosts;
+const channelMeta: Record<Channel, { title: string; description: string; eyebrow: string }> = {
+  dispatch: {
+    title: 'Dispatch Archives — OTD Vault',
+    description: 'Every dispatch. Plain-spoken coverage of money, power, and accountability.',
+    eyebrow: 'INDEPENDENT DISPATCH',
+  },
+  gear: {
+    title: 'Gear Reviews — OTD Vault',
+    description: 'Field-tested gear reviews. Tools, tech, and outdoor kit.',
+    eyebrow: 'GEAR REVIEWS',
+  },
+  table: {
+    title: 'The Table — OTD Vault',
+    description: 'Restaurant reviews from Texas and beyond.',
+    eyebrow: 'RESTAURANT REVIEWS',
+  },
+  chow: {
+    title: 'The Kitchen — OTD Vault',
+    description: 'Recipes, techniques, and kitchen picks.',
+    eyebrow: 'KITCHEN & RECIPES',
+  },
+  transit: {
+    title: 'Travel — OTD Vault',
+    description: 'Road dispatches, local color, and travel writing.',
+    eyebrow: 'TRAVEL WRITING',
+  },
+  coord: {
+    title: 'Getaways — OTD Vault',
+    description: 'Weekend getaways and lodging reviews.',
+    eyebrow: 'GETAWAYS & LODGING',
+  },
+};
 
-const sortedPosts = [...posts].sort((a, b) =>
-  String(b.data.date ?? '').localeCompare(String(a.data.date ?? ''))
-);
+const meta = channelMeta[channel];
+const posts = (await getCollection(channel as any))
+  .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 
-function nthSundayOf(year: number, month: number, n: number): Date {
-  const first = new Date(year, month - 1, 1);
-  return new Date(year, month - 1, 1 + (7 - first.getDay()) % 7 + (n - 1) * 7);
-}
-function isInCDT(datePart: string): boolean {
-  const [year, month, day] = datePart.split('-').map(Number);
-  const d = new Date(year, month - 1, day);
-  return d >= nthSundayOf(year, 3, 2) && d < nthSundayOf(year, 11, 1);
-}
-function formatDispatchTime(dateStr: string): string | null {
-  if (!dateStr || !dateStr.includes('T')) return null;
-  try {
-    const clean = dateStr.split('.')[0].replace('Z', '');
-    const [hourStr, minuteStr] = clean.split('T')[1].split(':');
-    const hour = parseInt(hourStr, 10);
-    const minute = parseInt(minuteStr, 10);
-    const datePart = clean.split('T')[0];
-    const hour12 = hour % 12 || 12;
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const tz = isInCDT(datePart) ? 'CDT' : 'CST';
-    return `${String(hour12).padStart(2,'0')}:${String(minute).padStart(2,'0')}${ampm}-${tz}`;
-  } catch (e) { return null; }
-}
+const isDispatch = channel === 'dispatch';
 ---
 
-<ChannelLayout title={channel}>
-  {sortedPosts.map(post => (
-    <PostCard
-      title={post.data.title}
-      date={post.data.date}
-      time={channel === 'dispatch' ? formatDispatchTime(String(post.data.date ?? '')) ?? undefined : undefined}
-      description={post.data.description}
-      href={`/${channel}/${post.slug}/`}
-      channel={channel}
-    />
-  ))}
-</ChannelLayout>
+<BaseLayout title={meta.title} description={meta.description}>
+
+  <!-- Channel Header -->
+  <section class="channel-hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">{meta.eyebrow}</p>
+      <h1 class="hero-title">
+        {channel === 'dispatch' ? 'Dispatch Archives' :
+         channel === 'gear' ? 'Gear' :
+         channel === 'table' ? 'The Table' :
+         channel === 'chow' ? 'The Kitchen' :
+         channel === 'transit' ? 'Travel' :
+         'Getaways'}
+      </h1>
+      {isDispatch && (
+        <p class="hero-sub">Every dispatch. The file gets closed. The damage doesn't.</p>
+      )}
+    </div>
+  </section>
+
+  <!-- Posts -->
+  <section class="posts-section">
+    <div class={isDispatch ? 'feed-list' : 'card-grid'}>
+      {posts.map((post: any) => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          description={post.data.description}
+          href={`/${channel}/${post.id}`}
+          channel={channel}
+          layout={isDispatch ? 'feed' : 'card'}
+        />
+      ))}
+    </div>
+    {posts.length === 0 && (
+      <p class="empty-state">Nothing filed yet. Check back soon.</p>
+    )}
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .channel-hero {
+    background: var(--ink);
+    color: var(--bg-limestone);
+    padding: 3rem 1.5rem 2.75rem;
+    text-align: center;
+  }
+  .hero-inner { max-width: 640px; margin: 0 auto; }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--ochre);
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.9rem, 5vw, 2.8rem);
+    font-weight: 700;
+    color: var(--bg-limestone);
+    margin: 0 0 0.75rem;
+    line-height: 1.1;
+  }
+  .hero-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(239,233,220,0.7);
+    margin: 0;
+  }
+
+  /* Feed layout (dispatch) */
+  .posts-section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  .feed-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Card grid layout (reviews) */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  /* When grid is used, expand section width */
+  .posts-section:has(.card-grid) {
+    max-width: 960px;
+  }
+
+  .empty-state {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: rgba(43,37,32,0.45);
+    text-align: center;
+    padding: 3rem 0;
+  }
+</style>
