@@ -1,24 +1,39 @@
 ---
 ---
 <footer>
-  <div style="text-align:center; margin-bottom:15px; font-size:0.8rem; letter-spacing: 1px;">
-    <span style="color:var(--secondary); opacity: 0.7;">LOOKING FOR PROFESSIONAL IT RESTORATION?&nbsp;</span>
-    <a href="https://vintage64tx.com" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:bold; border-bottom: 1px dashed var(--accent);">VISIT_VINTAGE64TX</a>
+  <div style="max-width:1080px; margin:0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:24px; margin-bottom:28px;">
+      <div>
+        <a href="/" style="font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--ink); text-decoration:none; display:block; margin-bottom:8px;">
+          OTD <span style="color:var(--clay);">VAULT</span>
+        </a>
+        <p style="font-size:13px; color:var(--ink-soft); max-width:280px; line-height:1.5;">
+          Unfiltered dispatches on power, money, and who's actually pulling the strings.
+        </p>
+      </div>
+      <div style="display:flex; align-items:center; gap:20px;">
+        <a href="https://www.facebook.com/profile.php?id=61587629078907" target="_blank" rel="noopener" style="opacity:0.55; transition:opacity 0.2s; display:inline-block;" aria-label="Facebook">
+          <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" style="height:26px; display:block;" />
+        </a>
+        <a href="https://www.instagram.com/old_texas_dude/" target="_blank" rel="noopener" style="opacity:0.55; transition:opacity 0.2s; display:inline-block;" aria-label="Instagram">
+          <img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram" style="height:26px; display:block;" />
+        </a>
+        <a href="https://v64otd.substack.com" target="_blank" rel="noopener" style="opacity:0.55; transition:opacity 0.2s; display:inline-block;" aria-label="Substack">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#FF6719">
+            <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--border); padding-top:20px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft);">
+      <span>
+        Looking for professional IT restoration?
+        <a href="https://vintage64tx.com" target="_blank" rel="noopener" style="color:var(--clay); margin-left:4px;">VINTAGE64TX →</a>
+      </span>
+      <div style="display:flex; gap:16px;">
+        <a href="/pages/privacy-policy" style="color:var(--ink-soft);">Privacy Policy</a>
+        <a href="/pages/gear-policy" style="color:var(--ink-soft);">Affiliate Policy</a>
+      </div>
+    </div>
   </div>
-  <div style="text-align:center; margin-bottom:10px; font-size:0.7rem; color:var(--secondary);">
-    SYSTEM_TIME: <span id="stardate"></span>
-  </div>
-  <div style="text-align:center; margin-bottom:10px; font-size:0.65rem; opacity: 0.6; letter-spacing: 1px;">
-    <a href="/pages/privacy-policy" style="color:var(--accent); text-decoration:none;">PRIVACY_POLICY</a>
-    <span style="color:var(--secondary); margin: 0 8px;">|</span>
-    <a href="/pages/gear-policy" style="color:var(--accent); text-decoration:none;">AFFILIATE_POLICY</a>
-  </div>
-  <p class="footer-tag blink">THE_WATCH_TOWER_V3.2.1 // DEEP_LINK_ENABLED</p>
 </footer>
-<script>
-  const el = document.getElementById('stardate');
-  if (el) {
-    const now = new Date();
-    el.textContent = now.toISOString().replace('T', ' ').split('.')[0] + ' UTC';
-  }
-</script>
