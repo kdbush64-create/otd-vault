@@ -8,6 +8,7 @@ interface Props {
   tags?: string;
   channel?: string;
   image?: string;
+  gallery?: { image: string; caption?: string }[];
   rating?: string;
   cost?: string;
   affiliateLinks?: { label: string; url: string }[];
@@ -15,19 +16,10 @@ interface Props {
 }
 
 const {
-  title,
-  date,
-  description,
-  tags,
-  channel = 'dispatch',
-  image,
-  rating,
-  cost,
-  affiliateLinks,
-  callToAction,
+  title, date, description, tags, channel = 'dispatch',
+  image, gallery, rating, cost, affiliateLinks, callToAction,
 } = Astro.props;
 
-// Parse tags — handles both old array format and new space-separated string
 const tagList = tags
   ? (Array.isArray(tags)
       ? (tags as string[]).flatMap(t => t.trim().split(/\s+/))
@@ -35,31 +27,29 @@ const tagList = tags
     .filter(Boolean)
   : [];
 
-// Format date
 const formattedDate = date
-  ? new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric', month: 'long', day: 'numeric',
-    })
+  ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   : null;
 
 const isDispatch = channel === 'dispatch';
 const isReview = ['gear', 'table', 'chow', 'transit', 'coord'].includes(channel);
 
-// Channel label map
 const channelLabels: Record<string, string> = {
-  dispatch: 'Dispatch',
-  gear: 'Gear',
-  table: 'The Table',
-  chow: 'The Kitchen',
-  transit: 'Travel',
-  coord: 'Travel',
+  dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
+  chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
 };
 const channelLabel = channelLabels[channel] ?? channel;
 const channelHref = isDispatch ? '/dispatch' : '/reviews';
+
+// Use first gallery image as hero for reviews if no standalone image
+const heroImage = image ?? (gallery && gallery.length > 0 ? gallery[0].image : undefined);
+const remainingGallery = image
+  ? gallery
+  : gallery && gallery.length > 1 ? gallery.slice(1) : undefined;
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class={`post-article channel-${channel}`}>
+  <article class={'post-article channel-' + channel}>
 
     <!-- Breadcrumb -->
     <nav class="post-breadcrumb" aria-label="breadcrumb">
@@ -69,7 +59,7 @@ const channelHref = isDispatch ? '/dispatch' : '/reviews';
       {!isDispatch && (
         <>
           <span aria-hidden="true">›</span>
-          <a href={`/${channel}`}>{channelLabel}</a>
+          <a href={'/' + channel}>{channelLabel}</a>
         </>
       )}
     </nav>
@@ -77,12 +67,9 @@ const channelHref = isDispatch ? '/dispatch' : '/reviews';
     <!-- Post Header -->
     <header class="post-header">
       <h1 class="post-title">{title}</h1>
-
       {isDispatch && (
         <div class="dispatch-meta">
-          {formattedDate && (
-            <time class="post-date" datetime={date}>{formattedDate}</time>
-          )}
+          {formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
           <div class="case-file-stamp" aria-label="Case File V64OTD">
             <svg viewBox="0 0 90 90" width="72" height="72" aria-hidden="true">
               <circle cx="45" cy="45" r="42" fill="none" stroke="var(--clay)" stroke-width="2.5"/>
@@ -94,16 +81,13 @@ const channelHref = isDispatch ? '/dispatch' : '/reviews';
           </div>
         </div>
       )}
-
-      {isReview && formattedDate && (
-        <time class="post-date" datetime={date}>{formattedDate}</time>
-      )}
+      {isReview && formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
     </header>
 
     <!-- Review: Hero Image with Field Tested stamp -->
-    {isReview && image && (
+    {isReview && heroImage && (
       <div class="review-image-wrap">
-        <img src={image} alt={title} class="review-hero-img" loading="lazy" />
+        <img src={heroImage} alt={title} class="review-hero-img" loading="lazy" />
         <div class="field-tested-stamp" aria-label="Field Tested V64OTD">
           <svg viewBox="0 0 90 90" width="80" height="80" aria-hidden="true">
             <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.92)" stroke="var(--cedar)" stroke-width="2.5"/>
@@ -116,21 +100,35 @@ const channelHref = isDispatch ? '/dispatch' : '/reviews';
       </div>
     )}
 
+    <!-- Dispatch: gallery (all images) -->
+    {isDispatch && gallery && gallery.length > 0 && (
+      <div class="post-gallery">
+        {gallery.map(item => (
+          <figure class="gallery-figure">
+            <img src={item.image} alt={item.caption ?? title} loading="lazy" class="gallery-img" />
+            {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+
+    <!-- Review: remaining gallery images (after hero) -->
+    {isReview && remainingGallery && remainingGallery.length > 0 && (
+      <div class="post-gallery">
+        {remainingGallery.map(item => (
+          <figure class="gallery-figure">
+            <img src={item.image} alt={item.caption ?? title} loading="lazy" class="gallery-img" />
+            {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+
     <!-- Review: Verdict Box -->
     {isReview && (rating || cost) && (
       <div class="verdict-box">
-        {rating && (
-          <div class="verdict-item">
-            <span class="verdict-label">RATING</span>
-            <span class="verdict-value">{rating}</span>
-          </div>
-        )}
-        {cost && (
-          <div class="verdict-item">
-            <span class="verdict-label">COST</span>
-            <span class="verdict-value">{cost}</span>
-          </div>
-        )}
+        {rating && <div class="verdict-item"><span class="verdict-label">RATING</span><span class="verdict-value">{rating}</span></div>}
+        {cost && <div class="verdict-item"><span class="verdict-label">COST</span><span class="verdict-value">{cost}</span></div>}
       </div>
     )}
 
@@ -140,17 +138,13 @@ const channelHref = isDispatch ? '/dispatch' : '/reviews';
     )}
 
     <!-- Article Body -->
-    <div class="post-body e-content prose">
-      <slot />
-    </div>
+    <div class="post-body e-content prose"><slot /></div>
 
     <!-- Dispatch: Call to Action block -->
     {isDispatch && callToAction && callToAction.length > 0 && (
       <div class="cta-block">
         <p class="cta-label">CALL TO ACTION</p>
-        <ol class="cta-list">
-          {callToAction.map(item => <li>{item}</li>)}
-        </ol>
+        <ol class="cta-list">{callToAction.map(item => <li>{item}</li>)}</ol>
       </div>
     )}
 
@@ -165,24 +159,17 @@ const channelHref = isDispatch ? '/dispatch' : '/reviews';
         <p class="affiliate-label">WHERE TO GET IT</p>
         <div class="affiliate-links">
           {affiliateLinks.map(link => (
-            <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">
-              {link.label}
-            </a>
+            <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">{link.label}</a>
           ))}
         </div>
-        <p class="affiliate-disclosure">
-          Affiliate disclosure: links above may earn a small commission at no cost to you.
-          OTD only links products personally tested and recommended.
-        </p>
+        <p class="affiliate-disclosure">Affiliate disclosure: links above may earn a small commission at no cost to you. OTD only links products personally tested and recommended.</p>
       </div>
     )}
 
     <!-- Tags -->
     {tagList.length > 0 && (
       <div class="post-tags">
-        {tagList.map(tag => (
-          <a href={`/tags/${tag.toLowerCase()}`} class="tag-chip">#{tag}</a>
-        ))}
+        {tagList.map(tag => <a href={'/tags/' + tag.toLowerCase()} class="tag-chip">#{tag}</a>)}
       </div>
     )}
 
@@ -190,281 +177,89 @@ const channelHref = isDispatch ? '/dispatch' : '/reviews';
 </BaseLayout>
 
 <style>
-  .post-article {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-  }
+  .post-article { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-  /* Breadcrumb */
   .post-breadcrumb {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    color: rgba(43,37,32,0.55);
-    margin-bottom: 1.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-wrap: wrap;
+    font-size: 0.72rem; letter-spacing: 0.06em;
+    color: rgba(43,37,32,0.55); margin-bottom: 1.75rem;
+    display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
   }
-  .post-breadcrumb a {
-    color: rgba(43,37,32,0.55);
-    text-decoration: none;
-  }
+  .post-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
   .post-breadcrumb a:hover { color: var(--clay); }
 
-  /* Post header */
-  .post-header {
-    margin-bottom: 1.5rem;
-  }
+  .post-header { margin-bottom: 1.5rem; }
   .post-title {
     font-family: 'Fraunces', serif;
     font-size: clamp(1.8rem, 5vw, 2.8rem);
-    font-weight: 700;
-    line-height: 1.15;
-    color: var(--ink);
-    margin: 0 0 1rem;
+    font-weight: 700; line-height: 1.15; color: var(--ink); margin: 0 0 1rem;
   }
   .post-date {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    color: rgba(43,37,32,0.5);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 0.75rem;
+    font-size: 0.72rem; letter-spacing: 0.08em;
+    color: rgba(43,37,32,0.5); text-transform: uppercase; display: block; margin-bottom: 0.75rem;
   }
+  .dispatch-meta { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+  .case-file-stamp { flex-shrink: 0; opacity: 0.85; }
 
-  /* Dispatch meta: date + stamp inline */
-  .dispatch-meta {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    flex-wrap: wrap;
-  }
-  .case-file-stamp {
-    flex-shrink: 0;
-    opacity: 0.85;
-  }
+  .review-image-wrap { position: relative; margin: 0 0 1.5rem; border-radius: 3px; overflow: hidden; }
+  .review-hero-img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; }
+  .field-tested-stamp { position: absolute; bottom: 1rem; right: 1rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
-  /* Review image */
-  .review-image-wrap {
-    position: relative;
-    margin: 0 0 1.5rem;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .review-hero-img {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-height: 420px;
-    object-fit: cover;
-  }
-  .field-tested-stamp {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-  }
+  .post-gallery { margin: 0 0 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .gallery-figure { margin: 0; }
+  .gallery-img { width: 100%; height: auto; border-radius: 3px; display: block; max-height: 480px; object-fit: cover; }
+  .gallery-caption { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.04em; color: rgba(43,37,32,0.5); margin-top: 0.4rem; }
 
-  /* Verdict box */
   .verdict-box {
-    display: flex;
-    gap: 2rem;
-    background: var(--card-bg);
-    border: 1.5px solid var(--border);
-    border-radius: 3px;
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.75rem;
-    flex-wrap: wrap;
+    display: flex; gap: 2rem; background: var(--card-bg);
+    border: 1.5px solid var(--border); border-radius: 3px;
+    padding: 1rem 1.5rem; margin-bottom: 1.75rem; flex-wrap: wrap;
   }
-  .verdict-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-  .verdict-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    color: rgba(43,37,32,0.5);
-    text-transform: uppercase;
-  }
-  .verdict-value {
-    font-family: 'Fraunces', serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--ochre);
-  }
+  .verdict-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .verdict-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: rgba(43,37,32,0.5); text-transform: uppercase; }
+  .verdict-value { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--ochre); }
 
-  /* Dispatch tagline */
   .dispatch-tagline {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.88rem;
-    color: rgba(43,37,32,0.5);
-    font-style: italic;
-    margin: 0 0 2rem;
-    border-left: 3px solid var(--clay);
-    padding-left: 0.85rem;
+    font-family: 'Inter', sans-serif; font-size: 0.88rem;
+    color: rgba(43,37,32,0.5); font-style: italic; margin: 0 0 2rem;
+    border-left: 3px solid var(--clay); padding-left: 0.85rem;
   }
 
-  /* Prose body */
-  .post-body {
-    font-family: 'Inter', sans-serif;
-    font-size: 1.05rem;
-    line-height: 1.75;
-    color: var(--ink);
-    margin-bottom: 2.5rem;
-  }
-  .post-body :global(h2) {
-    font-family: 'Fraunces', serif;
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin: 2rem 0 0.75rem;
-    color: var(--ink);
-  }
-  .post-body :global(h3) {
-    font-family: 'Fraunces', serif;
-    font-size: 1.15rem;
-    font-weight: 600;
-    margin: 1.5rem 0 0.5rem;
-    color: var(--ink);
-  }
+  .post-body { font-family: 'Inter', sans-serif; font-size: 1.05rem; line-height: 1.75; color: var(--ink); margin-bottom: 2.5rem; }
+  .post-body :global(h2) { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--ink); }
+  .post-body :global(h3) { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--ink); }
   .post-body :global(p) { margin: 0 0 1.25em; }
   .post-body :global(a) { color: var(--clay); text-underline-offset: 3px; }
-  .post-body :global(a:hover) { opacity: 0.8; }
-  .post-body :global(blockquote) {
-    border-left: 3px solid var(--clay);
-    margin: 1.5rem 0;
-    padding: 0.5rem 1rem;
-    color: rgba(43,37,32,0.7);
-    font-style: italic;
-  }
-  .post-body :global(ul), .post-body :global(ol) {
-    padding-left: 1.5rem;
-    margin: 0 0 1.25em;
-  }
+  .post-body :global(blockquote) { border-left: 3px solid var(--clay); margin: 1.5rem 0; padding: 0.5rem 1rem; color: rgba(43,37,32,0.7); font-style: italic; }
+  .post-body :global(ul), .post-body :global(ol) { padding-left: 1.5rem; margin: 0 0 1.25em; }
   .post-body :global(li) { margin-bottom: 0.4em; }
-  .post-body :global(code) {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.88em;
-    background: rgba(43,37,32,0.07);
-    padding: 0.1em 0.3em;
-    border-radius: 2px;
-  }
-  .post-body :global(img) {
-    max-width: 100%;
-    height: auto;
-    border-radius: 3px;
-    margin: 1.5rem 0;
-  }
+  .post-body :global(code) { font-family: 'IBM Plex Mono', monospace; font-size: 0.88em; background: rgba(43,37,32,0.07); padding: 0.1em 0.3em; border-radius: 2px; }
+  .post-body :global(img) { max-width: 100%; height: auto; border-radius: 3px; margin: 1.5rem 0; display: block; }
 
-  /* CTA block */
   .cta-block {
-    background: var(--card-bg);
-    border: 1.5px solid var(--border);
-    border-left: 4px solid var(--clay);
-    border-radius: 3px;
-    padding: 1.25rem 1.5rem;
-    margin: 0 0 2rem;
+    background: var(--card-bg); border: 1.5px solid var(--border);
+    border-left: 4px solid var(--clay); border-radius: 3px;
+    padding: 1.25rem 1.5rem; margin: 0 0 2rem;
   }
-  .cta-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    color: var(--clay);
-    margin: 0 0 0.75rem;
-    text-transform: uppercase;
-  }
-  .cta-list {
-    margin: 0;
-    padding-left: 1.4rem;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.98rem;
-    line-height: 1.65;
-    color: var(--ink);
-  }
+  .cta-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--clay); margin: 0 0 0.75rem; text-transform: uppercase; }
+  .cta-list { margin: 0; padding-left: 1.4rem; font-family: 'Inter', sans-serif; font-size: 0.98rem; line-height: 1.65; color: var(--ink); }
   .cta-list li { margin-bottom: 0.45em; }
 
-  /* Dispatch signoff */
   .dispatch-signoff {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    color: rgba(43,37,32,0.45);
-    text-transform: uppercase;
-    text-align: right;
-    margin: 0 0 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em;
+    color: rgba(43,37,32,0.45); text-transform: uppercase; text-align: right;
+    margin: 0 0 2rem; padding-top: 1rem; border-top: 1px solid var(--border);
   }
 
-  /* Affiliate block */
-  .affiliate-block {
-    background: var(--ink);
-    color: var(--bg-limestone);
-    border-radius: 3px;
-    padding: 1.5rem;
-    margin: 0 0 2rem;
-  }
-  .affiliate-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    color: var(--ochre);
-    margin: 0 0 1rem;
-    text-transform: uppercase;
-  }
-  .affiliate-links {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
-  }
-  .affiliate-btn {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
-    background: var(--clay);
-    color: #fff;
-    text-decoration: none;
-    padding: 0.55rem 1rem;
-    border-radius: 2px;
-    transition: opacity 0.15s;
-  }
+  .affiliate-block { background: var(--ink); color: var(--bg-limestone); border-radius: 3px; padding: 1.5rem; margin: 0 0 2rem; }
+  .affiliate-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ochre); margin: 0 0 1rem; text-transform: uppercase; }
+  .affiliate-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .affiliate-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; background: var(--clay); color: #fff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 2px; transition: opacity 0.15s; }
   .affiliate-btn:hover { opacity: 0.85; }
-  .affiliate-disclosure {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
-    color: rgba(239,233,220,0.5);
-    margin: 0;
-    line-height: 1.5;
-  }
+  .affiliate-disclosure { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: rgba(239,233,220,0.5); margin: 0; line-height: 1.5; }
 
-  /* Tags */
-  .post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-  }
-  .tag-chip {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    background: rgba(107,122,94,0.12);
-    color: var(--cedar);
-    padding: 0.3rem 0.7rem;
-    border-radius: 20px;
-    text-decoration: none;
-    transition: background 0.15s, color 0.15s;
-  }
-  .tag-chip:hover {
-    background: var(--cedar);
-    color: #fff;
-  }
+  .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .tag-chip { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; background: rgba(107,122,94,0.12); color: var(--cedar); padding: 0.3rem 0.7rem; border-radius: 20px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+  .tag-chip:hover { background: var(--cedar); color: #fff; }
 </style>
