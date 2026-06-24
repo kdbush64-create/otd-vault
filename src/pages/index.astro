@@ -1,151 +1,221 @@
 ---
-export const prerender = true;
-import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+export const prerender = true;
+
 const allDispatch = await getCollection('dispatch');
-const dispatchPosts = [...allDispatch]
-  .sort((a, b) => String(b.data.date ?? '').localeCompare(String(a.data.date ?? '')))
-  .map(post => ({
-    title: post.data.title,
-    date: String(post.data.date ?? ''),
-    description: post.data.description ?? '',
-    slug: post.slug,
-  }));
+const posts = allDispatch
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .slice(0, 10);
 ---
-<BaseLayout title="OTD Vault | The Watch Tower" description="Vintage64TX — Dispatch, Transit, Gear, Coord, Table." showHero={true}>
-<span class="h-card" hidden>
-  <a class="u-url" rel="me" href="https://v64otd.com/">OTD Vault | The Watch Tower</a>
-  <img class="u-photo" src="https://v64otd.com/images/profile/v64otd-mastodon-avatar.jpg" />
-  <img class="u-featured" src="https://v64otd.com/images/profile/v64otd-mastodon-header.jpg" />
-</span>  
-<nav class="vault-nav-container">
-    <div class="primary-nav" style="margin-bottom: 15px; width: 100%;">
-      <a href="/about" class="submit-btn" style="display:block; width:100%; padding:12px; border-color:var(--accent); color:var(--accent); font-weight:bold; font-size:1rem; text-align:center; text-decoration:none; box-sizing:border-box;">
-        ABOUT: OLD TEXAS DUDE
-      </a>
+
+<BaseLayout title="OTD Vault — The Ledger Doesn't Lie" description="Old Texas Dude. Dispatch from the margins. Field-tested reviews.">
+  <!-- Bridgy Fed federation link -->
+  <a rel="me" href="https://web.brid.gy/r/https://v64otd.com/" hidden></a>
+
+  <!-- Hero -->
+  <section class="dispatch-hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">OLD TEXAS DUDE // INDEPENDENT DISPATCH</p>
+      <h1 class="hero-title">The ledger doesn't lie.</h1>
+      <p class="hero-sub">Plain-spoken coverage of money, power, and the people who take your tax dollars. No affiliate links. No agenda but the truth.</p>
     </div>
-    <div class="secondary-filters">
-      <a href="/dispatch" class="submit-btn" style="text-decoration:none;">DISPATCH ARCHIVES</a>
-      <a href="/transit" class="submit-btn" style="text-decoration:none;">TRANSIT</a>
-      <a href="/gear" class="submit-btn" style="text-decoration:none;">GEAR</a>
-      <a href="/coord" class="submit-btn" style="text-decoration:none;">COORD</a>
-      <a href="/table" class="submit-btn" style="text-decoration:none;">THE TABLE</a>
-      <a href="/chow" class="submit-btn" style="text-decoration:none;">THE KITCHEN</a>
-      <a href="/substack" class="submit-btn" style="text-decoration:none;">SUBSTACK FEED</a>
+  </section>
+
+  <!-- Dispatch Feed -->
+  <section class="dispatch-feed">
+    <div class="feed-header">
+      <h2 class="feed-label">RECENT DISPATCHES</h2>
     </div>
-    <p class="instruction-text" style="text-align:center; margin-top: 14px; margin-bottom: 0;">
-      SELECT A DATA_CHANNEL OR SCAN FOR UPDATES.
-    </p>
-  </nav>
-  <div class="vault-layout">
-    <section class="log-display">
-      <article id="content" class="blog-post">
-        <div style="text-align: center; padding: 30px 20px 10px;">
-          <h2 class="force-blue" style="letter-spacing: 2px;">&gt; SYSTEM_READY</h2>
-          <p class="blink" style="font-size: 0.85rem; color: #00d4ff; text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); margin-bottom: 20px; font-family: monospace;">
-            [ INITIALIZING_DATA_STREAM... ]
-          </p>
-        </div>
-        <div style="padding: 0 20px 40px;">
-          <p style="color: var(--secondary); font-size: 0.78rem; letter-spacing: 2px; margin-bottom: 14px; font-family: monospace;">
-            &gt; DAILY_DISPATCH
-          </p>
-          <div id="daily-dispatch-list">
-            <p style="color: var(--primary-dim); font-size: 0.82rem;">[ LOADING... ]</p>
-          </div>
-        </div>
-      </article>
-    </section>
-  </div>
-  <script define:vars={{ dispatchPosts }}>
-    (function () {
-      function nthSundayOf(year, month, n) {
-        const first = new Date(year, month - 1, 1);
-        return new Date(year, month - 1, 1 + (7 - first.getDay()) % 7 + (n - 1) * 7);
-      }
-      function isInCDT(datePart) {
-        const [y, m, d] = datePart.split('-').map(Number);
-        const date = new Date(y, m - 1, d);
-        return date >= nthSundayOf(y, 3, 2) && date < nthSundayOf(y, 11, 1);
-      }
-      function formatTime(dateStr) {
-        if (!dateStr || !dateStr.includes('T')) return null;
-        try {
-          const clean = dateStr.split('.')[0].replace('Z', '');
-          const [hourStr, minuteStr] = clean.split('T')[1].split(':');
-          const hour = parseInt(hourStr, 10);
-          const minute = parseInt(minuteStr, 10);
-          const datePart = clean.split('T')[0];
-          const hour12 = hour % 12 || 12;
-          const ampm = hour >= 12 ? 'PM' : 'AM';
-          const tz = isInCDT(datePart) ? 'CDT' : 'CST';
-          return String(hour12).padStart(2,'0') + ':' + String(minute).padStart(2,'0') + ampm + '-' + tz;
-        } catch (e) { return null; }
-      }
-      function renderStars(avg) {
-        if (avg === null) return '☆☆☆☆☆';
-        const full = Math.round(avg);
-        return '★'.repeat(full) + '☆'.repeat(5 - full);
-      }
+    <div class="feed-list">
+      {posts.map(post => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          description={post.data.description}
+          href={`/dispatch/${post.id}`}
+          channel="dispatch"
+        />
+      ))}
+    </div>
+    <div class="feed-footer">
+      <a href="/dispatch" class="btn-outline">Full dispatch archive →</a>
+    </div>
+  </section>
 
-      const now = new Date();
-      const today = now.getFullYear() + '-' +
-        String(now.getMonth() + 1).padStart(2, '0') + '-' +
-        String(now.getDate()).padStart(2, '0');
-      const [ty, tm, td] = today.split('-').map(Number);
-      const co = new Date(ty, tm - 1, td - 2);
-      const cutoff = co.getFullYear() + '-' +
-        String(co.getMonth() + 1).padStart(2, '0') + '-' +
-        String(co.getDate()).padStart(2, '0');
-
-      const recent = dispatchPosts.filter(p => p.date.split('T')[0] >= cutoff);
-      const container = document.getElementById('daily-dispatch-list');
-      if (!container) return;
-
-      if (recent.length === 0) {
-        container.innerHTML = '<p style="color:var(--primary-dim);font-size:0.82rem;">[ NO DISPATCHES IN THE LAST 2 DAYS ]</p>';
-        return;
-      }
-
-      // Render cards first, with a placeholder for ratings
-      container.innerHTML = recent.map(post => {
-        const datePart = post.date.split('T')[0];
-        const time = formatTime(post.date);
-        const dateDisplay = new Date(datePart + 'T00:00:00').toLocaleDateString('en-US', {
-          year: 'numeric', month: 'long', day: 'numeric'
-        });
-        const timeSpan = time ? ' <span style="margin-left:8px;opacity:0.75;">' + time + '</span>' : '';
-        const desc = post.description
-          ? '<p style="color:var(--primary-dim);font-size:0.82rem;margin-top:4px;line-height:1.4;">' + post.description + '</p>'
-          : '';
-        return '<div style="border-bottom:1px dashed var(--border);padding:10px 0;margin-bottom:4px;">' +
-          '<a href="/dispatch/' + post.slug + '/" style="color:var(--accent);" class="log-link">&gt; ' + post.title + '</a>' +
-          '<p style="color:var(--primary-dim);font-size:0.75rem;margin-top:2px;">' + dateDisplay + timeSpan + '</p>' +
-          '<div id="rating-' + post.slug + '" style="font-size:0.82rem;color:var(--primary-dim);margin:2px 0 4px;"></div>' +
-          desc +
-          '</div>';
-      }).join('');
-
-      // Fetch ratings for each card and inject
-      recent.forEach(post => {
-        const ratingEl = document.getElementById('rating-' + post.slug);
-        if (!ratingEl) return;
-        fetch('/api/rate?slug=dispatch/' + post.slug)
-          .then(r => r.json())
-          .then(data => {
-            if (data.count > 0) {
-              ratingEl.innerHTML =
-                '<span style="color:#f0c040;letter-spacing:2px;">' + renderStars(data.average) + '</span>' +
-                ' <span>' + data.average.toFixed(1) + '</span>' +
-                ' <span style="opacity:0.7;">(' + data.count + ' ' + (data.count === 1 ? 'rating' : 'ratings') + ')</span>';
-            } else {
-              ratingEl.innerHTML = '<span style="opacity:0.5;">No ratings yet <span style="color:#888;">☆☆☆☆☆</span></span>';
-            }
-          })
-          .catch(() => {});
-      });
-    })();
-  </script>
-<a rel="me" href="https://web.brid.gy/r/https://v64otd.com/" hidden></a>
+  <!-- Email Signup -->
+  <section class="signup-block">
+    <div class="signup-inner">
+      <p class="signup-eyebrow">THE LEDGER</p>
+      <h2 class="signup-title">Add v64otd.com to your daily reading list.</h2>
+      <p class="signup-sub">The file gets closed. The damage doesn't. Get new dispatches in your inbox.</p>
+      <form class="signup-form" action="#" method="post">
+        <input type="email" name="email" placeholder="your@email.com" required class="signup-input" />
+        <button type="submit" class="btn-primary">Subscribe</button>
+      </form>
+      <p class="signup-note">One list. No spam. Unsubscribe any time.</p>
+    </div>
+  </section>
 </BaseLayout>
-</BaseLayout>
+
+<style>
+  /* Hero */
+  .dispatch-hero {
+    background: var(--ink);
+    color: var(--bg-limestone);
+    padding: 4rem 1.5rem 3.5rem;
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--ochre);
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 1rem;
+    color: var(--bg-limestone);
+  }
+  .hero-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: rgba(239,233,220,0.8);
+    margin: 0;
+    max-width: 540px;
+    margin-inline: auto;
+  }
+
+  /* Feed */
+  .dispatch-feed {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .feed-header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .feed-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .feed-footer {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+  .btn-outline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--clay);
+    text-decoration: none;
+    border: 1.5px solid var(--clay);
+    padding: 0.5rem 1.25rem;
+    border-radius: 2px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-outline:hover {
+    background: var(--clay);
+    color: #fff;
+  }
+
+  /* Signup */
+  .signup-block {
+    background: var(--card-bg);
+    border-top: 2px solid var(--border);
+    border-bottom: 2px solid var(--border);
+    padding: 3.5rem 1.5rem;
+    text-align: center;
+  }
+  .signup-inner {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .signup-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--cedar);
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+  .signup-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 0.75rem;
+    line-height: 1.2;
+  }
+  .signup-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(43,37,32,0.7);
+    margin: 0 0 1.75rem;
+    line-height: 1.6;
+  }
+  .signup-form {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .signup-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.65rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    background: #fff;
+    color: var(--ink);
+    flex: 1;
+    min-width: 220px;
+    max-width: 300px;
+  }
+  .signup-input:focus {
+    outline: 2px solid var(--clay);
+    border-color: transparent;
+  }
+  .btn-primary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    background: var(--clay);
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .signup-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(43,37,32,0.5);
+    margin: 1rem 0 0;
+  }
+</style>
