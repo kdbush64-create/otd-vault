@@ -1,0 +1,316 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+export const prerender = true;
+
+// Gather recent posts from all review channels
+const [gear, table, chow, transit, coord] = await Promise.all([
+  getCollection('gear'),
+  getCollection('table'),
+  getCollection('chow'),
+  getCollection('transit'),
+  getCollection('coord'),
+]);
+
+const allReviews = [
+  ...gear.map(p => ({ ...p, channel: 'gear' })),
+  ...table.map(p => ({ ...p, channel: 'table' })),
+  ...chow.map(p => ({ ...p, channel: 'chow' })),
+  ...transit.map(p => ({ ...p, channel: 'transit' })),
+  ...coord.map(p => ({ ...p, channel: 'coord' })),
+].sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+ .slice(0, 6);
+---
+
+<BaseLayout title="Reviews & Gear — OTD Vault" description="Hands-on reviews and recommendations. Field tested, no fluff.">
+
+  <!-- Hero -->
+  <section class="reviews-hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">FIELD-TESTED REVIEWS</p>
+      <h1 class="hero-title">Hands-on. No fluff.</h1>
+      <p class="hero-sub">Gear, food, travel, and kitchen. Every review is personal experience — the stamp only goes on things I've actually used.</p>
+    </div>
+  </section>
+
+  <!-- Category Grid -->
+  <section class="category-section">
+    <div class="category-grid">
+
+      <a href="/gear" class="category-card cat-cedar">
+        <div class="cat-stamp" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="48" height="48">
+            <circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
+            <text x="30" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" fill="currentColor" letter-spacing="1">GEAR</text>
+          </svg>
+        </div>
+        <h2 class="cat-title">Gear</h2>
+        <p class="cat-desc">Tools, tech, and outdoor kit. Tested in the field.</p>
+        <span class="cat-link">Browse gear →</span>
+      </a>
+
+      <a href="/table" class="category-card cat-clay">
+        <div class="cat-stamp" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="48" height="48">
+            <circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
+            <text x="30" y="28" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="currentColor" letter-spacing="1">THE</text>
+            <text x="30" y="38" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7.5" fill="currentColor" letter-spacing="1">TABLE</text>
+          </svg>
+        </div>
+        <h2 class="cat-title">The Table</h2>
+        <p class="cat-desc">Restaurant reviews. Texas and beyond.</p>
+        <span class="cat-link">Browse restaurants →</span>
+      </a>
+
+      <a href="/chow" class="category-card cat-ochre">
+        <div class="cat-stamp" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="48" height="48">
+            <circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
+            <text x="30" y="28" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="currentColor" letter-spacing="1">THE</text>
+            <text x="30" y="38" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="currentColor" letter-spacing="1">KITCHEN</text>
+          </svg>
+        </div>
+        <h2 class="cat-title">The Kitchen</h2>
+        <p class="cat-desc">Recipes, techniques, and pantry picks.</p>
+        <span class="cat-link">Browse kitchen →</span>
+      </a>
+
+      <a href="/transit" class="category-card cat-cedar">
+        <div class="cat-stamp" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="48" height="48">
+            <circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
+            <text x="30" y="34" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7.5" fill="currentColor" letter-spacing="1">TRAVEL</text>
+          </svg>
+        </div>
+        <h2 class="cat-title">Travel</h2>
+        <p class="cat-desc">Road dispatches, getaways, and local color. Texas first.</p>
+        <span class="cat-link">Browse travel →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Recently Reviewed -->
+  <section class="recent-section">
+    <div class="recent-header">
+      <h2 class="section-label">RECENTLY REVIEWED</h2>
+    </div>
+    <div class="recent-grid">
+      {allReviews.map(post => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          description={post.data.description}
+          href={`/${post.channel}/${post.id}`}
+          channel={post.channel}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Email Signup -->
+  <section class="signup-block">
+    <div class="signup-inner">
+      <p class="signup-eyebrow">FIELD NOTES</p>
+      <h2 class="signup-title">Get the next gear pick before it sells out.</h2>
+      <p class="signup-sub">New reviews straight to your inbox. One list. No noise.</p>
+      <form class="signup-form" action="#" method="post">
+        <input type="email" name="email" placeholder="your@email.com" required class="signup-input" />
+        <button type="submit" class="btn-primary">Subscribe</button>
+      </form>
+      <p class="signup-note">No spam. Unsubscribe any time.</p>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .reviews-hero {
+    background: var(--cedar);
+    color: var(--bg-limestone);
+    padding: 3.5rem 1.5rem 3rem;
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: rgba(239,233,220,0.75);
+    margin: 0 0 0.9rem;
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--bg-limestone);
+    margin: 0 0 0.9rem;
+  }
+  .hero-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: rgba(239,233,220,0.8);
+    margin: 0;
+  }
+
+  /* Category grid */
+  .category-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 1rem;
+  }
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.25rem;
+  }
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(43,37,32,0.1);
+  }
+  .cat-cedar { border-top: 3px solid var(--cedar); }
+  .cat-clay  { border-top: 3px solid var(--clay);  }
+  .cat-ochre { border-top: 3px solid var(--ochre); }
+  .cat-cedar .cat-stamp svg { color: var(--cedar); }
+  .cat-clay  .cat-stamp svg { color: var(--clay);  }
+  .cat-ochre .cat-stamp svg { color: var(--ochre); }
+  .cat-stamp { margin-bottom: 0.5rem; }
+  .cat-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+  }
+  .cat-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: rgba(43,37,32,0.65);
+    line-height: 1.5;
+    margin: 0;
+    flex: 1;
+  }
+  .cat-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--clay);
+    margin-top: 0.25rem;
+  }
+
+  /* Recent */
+  .recent-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+  .recent-header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.75rem;
+  }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .recent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* Signup */
+  .signup-block {
+    background: var(--card-bg);
+    border-top: 2px solid var(--border);
+    border-bottom: 2px solid var(--border);
+    padding: 3.5rem 1.5rem;
+    text-align: center;
+  }
+  .signup-inner { max-width: 500px; margin: 0 auto; }
+  .signup-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--cedar);
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+  .signup-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 0.65rem;
+    line-height: 1.25;
+  }
+  .signup-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    color: rgba(43,37,32,0.65);
+    margin: 0 0 1.5rem;
+  }
+  .signup-form {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .signup-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.65rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    background: #fff;
+    color: var(--ink);
+    flex: 1;
+    min-width: 200px;
+    max-width: 280px;
+  }
+  .signup-input:focus { outline: 2px solid var(--cedar); border-color: transparent; }
+  .btn-primary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    background: var(--cedar);
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .signup-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(43,37,32,0.45);
+    margin: 1rem 0 0;
+  }
+</style>
