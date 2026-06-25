@@ -5,10 +5,10 @@ import PostCard from '../components/PostCard.astro';
 
 export const prerender = true;
 
-type Channel = 'dispatch' | 'gear' | 'table' | 'chow' | 'transit' | 'coord';
+type Channel = 'dispatch' | 'gear' | 'table' | 'chow' | 'transit' | 'coord' | 'lifestyle';
 
 export async function getStaticPaths() {
-  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'];
+  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord', 'lifestyle'];
   return channels.map(channel => ({ params: { channel } }));
 }
 
@@ -45,6 +45,11 @@ const channelMeta: Record<Channel, { title: string; description: string; eyebrow
     description: 'Weekend getaways and lodging reviews.',
     eyebrow: 'GETAWAYS & LODGING',
   },
+  lifestyle: {
+    title: 'Lifestyle — OTD Vault',
+    description: 'Life off the clock. Health, travel, pets, and everything that isn\u2019t politics or a product review.',
+    eyebrow: 'LIFESTYLE',
+  },
 };
 
 const meta = channelMeta[channel];
@@ -66,6 +71,8 @@ const isDispatch = channel === 'dispatch';
          channel === 'table' ? 'The Table' :
          channel === 'chow' ? 'The Kitchen' :
          channel === 'transit' ? 'Travel' :
+         channel === 'lifestyle' ? 'Lifestyle' :
+'Getaways'
          'Getaways'}
       </h1>
       {isDispatch && (
