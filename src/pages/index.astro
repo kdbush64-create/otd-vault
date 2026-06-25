@@ -52,11 +52,11 @@ const posts = allDispatch
       <p class="signup-eyebrow">THE LEDGER</p>
       <h2 class="signup-title">Add v64otd.com to your daily reading list.</h2>
       <p class="signup-sub">The file gets closed. The damage doesn't. Get new dispatches in your inbox.</p>
-      <form class="signup-form" action="#" method="post">
+      <form class="signup-form" id="signup-form">
         <input type="email" name="email" placeholder="your@email.com" required class="signup-input" />
-        <button type="submit" class="btn-primary">Subscribe</button>
+        <button type="submit" class="btn-primary" id="signup-btn">Subscribe</button>
       </form>
-      <p class="signup-note">One list. No spam. Unsubscribe any time.</p>
+      <p class="signup-note" id="signup-note">One list. No spam. Unsubscribe any time.</p>
     </div>
   </section>
 </BaseLayout>
@@ -235,4 +235,40 @@ const posts = allDispatch
     color: rgba(43,37,32,0.5);
     margin: 1rem 0 0;
   }
+  .signup-note.success { color: var(--cedar); }
+  .signup-note.error   { color: var(--clay);  }
 </style>
+
+<script>
+  const form = document.getElementById('signup-form') as HTMLFormElement;
+  const btn  = document.getElementById('signup-btn')  as HTMLButtonElement;
+  const note = document.getElementById('signup-note') as HTMLParagraphElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Subscribing...';
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        note.textContent = "You're on the list. The ledger awaits.";
+        note.className = 'signup-note success';
+        form.reset();
+      } else {
+        note.textContent = 'Something went wrong. Please try again.';
+        note.className = 'signup-note error';
+      }
+    } catch {
+      note.textContent = 'Network error. Please try again.';
+      note.className = 'signup-note error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }
+  });
+</script>
