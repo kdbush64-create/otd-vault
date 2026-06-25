@@ -5,11 +5,11 @@ import PostCard from '../components/PostCard.astro';
 
 export const prerender = true;
 
-const CHANNELS = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'] as const;
-type Channel = typeof CHANNELS[number];
+type Channel = 'dispatch' | 'gear' | 'table' | 'chow' | 'transit' | 'coord';
 
 export async function getStaticPaths() {
-  return CHANNELS.map(channel => ({ params: { channel } }));
+  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'];
+  return channels.map(channel => ({ params: { channel } }));
 }
 
 const { channel } = Astro.params as { channel: Channel };
