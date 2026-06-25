@@ -40,7 +40,7 @@ const posts = allDispatch
           title={post.data.title}
           date={post.data.date}
           description={post.data.description}
-          href={`/dispatch/${post.id}`}
+          href={`/dispatch/${post.id.replace(/\.mdoc$/, '')}`}
           channel="dispatch"
           layout="feed"
         />
