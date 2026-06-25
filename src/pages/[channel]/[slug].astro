@@ -5,7 +5,7 @@ import PostLayout from '../../layouts/PostLayout.astro';
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'];
+  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord', 'lifestyle'];
   const paths = [];
   for (const channel of channels) {
     const entries = await getCollection(channel as any);
