@@ -48,7 +48,12 @@ const remainingGallery = image
   : gallery && gallery.length > 1 ? gallery.slice(1) : undefined;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={heroImage ?? 'https://v64otd.com/images/FTW_interchange.jpg'}
+  isArticle={true}
+>
   <article class={'post-article h-entry channel-' + channel}>
 
     <!-- Breadcrumb -->
