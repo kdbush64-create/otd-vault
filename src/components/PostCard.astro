@@ -44,12 +44,13 @@ const accentClass = channel === 'gear' || channel === 'transit' || channel === '
 
 {layout === 'feed' ? (
   <!-- Feed layout: horizontal row, dispatch style -->
-  <a href={href} class={`post-feed-item ${accentClass}`}>
+  <a href={href} class={`post-feed-item h-entry ${accentClass}`}>
     {formattedDate && (
-      <time class="feed-date" datetime={date}>{formattedDate}</time>
+      <time class="feed-date dt-published" datetime={date}>{formattedDate}</time>
     )}
-    <h2 class="feed-title">{title}</h2>
-    {description && <p class="feed-desc">{description}</p>}
+    <h2 class="feed-title p-name">{title}</h2>
+    {description && <p class="feed-desc p-summary">{description}</p>}
+    <data class="u-url" value={`https://v64otd.com${href}`} hidden></data>
   </a>
 ) : (
   <!-- Card layout: review channels -->
