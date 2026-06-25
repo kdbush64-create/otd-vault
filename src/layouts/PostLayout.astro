@@ -54,12 +54,7 @@ const remainingGallery = image
   ogImage={heroImage ?? 'https://v64otd.com/images/FTW_interchange.jpg'}
   isArticle={true}
 >
-  <article class={'post-article h-entry channel-' + channel}>
-
-    <!-- Microformat: featured image for Mastodon/Bridgy Fed -->
-    {heroImage && (
-      <data class="u-featured" value={heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage} hidden></data>
-    )}
+  <article class={'post-article channel-' + channel}>
 
     <!-- Breadcrumb -->
     <nav class="post-breadcrumb" aria-label="breadcrumb">
@@ -148,7 +143,7 @@ const remainingGallery = image
     )}
 
     <!-- Article Body -->
-    <div class="post-body e-content prose"><slot /></div>
+    <div class="post-body prose"><slot /></div>
 
     <!-- Dispatch: Call to Action block -->
     {isDispatch && callToAction && callToAction.length > 0 && (
