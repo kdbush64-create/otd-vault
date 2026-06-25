@@ -4,6 +4,7 @@ const isDispatch = pathname === '/dispatch' || pathname.startsWith('/dispatch/')
 const isReviews = ['/reviews','/gear','/table','/chow','/transit','/coord'].some(
   p => pathname === p || pathname.startsWith(p + '/')
 );
+const isLifestyle = pathname === '/lifestyle' || pathname.startsWith('/lifestyle/');
 const isAbout = pathname === '/about' || pathname.startsWith('/about/');
 ---
 <header>
@@ -13,6 +14,7 @@ const isAbout = pathname === '/about' || pathname.startsWith('/about/');
       <a href="/about" class={isAbout ? 'active' : ''}>ABOUT: OLD TEXAS DUDE</a>
       <a href="/dispatch" class={isDispatch ? 'active' : ''}>DISPATCH ARCHIVES</a>
       <a href="/reviews" class={isReviews ? 'active' : ''}>REVIEWS &amp; GEAR</a>
+      <a href="/lifestyle" class={isLifestyle ? 'active' : ''}>LIFESTYLE</a>
     </nav>
   </div>
 </header>
