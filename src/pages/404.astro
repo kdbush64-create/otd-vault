@@ -1,33 +1,108 @@
 ---
+export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="404 | OTD Vault" description="Page not found.">
-  <div class="vault-layout">
-    <section class="log-display" style="width:100%;">
-      <article class="blog-post">
-        <div class="blog-post-body" style="text-align:center; padding: 40px 20px;">
-          <p style="color:var(--secondary); font-size:0.75rem; letter-spacing:2px; margin-bottom:12px;">
-            [ SYSTEM_ERROR ]
-          </p>
-          <h1 style="color:var(--primary); font-size:3rem; margin-bottom:8px; letter-spacing:4px;">
-            4 0 4
-          </h1>
-          <h2 style="color:var(--secondary); font-size:1rem; letter-spacing:2px; margin-bottom:24px;">
-            &gt; SIGNAL_LOST
-          </h2>
-          <p style="color:var(--primary-dim); font-size:0.85rem; font-family:monospace; margin-bottom:32px;">
-            [ THE DATA_CHANNEL YOU ARE LOOKING FOR DOES NOT EXIST OR HAS BEEN RELOCATED ]
-          </p>
-          <div style="display:flex; flex-direction:column; gap:12px; max-width:300px; margin:0 auto;">
-            <a href="/" class="submit-btn" style="text-decoration:none; text-align:center;">
-              &laquo; RETURN TO WATCH_TOWER
-            </a>
-            <a href="/dispatch" class="submit-btn" style="text-decoration:none; text-align:center;">
-              DISPATCH ARCHIVES
-            </a>
-          </div>
-        </div>
-      </article>
-    </section>
-  </div>
+
+<BaseLayout title="404 — Page Not Found | OTD Vault" description="This file doesn't exist. The ledger has no record of it.">
+
+  <section class="not-found">
+    <div class="nf-inner">
+      <p class="nf-eyebrow">V64OTD // CASE FILE</p>
+      <div class="nf-stamp" aria-hidden="true">
+        <svg viewBox="0 0 90 90" width="96" height="96">
+          <circle cx="45" cy="45" r="42" fill="none" stroke="var(--clay)" stroke-width="2.5"/>
+          <circle cx="45" cy="45" r="36" fill="none" stroke="var(--clay)" stroke-width="1"/>
+          <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--clay)" letter-spacing="2">FILE NOT</text>
+          <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="18" font-weight="700" fill="var(--clay)">404</text>
+          <text x="45" y="64" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--clay)" letter-spacing="1.5">FOUND</text>
+        </svg>
+      </div>
+      <h1 class="nf-title">The ledger has no record of this.</h1>
+      <p class="nf-sub">
+        This page doesn't exist, was moved, or was never filed.
+        The damage may have already been done elsewhere.
+      </p>
+      <div class="nf-links">
+        <a href="/" class="btn-primary">Back to Home</a>
+        <a href="/dispatch" class="btn-outline">Dispatch Archives →</a>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+  .nf-inner {
+    max-width: 520px;
+  }
+  .nf-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    color: var(--clay);
+    text-transform: uppercase;
+    margin: 0 0 1.5rem;
+  }
+  .nf-stamp {
+    margin: 0 auto 2rem;
+    opacity: 0.85;
+  }
+  .nf-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 1rem;
+    line-height: 1.2;
+  }
+  .nf-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: rgba(43,37,32,0.65);
+    line-height: 1.65;
+    margin: 0 0 2.5rem;
+  }
+  .nf-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    background: var(--clay);
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 2px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-outline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--clay);
+    text-decoration: none;
+    border: 1.5px solid var(--clay);
+    padding: 0.63rem 1.25rem;
+    border-radius: 2px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-outline:hover {
+    background: var(--clay);
+    color: #fff;
+  }
+</style>

@@ -2,18 +2,23 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-
 export const prerender = true;
-
 const allDispatch = await getCollection('dispatch');
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
-  .slice(0, 10);
+  .slice(0, 5);
 ---
-
 <BaseLayout title="OTD Vault — The Ledger Doesn't Lie" description="Old Texas Dude. Dispatch from the margins. Field-tested reviews.">
+
   <!-- Bridgy Fed federation link -->
   <a rel="me" href="https://web.brid.gy/r/https://v64otd.com/" hidden></a>
+
+  <!-- Bridgy Fed / Mastodon h-card -->
+  <span class="h-card" hidden>
+    <a class="u-url p-name" rel="me" href="https://v64otd.com/">OTD Vault</a>
+    <img class="u-photo" src="https://v64otd.com/images/profile/v64otd-mastodon-avatar.jpg" alt="" />
+    <img class="u-featured" src="https://v64otd.com/images/FTW_interchange.jpg" alt="" />
+  </span>
 
   <!-- Hero -->
   <section class="dispatch-hero">
@@ -29,7 +34,7 @@ const posts = allDispatch
     <div class="feed-header">
       <h2 class="feed-label">RECENT DISPATCHES</h2>
     </div>
-    <div class="feed-list">
+    <div class="feed-list h-feed">
       {posts.map(post => (
         <PostCard
           title={post.data.title}
@@ -37,6 +42,7 @@ const posts = allDispatch
           description={post.data.description}
           href={`/dispatch/${post.id}`}
           channel="dispatch"
+          layout="feed"
         />
       ))}
     </div>
@@ -51,24 +57,41 @@ const posts = allDispatch
       <p class="signup-eyebrow">THE LEDGER</p>
       <h2 class="signup-title">Add v64otd.com to your daily reading list.</h2>
       <p class="signup-sub">The file gets closed. The damage doesn't. Get new dispatches in your inbox.</p>
-      <form class="signup-form" action="#" method="post">
+      <form class="signup-form" id="signup-form">
         <input type="email" name="email" placeholder="your@email.com" required class="signup-input" />
-        <button type="submit" class="btn-primary">Subscribe</button>
+        <button type="submit" class="btn-primary" id="signup-btn">Subscribe</button>
       </form>
-      <p class="signup-note">One list. No spam. Unsubscribe any time.</p>
+      <p class="signup-note" id="signup-note">One list. No spam. Unsubscribe any time.</p>
     </div>
   </section>
+
 </BaseLayout>
 
 <style>
   /* Hero */
   .dispatch-hero {
-    background: var(--ink);
+    position: relative;
+    background-image: url('/images/FTW_interchange.jpg');
+    background-size: cover;
+    background-position: center 40%;
     color: var(--bg-limestone);
-    padding: 4rem 1.5rem 3.5rem;
+    padding: 6rem 1.5rem 5rem;
     text-align: center;
   }
+  .dispatch-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(20,16,12,0.72) 0%,
+      rgba(20,16,12,0.58) 60%,
+      rgba(20,16,12,0.78) 100%
+    );
+  }
   .hero-inner {
+    position: relative;
+    z-index: 1;
     max-width: 680px;
     margin: 0 auto;
   }
@@ -218,4 +241,39 @@ const posts = allDispatch
     color: rgba(43,37,32,0.5);
     margin: 1rem 0 0;
   }
+  .signup-note.success { color: var(--cedar); }
+  .signup-note.error   { color: var(--clay);  }
 </style>
+
+<script>
+  const form = document.getElementById('signup-form') as HTMLFormElement;
+  const btn  = document.getElementById('signup-btn')  as HTMLButtonElement;
+  const note = document.getElementById('signup-note') as HTMLParagraphElement;
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Subscribing...';
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        note.textContent = "You're on the list. The ledger awaits.";
+        note.className = 'signup-note success';
+        form.reset();
+      } else {
+        note.textContent = 'Something went wrong. Please try again.';
+        note.className = 'signup-note error';
+      }
+    } catch {
+      note.textContent = 'Network error. Please try again.';
+      note.className = 'signup-note error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }
+  });
+</script>

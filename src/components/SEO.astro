@@ -9,7 +9,7 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = 
 const siteTitle = title.includes('v64otd') ? title : `${title} | v64otd.com`;
 const rawPath = Astro.url.pathname;
 const canonicalURL = new URL(rawPath.endsWith('/') ? rawPath : rawPath + '/', Astro.site ?? 'https://v64otd.com');
-const defaultOgImage = 'https://v64otd.com/og-default.png';
+const defaultOgImage = 'https://v64otd.com/images/FTW_interchange.jpg';
 const resolvedOgImage = ogImage
   ? (ogImage.startsWith('http') ? ogImage : `https://v64otd.com${ogImage}`)
   : defaultOgImage;

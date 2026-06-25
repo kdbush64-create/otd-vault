@@ -5,11 +5,11 @@ import PostCard from '../components/PostCard.astro';
 
 export const prerender = true;
 
-const CHANNELS = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'] as const;
-type Channel = typeof CHANNELS[number];
+type Channel = 'dispatch' | 'gear' | 'table' | 'chow' | 'transit' | 'coord';
 
 export async function getStaticPaths() {
-  return CHANNELS.map(channel => ({ params: { channel } }));
+  const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord'];
+  return channels.map(channel => ({ params: { channel } }));
 }
 
 const { channel } = Astro.params as { channel: Channel };
@@ -57,7 +57,7 @@ const isDispatch = channel === 'dispatch';
 <BaseLayout title={meta.title} description={meta.description}>
 
   <!-- Channel Header -->
-  <section class="channel-hero">
+  <section class={'channel-hero' + (isDispatch ? ' has-photo' : '')}>
     <div class="hero-inner">
       <p class="hero-eyebrow">{meta.eyebrow}</p>
       <h1 class="hero-title">
@@ -98,10 +98,32 @@ const isDispatch = channel === 'dispatch';
 <style>
   /* Hero */
   .channel-hero {
+    position: relative;
     background: var(--ink);
     color: var(--bg-limestone);
     padding: 3rem 1.5rem 2.75rem;
     text-align: center;
+  }
+  .channel-hero.has-photo {
+    background-image: url('/images/archives-hero.jpg');
+    background-size: cover;
+    background-position: center 50%;
+    padding: 5rem 1.5rem 4.5rem;
+  }
+  .channel-hero.has-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(20,16,12,0.70) 0%,
+      rgba(20,16,12,0.55) 55%,
+      rgba(20,16,12,0.75) 100%
+    );
+  }
+  .channel-hero.has-photo .hero-inner {
+    position: relative;
+    z-index: 1;
   }
   .hero-inner { max-width: 640px; margin: 0 auto; }
   .hero-eyebrow {

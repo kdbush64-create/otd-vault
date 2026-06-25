@@ -8,35 +8,58 @@ interface Props {
   layout?: 'feed' | 'card';
 }
 
-const { title, date, description, href, channel = 'dispatch', layout = 'card' } = Astro.props;
+const {
+  title,
+  date,
+  description,
+  href,
+  channel = 'dispatch',
+  layout = 'card',
+} = Astro.props;
 
 const formattedDate = date
-  ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  ? new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric',
+    })
   : null;
 
-const accentClass =
-  channel === 'table' ? 'accent-clay' :
-  channel === 'chow'  ? 'accent-ochre' :
-  channel === 'dispatch' ? 'accent-ink' : 'accent-cedar';
-
 const channelLabels: Record<string, string> = {
-  dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
-  chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
+  dispatch: 'Dispatch',
+  gear: 'Gear',
+  table: 'The Table',
+  chow: 'The Kitchen',
+  transit: 'Travel',
+  coord: 'Travel',
 };
 const channelLabel = channelLabels[channel] ?? channel;
+
+const accentClass = channel === 'gear' || channel === 'transit' || channel === 'coord'
+  ? 'accent-cedar'
+  : channel === 'table'
+  ? 'accent-clay'
+  : channel === 'chow'
+  ? 'accent-ochre'
+  : 'accent-ink'; // dispatch
 ---
 
 {layout === 'feed' ? (
-  <a href={href} class={`post-feed-item ${accentClass}`}>
-    {formattedDate && <time class="feed-date" datetime={date}>{formattedDate}</time>}
-    <h2 class="feed-title">{title}</h2>
-    {description && <p class="feed-desc">{description}</p>}
+  <!-- Feed layout: horizontal row, dispatch style -->
+  <a href={href} class={`post-feed-item h-entry ${accentClass}`}>
+    {formattedDate && (
+      <time class="feed-date dt-published" datetime={date}>{formattedDate}</time>
+    )}
+    <h2 class="feed-title p-name">{title}</h2>
+    {description && <p class="feed-desc p-summary">{description}</p>}
+    <data class="u-url" value={`https://v64otd.com${href}`} hidden></data>
   </a>
 ) : (
+  <!-- Card layout: review channels -->
   <a href={href} class={`post-card ${accentClass}`}>
     <div class="card-meta">
       <span class="card-channel">{channelLabel}</span>
-      {formattedDate && <time class="card-date" datetime={date}>{formattedDate}</time>}
+      {formattedDate && (
+        <time class="card-date" datetime={date}>{formattedDate}</time>
+      )}
     </div>
     <h2 class="card-title">{title}</h2>
     {description && <p class="card-desc">{description}</p>}
@@ -45,25 +68,114 @@ const channelLabel = channelLabels[channel] ?? channel;
 )}
 
 <style>
-  .post-feed-item { display: block; padding: 1.4rem 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--ink); }
+  /* Feed item (dispatch) */
+  .post-feed-item {
+    display: block;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--ink);
+    transition: color 0.12s;
+  }
   .post-feed-item:first-child { border-top: 1px solid var(--border); }
   .post-feed-item:hover .feed-title { color: var(--clay); }
-  .feed-date { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(43,37,32,0.45); text-transform: uppercase; display: block; margin-bottom: 0.4rem; }
-  .feed-title { font-family: 'Fraunces', serif; font-size: 1.18rem; font-weight: 600; color: var(--ink); margin: 0 0 0.35rem; line-height: 1.3; transition: color 0.12s; }
-  .feed-desc { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: rgba(43,37,32,0.65); margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .post-card { display: flex; flex-direction: column; gap: 0.4rem; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 4px; padding: 1.35rem 1.25rem 1.15rem; text-decoration: none; color: var(--ink); transition: transform 0.15s, box-shadow 0.15s; }
-  .post-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(43,37,32,0.09); }
+  .feed-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: rgba(43,37,32,0.45);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .feed-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.18rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 0.35rem;
+    line-height: 1.3;
+    transition: color 0.12s;
+  }
+  .feed-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(43,37,32,0.65);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Card (review channels) */
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 1.35rem 1.25rem 1.15rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(43,37,32,0.09);
+  }
   .accent-cedar { border-top: 3px solid var(--cedar); }
-  .accent-clay  { border-top: 3px solid var(--clay); }
+  .accent-clay  { border-top: 3px solid var(--clay);  }
   .accent-ochre { border-top: 3px solid var(--ochre); }
-  .accent-ink   { border-top: 3px solid var(--ink); }
-  .card-meta { display: flex; align-items: center; gap: 0.6rem; }
-  .card-channel { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cedar); }
+  .accent-ink   { border-top: 3px solid var(--ink);   }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .card-channel {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cedar);
+  }
   .accent-clay  .card-channel { color: var(--clay); }
   .accent-ochre .card-channel { color: var(--ochre); }
   .accent-ink   .card-channel { color: var(--ink); }
-  .card-date { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; color: rgba(43,37,32,0.4); }
-  .card-title { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin: 0.15rem 0 0; line-height: 1.3; }
-  .card-desc { font-family: 'Inter', sans-serif; font-size: 0.875rem; color: rgba(43,37,32,0.62); margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
-  .card-read { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--clay); margin-top: 0.5rem; }
+  .card-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    color: rgba(43,37,32,0.4);
+  }
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0.15rem 0 0;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: rgba(43,37,32,0.62);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+  .card-read {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--clay);
+    margin-top: 0.5rem;
+  }
 </style>
