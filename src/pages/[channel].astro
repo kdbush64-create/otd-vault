@@ -82,7 +82,7 @@ const isDispatch = channel === 'dispatch';
           title={post.data.title}
           date={post.data.date}
           description={post.data.description}
-          href={`/${channel}/${post.id}`}
+          href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
           channel={channel}
           layout={isDispatch ? 'feed' : 'card'}
         />
