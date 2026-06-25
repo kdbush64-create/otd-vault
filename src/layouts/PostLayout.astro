@@ -56,6 +56,11 @@ const remainingGallery = image
 >
   <article class={'post-article h-entry channel-' + channel}>
 
+    <!-- Microformat: featured image for Mastodon/Bridgy Fed -->
+    {heroImage && (
+      <data class="u-featured" value={heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage} hidden></data>
+    )}
+
     <!-- Breadcrumb -->
     <nav class="post-breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
