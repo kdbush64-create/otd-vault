@@ -2,18 +2,23 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-
 export const prerender = true;
-
 const allDispatch = await getCollection('dispatch');
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 5);
 ---
-
 <BaseLayout title="OTD Vault — The Ledger Doesn't Lie" description="Old Texas Dude. Dispatch from the margins. Field-tested reviews.">
+
   <!-- Bridgy Fed federation link -->
   <a rel="me" href="https://web.brid.gy/r/https://v64otd.com/" hidden></a>
+
+  <!-- Bridgy Fed / Mastodon h-card -->
+  <span class="h-card" hidden>
+    <a class="u-url" rel="me" href="https://v64otd.com/">OTD Vault</a>
+    <img class="u-photo" src="https://v64otd.com/images/profile/v64otd-mastodon-avatar.jpg" alt="Old Texas Dude" />
+    <img class="u-featured" src="https://v64otd.com/images/FTW_interchange.jpg" alt="Fort Worth interchange at dusk" />
+  </span>
 
   <!-- Hero -->
   <section class="dispatch-hero">
@@ -59,6 +64,7 @@ const posts = allDispatch
       <p class="signup-note" id="signup-note">One list. No spam. Unsubscribe any time.</p>
     </div>
   </section>
+
 </BaseLayout>
 
 <style>
@@ -243,7 +249,6 @@ const posts = allDispatch
   const form = document.getElementById('signup-form') as HTMLFormElement;
   const btn  = document.getElementById('signup-btn')  as HTMLButtonElement;
   const note = document.getElementById('signup-note') as HTMLParagraphElement;
-
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     btn.disabled = true;
