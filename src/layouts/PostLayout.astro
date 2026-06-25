@@ -11,13 +11,45 @@ interface Props {
   gallery?: { image: string; caption?: string }[];
   rating?: string;
   cost?: string;
-  affiliateLinks?: { label: string; url: string }[];
+  affiliateLinks?: { label: string; url: string; priceNoted?: string }[];
   callToAction?: string[];
+  signoff?: string;
+  // Gear
+  manufacturerUrl?: string;
+  useCase?: string;
+  pros?: string[];
+  cons?: string[];
+  buildQuality?: string;
+  timeFieldTested?: string;
+  bestFor?: string;
+  wouldBuyAgain?: string;
+  // The Table
+  whatYouOrdered?: string;
+  serviceQuality?: string;
+  ambiance?: string;
+  wouldReturn?: string;
+  // The Kitchen
+  prepTime?: string;
+  cookTime?: string;
+  totalTime?: string;
+  servings?: string;
+  difficulty?: string;
+  equipmentNeeded?: string[];
+  substitutionNotes?: string;
+  storageNotes?: string;
+  // Travel
+  bestSeason?: string;
+  recommendedStay?: string;
+  pairWith?: string;
 }
 
 const {
   title, date, description, tags, channel = 'dispatch',
-  image, gallery, rating, cost, affiliateLinks, callToAction,
+  image, gallery, rating, cost, affiliateLinks, callToAction, signoff,
+  manufacturerUrl, useCase, pros, cons, buildQuality, timeFieldTested, bestFor, wouldBuyAgain,
+  whatYouOrdered, serviceQuality, ambiance, wouldReturn,
+  prepTime, cookTime, totalTime, servings, difficulty, equipmentNeeded, substitutionNotes, storageNotes,
+  bestSeason, recommendedStay, pairWith,
 } = Astro.props;
 
 const tagList = tags
@@ -32,14 +64,17 @@ const formattedDate = date
   : null;
 
 const isDispatch = channel === 'dispatch';
+const isLifestyle = channel === 'lifestyle';
+const isDispatchLike = isDispatch || isLifestyle; // Lifestyle = Dispatch's look + affiliate links
 const isReview = ['gear', 'table', 'chow', 'transit', 'coord'].includes(channel);
 
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
   chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
+  lifestyle: 'Lifestyle',
 };
 const channelLabel = channelLabels[channel] ?? channel;
-const channelHref = isDispatch ? '/dispatch' : '/reviews';
+const channelHref = isDispatch ? '/dispatch' : isLifestyle ? '/lifestyle' : '/reviews';
 
 // Use first gallery image as hero for reviews if no standalone image
 const heroImage = image ?? (gallery && gallery.length > 0 ? gallery[0].image : undefined);
@@ -51,6 +86,16 @@ const remainingGallery = image
 const ogImageAbsolute = heroImage
   ? (heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage)
   : 'https://v64otd.com/images/FTW_interchange.jpg';
+
+// Does this page have any structured review-detail fields worth showing? (Review zone only)
+const hasDetails = Boolean(
+  useCase || whatYouOrdered || serviceQuality || ambiance || buildQuality || timeFieldTested ||
+  prepTime || cookTime || totalTime || servings || difficulty || bestSeason || recommendedStay ||
+  bestFor || manufacturerUrl || pairWith || substitutionNotes || storageNotes ||
+  (equipmentNeeded && equipmentNeeded.length > 0) ||
+  (pros && pros.length > 0) || (cons && cons.length > 0) ||
+  wouldBuyAgain || wouldReturn
+);
 ---
 
 <BaseLayout
@@ -75,8 +120,8 @@ const ogImageAbsolute = heroImage
     <nav class="post-breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
       <span aria-hidden="true">›</span>
-      <a href={channelHref}>{isDispatch ? 'Dispatch' : 'Reviews'}</a>
-      {!isDispatch && (
+      <a href={channelHref}>{isDispatch ? 'Dispatch' : isLifestyle ? 'Lifestyle' : 'Reviews'}</a>
+      {!isDispatchLike && (
         <>
           <span aria-hidden="true">›</span>
           <a href={'/' + channel}>{channelLabel}</a>
@@ -84,10 +129,10 @@ const ogImageAbsolute = heroImage
       )}
     </nav>
 
-    <!-- Post Header -->
+    <!-- Post Header — identical for Dispatch and Lifestyle -->
     <header class="post-header">
       <h1 class="post-title">{title}</h1>
-      {isDispatch && (
+      {isDispatchLike && (
         <div class="dispatch-meta">
           {formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
           <div class="case-file-stamp" aria-label="Case File V64OTD">
@@ -120,8 +165,8 @@ const ogImageAbsolute = heroImage
       </div>
     )}
 
-    <!-- Dispatch: gallery (all images) -->
-    {isDispatch && gallery && gallery.length > 0 && (
+    <!-- Dispatch/Lifestyle: gallery (all images, no hero/stamp split — same as Dispatch) -->
+    {isDispatchLike && gallery && gallery.length > 0 && (
       <div class="post-gallery">
         {gallery.map(item => (
           <figure class="gallery-figure">
@@ -147,43 +192,101 @@ const ogImageAbsolute = heroImage
     <!-- Review: Verdict Box -->
     {isReview && (rating || cost) && (
       <div class="verdict-box">
-        {rating && <div class="verdict-item"><span class="verdict-label">RATING</span><span class="verdict-value">{rating}</span></div>}
+        {rating && <div class="verdict-item"><span class="verdict-label">RATING</span><span class="verdict-value">{rating} / 5</span></div>}
         {cost && <div class="verdict-item"><span class="verdict-label">COST</span><span class="verdict-value">{cost}</span></div>}
       </div>
     )}
 
-    <!-- Dispatch tagline -->
-    {isDispatch && (
-      <p class="dispatch-tagline">Add v64otd.com to your daily reading list — the ledger doesn't lie.</p>
+    <!-- Review: Structured Details Panel -->
+    {isReview && hasDetails && (
+      <div class="review-details">
+        {useCase && <div class="detail-row"><span class="detail-label">USE CASE</span><span class="detail-value">{useCase}</span></div>}
+        {whatYouOrdered && <div class="detail-row"><span class="detail-label">WHAT WE ORDERED</span><span class="detail-value">{whatYouOrdered}</span></div>}
+        {serviceQuality && <div class="detail-row"><span class="detail-label">SERVICE</span><span class="detail-value">{serviceQuality}</span></div>}
+        {ambiance && <div class="detail-row"><span class="detail-label">AMBIANCE</span><span class="detail-value">{ambiance}</span></div>}
+        {buildQuality && <div class="detail-row"><span class="detail-label">BUILD QUALITY</span><span class="detail-value">{buildQuality}</span></div>}
+        {timeFieldTested && <div class="detail-row"><span class="detail-label">TIME TESTED</span><span class="detail-value">{timeFieldTested}</span></div>}
+        {prepTime && <div class="detail-row"><span class="detail-label">PREP TIME</span><span class="detail-value">{prepTime}</span></div>}
+        {cookTime && <div class="detail-row"><span class="detail-label">COOK TIME</span><span class="detail-value">{cookTime}</span></div>}
+        {totalTime && <div class="detail-row"><span class="detail-label">TOTAL TIME</span><span class="detail-value">{totalTime}</span></div>}
+        {servings && <div class="detail-row"><span class="detail-label">SERVINGS</span><span class="detail-value">{servings}</span></div>}
+        {difficulty && <div class="detail-row"><span class="detail-label">DIFFICULTY</span><span class="detail-value">{difficulty}</span></div>}
+        {bestSeason && <div class="detail-row"><span class="detail-label">BEST SEASON</span><span class="detail-value">{bestSeason}</span></div>}
+        {recommendedStay && <div class="detail-row"><span class="detail-label">RECOMMENDED STAY</span><span class="detail-value">{recommendedStay}</span></div>}
+        {bestFor && <div class="detail-row"><span class="detail-label">BEST FOR</span><span class="detail-value">{bestFor}</span></div>}
+        {manufacturerUrl && <div class="detail-row"><span class="detail-label">PRODUCT PAGE</span><span class="detail-value"><a href={manufacturerUrl} target="_blank" rel="noopener">{manufacturerUrl.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a></span></div>}
+        {wouldBuyAgain && <div class="detail-row"><span class="detail-label">WOULD BUY AGAIN?</span><span class="detail-value">{wouldBuyAgain === 'yes' ? 'Yes' : wouldBuyAgain === 'no' ? 'No' : wouldBuyAgain}</span></div>}
+        {wouldReturn && <div class="detail-row"><span class="detail-label">WOULD RETURN?</span><span class="detail-value">{wouldReturn === 'yes' ? 'Yes' : wouldReturn === 'no' ? 'No' : wouldReturn}</span></div>}
+
+        {pairWith && <div class="detail-block"><span class="detail-label">WHAT'S NEARBY</span><p class="detail-text">{pairWith}</p></div>}
+        {substitutionNotes && <div class="detail-block"><span class="detail-label">SUBSTITUTIONS</span><p class="detail-text">{substitutionNotes}</p></div>}
+        {storageNotes && <div class="detail-block"><span class="detail-label">STORAGE</span><p class="detail-text">{storageNotes}</p></div>}
+
+        {equipmentNeeded && equipmentNeeded.length > 0 && (
+          <div class="detail-block">
+            <span class="detail-label">EQUIPMENT NEEDED</span>
+            <ul class="detail-list">{equipmentNeeded.map(item => <li>{item}</li>)}</ul>
+          </div>
+        )}
+
+        {((pros && pros.length > 0) || (cons && cons.length > 0)) && (
+          <div class="pros-cons-grid">
+            {pros && pros.length > 0 && (
+              <div class="pros-box">
+                <span class="detail-label pros-label">PROS</span>
+                <ul class="detail-list">{pros.map(item => <li>{item}</li>)}</ul>
+              </div>
+            )}
+            {cons && cons.length > 0 && (
+              <div class="cons-box">
+                <span class="detail-label cons-label">CONS</span>
+                <ul class="detail-list">{cons.map(item => <li>{item}</li>)}</ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- Reading-list CTA — same core line everywhere, but the "ledger" claim stays Dispatch-only -->
+    {isDispatchLike && (
+      <p class="dispatch-tagline">
+        {isDispatch
+          ? "Add v64otd.com to your daily reading list — the ledger doesn't lie."
+          : "Add v64otd.com to your daily reading list."}
+      </p>
     )}
 
     <!-- Article Body -->
     <div class="post-body e-content prose"><slot /></div>
 
-    <!-- Dispatch: Call to Action block -->
-    {isDispatch && callToAction && callToAction.length > 0 && (
+    <!-- Dispatch/Lifestyle: Call to Action block -->
+    {isDispatchLike && callToAction && callToAction.length > 0 && (
       <div class="cta-block">
         <p class="cta-label">CALL TO ACTION</p>
         <ol class="cta-list">{callToAction.map(item => <li>{item}</li>)}</ol>
       </div>
     )}
 
-    <!-- Dispatch: Signoff -->
-    {isDispatch && (
-      <p class="dispatch-signoff">V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN'T.</p>
-    )}
-
-    <!-- Review: Affiliate CTA -->
-    {isReview && affiliateLinks && affiliateLinks.length > 0 && (
+    <!-- Review/Lifestyle: Affiliate CTA -->
+    {(isReview || isLifestyle) && affiliateLinks && affiliateLinks.length > 0 && (
       <div class="affiliate-block">
         <p class="affiliate-label">WHERE TO GET IT</p>
         <div class="affiliate-links">
           {affiliateLinks.map(link => (
-            <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">{link.label}</a>
+            <div class="affiliate-link-item">
+              <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">{link.label}</a>
+              {link.priceNoted && <span class="affiliate-price">~{link.priceNoted} at time of review</span>}
+            </div>
           ))}
         </div>
-        <p class="affiliate-disclosure">Affiliate disclosure: links above may earn a small commission at no cost to you. OTD only links products personally tested and recommended.</p>
+        <p class="affiliate-disclosure">This post contains affiliate links. If you purchase through them, I may earn a small commission at no extra cost to you. Any prices mentioned reflect what I saw at the time of writing — Amazon determines current pricing and availability, which will be shown when you click through.</p>
       </div>
+    )}
+
+    <!-- Dispatch/Lifestyle: Signoff — now a per-article field, not fixed text. Renders only if filled in. -->
+    {isDispatchLike && signoff && (
+      <p class="dispatch-signoff">{signoff}</p>
     )}
 
     <!-- Tags -->
@@ -240,6 +343,26 @@ const ogImageAbsolute = heroImage
   .verdict-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: rgba(43,37,32,0.5); text-transform: uppercase; }
   .verdict-value { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--ochre); }
 
+  .review-details {
+    background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 3px;
+    padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;
+    display: flex; flex-direction: column; gap: 0.85rem;
+  }
+  .detail-row { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-bottom: 1px dashed var(--border); padding-bottom: 0.6rem; }
+  .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .detail-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: rgba(43,37,32,0.5); text-transform: uppercase; flex-shrink: 0; }
+  .detail-value { font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--ink); text-align: right; }
+  .detail-value a { color: var(--clay); }
+  .detail-block { display: flex; flex-direction: column; gap: 0.4rem; }
+  .detail-text { font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--ink); margin: 0; line-height: 1.55; }
+  .detail-list { margin: 0; padding-left: 1.25rem; font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--ink); }
+  .detail-list li { margin-bottom: 0.3em; }
+
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .pros-box, .cons-box { display: flex; flex-direction: column; gap: 0.4rem; }
+  .pros-label { color: var(--cedar); }
+  .cons-label { color: var(--clay); }
+
   .dispatch-tagline {
     font-family: 'Inter', sans-serif; font-size: 0.88rem;
     color: rgba(43,37,32,0.5); font-style: italic; margin: 0 0 2rem;
@@ -274,9 +397,11 @@ const ogImageAbsolute = heroImage
 
   .affiliate-block { background: var(--ink); color: var(--bg-limestone); border-radius: 3px; padding: 1.5rem; margin: 0 0 2rem; }
   .affiliate-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ochre); margin: 0 0 1rem; text-transform: uppercase; }
-  .affiliate-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .affiliate-links { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .affiliate-link-item { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
   .affiliate-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; background: var(--clay); color: #fff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 2px; transition: opacity 0.15s; }
   .affiliate-btn:hover { opacity: 0.85; }
+  .affiliate-price { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: rgba(239,233,220,0.6); }
   .affiliate-disclosure { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: rgba(239,233,220,0.5); margin: 0; line-height: 1.5; }
 
   .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
