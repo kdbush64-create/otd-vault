@@ -32,6 +32,7 @@ const allReviews = [
       <p class="hero-eyebrow">FIELD-TESTED REVIEWS</p>
       <h1 class="hero-title">Hands-on. No fluff.</h1>
       <p class="hero-sub">Gear, food, travel, and kitchen. Every review is personal experience — the stamp only goes on things I've actually used.</p>
+      <p class="hero-disclosure">Some posts in this section contain affiliate links — if you buy through them, I may earn a small commission at no extra cost to you.</p>
     </div>
   </section>
 
@@ -103,7 +104,7 @@ const allReviews = [
           title={post.data.title}
           date={post.data.date}
           description={post.data.description}
-          href={`/${post.channel}/${post.id}`}
+          href={`/${post.channel}/${post.id.replace(/\.mdoc$/, '')}`}
           channel={post.channel}
         />
       ))}
@@ -194,6 +195,12 @@ const allReviews = [
     line-height: 1.65;
     color: rgba(239,233,220,0.8);
     margin: 0;
+  }
+  .hero-disclosure {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: rgba(239,233,220,0.6);
+    margin: 0.85rem 0 0;
   }
 
   /* Category grid */
