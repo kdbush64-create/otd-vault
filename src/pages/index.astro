@@ -8,7 +8,7 @@ export const prerender = true;
 const allDispatch = await getCollection('dispatch');
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
-  .slice(0, 10);
+  .slice(0, 5);
 ---
 
 <BaseLayout title="OTD Vault — The Ledger Doesn't Lie" description="Old Texas Dude. Dispatch from the margins. Field-tested reviews.">
@@ -37,6 +37,7 @@ const posts = allDispatch
           description={post.data.description}
           href={`/dispatch/${post.id}`}
           channel="dispatch"
+          layout="feed"
         />
       ))}
     </div>
