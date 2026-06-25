@@ -44,6 +44,10 @@ const postFields = {
     { label: 'Gallery', itemLabel: (props) => props.fields.caption.value || 'Image', validation: { length: { max: 10 } } }
   ),
   content: fields.markdoc({ label: 'Content' }),
+  signoff: fields.text({
+  label: 'Signoff Line (optional)',
+  description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN\u2019T. Leave blank to skip entirely.',
+}),
 };
 
 // Price now lives per-link, not as a single article-level field — supports multi-product articles
@@ -145,6 +149,10 @@ const travelFields = {
 const lifestyleFields = {
   ...affiliateFields,
   affiliateLinks: affiliateLinksField('Add a link for anything mentioned worth pointing readers toward — no pressure to link everything.'),
+  signoff: fields.text({
+  label: 'Signoff Line (optional)',
+  description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN\u2019T. Leave blank to skip entirely.',
+}),
 };
 
 export default config({
