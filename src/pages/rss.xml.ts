@@ -1,7 +1,5 @@
 export const prerender = true;
-
 import { getCollection } from 'astro:content';
-
 function toRFC822(dateStr: string): string {
   const clean = dateStr.split('.')[0].replace('Z', '');
   const d = new Date(clean.includes('T') ? clean : clean + 'T00:00:00');
@@ -9,20 +7,27 @@ function toRFC822(dateStr: string): string {
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return `${days[d.getUTCDay()]}, ${String(d.getUTCDate()).padStart(2,'0')} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()} ${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')} +0000`;
 }
-
 export async function GET() {
-  const posts = await getCollection('dispatch');
-  const sorted = [...posts].sort((a, b) =>
-    String(b.data.date ?? '').localeCompare(String(a.data.date ?? ''))
+  const channels = ['dispatch', 'lifestyle'] as const;
+  const allPosts = (
+    await Promise.all(
+      channels.map(async (channel) => {
+        const entries = await getCollection(channel as any);
+        return entries.map((post) => ({ post, channel }));
+      })
+    )
+  ).flat();
+
+  const sorted = allPosts.sort((a, b) =>
+    String(b.post.data.date ?? '').localeCompare(String(a.post.data.date ?? ''))
   );
 
-  const items = sorted.map(post => {
+  const items = sorted.map(({ post, channel }) => {
     const title = post.data.title;
     const description = post.data.description ?? '';
-    const url = `https://v64otd.com/dispatch/${post.slug}/`;
+    const url = `https://v64otd.com/${channel}/${post.slug}/`;
     const pubDate = toRFC822(String(post.data.date ?? ''));
     const body = post.body ?? '';
-
     return `
     <item>
       <title><![CDATA[${title}]]></title>
@@ -48,7 +53,6 @@ export async function GET() {
     ${items}
   </channel>
 </rss>`;
-
   return new Response(xml, {
     headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' }
   });
