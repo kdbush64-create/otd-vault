@@ -54,7 +54,17 @@ const remainingGallery = image
   ogImage={heroImage ?? 'https://v64otd.com/images/FTW_interchange.jpg'}
   isArticle={true}
 >
-  <article class={'post-article channel-' + channel}>
+  <article class={'post-article h-entry channel-' + channel}>
+
+    <!-- Article image for Bridgy Fed/Mastodon syndication -->
+    {heroImage && (
+      <img
+        class="u-photo"
+        src={heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage}
+        alt={title}
+        style="display:none"
+      />
+    )}
 
     <!-- Breadcrumb -->
     <nav class="post-breadcrumb" aria-label="breadcrumb">
@@ -143,7 +153,7 @@ const remainingGallery = image
     )}
 
     <!-- Article Body -->
-    <div class="post-body prose"><slot /></div>
+    <div class="post-body e-content prose"><slot /></div>
 
     <!-- Dispatch: Call to Action block -->
     {isDispatch && callToAction && callToAction.length > 0 && (
