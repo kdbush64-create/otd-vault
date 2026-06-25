@@ -46,12 +46,17 @@ const heroImage = image ?? (gallery && gallery.length > 0 ? gallery[0].image : u
 const remainingGallery = image
   ? gallery
   : gallery && gallery.length > 1 ? gallery.slice(1) : undefined;
+
+// Always produce an absolute URL for og:image (Mastodon/X/Bridgy Fed require absolute URLs)
+const ogImageAbsolute = heroImage
+  ? (heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage)
+  : 'https://v64otd.com/images/FTW_interchange.jpg';
 ---
 
 <BaseLayout
   title={title}
   description={description}
-  ogImage={heroImage ?? 'https://v64otd.com/images/FTW_interchange.jpg'}
+  ogImage={ogImageAbsolute}
   isArticle={true}
 >
   <article class={'post-article h-entry channel-' + channel}>
