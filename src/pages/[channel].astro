@@ -57,12 +57,17 @@ const posts = (await getCollection(channel as any))
   .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 
 const isDispatch = channel === 'dispatch';
+const channelHeroImages: Partial<Record<Channel, string>> = {
+  dispatch: '/images/archives-hero.jpg',
+  lifestyle: '/images/lifestyle-hero.jpg',
+};
+const heroImage = channelHeroImages[channel];
 ---
 
 <BaseLayout title={meta.title} description={meta.description}>
 
   <!-- Channel Header -->
-  <section class={'channel-hero' + (isDispatch ? ' has-photo' : '')}>
+  <section class={'channel-hero' + (heroImage ? ' has-photo' : '')} style={heroImage ? `--hero-img: url('${heroImage}')` : undefined}>
     <div class="hero-inner">
       <p class="hero-eyebrow">{meta.eyebrow}</p>
       <h1 class="hero-title">
@@ -111,7 +116,7 @@ const isDispatch = channel === 'dispatch';
     text-align: center;
   }
   .channel-hero.has-photo {
-    background-image: url('/images/archives-hero.jpg');
+    background-image: var(--hero-img);
     background-size: cover;
     background-position: center 50%;
     padding: 5rem 1.5rem 4.5rem;
