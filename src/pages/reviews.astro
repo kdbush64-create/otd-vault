@@ -176,11 +176,29 @@ const allReviews = [
 <style>
   /* Hero */
   .reviews-hero {
-    background: var(--cedar);
-    color: var(--bg-limestone);
-    padding: 3.5rem 1.5rem 3rem;
-    text-align: center;
-  }
+  position: relative;
+  background: var(--cedar);
+  background-image: url('/images/reviews-hero.jpg');
+  background-size: cover;
+  background-position: center 50%;
+  color: var(--bg-limestone);
+  padding: 5rem 1.5rem 4.5rem;
+  text-align: center;
+}
+.reviews-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(107,122,94,0.55) 0%,
+    rgba(107,122,94,0.65) 100%
+  );
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+}
   .hero-inner {
     max-width: 620px;
     margin: 0 auto;
