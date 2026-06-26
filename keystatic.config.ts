@@ -174,7 +174,7 @@ export default config({
     table:     collection({ label: 'The Table',           slugField: 'title', path: 'src/content/table/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: tableFields }),
     chow:      collection({ label: 'The Kitchen',         slugField: 'title', path: 'src/content/chow/*',      format: { frontmatter: 'yaml', contentField: 'content' }, schema: chowFields }),
     transit:   collection({ label: 'Travel — Road Trip',  slugField: 'title', path: 'src/content/transit/*',   format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
-    coord:     collection({ label: 'Travel — Getaway',    slugField: 'title', path: 'src/content/coord/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
+    coord:     collection({ label: 'Getaways',            slugField: 'title', path: 'src/content/coord/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
     lifestyle: collection({ label: 'Lifestyle',           slugField: 'title', path: 'src/content/lifestyle/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: lifestyleFields }),
     xposts:    collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
