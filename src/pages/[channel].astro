@@ -37,7 +37,7 @@ const channelMeta: Record<Channel, { title: string; description: string; eyebrow
   },
   transit: {
     title: 'Travel — OTD Vault',
-    description: 'Road dispatches, local color, and travel writing.',
+    description: 'Road dispatches and local color, Texas first.',
     eyebrow: 'TRAVEL WRITING',
   },
   coord: {
@@ -57,8 +57,14 @@ const posts = (await getCollection(channel as any))
   .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 
 const isDispatch = channel === 'dispatch';
+
 const channelHeroImages: Partial<Record<Channel, string>> = {
   dispatch: '/images/archives-hero.jpg',
+  gear: '/images/gear-hero.jpg',
+  table: '/images/table-hero.jpg',
+  chow: '/images/chow-hero.jpg',
+  transit: '/images/transit-hero.jpg',
+  coord: '/images/coord-hero.jpg',
   lifestyle: '/images/lifestyle-hero.jpg',
 };
 const heroImage = channelHeroImages[channel];
