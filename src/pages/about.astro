@@ -30,6 +30,13 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
       <figcaption class="about-portrait-caption">I-35 South. Fort Worth. The brisket was cold. The dispatch was not.</figcaption>
     </figure>
 
+    <div class="about-storefront">
+      <a href="https://amzn.to/4vDY4A2" target="_blank" rel="noopener sponsored" class="storefront-link">
+        🛒 Shop my Amazon picks →
+      </a>
+      <p class="storefront-disclosure">As an Amazon Associate, I earn from qualifying purchases.</p>
+    </div>
+
     <div class="about-body">
       {Content ? <Content /> : <p>About page coming soon.</p>}
     </div>
@@ -131,7 +138,28 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     color: rgba(43,37,32,0.5);
     margin-top: 0.5rem;
     display: block;
-  }  
+  }
+  .about-storefront {
+    margin: 0 0 2rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+  }
+  .storefront-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--clay);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .storefront-link:hover { opacity: 0.8; }
+  .storefront-disclosure {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(43,37,32,0.5);
+    margin: 0.4rem 0 0;
+  }
 .about-page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   .about-breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 2rem; }
   .about-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
