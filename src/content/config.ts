@@ -45,6 +45,16 @@ const chowSchema = postSchema.extend({
   affiliateLinks: z.array(z.object({ label: z.string(), url: z.string() })).optional(),
 });
 
+const lifestyleSchema = postSchema.extend({
+  affiliate: z.boolean().optional(),
+  affiliateLinks: z.array(z.object({
+    label: z.string(),
+    url: z.string(),
+    priceNoted: z.string().optional(),
+  })).optional(),
+  signoff: z.string().optional(),
+});
+
 const xpostSchema = z.object({
   title: z.string(),
   date: z.coerce.string(),
@@ -64,6 +74,7 @@ export const collections = {
   coord:    defineCollection({ schema: locationSchema }),
   table:    defineCollection({ schema: tableSchema }),
   chow:     defineCollection({ schema: chowSchema }),
+  lifestyle: defineCollection({ schema: lifestyleSchema }),
   xposts:   defineCollection({ schema: xpostSchema }),
   pages:    defineCollection({ schema: pageSchema }),
 };
