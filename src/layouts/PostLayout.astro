@@ -184,7 +184,6 @@ const ogImageAbsolute = heroImage
           </div>
           <script id="gallery-json" type="application/json" set:html={JSON.stringify(gallery.map(g => ({ src: g.image, caption: g.caption ?? '' })))} />
         </>
-      )
     )}
 
     <!-- Dispatch: gallery (all images, no stamp) -->
@@ -425,56 +424,58 @@ const ogImageAbsolute = heroImage
   .tag-chip:hover { background: var(--cedar); color: #fff; }
 </style>
 
-<script>
-  const dataEl = document.getElementById('gallery-json');
-  if (dataEl) {
-    const photos: { src: string; caption: string }[] = JSON.parse(dataEl.textContent || '[]');
-    const lightbox = document.getElementById('review-lightbox') as HTMLElement;
-    const lbImg = document.getElementById('lb-img') as HTMLImageElement;
-    const lbCaption = document.getElementById('lb-caption') as HTMLElement;
-    const lbCounter = document.getElementById('lb-counter') as HTMLElement;
-    const lbClose = document.getElementById('lb-close') as HTMLButtonElement;
-    const lbPrev = document.getElementById('lb-prev') as HTMLButtonElement;
-    const lbNext = document.getElementById('lb-next') as HTMLButtonElement;
-    let current = 0;
+<script is:inline>
+  (function () {
+    var dataEl = document.getElementById('gallery-json');
+    if (!dataEl) return;
+    var photos = JSON.parse(dataEl.textContent || '[]');
+    if (!photos.length) return;
+    var lightbox = document.getElementById('review-lightbox');
+    var lbImg = document.getElementById('lb-img');
+    var lbCaption = document.getElementById('lb-caption');
+    var lbCounter = document.getElementById('lb-counter');
+    var lbClose = document.getElementById('lb-close');
+    var lbPrev = document.getElementById('lb-prev');
+    var lbNext = document.getElementById('lb-next');
+    var current = 0;
 
-    function show(i: number) {
+    function show(i) {
       current = ((i % photos.length) + photos.length) % photos.length;
       lbImg.src = photos[current].src;
-      lbImg.alt = photos[current].caption || `Photo ${current + 1}`;
+      lbImg.alt = photos[current].caption || 'Photo ' + (current + 1);
       lbCaption.textContent = photos[current].caption;
-      lbCounter.textContent = `${current + 1} / ${photos.length}`;
+      lbCounter.textContent = (current + 1) + ' / ' + photos.length;
     }
 
-    function open(i: number) {
+    function openLightbox(i) {
       show(i);
       lightbox.removeAttribute('hidden');
       document.body.style.overflow = 'hidden';
       lbClose.focus();
     }
 
-    function close() {
+    function closeLightbox() {
       lightbox.setAttribute('hidden', '');
       document.body.style.overflow = '';
     }
 
-    document.querySelectorAll<HTMLButtonElement>('.thumb-btn').forEach(btn => {
-      btn.addEventListener('click', () => open(Number(btn.dataset.index)));
+    document.querySelectorAll('.thumb-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () { openLightbox(Number(btn.dataset.index)); });
     });
 
-    lbClose.addEventListener('click', close);
-    lbPrev.addEventListener('click', () => show(current - 1));
-    lbNext.addEventListener('click', () => show(current + 1));
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', function () { show(current - 1); });
+    lbNext.addEventListener('click', function () { show(current + 1); });
 
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) close();
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
     });
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function (e) {
       if (lightbox.hasAttribute('hidden')) return;
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') show(current - 1);
       if (e.key === 'ArrowRight') show(current + 1);
     });
-  }
+  })();
 </script>
