@@ -67,6 +67,9 @@ const ratingStars = ratingNum > 0
   : '';
 const ratingDisplay = ratingNum > 0 ? `${ratingStars} ${ratingNum}/5` : '';
 
+// Permalink for u-url (Bridgy Fed requires absolute self-link)
+const permalink = Astro.url.href;
+
 // Always produce an absolute URL for og:image (Mastodon/X/Bridgy Fed require absolute URLs)
 const ogImageAbsolute = heroImage
   ? (heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage)
@@ -106,10 +109,10 @@ const ogImageAbsolute = heroImage
 
     <!-- Post Header -->
     <header class="post-header">
-      <h1 class="post-title">{title}</h1>
+      <h1 class="post-title p-name">{title}</h1>
       {isDispatch && (
         <div class="dispatch-meta">
-          {formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
+          {formattedDate && <time class="post-date dt-published" datetime={date}>{formattedDate}</time>}
           <div class="case-file-stamp" aria-label="Case File V64OTD">
             <svg viewBox="0 0 90 90" width="72" height="72" aria-hidden="true">
               <circle cx="45" cy="45" r="42" fill="none" stroke="var(--clay)" stroke-width="2.5"/>
@@ -121,7 +124,7 @@ const ogImageAbsolute = heroImage
           </div>
         </div>
       )}
-      {(isReview || isLifestyle) && formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
+      {(isReview || isLifestyle) && formattedDate && <time class="post-date dt-published" datetime={date}>{formattedDate}</time>}
     </header>
 
     <!-- Review: Stacked gallery (1–4 photos) -->
@@ -287,6 +290,10 @@ const ogImageAbsolute = heroImage
         {tagList.map(tag => <a href={'/tags/' + tag.toLowerCase()} class="tag-chip">#{tag}</a>)}
       </div>
     )}
+
+    <!-- Bridgy Fed microformat hooks -->
+    <a href={permalink} class="u-url" hidden></a>
+    <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
 
   </article>
 </BaseLayout>
