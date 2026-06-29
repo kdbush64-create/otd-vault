@@ -11,45 +11,13 @@ interface Props {
   gallery?: { image: string; caption?: string }[];
   rating?: string;
   cost?: string;
-  affiliateLinks?: { label: string; url: string; priceNoted?: string }[];
+  affiliateLinks?: { label: string; url: string }[];
   callToAction?: string[];
-  signoff?: string;
-  // Gear
-  manufacturerUrl?: string;
-  useCase?: string;
-  pros?: string[];
-  cons?: string[];
-  buildQuality?: string;
-  timeFieldTested?: string;
-  bestFor?: string;
-  wouldBuyAgain?: string;
-  // The Table
-  whatYouOrdered?: string;
-  serviceQuality?: string;
-  ambiance?: string;
-  wouldReturn?: string;
-  // The Kitchen
-  prepTime?: string;
-  cookTime?: string;
-  totalTime?: string;
-  servings?: string;
-  difficulty?: string;
-  equipmentNeeded?: string[];
-  substitutionNotes?: string;
-  storageNotes?: string;
-  // Travel
-  bestSeason?: string;
-  recommendedStay?: string;
-  pairWith?: string;
 }
 
 const {
   title, date, description, tags, channel = 'dispatch',
-  image, gallery, rating, cost, affiliateLinks, callToAction, signoff,
-  manufacturerUrl, useCase, pros, cons, buildQuality, timeFieldTested, bestFor, wouldBuyAgain,
-  whatYouOrdered, serviceQuality, ambiance, wouldReturn,
-  prepTime, cookTime, totalTime, servings, difficulty, equipmentNeeded, substitutionNotes, storageNotes,
-  bestSeason, recommendedStay, pairWith,
+  image, gallery, rating, cost, affiliateLinks, callToAction,
 } = Astro.props;
 
 const tagList = tags
@@ -64,17 +32,14 @@ const formattedDate = date
   : null;
 
 const isDispatch = channel === 'dispatch';
-const isLifestyle = channel === 'lifestyle';
-const isDispatchLike = isDispatch || isLifestyle; // Lifestyle = Dispatch's look + affiliate links
 const isReview = ['gear', 'table', 'chow', 'transit', 'coord'].includes(channel);
 
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
-  chow: 'The Kitchen', transit: 'Travel', coord: 'Getaways',
-  lifestyle: 'Lifestyle',
+  chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
 };
 const channelLabel = channelLabels[channel] ?? channel;
-const channelHref = isDispatch ? '/dispatch' : isLifestyle ? '/lifestyle' : '/reviews';
+const channelHref = isDispatch ? '/dispatch' : '/reviews';
 
 // Use first gallery image as hero for reviews if no standalone image
 const heroImage = image ?? (gallery && gallery.length > 0 ? gallery[0].image : undefined);
@@ -82,23 +47,20 @@ const remainingGallery = image
   ? gallery
   : gallery && gallery.length > 1 ? gallery.slice(1) : undefined;
 
+// Channel-specific stamp labels
+const stampLabels: Record<string, { top: string; bottom: string }> = {
+  gear:    { top: 'FIELD TESTED', bottom: 'VERIFIED' },
+  table:   { top: 'DINE TESTED',  bottom: 'VERIFIED' },
+  chow:    { top: 'KITCHEN TESTED', bottom: 'VERIFIED' },
+  transit: { top: 'ROAD TESTED',  bottom: 'VERIFIED' },
+  coord:   { top: 'STAY TESTED',  bottom: 'VERIFIED' },
+};
+const stamp = stampLabels[channel] ?? { top: 'FIELD TESTED', bottom: 'VERIFIED' };
+
 // Always produce an absolute URL for og:image (Mastodon/X/Bridgy Fed require absolute URLs)
 const ogImageAbsolute = heroImage
   ? (heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage)
   : 'https://v64otd.com/images/FTW_interchange.jpg';
-
-// Permalink for Bridgy Fed's u-url — Astro's own knowledge of the current page's exact URL
-const permalink = Astro.url.href;
-
-// Does this page have any structured review-detail fields worth showing? (Review zone only)
-const hasDetails = Boolean(
-  useCase || whatYouOrdered || serviceQuality || ambiance || buildQuality || timeFieldTested ||
-  prepTime || cookTime || totalTime || servings || difficulty || bestSeason || recommendedStay ||
-  bestFor || manufacturerUrl || pairWith || substitutionNotes || storageNotes ||
-  (equipmentNeeded && equipmentNeeded.length > 0) ||
-  (pros && pros.length > 0) || (cons && cons.length > 0) ||
-  wouldBuyAgain || wouldReturn
-);
 ---
 
 <BaseLayout
@@ -108,10 +70,6 @@ const hasDetails = Boolean(
   isArticle={true}
 >
   <article class={'post-article h-entry channel-' + channel}>
-
-    <!-- Bridgy Fed: permalink + verification link (required for webmention delivery, not just acceptance) -->
-    <a href={permalink} class="u-url" hidden></a>
-    <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
 
     <!-- Article image for Bridgy Fed/Mastodon syndication -->
     {heroImage && (
@@ -127,8 +85,8 @@ const hasDetails = Boolean(
     <nav class="post-breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
       <span aria-hidden="true">›</span>
-      <a href={channelHref}>{isDispatch ? 'Dispatch' : isLifestyle ? 'Lifestyle' : 'Reviews'}</a>
-      {!isDispatchLike && (
+      <a href={channelHref}>{isDispatch ? 'Dispatch' : 'Reviews'}</a>
+      {!isDispatch && (
         <>
           <span aria-hidden="true">›</span>
           <a href={'/' + channel}>{channelLabel}</a>
@@ -136,12 +94,12 @@ const hasDetails = Boolean(
       )}
     </nav>
 
-    <!-- Post Header — identical for Dispatch and Lifestyle -->
+    <!-- Post Header -->
     <header class="post-header">
-      <h1 class="post-title p-name">{title}</h1>
-      {isDispatchLike && (
+      <h1 class="post-title">{title}</h1>
+      {isDispatch && (
         <div class="dispatch-meta">
-          {formattedDate && <time class="post-date dt-published" datetime={date}>{formattedDate}</time>}
+          {formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
           <div class="case-file-stamp" aria-label="Case File V64OTD">
             <svg viewBox="0 0 90 90" width="72" height="72" aria-hidden="true">
               <circle cx="45" cy="45" r="42" fill="none" stroke="var(--clay)" stroke-width="2.5"/>
@@ -153,27 +111,82 @@ const hasDetails = Boolean(
           </div>
         </div>
       )}
-      {isReview && formattedDate && <time class="post-date dt-published" datetime={date}>{formattedDate}</time>}
+      {isReview && formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
     </header>
 
-    <!-- Review: Hero Image with Field Tested stamp -->
-    {isReview && heroImage && (
-      <div class="review-image-wrap">
-        <img src={heroImage} alt={title} class="review-hero-img" loading="lazy" />
-        <div class="field-tested-stamp" aria-label="Field Tested V64OTD">
-          <svg viewBox="0 0 90 90" width="80" height="80" aria-hidden="true">
-            <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.92)" stroke="var(--cedar)" stroke-width="2.5"/>
-            <circle cx="45" cy="45" r="36" fill="none" stroke="var(--cedar)" stroke-width="1"/>
-            <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--cedar)" letter-spacing="1.5">FIELD TESTED</text>
-            <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--cedar)">V64OTD</text>
-            <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--cedar)" letter-spacing="1.5">VERIFIED</text>
-          </svg>
+    <!-- Review: Gallery — stacked (1–4 photos) or thumbnail grid + lightbox (5+) -->
+    {isReview && gallery && gallery.length > 0 && (
+      gallery.length < 5 ? (
+        <div class="review-gallery">
+          {gallery.map((item, index) => (
+            <div class="review-image-wrap">
+              <img src={item.image} alt={item.caption ?? title} class="review-hero-img" loading={index === 0 ? 'eager' : 'lazy'} />
+              <div class="field-tested-stamp" aria-label={`${stamp.top} V64OTD`}>
+                <svg viewBox="0 0 90 90" width="80" height="80" aria-hidden="true">
+                  <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.92)" stroke="var(--cedar)" stroke-width="2.5"/>
+                  <circle cx="45" cy="45" r="36" fill="none" stroke="var(--cedar)" stroke-width="1"/>
+                  <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--cedar)" letter-spacing="1.5">{stamp.top}</text>
+                  <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--cedar)">V64OTD</text>
+                  <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--cedar)" letter-spacing="1.5">{stamp.bottom}</text>
+                </svg>
+              </div>
+              {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+            </div>
+          ))}
         </div>
-      </div>
+      ) : (
+        <>
+          <p class="gallery-count-label">{gallery.length} PHOTOS — tap to enlarge</p>
+          <div class="review-thumb-grid">
+            {gallery.map((item, index) => (
+              <button class="thumb-btn" data-index={String(index)} type="button" aria-label={item.caption || `Photo ${index + 1} of ${gallery.length}`}>
+                <div class="thumb-wrap">
+                  <img src={item.image} alt={item.caption ?? title} class="thumb-img" loading={index < 6 ? 'eager' : 'lazy'} />
+                  <div class="thumb-stamp" aria-hidden="true">
+                    <svg viewBox="0 0 90 90" width="44" height="44">
+                      <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.9)" stroke="var(--cedar)" stroke-width="2.5"/>
+                      <circle cx="45" cy="45" r="36" fill="none" stroke="var(--cedar)" stroke-width="1"/>
+                      <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--cedar)" letter-spacing="1.5">{stamp.top}</text>
+                      <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--cedar)">V64OTD</text>
+                      <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--cedar)" letter-spacing="1.5">{stamp.bottom}</text>
+                    </svg>
+                  </div>
+                </div>
+                {item.caption && <span class="thumb-caption">{item.caption}</span>}
+              </button>
+            ))}
+          </div>
+          <!-- Lightbox -->
+          <div id="review-lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+            <button class="lb-close" id="lb-close" aria-label="Close">✕</button>
+            <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&#8249;</button>
+            <div class="lb-content">
+              <div class="review-image-wrap lb-image-wrap">
+                <img id="lb-img" src="" alt="" class="lb-img" />
+                <div class="field-tested-stamp" aria-hidden="true">
+                  <svg viewBox="0 0 90 90" width="80" height="80">
+                    <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.92)" stroke="var(--cedar)" stroke-width="2.5"/>
+                    <circle cx="45" cy="45" r="36" fill="none" stroke="var(--cedar)" stroke-width="1"/>
+                    <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--cedar)" letter-spacing="1.5">{stamp.top}</text>
+                    <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--cedar)">V64OTD</text>
+                    <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--cedar)" letter-spacing="1.5">{stamp.bottom}</text>
+                  </svg>
+                </div>
+              </div>
+              <div class="lb-meta">
+                <span class="lb-caption" id="lb-caption"></span>
+                <span class="lb-counter" id="lb-counter"></span>
+              </div>
+            </div>
+            <button class="lb-nav lb-next" id="lb-next" aria-label="Next photo">&#8250;</button>
+          </div>
+          <script id="gallery-json" type="application/json" set:html={JSON.stringify(gallery.map(g => ({ src: g.image, caption: g.caption ?? '' })))} />
+        </>
+      )
     )}
 
-    <!-- Dispatch/Lifestyle: gallery (all images, no hero/stamp split — same as Dispatch) -->
-    {isDispatchLike && gallery && gallery.length > 0 && (
+    <!-- Dispatch: gallery (all images, no stamp) -->
+    {isDispatch && gallery && gallery.length > 0 && (
       <div class="post-gallery">
         {gallery.map(item => (
           <figure class="gallery-figure">
@@ -184,116 +197,51 @@ const hasDetails = Boolean(
       </div>
     )}
 
-    <!-- Review: remaining gallery images (after hero) -->
-    {isReview && remainingGallery && remainingGallery.length > 0 && (
-      <div class="post-gallery">
-        {remainingGallery.map(item => (
-          <figure class="gallery-figure">
-            <img src={item.image} alt={item.caption ?? title} loading="lazy" class="gallery-img" />
-            {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
-          </figure>
-        ))}
-      </div>
+    <!-- placeholder kept for structure -->
+    {false && (
+      <div>
     )}
 
     <!-- Review: Verdict Box -->
     {isReview && (rating || cost) && (
       <div class="verdict-box">
-        {rating && <div class="verdict-item"><span class="verdict-label">RATING</span><span class="verdict-value">{rating} / 5</span></div>}
+        {rating && <div class="verdict-item"><span class="verdict-label">RATING</span><span class="verdict-value">{rating}</span></div>}
         {cost && <div class="verdict-item"><span class="verdict-label">COST</span><span class="verdict-value">{cost}</span></div>}
       </div>
     )}
 
-    <!-- Review: Structured Details Panel -->
-    {isReview && hasDetails && (
-      <div class="review-details">
-        {useCase && <div class="detail-row"><span class="detail-label">USE CASE</span><span class="detail-value">{useCase}</span></div>}
-        {whatYouOrdered && <div class="detail-row"><span class="detail-label">WHAT WE ORDERED</span><span class="detail-value">{whatYouOrdered}</span></div>}
-        {serviceQuality && <div class="detail-row"><span class="detail-label">SERVICE</span><span class="detail-value">{serviceQuality}</span></div>}
-        {ambiance && <div class="detail-row"><span class="detail-label">AMBIANCE</span><span class="detail-value">{ambiance}</span></div>}
-        {buildQuality && <div class="detail-row"><span class="detail-label">BUILD QUALITY</span><span class="detail-value">{buildQuality}</span></div>}
-        {timeFieldTested && <div class="detail-row"><span class="detail-label">TIME TESTED</span><span class="detail-value">{timeFieldTested}</span></div>}
-        {prepTime && <div class="detail-row"><span class="detail-label">PREP TIME</span><span class="detail-value">{prepTime}</span></div>}
-        {cookTime && <div class="detail-row"><span class="detail-label">COOK TIME</span><span class="detail-value">{cookTime}</span></div>}
-        {totalTime && <div class="detail-row"><span class="detail-label">TOTAL TIME</span><span class="detail-value">{totalTime}</span></div>}
-        {servings && <div class="detail-row"><span class="detail-label">SERVINGS</span><span class="detail-value">{servings}</span></div>}
-        {difficulty && <div class="detail-row"><span class="detail-label">DIFFICULTY</span><span class="detail-value">{difficulty}</span></div>}
-        {bestSeason && <div class="detail-row"><span class="detail-label">BEST SEASON</span><span class="detail-value">{bestSeason}</span></div>}
-        {recommendedStay && <div class="detail-row"><span class="detail-label">RECOMMENDED STAY</span><span class="detail-value">{recommendedStay}</span></div>}
-        {bestFor && <div class="detail-row"><span class="detail-label">BEST FOR</span><span class="detail-value">{bestFor}</span></div>}
-        {manufacturerUrl && <div class="detail-row"><span class="detail-label">PRODUCT PAGE</span><span class="detail-value"><a href={manufacturerUrl} target="_blank" rel="noopener">{manufacturerUrl.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a></span></div>}
-        {wouldBuyAgain && <div class="detail-row"><span class="detail-label">WOULD BUY AGAIN?</span><span class="detail-value">{wouldBuyAgain === 'yes' ? 'Yes' : wouldBuyAgain === 'no' ? 'No' : wouldBuyAgain}</span></div>}
-        {wouldReturn && <div class="detail-row"><span class="detail-label">WOULD RETURN?</span><span class="detail-value">{wouldReturn === 'yes' ? 'Yes' : wouldReturn === 'no' ? 'No' : wouldReturn}</span></div>}
-
-        {pairWith && <div class="detail-block"><span class="detail-label">WHAT'S NEARBY</span><p class="detail-text">{pairWith}</p></div>}
-        {substitutionNotes && <div class="detail-block"><span class="detail-label">SUBSTITUTIONS</span><p class="detail-text">{substitutionNotes}</p></div>}
-        {storageNotes && <div class="detail-block"><span class="detail-label">STORAGE</span><p class="detail-text">{storageNotes}</p></div>}
-
-        {equipmentNeeded && equipmentNeeded.length > 0 && (
-          <div class="detail-block">
-            <span class="detail-label">EQUIPMENT NEEDED</span>
-            <ul class="detail-list">{equipmentNeeded.map(item => <li>{item}</li>)}</ul>
-          </div>
-        )}
-
-        {((pros && pros.length > 0) || (cons && cons.length > 0)) && (
-          <div class="pros-cons-grid">
-            {pros && pros.length > 0 && (
-              <div class="pros-box">
-                <span class="detail-label pros-label">PROS</span>
-                <ul class="detail-list">{pros.map(item => <li>{item}</li>)}</ul>
-              </div>
-            )}
-            {cons && cons.length > 0 && (
-              <div class="cons-box">
-                <span class="detail-label cons-label">CONS</span>
-                <ul class="detail-list">{cons.map(item => <li>{item}</li>)}</ul>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    )}
-
-    <!-- Reading-list CTA — same core line everywhere, but the "ledger" claim stays Dispatch-only -->
-    {isDispatchLike && (
-      <p class="dispatch-tagline">
-        {isDispatch
-          ? "Add v64otd.com to your daily reading list — the ledger doesn't lie."
-          : "Add v64otd.com to your daily reading list."}
-      </p>
+    <!-- Dispatch tagline -->
+    {isDispatch && (
+      <p class="dispatch-tagline">Add v64otd.com to your daily reading list — the ledger doesn't lie.</p>
     )}
 
     <!-- Article Body -->
     <div class="post-body e-content prose"><slot /></div>
 
-    <!-- Dispatch/Lifestyle: Call to Action block -->
-    {isDispatchLike && callToAction && callToAction.length > 0 && (
+    <!-- Dispatch: Call to Action block -->
+    {isDispatch && callToAction && callToAction.length > 0 && (
       <div class="cta-block">
         <p class="cta-label">CALL TO ACTION</p>
         <ol class="cta-list">{callToAction.map(item => <li>{item}</li>)}</ol>
       </div>
     )}
 
-    <!-- Review/Lifestyle: Affiliate CTA -->
-    {(isReview || isLifestyle) && affiliateLinks && affiliateLinks.length > 0 && (
+    <!-- Dispatch: Signoff -->
+    {isDispatch && (
+      <p class="dispatch-signoff">V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN'T.</p>
+    )}
+
+    <!-- Review: Affiliate CTA -->
+    {isReview && affiliateLinks && affiliateLinks.length > 0 && (
       <div class="affiliate-block">
         <p class="affiliate-label">WHERE TO GET IT</p>
         <div class="affiliate-links">
           {affiliateLinks.map(link => (
-            <div class="affiliate-link-item">
-              <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">{link.label}</a>
-              {link.priceNoted && <span class="affiliate-price">~{link.priceNoted} at time of review</span>}
-            </div>
+            <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">{link.label}</a>
           ))}
         </div>
-        <p class="affiliate-disclosure">This post contains affiliate links. If you purchase through them, I may earn a small commission at no extra cost to you. Any prices mentioned reflect what I saw at the time of writing — Amazon determines current pricing and availability, which will be shown when you click through.</p>
+        <p class="affiliate-disclosure">Affiliate disclosure: links above may earn a small commission at no cost to you. OTD only links products personally tested and recommended.</p>
       </div>
-    )}
-
-    <!-- Dispatch/Lifestyle: Signoff — per-article field, renders only if filled in -->
-    {isDispatchLike && signoff && (
-      <p class="dispatch-signoff">{signoff}</p>
     )}
 
     <!-- Tags -->
@@ -332,9 +280,94 @@ const hasDetails = Boolean(
   .dispatch-meta { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
   .case-file-stamp { flex-shrink: 0; opacity: 0.85; }
 
-  .review-image-wrap { position: relative; margin: 0 0 1.5rem; border-radius: 3px; overflow: hidden; }
+  /* Stacked gallery (1–4 photos) */
+  .review-gallery { display: flex; flex-direction: column; gap: 1.5rem; margin: 0 0 1.5rem; }
+  .review-image-wrap { position: relative; border-radius: 3px; overflow: hidden; }
   .review-hero-img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; }
   .field-tested-stamp { position: absolute; bottom: 1rem; right: 1rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+
+  /* Thumbnail grid (5+ photos) */
+  .gallery-count-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem;
+    letter-spacing: 0.12em; color: rgba(43,37,32,0.4);
+    text-transform: uppercase; margin: 0 0 0.6rem;
+  }
+  .review-thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+    margin: 0 0 1.5rem;
+  }
+  .thumb-btn {
+    background: none; border: none; padding: 0; cursor: pointer;
+    display: flex; flex-direction: column; gap: 0.2rem;
+    border-radius: 3px; overflow: visible;
+  }
+  .thumb-wrap {
+    position: relative; aspect-ratio: 4/3;
+    overflow: hidden; border-radius: 3px;
+  }
+  .thumb-img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.2s; display: block;
+  }
+  .thumb-btn:hover .thumb-img { transform: scale(1.05); }
+  .thumb-stamp {
+    position: absolute; bottom: 0.3rem; right: 0.3rem;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+    pointer-events: none;
+  }
+  .thumb-caption {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
+    color: rgba(43,37,32,0.45); letter-spacing: 0.03em;
+    display: block; text-align: left; padding: 0 0.1rem;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(20,16,12,0.95);
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    padding: 1rem;
+  }
+  .lightbox[hidden] { display: none; }
+  .lb-content {
+    display: flex; flex-direction: column; align-items: center;
+    max-width: min(800px, calc(100vw - 8rem)); width: 100%;
+  }
+  .lb-image-wrap { width: 100%; }
+  .lb-img {
+    max-width: 100%; max-height: 75vh; object-fit: contain;
+    border-radius: 3px; display: block; margin: 0 auto;
+  }
+  .lb-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    width: 100%; margin-top: 0.75rem; gap: 1rem;
+  }
+  .lb-caption {
+    font-family: 'Inter', sans-serif; font-size: 0.88rem;
+    color: rgba(239,233,220,0.7); flex: 1;
+  }
+  .lb-counter {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    color: rgba(239,233,220,0.35); letter-spacing: 0.1em; white-space: nowrap;
+  }
+  .lb-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none;
+    color: rgba(239,233,220,0.6); font-size: 1.4rem;
+    cursor: pointer; padding: 0.25rem; line-height: 1;
+    transition: color 0.15s;
+  }
+  .lb-close:hover { color: #fff; }
+  .lb-nav {
+    background: none; border: none;
+    color: rgba(239,233,220,0.5); font-size: 3.5rem; line-height: 1;
+    cursor: pointer; padding: 0.5rem; flex-shrink: 0;
+    transition: color 0.15s; user-select: none;
+  }
+  .lb-nav:hover { color: #fff; }
 
   .post-gallery { margin: 0 0 2rem; display: flex; flex-direction: column; gap: 1rem; }
   .gallery-figure { margin: 0; }
@@ -349,26 +382,6 @@ const hasDetails = Boolean(
   .verdict-item { display: flex; flex-direction: column; gap: 0.2rem; }
   .verdict-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: rgba(43,37,32,0.5); text-transform: uppercase; }
   .verdict-value { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--ochre); }
-
-  .review-details {
-    background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 3px;
-    padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;
-    display: flex; flex-direction: column; gap: 0.85rem;
-  }
-  .detail-row { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-bottom: 1px dashed var(--border); padding-bottom: 0.6rem; }
-  .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .detail-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: rgba(43,37,32,0.5); text-transform: uppercase; flex-shrink: 0; }
-  .detail-value { font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--ink); text-align: right; }
-  .detail-value a { color: var(--clay); }
-  .detail-block { display: flex; flex-direction: column; gap: 0.4rem; }
-  .detail-text { font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--ink); margin: 0; line-height: 1.55; }
-  .detail-list { margin: 0; padding-left: 1.25rem; font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--ink); }
-  .detail-list li { margin-bottom: 0.3em; }
-
-  .pros-cons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-  .pros-box, .cons-box { display: flex; flex-direction: column; gap: 0.4rem; }
-  .pros-label { color: var(--cedar); }
-  .cons-label { color: var(--clay); }
 
   .dispatch-tagline {
     font-family: 'Inter', sans-serif; font-size: 0.88rem;
@@ -404,14 +417,66 @@ const hasDetails = Boolean(
 
   .affiliate-block { background: var(--ink); color: var(--bg-limestone); border-radius: 3px; padding: 1.5rem; margin: 0 0 2rem; }
   .affiliate-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ochre); margin: 0 0 1rem; text-transform: uppercase; }
-  .affiliate-links { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
-  .affiliate-link-item { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+  .affiliate-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
   .affiliate-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; background: var(--clay); color: #fff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 2px; transition: opacity 0.15s; }
   .affiliate-btn:hover { opacity: 0.85; }
-  .affiliate-price { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: rgba(239,233,220,0.6); }
   .affiliate-disclosure { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: rgba(239,233,220,0.5); margin: 0; line-height: 1.5; }
 
   .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
   .tag-chip { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; background: rgba(107,122,94,0.12); color: var(--cedar); padding: 0.3rem 0.7rem; border-radius: 20px; text-decoration: none; transition: background 0.15s, color 0.15s; }
   .tag-chip:hover { background: var(--cedar); color: #fff; }
 </style>
+
+<script>
+  const dataEl = document.getElementById('gallery-json');
+  if (dataEl) {
+    const photos: { src: string; caption: string }[] = JSON.parse(dataEl.textContent || '[]');
+    const lightbox = document.getElementById('review-lightbox') as HTMLElement;
+    const lbImg = document.getElementById('lb-img') as HTMLImageElement;
+    const lbCaption = document.getElementById('lb-caption') as HTMLElement;
+    const lbCounter = document.getElementById('lb-counter') as HTMLElement;
+    const lbClose = document.getElementById('lb-close') as HTMLButtonElement;
+    const lbPrev = document.getElementById('lb-prev') as HTMLButtonElement;
+    const lbNext = document.getElementById('lb-next') as HTMLButtonElement;
+    let current = 0;
+
+    function show(i: number) {
+      current = ((i % photos.length) + photos.length) % photos.length;
+      lbImg.src = photos[current].src;
+      lbImg.alt = photos[current].caption || `Photo ${current + 1}`;
+      lbCaption.textContent = photos[current].caption;
+      lbCounter.textContent = `${current + 1} / ${photos.length}`;
+    }
+
+    function open(i: number) {
+      show(i);
+      lightbox.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+      lbClose.focus();
+    }
+
+    function close() {
+      lightbox.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('.thumb-btn').forEach(btn => {
+      btn.addEventListener('click', () => open(Number(btn.dataset.index)));
+    });
+
+    lbClose.addEventListener('click', close);
+    lbPrev.addEventListener('click', () => show(current - 1));
+    lbNext.addEventListener('click', () => show(current + 1));
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.hasAttribute('hidden')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+  }
+</script>
