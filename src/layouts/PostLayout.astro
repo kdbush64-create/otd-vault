@@ -114,29 +114,31 @@ const ogImageAbsolute = heroImage
       {isReview && formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
     </header>
 
-    <!-- Review: Gallery — stacked (1–4 photos) or thumbnail grid + lightbox (5+) -->
-    {isReview && gallery && gallery.length > 0 && (
-      gallery.length < 5 ? (
-        <div class="review-gallery">
-          {gallery.map((item, index) => (
-            <div class="review-image-wrap">
-              <img src={item.image} alt={item.caption ?? title} class="review-hero-img" loading={index === 0 ? 'eager' : 'lazy'} />
-              <div class="field-tested-stamp" aria-label={`${stamp.top} V64OTD`}>
-                <svg viewBox="0 0 90 90" width="80" height="80" aria-hidden="true">
-                  <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.92)" stroke="var(--cedar)" stroke-width="2.5"/>
-                  <circle cx="45" cy="45" r="36" fill="none" stroke="var(--cedar)" stroke-width="1"/>
-                  <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--cedar)" letter-spacing="1.5">{stamp.top}</text>
-                  <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--cedar)">V64OTD</text>
-                  <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--cedar)" letter-spacing="1.5">{stamp.bottom}</text>
-                </svg>
-              </div>
-              {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+    <!-- Review: Stacked gallery (1–4 photos) -->
+    {isReview && gallery && gallery.length > 0 && gallery.length < 5 && (
+      <div class="review-gallery">
+        {gallery.map((item, index) => (
+          <div class="review-image-wrap">
+            <img src={item.image} alt={item.caption ?? title} class="review-hero-img" loading={index === 0 ? 'eager' : 'lazy'} />
+            <div class="field-tested-stamp" aria-label={`${stamp.top} V64OTD`}>
+              <svg viewBox="0 0 90 90" width="80" height="80" aria-hidden="true">
+                <circle cx="45" cy="45" r="42" fill="rgba(239,233,220,0.92)" stroke="var(--cedar)" stroke-width="2.5"/>
+                <circle cx="45" cy="45" r="36" fill="none" stroke="var(--cedar)" stroke-width="1"/>
+                <text x="45" y="33" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" fill="var(--cedar)" letter-spacing="1.5">{stamp.top}</text>
+                <text x="45" y="50" text-anchor="middle" font-family="'Fraunces',serif" font-size="11" font-weight="700" fill="var(--cedar)">V64OTD</text>
+                <text x="45" y="63" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" fill="var(--cedar)" letter-spacing="1.5">{stamp.bottom}</text>
+              </svg>
             </div>
-          ))}
-        </div>
-      ) : (
-        <>
-          <p class="gallery-count-label">{gallery.length} PHOTOS — tap to enlarge</p>
+            {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+          </div>
+        ))}
+      </div>
+    )}
+
+    <!-- Review: Thumbnail grid + lightbox (5+ photos) -->
+    {isReview && gallery && gallery.length >= 5 && (
+      <>
+        <p class="gallery-count-label">{gallery.length} PHOTOS — tap to enlarge</p>
           <div class="review-thumb-grid">
             {gallery.map((item, index) => (
               <button class="thumb-btn" data-index={String(index)} type="button" aria-label={item.caption || `Photo ${index + 1} of ${gallery.length}`}>
@@ -197,10 +199,6 @@ const ogImageAbsolute = heroImage
       </div>
     )}
 
-    <!-- placeholder kept for structure -->
-    {false && (
-      <div>
-    )}
 
     <!-- Review: Verdict Box -->
     {isReview && (rating || cost) && (
