@@ -1,7 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
+
 export const prerender = true;
+
 export async function getStaticPaths() {
   const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord', 'lifestyle'];
   const paths = [];
@@ -13,50 +15,48 @@ export async function getStaticPaths() {
   }
   return paths;
 }
+
 const { channel, entry } = Astro.props as { channel: string; entry: any };
 const { Content } = await render(entry);
 const data = entry.data;
 
 const callToAction     = 'callToAction'     in data ? data.callToAction     : undefined;
 const signoff          = 'signoff'          in data ? data.signoff          : undefined;
-const rating            = 'rating'           in data ? data.rating           : undefined;
-const cost              = 'cost'             in data ? data.cost             : undefined;
-const affiliateLinks    = 'affiliateLinks'   in data ? data.affiliateLinks   : undefined;
-const image             = 'image'            in data ? data.image            : undefined;
-const gallery           = 'gallery'          in data ? data.gallery          : undefined;
-const tags              = 'tags'             in data ? data.tags             : undefined;
-
+const rating           = 'rating'           in data ? data.rating           : undefined;
+const cost             = 'cost'             in data ? data.cost             : undefined;
+const affiliateLinks   = 'affiliateLinks'   in data ? data.affiliateLinks   : undefined;
+const image            = 'image'            in data ? data.image            : undefined;
+const gallery          = 'gallery'          in data ? data.gallery          : undefined;
+const tags             = 'tags'             in data ? data.tags             : undefined;
 // Gear
-const manufacturerUrl   = 'manufacturerUrl'  in data ? data.manufacturerUrl  : undefined;
-const useCase            = 'useCase'          in data ? data.useCase          : undefined;
-const pros               = 'pros'             in data ? data.pros             : undefined;
-const cons               = 'cons'             in data ? data.cons             : undefined;
-const buildQuality       = 'buildQuality'     in data ? data.buildQuality     : undefined;
-const timeFieldTested    = 'timeFieldTested'  in data ? data.timeFieldTested  : undefined;
-const bestFor            = 'bestFor'          in data ? data.bestFor          : undefined;
-const wouldBuyAgain      = 'wouldBuyAgain'    in data ? data.wouldBuyAgain    : undefined;
-
+const manufacturerUrl  = 'manufacturerUrl'  in data ? data.manufacturerUrl  : undefined;
+const useCase          = 'useCase'          in data ? data.useCase          : undefined;
+const pros             = 'pros'             in data ? data.pros             : undefined;
+const cons             = 'cons'             in data ? data.cons             : undefined;
+const buildQuality     = 'buildQuality'     in data ? data.buildQuality     : undefined;
+const timeFieldTested  = 'timeFieldTested'  in data ? data.timeFieldTested  : undefined;
+const bestFor          = 'bestFor'          in data ? data.bestFor          : undefined;
+const wouldBuyAgain    = 'wouldBuyAgain'    in data ? data.wouldBuyAgain    : undefined;
 // The Table
-const whatYouOrdered     = 'whatYouOrdered'   in data ? data.whatYouOrdered   : undefined;
-const serviceQuality     = 'serviceQuality'   in data ? data.serviceQuality   : undefined;
-const ambiance           = 'ambiance'         in data ? data.ambiance         : undefined;
-const wouldReturn        = 'wouldReturn'      in data ? data.wouldReturn      : undefined;
-
+const whatYouOrdered   = 'whatYouOrdered'   in data ? data.whatYouOrdered   : undefined;
+const serviceQuality   = 'serviceQuality'   in data ? data.serviceQuality   : undefined;
+const ambiance         = 'ambiance'         in data ? data.ambiance         : undefined;
+const wouldReturn      = 'wouldReturn'      in data ? data.wouldReturn      : undefined;
 // The Kitchen
-const prepTime           = 'prepTime'         in data ? data.prepTime         : undefined;
-const cookTime           = 'cookTime'         in data ? data.cookTime         : undefined;
-const totalTime          = 'totalTime'        in data ? data.totalTime       : undefined;
-const servings           = 'servings'         in data ? data.servings         : undefined;
-const difficulty         = 'difficulty'       in data ? data.difficulty       : undefined;
-const equipmentNeeded    = 'equipmentNeeded'  in data ? data.equipmentNeeded  : undefined;
-const substitutionNotes  = 'substitutionNotes' in data ? data.substitutionNotes : undefined;
-const storageNotes       = 'storageNotes'     in data ? data.storageNotes     : undefined;
-
+const prepTime         = 'prepTime'         in data ? data.prepTime         : undefined;
+const cookTime         = 'cookTime'         in data ? data.cookTime         : undefined;
+const totalTime        = 'totalTime'        in data ? data.totalTime        : undefined;
+const servings         = 'servings'         in data ? data.servings         : undefined;
+const difficulty       = 'difficulty'       in data ? data.difficulty       : undefined;
+const equipmentNeeded  = 'equipmentNeeded'  in data ? data.equipmentNeeded  : undefined;
+const substitutionNotes = 'substitutionNotes' in data ? data.substitutionNotes : undefined;
+const storageNotes     = 'storageNotes'     in data ? data.storageNotes     : undefined;
 // Travel
-const bestSeason         = 'bestSeason'       in data ? data.bestSeason       : undefined;
-const recommendedStay    = 'recommendedStay'  in data ? data.recommendedStay  : undefined;
-const pairWith           = 'pairWith'         in data ? data.pairWith         : undefined;
+const bestSeason       = 'bestSeason'       in data ? data.bestSeason       : undefined;
+const recommendedStay  = 'recommendedStay'  in data ? data.recommendedStay  : undefined;
+const pairWith         = 'pairWith'         in data ? data.pairWith         : undefined;
 ---
+
 <PostLayout
   title={data.title}
   date={data.date}
