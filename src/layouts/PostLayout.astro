@@ -57,6 +57,13 @@ const stampLabels: Record<string, { top: string; bottom: string }> = {
 };
 const stamp = stampLabels[channel] ?? { top: 'FIELD TESTED', bottom: 'VERIFIED' };
 
+// Convert numeric rating value to star display
+const ratingNum = rating ? parseInt(rating, 10) : 0;
+const ratingStars = ratingNum > 0
+  ? '★'.repeat(ratingNum) + '☆'.repeat(5 - ratingNum)
+  : '';
+const ratingDisplay = ratingNum > 0 ? `${ratingStars} ${ratingNum}/5` : '';
+
 // Always produce an absolute URL for og:image (Mastodon/X/Bridgy Fed require absolute URLs)
 const ogImageAbsolute = heroImage
   ? (heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage)
@@ -202,7 +209,7 @@ const ogImageAbsolute = heroImage
     <!-- Review: Verdict Box -->
     {isReview && (rating || cost) && (
       <div class="verdict-box">
-        {rating && <div class="verdict-item"><span class="verdict-label">RATING</span><span class="verdict-value">{rating}</span></div>}
+        {ratingDisplay && <div class="verdict-item"><span class="verdict-label">RATING</span><span class="verdict-value rating-value">{ratingDisplay}</span></div>}
         {cost && <div class="verdict-item"><span class="verdict-label">COST</span><span class="verdict-value">{cost}</span></div>}
       </div>
     )}
@@ -379,6 +386,7 @@ const ogImageAbsolute = heroImage
   .verdict-item { display: flex; flex-direction: column; gap: 0.2rem; }
   .verdict-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: rgba(43,37,32,0.5); text-transform: uppercase; }
   .verdict-value { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--ochre); }
+  .rating-value { font-family: 'IBM Plex Mono', monospace; font-size: 1rem; letter-spacing: 0.04em; }
 
   .dispatch-tagline {
     font-family: 'Inter', sans-serif; font-size: 0.88rem;
