@@ -11,13 +11,14 @@ interface Props {
   gallery?: { image: string; caption?: string }[];
   rating?: string;
   cost?: string;
-  affiliateLinks?: { label: string; url: string }[];
+  affiliateLinks?: { label: string; url: string; priceNoted?: string }[];
   callToAction?: string[];
+  signoff?: string;
 }
 
 const {
   title, date, description, tags, channel = 'dispatch',
-  image, gallery, rating, cost, affiliateLinks, callToAction,
+  image, gallery, rating, cost, affiliateLinks, callToAction, signoff,
 } = Astro.props;
 
 const tagList = tags
@@ -33,13 +34,15 @@ const formattedDate = date
 
 const isDispatch = channel === 'dispatch';
 const isReview = ['gear', 'table', 'chow', 'transit', 'coord'].includes(channel);
+const isLifestyle = channel === 'lifestyle';
 
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
   chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
+  lifestyle: 'Lifestyle',
 };
 const channelLabel = channelLabels[channel] ?? channel;
-const channelHref = isDispatch ? '/dispatch' : '/reviews';
+const channelHref = isDispatch ? '/dispatch' : isLifestyle ? '/lifestyle' : '/reviews';
 
 // Use first gallery image as hero for reviews if no standalone image
 const heroImage = image ?? (gallery && gallery.length > 0 ? gallery[0].image : undefined);
@@ -92,8 +95,8 @@ const ogImageAbsolute = heroImage
     <nav class="post-breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
       <span aria-hidden="true">›</span>
-      <a href={channelHref}>{isDispatch ? 'Dispatch' : 'Reviews'}</a>
-      {!isDispatch && (
+      <a href={channelHref}>{isDispatch ? 'Dispatch' : isLifestyle ? 'Lifestyle' : 'Reviews'}</a>
+      {!isDispatch && !isLifestyle && (
         <>
           <span aria-hidden="true">›</span>
           <a href={'/' + channel}>{channelLabel}</a>
@@ -118,7 +121,7 @@ const ogImageAbsolute = heroImage
           </div>
         </div>
       )}
-      {isReview && formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
+      {(isReview || isLifestyle) && formattedDate && <time class="post-date" datetime={date}>{formattedDate}</time>}
     </header>
 
     <!-- Review: Stacked gallery (1–4 photos) -->
@@ -193,6 +196,18 @@ const ogImageAbsolute = heroImage
         </>
     )}
 
+    <!-- Lifestyle: gallery (all images, no stamp) -->
+    {isLifestyle && gallery && gallery.length > 0 && (
+      <div class="post-gallery">
+        {gallery.map(item => (
+          <figure class="gallery-figure">
+            <img src={item.image} alt={item.caption ?? title} loading="lazy" class="gallery-img" />
+            {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+
     <!-- Dispatch: gallery (all images, no stamp) -->
     {isDispatch && gallery && gallery.length > 0 && (
       <div class="post-gallery">
@@ -233,6 +248,24 @@ const ogImageAbsolute = heroImage
     <!-- Dispatch: Signoff -->
     {isDispatch && (
       <p class="dispatch-signoff">V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN'T.</p>
+    )}
+
+    <!-- Lifestyle: Signoff -->
+    {isLifestyle && signoff && (
+      <p class="dispatch-signoff">{signoff}</p>
+    )}
+
+    <!-- Lifestyle: Affiliate CTA -->
+    {isLifestyle && affiliateLinks && affiliateLinks.length > 0 && (
+      <div class="affiliate-block">
+        <p class="affiliate-label">MENTIONED IN THIS POST</p>
+        <div class="affiliate-links">
+          {affiliateLinks.map(link => (
+            <a href={link.url} class="affiliate-btn" target="_blank" rel="noopener sponsored">{link.label}</a>
+          ))}
+        </div>
+        <p class="affiliate-disclosure">Affiliate disclosure: links above may earn a small commission at no cost to you.</p>
+      </div>
     )}
 
     <!-- Review: Affiliate CTA -->
