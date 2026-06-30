@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background: limestone cream -->
+  <rect width="32" height="32" rx="3" fill="#EFE9DC"/>
+
+  <!-- Wax seal body — scalloped edge -->
+  <polygon points="29.50,17.00 28.07,20.24 27.69,23.75 24.84,25.84 22.75,28.69 19.24,29.07 16.00,30.50 12.76,29.07 9.25,28.69 7.16,25.84 4.31,23.75 3.93,20.24 2.50,17.00 3.93,13.76 4.31,10.25 7.16,8.16 9.25,5.31 12.76,4.93 16.00,3.50 19.24,4.93 22.75,5.31 24.84,8.16 27.69,10.25 28.07,13.76"
+        fill="#B5482E"/>
+
+  <!-- Inner seal ring — slightly lighter to give depth -->
+  <circle cx="16" cy="17" r="11" fill="none" stroke="#D4613A" stroke-width="0.8" opacity="0.6"/>
+
+  <!-- Lone Star — cream/ivory so it reads as embossed into the wax -->
+  <polygon points="16.00,10.00 17.76,14.57 22.66,14.84 18.85,17.93 20.11,22.66 16.00,20.00 11.89,22.66 13.15,17.93 9.34,14.84 14.24,14.57"
+        fill="#EFE9DC"/>
+
+  <!-- Subtle drop shadow on star for embossed depth -->
+  <polygon points="16.00,10.00 17.76,14.57 22.66,14.84 18.85,17.93 20.11,22.66 16.00,20.00 11.89,22.66 13.15,17.93 9.34,14.84 14.24,14.57"
+        fill="none" stroke="#C87050" stroke-width="0.5"/>
+</svg>
