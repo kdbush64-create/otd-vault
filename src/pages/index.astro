@@ -43,6 +43,7 @@ const posts = allDispatch
           href={`/dispatch/${post.id.replace(/\.mdoc$/, '')}`}
           channel="dispatch"
           layout="feed"
+          gallery={post.data.gallery}
         />
       ))}
     </div>
