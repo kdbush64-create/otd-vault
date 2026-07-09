@@ -6,6 +6,7 @@ interface Props {
   href: string;
   channel?: string;
   layout?: 'feed' | 'card';
+  gallery?: { image: string; alt?: string }[];
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   href,
   channel = 'dispatch',
   layout = 'card',
+  gallery,
 } = Astro.props;
 
 const formattedDate = date
@@ -39,21 +41,26 @@ const accentClass = channel === 'gear' || channel === 'transit' || channel === '
   ? 'accent-clay'
   : channel === 'chow'
   ? 'accent-ochre'
-  : 'accent-ink'; // dispatch
+  : 'accent-ink';
+
+const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
 ---
 
 {layout === 'feed' ? (
-  <!-- Feed layout: horizontal row, dispatch style -->
   <a href={href} class={`post-feed-item h-entry ${accentClass}`}>
     {formattedDate && (
       <time class="feed-date dt-published" datetime={date}>{formattedDate}</time>
+    )}
+    {thumbImage && (
+      <div class="feed-thumb">
+        <img src={thumbImage.image} alt={thumbImage.alt ?? ''} loading="lazy" decoding="async" />
+      </div>
     )}
     <h2 class="feed-title p-name">{title}</h2>
     {description && <p class="feed-desc p-summary">{description}</p>}
     <data class="u-url" value={`https://v64otd.com${href}`} hidden></data>
   </a>
 ) : (
-  <!-- Card layout: review channels -->
   <a href={href} class={`post-card ${accentClass}`}>
     <div class="card-meta">
       <span class="card-channel">{channelLabel}</span>
@@ -68,48 +75,37 @@ const accentClass = channel === 'gear' || channel === 'transit' || channel === '
 )}
 
 <style>
-  /* Feed item (dispatch) */
+  /* ── Feed item (dispatch) ── */
   .post-feed-item {
     display: block;
-    padding: 1.4rem 0;
-    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border, rgba(43,37,32,0.12));
     text-decoration: none;
-    color: var(--ink);
-    transition: color 0.12s;
-  }
-  .post-feed-item:first-child { border-top: 1px solid var(--border); }
-  .post-feed-item:hover .feed-title { color: var(--clay); }
-  .feed-date {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    color: rgba(43,37,32,0.45);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 0.4rem;
-  }
-  .feed-title {
-    font-family: 'Fraunces', serif;
-    font-size: 1.18rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin: 0 0 0.35rem;
-    line-height: 1.3;
-    transition: color 0.12s;
-  }
-  .feed-desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    color: rgba(43,37,32,0.65);
-    margin: 0;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    color: inherit;
   }
 
-  /* Card (review channels) */
+  .post-feed-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Thumbnail — only renders when gallery image exists */
+  .feed-thumb {
+    margin: 0.5rem 0 0.75rem;
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .feed-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Card layout (review channels) ── */
   .post-card {
     display: flex;
     flex-direction: column;
