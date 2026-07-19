@@ -13,17 +13,41 @@ interface Props {
   affiliateLinks?: { label: string; url: string; priceNoted?: string }[];
   callToAction?: string[];
   signoff?: string;
+  address?: string;
+  website?: string;
   foodType?: string;
   whatYouOrdered?: string;
   serviceQuality?: string;
   ambiance?: string;
   bestFor?: string;
   wouldReturn?: string;
+  manufacturerUrl?: string;
+  useCase?: string;
+  pros?: string | string[];
+  cons?: string | string[];
+  buildQuality?: string;
+  timeFieldTested?: string;
+  wouldBuyAgain?: string;
+  prepTime?: string;
+  cookTime?: string;
+  totalTime?: string;
+  servings?: string;
+  difficulty?: string;
+  equipmentNeeded?: string | string[];
+  substitutionNotes?: string;
+  storageNotes?: string;
+  bestSeason?: string;
+  recommendedStay?: string;
+  pairWith?: string;
 }
 const {
   title, date, description, tags, channel = 'dispatch',
   image, gallery, rating, cost, affiliateLinks, callToAction, signoff,
+  address, website,
   foodType, whatYouOrdered, serviceQuality, ambiance, bestFor, wouldReturn,
+  manufacturerUrl, useCase, pros, cons, buildQuality, timeFieldTested, wouldBuyAgain,
+  prepTime, cookTime, totalTime, servings, difficulty, equipmentNeeded, substitutionNotes, storageNotes,
+  bestSeason, recommendedStay, pairWith,
 } = Astro.props;
 const tagList = tags
   ? (Array.isArray(tags)
@@ -217,9 +241,21 @@ const ogImageAbsolute = heroImage
         {cost && <div class="verdict-item"><span class="verdict-label">COST</span><span class="verdict-value">{cost}</span></div>}
       </div>
     )}
-    <!-- Review: Details (What You Ordered, Service, Ambiance, Best For, Would Return) -->
-    {isReview && (foodType || whatYouOrdered || serviceQuality || ambiance || bestFor || wouldReturn) && (
+    <!-- Review: Details (channel-specific specs) -->
+    {isReview && (
+      address || website || foodType || whatYouOrdered || serviceQuality || ambiance || bestFor || wouldReturn ||
+      manufacturerUrl || useCase || pros || cons || buildQuality || timeFieldTested || wouldBuyAgain ||
+      prepTime || cookTime || totalTime || servings || difficulty || equipmentNeeded || substitutionNotes || storageNotes ||
+      bestSeason || recommendedStay || pairWith
+    ) && (
       <div class="review-details">
+        {address && (
+          <div class="detail-row"><span class="detail-label">ADDRESS</span><p class="detail-text">{address}</p></div>
+        )}
+        {website && (
+          <div class="detail-row"><span class="detail-label">WEBSITE</span><p class="detail-text"><a href={website} target="_blank" rel="noopener">{website}</a></p></div>
+        )}
+        <!-- The Table -->
         {foodType && (
           <div class="detail-row"><span class="detail-label">FOOD TYPE</span><p class="detail-text">{foodType}</p></div>
         )}
@@ -232,14 +268,84 @@ const ogImageAbsolute = heroImage
         {ambiance && (
           <div class="detail-row"><span class="detail-label">AMBIANCE</span><p class="detail-text">{ambiance}</p></div>
         )}
-        {bestFor && (
-          <div class="detail-row"><span class="detail-label">BEST FOR</span><p class="detail-text">{bestFor}</p></div>
-        )}
         {wouldReturn && (
           <div class="detail-row">
             <span class="detail-label">WOULD RETURN?</span>
-            <p class="detail-text detail-return">{wouldReturn === 'yes' ? 'Yes' : wouldReturn === 'no' ? 'No' : wouldReturn}</p>
+            <p class="detail-text detail-flag">{wouldReturn === 'yes' ? 'Yes' : wouldReturn === 'no' ? 'No' : wouldReturn}</p>
           </div>
+        )}
+        <!-- Gear -->
+        {useCase && (
+          <div class="detail-row"><span class="detail-label">USE CASE</span><p class="detail-text">{useCase}</p></div>
+        )}
+        {buildQuality && (
+          <div class="detail-row"><span class="detail-label">BUILD QUALITY</span><p class="detail-text">{buildQuality}</p></div>
+        )}
+        {timeFieldTested && (
+          <div class="detail-row"><span class="detail-label">TIME FIELD TESTED</span><p class="detail-text">{timeFieldTested}</p></div>
+        )}
+        {pros && (
+          <div class="detail-row">
+            <span class="detail-label">PROS</span>
+            {Array.isArray(pros)
+              ? <ul class="detail-list">{pros.map(item => <li>{item}</li>)}</ul>
+              : <p class="detail-text">{pros}</p>}
+          </div>
+        )}
+        {cons && (
+          <div class="detail-row">
+            <span class="detail-label">CONS</span>
+            {Array.isArray(cons)
+              ? <ul class="detail-list">{cons.map(item => <li>{item}</li>)}</ul>
+              : <p class="detail-text">{cons}</p>}
+          </div>
+        )}
+        {manufacturerUrl && (
+          <div class="detail-row"><span class="detail-label">MANUFACTURER</span><p class="detail-text"><a href={manufacturerUrl} target="_blank" rel="noopener">{manufacturerUrl}</a></p></div>
+        )}
+        {wouldBuyAgain && (
+          <div class="detail-row">
+            <span class="detail-label">WOULD BUY AGAIN?</span>
+            <p class="detail-text detail-flag">{wouldBuyAgain === 'yes' ? 'Yes' : wouldBuyAgain === 'no' ? 'No' : wouldBuyAgain}</p>
+          </div>
+        )}
+        <!-- Shared: Table + Gear -->
+        {bestFor && (
+          <div class="detail-row"><span class="detail-label">BEST FOR</span><p class="detail-text">{bestFor}</p></div>
+        )}
+        <!-- The Kitchen -->
+        {(prepTime || cookTime || totalTime || servings || difficulty) && (
+          <div class="detail-row-grid">
+            {prepTime && <div><span class="detail-label">PREP TIME</span><p class="detail-text">{prepTime}</p></div>}
+            {cookTime && <div><span class="detail-label">COOK TIME</span><p class="detail-text">{cookTime}</p></div>}
+            {totalTime && <div><span class="detail-label">TOTAL TIME</span><p class="detail-text">{totalTime}</p></div>}
+            {servings && <div><span class="detail-label">SERVINGS</span><p class="detail-text">{servings}</p></div>}
+            {difficulty && <div><span class="detail-label">DIFFICULTY</span><p class="detail-text">{difficulty}</p></div>}
+          </div>
+        )}
+        {equipmentNeeded && (
+          <div class="detail-row">
+            <span class="detail-label">EQUIPMENT NEEDED</span>
+            {Array.isArray(equipmentNeeded)
+              ? <ul class="detail-list">{equipmentNeeded.map(item => <li>{item}</li>)}</ul>
+              : <p class="detail-text">{equipmentNeeded}</p>}
+          </div>
+        )}
+        {substitutionNotes && (
+          <div class="detail-row"><span class="detail-label">SUBSTITUTION NOTES</span><p class="detail-text">{substitutionNotes}</p></div>
+        )}
+        {storageNotes && (
+          <div class="detail-row"><span class="detail-label">STORAGE NOTES</span><p class="detail-text">{storageNotes}</p></div>
+        )}
+        <!-- Travel / Getaways -->
+        {bestSeason && (
+          <div class="detail-row"><span class="detail-label">BEST SEASON</span><p class="detail-text">{bestSeason}</p></div>
+        )}
+        {recommendedStay && (
+          <div class="detail-row"><span class="detail-label">RECOMMENDED STAY</span><p class="detail-text">{recommendedStay}</p></div>
+        )}
+        {pairWith && (
+          <div class="detail-row"><span class="detail-label">PAIR WITH</span><p class="detail-text">{pairWith}</p></div>
         )}
       </div>
     )}
@@ -427,15 +533,23 @@ const ogImageAbsolute = heroImage
     padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;
   }
   .detail-row { display: flex; flex-direction: column; gap: 0.25rem; }
+  .detail-row-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.75rem;
+  }
+  .detail-row-grid > div { display: flex; flex-direction: column; gap: 0.25rem; }
   .detail-label {
     font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
     letter-spacing: 0.12em; color: rgba(43,37,32,0.5); text-transform: uppercase;
   }
   .detail-text {
     font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.55;
-    color: var(--ink); margin: 0;
+    color: var(--ink); margin: 0; white-space: pre-line;
   }
-  .detail-return { font-weight: 600; }
+  .detail-text a { color: var(--clay); word-break: break-all; }
+  .detail-flag { font-weight: 600; }
+  .detail-list { margin: 0; padding-left: 1.25rem; font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.55; color: var(--ink); }
+  .detail-list li { margin-bottom: 0.3em; }
   .dispatch-tagline {
     font-family: 'Inter', sans-serif; font-size: 0.88rem;
     color: rgba(43,37,32,0.5); font-style: italic; margin: 0 0 2rem;
