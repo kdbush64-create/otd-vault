@@ -1,6 +1,5 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-
 interface Props {
   title: string;
   date?: string;
@@ -14,28 +13,30 @@ interface Props {
   affiliateLinks?: { label: string; url: string; priceNoted?: string }[];
   callToAction?: string[];
   signoff?: string;
+  foodType?: string;
+  whatYouOrdered?: string;
+  serviceQuality?: string;
+  ambiance?: string;
+  bestFor?: string;
+  wouldReturn?: string;
 }
-
 const {
   title, date, description, tags, channel = 'dispatch',
   image, gallery, rating, cost, affiliateLinks, callToAction, signoff,
+  foodType, whatYouOrdered, serviceQuality, ambiance, bestFor, wouldReturn,
 } = Astro.props;
-
 const tagList = tags
   ? (Array.isArray(tags)
       ? (tags as string[]).flatMap(t => t.trim().split(/\s+/))
       : String(tags).trim().split(/\s+/))
     .filter(Boolean)
   : [];
-
 const formattedDate = date
   ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   : null;
-
 const isDispatch = channel === 'dispatch';
 const isReview = ['gear', 'table', 'chow', 'transit', 'coord'].includes(channel);
 const isLifestyle = channel === 'lifestyle';
-
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
   chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
@@ -43,13 +44,11 @@ const channelLabels: Record<string, string> = {
 };
 const channelLabel = channelLabels[channel] ?? channel;
 const channelHref = isDispatch ? '/dispatch' : isLifestyle ? '/lifestyle' : '/reviews';
-
 // Use first gallery image as hero for reviews if no standalone image
 const heroImage = image ?? (gallery && gallery.length > 0 ? gallery[0].image : undefined);
 const remainingGallery = image
   ? gallery
   : gallery && gallery.length > 1 ? gallery.slice(1) : undefined;
-
 // Channel-specific stamp labels
 const stampLabels: Record<string, { top: string; bottom: string }> = {
   gear:    { top: 'FIELD TESTED', bottom: 'VERIFIED' },
@@ -59,23 +58,19 @@ const stampLabels: Record<string, { top: string; bottom: string }> = {
   coord:   { top: 'STAY TESTED',  bottom: 'VERIFIED' },
 };
 const stamp = stampLabels[channel] ?? { top: 'FIELD TESTED', bottom: 'VERIFIED' };
-
 // Convert numeric rating value to star display
 const ratingNum = rating ? parseInt(rating, 10) : 0;
 const ratingStars = ratingNum > 0
   ? '★'.repeat(ratingNum) + '☆'.repeat(5 - ratingNum)
   : '';
 const ratingDisplay = ratingNum > 0 ? `${ratingStars} ${ratingNum}/5` : '';
-
 // Permalink for u-url (Bridgy Fed requires absolute self-link)
 const permalink = Astro.url.href;
-
 // Always produce an absolute URL for og:image (Mastodon/X/Bridgy Fed require absolute URLs)
 const ogImageAbsolute = heroImage
   ? (heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage)
   : 'https://v64otd.com/images/FTW_interchange.jpg';
 ---
-
 <BaseLayout
   title={title}
   description={description}
@@ -83,7 +78,6 @@ const ogImageAbsolute = heroImage
   isArticle={true}
 >
   <article class={'post-article h-entry channel-' + channel}>
-
     <!-- Article image for Bridgy Fed/Mastodon syndication -->
     {heroImage && (
       <img
@@ -93,7 +87,6 @@ const ogImageAbsolute = heroImage
         style="display:none"
       />
     )}
-
     <!-- Breadcrumb -->
     <nav class="post-breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
@@ -106,7 +99,6 @@ const ogImageAbsolute = heroImage
         </>
       )}
     </nav>
-
     <!-- Post Header -->
     <header class="post-header">
       <h1 class="post-title p-name">{title}</h1>
@@ -126,7 +118,6 @@ const ogImageAbsolute = heroImage
       )}
       {(isReview || isLifestyle) && formattedDate && <time class="post-date dt-published" datetime={date}>{formattedDate}</time>}
     </header>
-
     <!-- Review: Stacked gallery (1–4 photos) -->
     {isReview && gallery && gallery.length > 0 && gallery.length < 5 && (
       <div class="review-gallery">
@@ -147,7 +138,6 @@ const ogImageAbsolute = heroImage
         ))}
       </div>
     )}
-
     <!-- Review: Thumbnail grid + lightbox (5+ photos) -->
     {isReview && gallery && gallery.length >= 5 && (
       <>
@@ -198,7 +188,6 @@ const ogImageAbsolute = heroImage
           <script id="gallery-json" type="application/json" set:html={JSON.stringify(gallery.map(g => ({ src: g.image, caption: g.caption ?? '' })))} />
         </>
     )}
-
     <!-- Lifestyle: gallery (all images, no stamp) -->
     {isLifestyle && gallery && gallery.length > 0 && (
       <div class="post-gallery">
@@ -210,7 +199,6 @@ const ogImageAbsolute = heroImage
         ))}
       </div>
     )}
-
     <!-- Dispatch: gallery (all images, no stamp) -->
     {isDispatch && gallery && gallery.length > 0 && (
       <div class="post-gallery">
@@ -222,8 +210,6 @@ const ogImageAbsolute = heroImage
         ))}
       </div>
     )}
-
-
     <!-- Review: Verdict Box -->
     {isReview && (rating || cost) && (
       <div class="verdict-box">
@@ -231,15 +217,38 @@ const ogImageAbsolute = heroImage
         {cost && <div class="verdict-item"><span class="verdict-label">COST</span><span class="verdict-value">{cost}</span></div>}
       </div>
     )}
-
+    <!-- Review: Details (What You Ordered, Service, Ambiance, Best For, Would Return) -->
+    {isReview && (foodType || whatYouOrdered || serviceQuality || ambiance || bestFor || wouldReturn) && (
+      <div class="review-details">
+        {foodType && (
+          <div class="detail-row"><span class="detail-label">FOOD TYPE</span><p class="detail-text">{foodType}</p></div>
+        )}
+        {whatYouOrdered && (
+          <div class="detail-row"><span class="detail-label">WHAT WE ORDERED</span><p class="detail-text">{whatYouOrdered}</p></div>
+        )}
+        {serviceQuality && (
+          <div class="detail-row"><span class="detail-label">SERVICE</span><p class="detail-text">{serviceQuality}</p></div>
+        )}
+        {ambiance && (
+          <div class="detail-row"><span class="detail-label">AMBIANCE</span><p class="detail-text">{ambiance}</p></div>
+        )}
+        {bestFor && (
+          <div class="detail-row"><span class="detail-label">BEST FOR</span><p class="detail-text">{bestFor}</p></div>
+        )}
+        {wouldReturn && (
+          <div class="detail-row">
+            <span class="detail-label">WOULD RETURN?</span>
+            <p class="detail-text detail-return">{wouldReturn === 'yes' ? 'Yes' : wouldReturn === 'no' ? 'No' : wouldReturn}</p>
+          </div>
+        )}
+      </div>
+    )}
     <!-- Dispatch tagline -->
     {isDispatch && (
       <p class="dispatch-tagline">Add v64otd.com to your daily reading list — the ledger doesn't lie.</p>
     )}
-
     <!-- Article Body -->
     <div class="post-body e-content prose"><slot /></div>
-
     <!-- Dispatch: Call to Action block -->
     {isDispatch && callToAction && callToAction.length > 0 && (
       <div class="cta-block">
@@ -247,17 +256,14 @@ const ogImageAbsolute = heroImage
         <ol class="cta-list">{callToAction.map(item => <li>{item}</li>)}</ol>
       </div>
     )}
-
     <!-- Dispatch: Signoff -->
     {isDispatch && (
       <p class="dispatch-signoff">V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN'T.</p>
     )}
-
     <!-- Lifestyle: Signoff -->
     {isLifestyle && signoff && (
       <p class="dispatch-signoff">{signoff}</p>
     )}
-
     <!-- Lifestyle: Affiliate CTA -->
     {isLifestyle && affiliateLinks && affiliateLinks.length > 0 && (
       <div class="affiliate-block">
@@ -270,7 +276,6 @@ const ogImageAbsolute = heroImage
         <p class="affiliate-disclosure">Affiliate disclosure: links above may earn a small commission at no cost to you.</p>
       </div>
     )}
-
     <!-- Review: Affiliate CTA -->
     {isReview && affiliateLinks && affiliateLinks.length > 0 && (
       <div class="affiliate-block">
@@ -283,24 +288,19 @@ const ogImageAbsolute = heroImage
         <p class="affiliate-disclosure">Affiliate disclosure: links above may earn a small commission at no cost to you. OTD only links products personally tested and recommended.</p>
       </div>
     )}
-
     <!-- Tags -->
     {tagList.length > 0 && (
       <div class="post-tags">
         {tagList.map(tag => <a href={'/tags/' + tag.toLowerCase()} class="tag-chip">#{tag}</a>)}
       </div>
     )}
-
     <!-- Bridgy Fed microformat hooks -->
     <a href={permalink} class="u-url" hidden></a>
     <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
-
   </article>
 </BaseLayout>
-
 <style>
   .post-article { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-
   .post-breadcrumb {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem; letter-spacing: 0.06em;
@@ -309,7 +309,6 @@ const ogImageAbsolute = heroImage
   }
   .post-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
   .post-breadcrumb a:hover { color: var(--clay); }
-
   .post-header { margin-bottom: 1.5rem; }
   .post-title {
     font-family: 'Fraunces', serif;
@@ -323,13 +322,11 @@ const ogImageAbsolute = heroImage
   }
   .dispatch-meta { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
   .case-file-stamp { flex-shrink: 0; opacity: 0.85; }
-
   /* Stacked gallery (1–4 photos) */
   .review-gallery { display: flex; flex-direction: column; gap: 1.5rem; margin: 0 0 1.5rem; }
   .review-image-wrap { position: relative; border-radius: 3px; overflow: hidden; }
   .review-hero-img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; }
   .field-tested-stamp { position: absolute; bottom: 1rem; right: 1rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-
   /* Thumbnail grid (5+ photos) */
   .gallery-count-label {
     font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem;
@@ -367,7 +364,6 @@ const ogImageAbsolute = heroImage
     display: block; text-align: left; padding: 0 0.1rem;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-
   /* Lightbox */
   .lightbox {
     position: fixed; inset: 0; z-index: 1000;
@@ -412,12 +408,10 @@ const ogImageAbsolute = heroImage
     transition: color 0.15s; user-select: none;
   }
   .lb-nav:hover { color: #fff; }
-
   .post-gallery { margin: 0 0 2rem; display: flex; flex-direction: column; gap: 1rem; }
   .gallery-figure { margin: 0; }
   .gallery-img { width: 100%; height: auto; border-radius: 3px; display: block; max-height: 480px; object-fit: cover; }
   .gallery-caption { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.04em; color: rgba(43,37,32,0.5); margin-top: 0.4rem; }
-
   .verdict-box {
     display: flex; gap: 2rem; background: var(--card-bg);
     border: 1.5px solid var(--border); border-radius: 3px;
@@ -427,13 +421,26 @@ const ogImageAbsolute = heroImage
   .verdict-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: rgba(43,37,32,0.5); text-transform: uppercase; }
   .verdict-value { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--ochre); }
   .rating-value { font-family: 'IBM Plex Mono', monospace; font-size: 1rem; letter-spacing: 0.04em; }
-
+  .review-details {
+    display: flex; flex-direction: column; gap: 1rem;
+    background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 3px;
+    padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;
+  }
+  .detail-row { display: flex; flex-direction: column; gap: 0.25rem; }
+  .detail-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.12em; color: rgba(43,37,32,0.5); text-transform: uppercase;
+  }
+  .detail-text {
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.55;
+    color: var(--ink); margin: 0;
+  }
+  .detail-return { font-weight: 600; }
   .dispatch-tagline {
     font-family: 'Inter', sans-serif; font-size: 0.88rem;
     color: rgba(43,37,32,0.5); font-style: italic; margin: 0 0 2rem;
     border-left: 3px solid var(--clay); padding-left: 0.85rem;
   }
-
   .post-body { font-family: 'Inter', sans-serif; font-size: 1.05rem; line-height: 1.75; color: var(--ink); margin-bottom: 2.5rem; }
   .post-body :global(h2) { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--ink); }
   .post-body :global(h3) { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--ink); }
@@ -444,7 +451,6 @@ const ogImageAbsolute = heroImage
   .post-body :global(li) { margin-bottom: 0.4em; }
   .post-body :global(code) { font-family: 'IBM Plex Mono', monospace; font-size: 0.88em; background: rgba(43,37,32,0.07); padding: 0.1em 0.3em; border-radius: 2px; }
   .post-body :global(img) { max-width: 100%; height: auto; border-radius: 3px; margin: 1.5rem 0; display: block; }
-
   .cta-block {
     background: var(--card-bg); border: 1.5px solid var(--border);
     border-left: 4px solid var(--clay); border-radius: 3px;
@@ -453,25 +459,21 @@ const ogImageAbsolute = heroImage
   .cta-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--clay); margin: 0 0 0.75rem; text-transform: uppercase; }
   .cta-list { margin: 0; padding-left: 1.4rem; font-family: 'Inter', sans-serif; font-size: 0.98rem; line-height: 1.65; color: var(--ink); }
   .cta-list li { margin-bottom: 0.45em; }
-
   .dispatch-signoff {
     font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em;
     color: rgba(43,37,32,0.45); text-transform: uppercase; text-align: right;
     margin: 0 0 2rem; padding-top: 1rem; border-top: 1px solid var(--border);
   }
-
   .affiliate-block { background: var(--ink); color: var(--bg-limestone); border-radius: 3px; padding: 1.5rem; margin: 0 0 2rem; }
   .affiliate-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ochre); margin: 0 0 1rem; text-transform: uppercase; }
   .affiliate-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
   .affiliate-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; background: var(--clay); color: #fff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 2px; transition: opacity 0.15s; }
   .affiliate-btn:hover { opacity: 0.85; }
   .affiliate-disclosure { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: rgba(239,233,220,0.5); margin: 0; line-height: 1.5; }
-
   .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
   .tag-chip { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; background: rgba(107,122,94,0.12); color: var(--cedar); padding: 0.3rem 0.7rem; border-radius: 20px; text-decoration: none; transition: background 0.15s, color 0.15s; }
   .tag-chip:hover { background: var(--cedar); color: #fff; }
 </style>
-
 <script is:inline>
   (function () {
     var dataEl = document.getElementById('gallery-json');
@@ -486,7 +488,6 @@ const ogImageAbsolute = heroImage
     var lbPrev = document.getElementById('lb-prev');
     var lbNext = document.getElementById('lb-next');
     var current = 0;
-
     function show(i) {
       current = ((i % photos.length) + photos.length) % photos.length;
       lbImg.src = photos[current].src;
@@ -494,31 +495,25 @@ const ogImageAbsolute = heroImage
       lbCaption.textContent = photos[current].caption;
       lbCounter.textContent = (current + 1) + ' / ' + photos.length;
     }
-
     function openLightbox(i) {
       show(i);
       lightbox.removeAttribute('hidden');
       document.body.style.overflow = 'hidden';
       lbClose.focus();
     }
-
     function closeLightbox() {
       lightbox.setAttribute('hidden', '');
       document.body.style.overflow = '';
     }
-
     document.querySelectorAll('.thumb-btn').forEach(function (btn) {
       btn.addEventListener('click', function () { openLightbox(Number(btn.dataset.index)); });
     });
-
     lbClose.addEventListener('click', closeLightbox);
     lbPrev.addEventListener('click', function () { show(current - 1); });
     lbNext.addEventListener('click', function () { show(current + 1); });
-
     lightbox.addEventListener('click', function (e) {
       if (e.target === lightbox) closeLightbox();
     });
-
     document.addEventListener('keydown', function (e) {
       if (lightbox.hasAttribute('hidden')) return;
       if (e.key === 'Escape') closeLightbox();
