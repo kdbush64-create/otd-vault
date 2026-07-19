@@ -5,7 +5,7 @@ const postSchema = z.object({
   date: z.coerce.string(),
   description: z.string().optional(),
   tags: z.union([z.string(), z.array(z.string())]).optional(),
-  gallery: z.array(z.object({ image: z.string(), caption: z.string().max(50).optional() })).max(10).optional(),
+  gallery: z.array(z.object({ image: z.string(), caption: z.string().max(500).optional() })).max(10).optional(),
   image: z.string().optional(),
   signoff: z.string().optional(),
   callToAction: z.string().optional(),
