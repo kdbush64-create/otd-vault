@@ -1,9 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
-
 export const prerender = true;
-
 export async function getStaticPaths() {
   const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord', 'lifestyle'];
   const paths = [];
@@ -15,11 +13,9 @@ export async function getStaticPaths() {
   }
   return paths;
 }
-
 const { channel, entry } = Astro.props as { channel: string; entry: any };
 const { Content } = await render(entry);
 const data = entry.data;
-
 const callToAction     = 'callToAction'     in data ? data.callToAction     : undefined;
 const signoff          = 'signoff'          in data ? data.signoff          : undefined;
 const rating           = 'rating'           in data ? data.rating           : undefined;
@@ -28,6 +24,8 @@ const affiliateLinks   = 'affiliateLinks'   in data ? data.affiliateLinks   : un
 const image            = 'image'            in data ? data.image            : undefined;
 const gallery          = 'gallery'          in data ? data.gallery          : undefined;
 const tags             = 'tags'             in data ? data.tags             : undefined;
+const address          = 'address'          in data ? data.address          : undefined;
+const website          = 'website'          in data ? data.website          : undefined;
 // Gear
 const manufacturerUrl  = 'manufacturerUrl'  in data ? data.manufacturerUrl  : undefined;
 const useCase          = 'useCase'          in data ? data.useCase          : undefined;
@@ -56,7 +54,6 @@ const bestSeason       = 'bestSeason'       in data ? data.bestSeason       : un
 const recommendedStay  = 'recommendedStay'  in data ? data.recommendedStay  : undefined;
 const pairWith         = 'pairWith'         in data ? data.pairWith         : undefined;
 ---
-
 <PostLayout
   title={data.title}
   date={data.date}
@@ -70,6 +67,8 @@ const pairWith         = 'pairWith'         in data ? data.pairWith         : un
   rating={rating}
   cost={cost}
   affiliateLinks={affiliateLinks}
+  address={address}
+  website={website}
   manufacturerUrl={manufacturerUrl}
   useCase={useCase}
   pros={pros}
