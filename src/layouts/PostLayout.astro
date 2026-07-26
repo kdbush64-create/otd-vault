@@ -142,6 +142,16 @@ const ogImageAbsolute = heroImage
       )}
       {(isReview || isLifestyle) && formattedDate && <time class="post-date dt-published" datetime={date}>{formattedDate}</time>}
     </header>
+
+    <!-- Share button -->
+    <div class="share-row">
+      <button class="share-btn" id="share-btn" aria-label="Share this article">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <span class="share-confirm" id="share-confirm" aria-live="polite"></span>
+    </div>
+
     <!-- Review: Stacked gallery (1–4 photos) -->
     {isReview && gallery && gallery.length > 0 && gallery.length < 5 && (
       <div class="review-gallery">
@@ -428,6 +438,17 @@ const ogImageAbsolute = heroImage
   }
   .dispatch-meta { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
   .case-file-stamp { flex-shrink: 0; opacity: 0.85; }
+  /* Share button */
+  .share-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.75rem; }
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em;
+    color: var(--cedar); background: none; border: 1.5px solid var(--cedar);
+    border-radius: 2px; padding: 0.4rem 0.85rem;
+    cursor: pointer; transition: background 0.15s, color 0.15s;
+  }
+  .share-btn:hover { background: var(--cedar); color: #fff; }
+  .share-confirm { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--cedar); letter-spacing: 0.06em; }
   /* Stacked gallery (1–4 photos) */
   .review-gallery { display: flex; flex-direction: column; gap: 1.5rem; margin: 0 0 1.5rem; }
   .review-image-wrap { position: relative; border-radius: 3px; overflow: hidden; }
@@ -633,6 +654,37 @@ const ogImageAbsolute = heroImage
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') show(current - 1);
       if (e.key === 'ArrowRight') show(current + 1);
+    });
+  })();
+</script>
+<script is:inline>
+  (function () {
+    var btn = document.getElementById('share-btn');
+    var confirm = document.getElementById('share-confirm');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var shareData = { title: document.title, url: window.location.href };
+      if (navigator.share) {
+        navigator.share(shareData).catch(function () {});
+      } else {
+        var url = window.location.href;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(function () {
+            confirm.textContent = 'Link copied!';
+            setTimeout(function () { confirm.textContent = ''; }, 2500);
+          });
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = url;
+          ta.style.cssText = 'position:fixed;opacity:0;';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta);
+          confirm.textContent = 'Link copied!';
+          setTimeout(function () { confirm.textContent = ''; }, 2500);
+        }
+      }
     });
   })();
 </script>
