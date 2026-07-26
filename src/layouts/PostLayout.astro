@@ -410,6 +410,14 @@ const ogImageAbsolute = heroImage
         {tagList.map(tag => <a href={'/tags/' + tag.toLowerCase()} class="tag-chip">#{tag}</a>)}
       </div>
     )}
+    <!-- Share button (bottom) -->
+    <div class="share-row share-row-bottom">
+      <button class="share-btn" id="share-btn-bottom" aria-label="Share this article">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <span class="share-confirm" id="share-confirm-bottom" aria-live="polite"></span>
+    </div>
     <!-- Bridgy Fed microformat hooks -->
     <a href={permalink} class="u-url" hidden></a>
     <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
@@ -659,32 +667,36 @@ const ogImageAbsolute = heroImage
 </script>
 <script is:inline>
   (function () {
-    var btn = document.getElementById('share-btn');
-    var confirm = document.getElementById('share-confirm');
-    if (!btn) return;
-    btn.addEventListener('click', function () {
-      var shareData = { title: document.title, url: window.location.href };
-      if (navigator.share) {
-        navigator.share(shareData).catch(function () {});
-      } else {
-        var url = window.location.href;
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(url).then(function () {
+    function wireShareBtn(btnId, confirmId) {
+      var btn = document.getElementById(btnId);
+      var confirm = document.getElementById(confirmId);
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var shareData = { title: document.title, url: window.location.href };
+        if (navigator.share) {
+          navigator.share(shareData).catch(function () {});
+        } else {
+          var url = window.location.href;
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(function () {
+              confirm.textContent = 'Link copied!';
+              setTimeout(function () { confirm.textContent = ''; }, 2500);
+            });
+          } else {
+            var ta = document.createElement('textarea');
+            ta.value = url;
+            ta.style.cssText = 'position:fixed;opacity:0;';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
             confirm.textContent = 'Link copied!';
             setTimeout(function () { confirm.textContent = ''; }, 2500);
-          });
-        } else {
-          var ta = document.createElement('textarea');
-          ta.value = url;
-          ta.style.cssText = 'position:fixed;opacity:0;';
-          document.body.appendChild(ta);
-          ta.select();
-          try { document.execCommand('copy'); } catch (e) {}
-          document.body.removeChild(ta);
-          confirm.textContent = 'Link copied!';
-          setTimeout(function () { confirm.textContent = ''; }, 2500);
+          }
         }
-      }
-    });
+      });
+    }
+    wireShareBtn('share-btn', 'share-confirm');
+    wireShareBtn('share-btn-bottom', 'share-confirm-bottom');
   })();
 </script>
