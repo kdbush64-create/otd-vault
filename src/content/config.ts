@@ -9,6 +9,10 @@ const postSchema = z.object({
   image: z.string().optional(),
   signoff: z.string().optional(),
   callToAction: z.string().optional(),
+  affiliateLinks: z.array(z.object({
+    label: z.string(),
+    url: z.string(),
+  })).optional(),
 });
 
 const locationSchema = postSchema.extend({
@@ -49,10 +53,6 @@ const affiliateSchema = postSchema.extend({
 
 const chowSchema = postSchema.extend({
   affiliate: z.boolean().optional(),
-  affiliateLinks: z.array(z.object({
-    label: z.string(),
-    url: z.string(),
-  })).optional(),
   prepTime: z.string().optional(),
   cookTime: z.string().optional(),
   totalTime: z.string().optional(),
