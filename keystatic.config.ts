@@ -86,6 +86,7 @@ const gearFields = {
   ...affiliateFields,
   rating: fields.select({ label: 'Rating', description: 'Reserve 5 stars for something you’d buy again without thinking twice.', options: ratingOptions, defaultValue: '' }),
   manufacturerUrl: fields.url({ label: 'Manufacturer / Product Page (non-affiliate)', description: 'The brand’s own page, for reference — not a buy link.' }),
+  website: fields.url({ label: 'Website / Product Page URL' }),
   useCase: fields.text({ label: 'Use Case', description: 'One sentence: what job is this actually for? Helps readers self-select fast.' }),
   pros: listField('Pros', 'Pro', 'Be specific — "doesn’t fog in humidity" beats "works well."'),
   cons: listField('Cons', 'Con', 'Don’t skip this even for things you love — zero cons reads as an ad, not a review.'),
