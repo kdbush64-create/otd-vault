@@ -52,21 +52,7 @@ const posts = allDispatch
     </div>
   </section>
 
-  <!-- Email Signup -->
-  <section class="signup-block">
-    <div class="signup-inner">
-      <p class="signup-eyebrow">THE LEDGER</p>
-      <h2 class="signup-title">Add v64otd.com to your daily reading list.</h2>
-      <p class="signup-sub">The file gets closed. The damage doesn't. Get new dispatches in your inbox.</p>
-      <form class="signup-form" id="signup-form">
-        <input type="email" name="email" placeholder="your@email.com" required class="signup-input" />
-        <button type="submit" class="btn-primary" id="signup-btn">Subscribe</button>
-      </form>
-      <p class="signup-note" id="signup-note">One list. No spam. Unsubscribe any time.</p>
-    </div>
-  </section>
-
-</BaseLayout>
+ </BaseLayout>
 
 <style>
   /* Hero */
@@ -165,116 +151,6 @@ const posts = allDispatch
     color: #fff;
   }
 
-  /* Signup */
-  .signup-block {
-    background: var(--card-bg);
-    border-top: 2px solid var(--border);
-    border-bottom: 2px solid var(--border);
-    padding: 3.5rem 1.5rem;
-    text-align: center;
-  }
-  .signup-inner {
-    max-width: 520px;
-    margin: 0 auto;
-  }
-  .signup-eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    color: var(--cedar);
-    margin: 0 0 0.75rem;
-    text-transform: uppercase;
-  }
-  .signup-title {
-    font-family: 'Fraunces', serif;
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin: 0 0 0.75rem;
-    line-height: 1.2;
-  }
-  .signup-sub {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    color: rgba(43,37,32,0.7);
-    margin: 0 0 1.75rem;
-    line-height: 1.6;
-  }
-  .signup-form {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .signup-input {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    padding: 0.65rem 1rem;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    background: #fff;
-    color: var(--ink);
-    flex: 1;
-    min-width: 220px;
-    max-width: 300px;
-  }
-  .signup-input:focus {
-    outline: 2px solid var(--clay);
-    border-color: transparent;
-  }
-  .btn-primary {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
-    background: var(--clay);
-    color: #fff;
-    border: none;
-    padding: 0.65rem 1.25rem;
-    border-radius: 2px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.15s;
-  }
-  .btn-primary:hover { opacity: 0.88; }
-  .signup-note {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.78rem;
-    color: rgba(43,37,32,0.5);
-    margin: 1rem 0 0;
-  }
-  .signup-note.success { color: var(--cedar); }
-  .signup-note.error   { color: var(--clay);  }
+   
 </style>
 
-<script>
-  const form = document.getElementById('signup-form') as HTMLFormElement;
-  const btn  = document.getElementById('signup-btn')  as HTMLButtonElement;
-  const note = document.getElementById('signup-note') as HTMLParagraphElement;
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    btn.disabled = true;
-    btn.textContent = 'Subscribing...';
-    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-    try {
-      const res = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        note.textContent = "You're on the list. The ledger awaits.";
-        note.className = 'signup-note success';
-        form.reset();
-      } else {
-        note.textContent = 'Something went wrong. Please try again.';
-        note.className = 'signup-note error';
-      }
-    } catch {
-      note.textContent = 'Network error. Please try again.';
-      note.className = 'signup-note error';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Subscribe';
-    }
-  });
-</script>
