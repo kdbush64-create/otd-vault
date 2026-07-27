@@ -1,7 +1,33 @@
 ---
 ---
 <footer>
+  ---
+---
+<footer>
   <div style="max-width:1080px; margin:0 auto;">
+
+    <!-- Newsletter signup strip -->
+    <div style="border-bottom:1px solid var(--border); padding-bottom:20px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft);">
+        Sign up for Old Texas Dude's monthly newsletter
+      </span>
+      <div>
+        <form id="footer-signup-form" style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="email" name="email" placeholder="your@email.com" required
+            style="font-family:'Inter',sans-serif; font-size:13px; padding:7px 12px; border:1.5px solid var(--border); border-radius:2px; background:#fff; color:var(--ink); min-width:200px;" />
+          <button type="submit"
+            style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1px; background:var(--clay); color:#fff; border:none; padding:7px 16px; border-radius:2px; cursor:pointer; white-space:nowrap;">
+            Subscribe
+          </button>
+        </form>
+        <p id="footer-signup-note" style="font-family:'Inter',sans-serif; font-size:11px; color:rgba(43,37,32,0.45); margin:6px 0 0; text-align:right;">
+          Monthly. No spam. Unsubscribe any time.
+        </p>
+      </div>
+    </div>
+
+    <!-- existing footer content below — no changes -->
+    <div style="display:flex; justify-content:space-between; ...
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:24px; margin-bottom:28px;">
       <div>
         <a href="/" style="font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--ink); text-decoration:none; display:block; margin-bottom:8px;">
@@ -51,3 +77,38 @@
     </div>
   </div>
 </footer>
+<script is:inline>
+  (function () {
+    var form = document.getElementById('footer-signup-form');
+    var note = document.getElementById('footer-signup-note');
+    if (!form) return;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('button');
+      btn.disabled = true;
+      btn.textContent = 'Subscribing...';
+      var email = form.querySelector('input[name="email"]').value;
+      try {
+        var res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email }),
+        });
+        if (res.ok) {
+          note.textContent = "You're on the list.";
+          note.style.color = '#6B7A5E';
+          form.reset();
+        } else {
+          note.textContent = 'Something went wrong. Try again.';
+          note.style.color = '#B5482E';
+        }
+      } catch {
+        note.textContent = 'Network error. Try again.';
+        note.style.color = '#B5482E';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+      }
+    });
+  })();
+</script>
