@@ -1,0 +1,296 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export const prerender = true;
+
+const allPicks = await getCollection('picks', ({ data }) => data.active !== false);
+
+const categories = [
+  { key: 'health-supplements', label: 'Health & Supplements' },
+  { key: 'health-beauty',      label: 'Health & Beauty' },
+  { key: 'kitchen-food',       label: 'Kitchen & Food' },
+  { key: 'tools-hardware',     label: 'Tools & Hardware' },
+  { key: 'home-appliances',    label: 'Home & Appliances' },
+  { key: 'everyday-gear',      label: 'Everyday Gear' },
+];
+
+const stars = (rating: string) => {
+  const n = parseInt(rating) || 0;
+  return '★'.repeat(n) + '☆'.repeat(5 - n);
+};
+---
+
+<BaseLayout
+  title="OTD Picks — Stuff I Actually Use"
+  description="No sponsored placements. Products I've bought, tested, and kept — organized by category with affiliate links."
+>
+
+<!-- Hero -->
+<section class="picks-hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">OTD PICKS</p>
+    <h1 class="hero-title">Stuff I Actually Use</h1>
+    <p class="hero-sub">No sponsored placements. No brand deals. Products I've bought, tested, and kept — organized so you can find what you need.</p>
+    <p class="hero-disclosure">Links marked Shop are affiliate links. You pay the same price; I earn a small commission that helps keep the lights on. — DeWayne</p>
+  </div>
+</section>
+
+<!-- Picks -->
+<section class="picks-main">
+  <div class="picks-inner">
+
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-cat="all">All Picks</button>
+      {categories.map(cat => (
+        <button class="filter-btn" data-cat={cat.key}>{cat.label}</button>
+      ))}
+    </div>
+
+    <p class="pick-count" id="pick-count">{allPicks.length} pick{allPicks.length !== 1 ? 's' : ''}</p>
+
+    {allPicks.length === 0 ? (
+      <p class="picks-empty">No picks yet — check back soon.</p>
+    ) : (
+      <div class="picks-grid" id="picks-grid">
+        {allPicks.map(pick => (
+          <div class="pick-card" data-cat={pick.data.category ?? ''}>
+            <div class="pick-body">
+              <div class="pick-meta">
+                <span class="pick-retailer">{pick.data.retailer ?? 'Amazon'}</span>
+                {pick.data.rating && pick.data.rating !== '' && (
+                  <span class="pick-stars">{stars(pick.data.rating)}</span>
+                )}
+              </div>
+              <h2 class="pick-name">{pick.data.title}</h2>
+              <p class="pick-desc">{pick.data.description}</p>
+              {pick.data.priceNoted && (
+                <p class="pick-price">${pick.data.priceNoted} when reviewed</p>
+              )}
+              {pick.data.reviewLink && (
+                <a href={pick.data.reviewLink} class="pick-review-link">→ Read the full review</a>
+              )}
+            </div>
+            <div class="pick-footer">
+              <a
+                href={pick.data.affiliateUrl}
+                class="shop-btn"
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+              >
+                Shop on {pick.data.retailer ?? 'Amazon'}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+
+  </div>
+</section>
+
+</BaseLayout>
+
+<script is:inline>
+  const btns   = document.querySelectorAll('.filter-btn');
+  const cards  = document.querySelectorAll('.pick-card');
+  const countEl = document.getElementById('pick-count');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      let visible = 0;
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.style.display = '';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      if (countEl) countEl.textContent = `${visible} pick${visible !== 1 ? 's' : ''}`;
+    });
+  });
+</script>
+
+<style>
+  /* ---- Hero ---- */
+  .picks-hero {
+    background: var(--ink);
+    color: var(--bg-limestone);
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--clay);
+    margin: 0 0 0.9rem;
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5.5vw, 2.8rem);
+    font-weight: 700;
+    color: var(--bg-limestone);
+    margin: 0 0 0.9rem;
+    line-height: 1.1;
+  }
+  .hero-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: rgba(239,233,220,0.8);
+    margin: 0;
+  }
+  .hero-disclosure {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(239,233,220,0.5);
+    margin: 0.85rem 0 0;
+    font-style: italic;
+  }
+
+  /* ---- Main ---- */
+  .picks-main {
+    background: var(--bg-limestone);
+    min-height: 40vh;
+  }
+  .picks-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* ---- Filters ---- */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .filter-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--border, #c8bfaf);
+    border-radius: 2px;
+    background: var(--card-bg);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .filter-btn:hover { border-color: var(--clay); color: var(--clay); }
+  .filter-btn.active { background: var(--clay); border-color: var(--clay); color: #fff; }
+
+  /* ---- Count ---- */
+  .pick-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    margin-bottom: 1.5rem;
+  }
+  .picks-empty {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    padding: 3rem 0;
+    text-align: center;
+  }
+
+  /* ---- Grid ---- */
+  .picks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .pick-card {
+    background: var(--card-bg);
+    border: 1px solid #d9d0c2;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+  }
+  .pick-body {
+    padding: 1rem 1.1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .pick-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pick-retailer {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .pick-stars {
+    color: var(--ochre);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+  }
+  .pick-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.25;
+    margin: 0;
+  }
+  .pick-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    flex: 1;
+    margin: 0;
+  }
+  .pick-price {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .pick-review-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: var(--clay);
+    text-decoration: underline;
+  }
+  .pick-footer {
+    padding: 0.75rem 1.1rem;
+    border-top: 1px solid #e8e0d4;
+  }
+  .shop-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--clay);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0.6rem 1rem;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .shop-btn:hover { background: var(--clay-dark); }
+</style>
