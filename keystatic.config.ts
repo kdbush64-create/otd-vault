@@ -1,4 +1,5 @@
 import { config, fields, collection } from '@keystatic/core';
+
 const ratingOptions = [
   { label: '— not rated —', value: '' },
   { label: '★☆☆☆☆ (1/5)', value: '1' },
@@ -20,6 +21,16 @@ const yesNoOptions = [
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
 ];
+const categoryOptions = [
+  { label: '— select category —', value: '' },
+  { label: 'Health & Supplements', value: 'health-supplements' },
+  { label: 'Health & Beauty', value: 'health-beauty' },
+  { label: 'Kitchen & Food', value: 'kitchen-food' },
+  { label: 'Tools & Hardware', value: 'tools-hardware' },
+  { label: 'Home & Appliances', value: 'home-appliances' },
+  { label: 'Everyday Gear', value: 'everyday-gear' },
+];
+
 const postFields = {
   title: fields.slug({ name: { label: 'Title' } }),
   date: fields.text({
@@ -47,6 +58,7 @@ const postFields = {
     description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN’T. Leave blank to skip entirely.',
   }),
 };
+
 // Price now lives per-link, not as a single article-level field — supports multi-product articles
 const affiliateLinksField = (description) => fields.array(
   fields.object({
@@ -63,16 +75,19 @@ const affiliateLinksField = (description) => fields.array(
     itemLabel: (props) => props.fields.label.value || 'Link',
   }
 );
+
 const listField = (label, itemLabel, description) =>
   fields.array(fields.text({ label: itemLabel }), {
     label,
     description,
     itemLabel: (props) => props.value || itemLabel,
   });
+
 const affiliateFields = {
   ...postFields,
   affiliate: fields.checkbox({ label: 'Contains affiliate links', defaultValue: false }),
 };
+
 const locationFields = {
   ...postFields,
   address: fields.text({ label: 'Address' }),
@@ -81,6 +96,7 @@ const locationFields = {
   cost: fields.select({ label: 'Cost', options: costOptions, defaultValue: '' }),
   content: fields.markdoc({ label: 'Summary' }),
 };
+
 // ---- Gear ----
 const gearFields = {
   ...affiliateFields,
@@ -88,25 +104,27 @@ const gearFields = {
   manufacturerUrl: fields.url({ label: 'Manufacturer / Product Page (non-affiliate)', description: 'The brand’s own page, for reference — not a buy link.' }),
   website: fields.url({ label: 'Website / Product Page URL' }),
   useCase: fields.text({ label: 'Use Case', description: 'One sentence: what job is this actually for? Helps readers self-select fast.' }),
-  pros: listField('Pros', 'Pro', 'Be specific — "doesn’t fog in humidity" beats "works well."'),
+  pros: listField('Pros', 'Pro', 'Be specific — “doesn’t fog in humidity” beats “works well.”'),
   cons: listField('Cons', 'Con', 'Don’t skip this even for things you love — zero cons reads as an ad, not a review.'),
   buildQuality: fields.text({ label: 'Build Quality / Durability Note', multiline: true, description: 'How does it actually feel after real use — scuffed, loose, still solid?' }),
-  timeFieldTested: fields.text({ label: 'Time Field-Tested', description: 'Be specific: "3 weekend trips" tells readers more than "a while."' }),
+  timeFieldTested: fields.text({ label: 'Time Field-Tested', description: 'Be specific: “3 weekend trips” tells readers more than “a while.”' }),
   bestFor: fields.text({ label: 'Best For / Not For', description: 'Who should buy this — and who should skip it for something else?' }),
   wouldBuyAgain: fields.select({ label: 'Would You Buy It Again?', description: 'The simplest honest test there is.', options: yesNoOptions, defaultValue: '' }),
   affiliateLinks: affiliateLinksField('Add a link for every product named above, including any paired item.'),
 };
+
 // ---- The Table (restaurants) ----
 const tableFields = {
   ...locationFields,
   foodType: fields.text({ label: 'Food Type', description: 'e.g. BBQ, Italian, Tex-Mex (50 chars max)', validation: { length: { max: 50 } } }),
-  whatYouOrdered: fields.text({ label: 'What You Ordered', multiline: true, description: 'Name actual dishes — "the food was good" tells a reader nothing they can act on.' }),
-  serviceQuality: fields.text({ label: 'Service Quality', description: 'A specific moment (fast refill, forgotten order) beats "service was fine."' }),
+  whatYouOrdered: fields.text({ label: 'What You Ordered', multiline: true, description: 'Name actual dishes — “the food was good” tells a reader nothing they can act on.' }),
+  serviceQuality: fields.text({ label: 'Service Quality', description: 'A specific moment (fast refill, forgotten order) beats “service was fine.”' }),
   ambiance: fields.text({ label: 'Ambiance / Atmosphere', description: 'Noise, lighting, crowd — the things that decide if it’s date-night or quick-lunch.' }),
-  bestFor: fields.text({ label: 'Best For', description: 'Be specific about occasion, not just "good restaurant."' }),
+  bestFor: fields.text({ label: 'Best For', description: 'Be specific about occasion, not just “good restaurant.”' }),
   wouldReturn: fields.select({ label: 'Would You Return?', description: 'If the honest answer is no, say so — that’s the useful part.', options: yesNoOptions, defaultValue: '' }),
   affiliateLinks: affiliateLinksField('Rare for restaurants, but use this if a reservation platform link applies.'),
 };
+
 // ---- The Kitchen (recipes) ----
 const chowFields = {
   ...affiliateFields,
@@ -126,15 +144,17 @@ const chowFields = {
   storageNotes: fields.text({ label: 'Storage / Leftovers Note', multiline: true, description: 'How long did leftovers actually stay good, and how did you store them?' }),
   affiliateLinks: affiliateLinksField('Tools, pans, or ingredients worth linking directly.'),
 };
+
 // ---- Travel (transit + coord — shared shape, separate collections) ----
 const travelFields = {
   ...locationFields,
-  bestSeason: fields.text({ label: 'Best Time to Visit / Season', description: 'Be specific about months or conditions, not just "summer."' }),
+  bestSeason: fields.text({ label: 'Best Time to Visit / Season', description: 'Be specific about months or conditions, not just “summer.”' }),
   recommendedStay: fields.text({ label: 'Recommended Length of Stay', description: 'How long did you actually need before it felt like enough?' }),
-  pairWith: fields.text({ label: "What's Nearby / Pair With", multiline: true, description: 'What’s worth combining this with on the same trip?' }),
+  pairWith: fields.text({ label: "What’s Nearby / Pair With", multiline: true, description: 'What’s worth combining this with on the same trip?' }),
   bestFor: fields.text({ label: 'Best For', description: 'Be specific about who this is — and isn’t — a good fit for.' }),
   affiliateLinks: affiliateLinksField('Booking link if you have one — Vrbo or Booking.com, not Airbnb.'),
 };
+
 // ---- Lifestyle (narrative content — health, travel essays, pets, etc.) ----
 const lifestyleFields = {
   ...affiliateFields,
@@ -144,6 +164,49 @@ const lifestyleFields = {
     description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN’T. Leave blank to skip entirely.',
   }),
 };
+
+// ---- Picks (affiliate product cards — no full review required) ----
+const picksFields = {
+  title: fields.slug({ name: { label: 'Product Name' } }),
+  description: fields.text({
+    label: 'Short Description',
+    multiline: true,
+    description: 'One or two sentences — what it is and why it’s worth noting.',
+    validation: { isRequired: true },
+  }),
+  category: fields.select({
+    label: 'Category',
+    options: categoryOptions,
+    defaultValue: '',
+  }),
+  retailer: fields.text({
+    label: 'Retailer',
+    description: 'e.g. Amazon, Direct',
+  }),
+  affiliateUrl: fields.url({
+    label: 'Affiliate / Shop URL',
+    validation: { isRequired: true },
+  }),
+  reviewLink: fields.text({
+    label: 'Review Article Link (optional)',
+    description: 'Relative path to the review, e.g. /gear/daviky-weekly-pill-organizer-review',
+  }),
+  rating: fields.select({
+    label: 'Rating (optional)',
+    options: ratingOptions,
+    defaultValue: '',
+  }),
+  priceNoted: fields.text({
+    label: 'Price When Noted (optional)',
+    description: 'What you saw at the time — not a guarantee.',
+  }),
+  active: fields.checkbox({
+    label: 'Show on picks page',
+    defaultValue: true,
+  }),
+  content: fields.markdoc({ label: 'Notes (optional)', description: 'Any additional context — leave blank for a standard card.' }),
+};
+
 export default config({
   storage: { kind: 'cloud' },
   cloud: { project: 'otd-vault/otd-vault' },
@@ -153,6 +216,7 @@ export default config({
       Dispatch: ['dispatch'],
       'Reviews & Gear': ['gear', 'table', 'chow', 'transit', 'coord'],
       Lifestyle: ['lifestyle'],
+      Picks: ['picks'],
       Site: ['pages'],
       Other: ['xposts'],
     },
@@ -165,6 +229,7 @@ export default config({
     transit:   collection({ label: 'Travel — Road Trip',  slugField: 'title', path: 'src/content/transit/*',   format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
     coord:     collection({ label: 'Getaways',            slugField: 'title', path: 'src/content/coord/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
     lifestyle: collection({ label: 'Lifestyle',           slugField: 'title', path: 'src/content/lifestyle/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: lifestyleFields }),
+    picks:     collection({ label: 'Picks',               slugField: 'title', path: 'src/content/picks/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: picksFields }),
     xposts:    collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
       date: fields.date({ label: 'Date', validation: { isRequired: true } }),
