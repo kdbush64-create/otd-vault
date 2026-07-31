@@ -63,6 +63,18 @@ const chowSchema = postSchema.extend({
   storageNotes: z.string().optional(),
 });
 
+const picksSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  category: z.string().optional(),
+  retailer: z.string().optional(),
+  affiliateUrl: z.string(),
+  reviewLink: z.string().optional(),
+  rating: z.string().optional(),
+  priceNoted: z.string().optional(),
+  active: z.boolean().optional(),
+});
+
 const xpostSchema = z.object({
   title: z.string(),
   date: z.coerce.string(),
@@ -82,6 +94,7 @@ export const collections = {
   coord:    defineCollection({ schema: locationSchema }),
   table:    defineCollection({ schema: tableSchema }),
   chow:     defineCollection({ schema: chowSchema }),
+  picks:    defineCollection({ schema: picksSchema }),
   xposts:   defineCollection({ schema: xpostSchema }),
   pages:    defineCollection({ schema: pageSchema }),
 };
