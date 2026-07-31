@@ -6,6 +6,14 @@ export const prerender = true;
 
 const allPicks = await getCollection('picks', ({ data }) => data.active !== false);
 
+const picksRendered = await Promise.all(
+  allPicks.map(async (pick) => {
+    const { Content } = await pick.render();
+    const hasNotes = pick.body != null && pick.body.trim().length > 0;
+    return { pick, Content, hasNotes };
+  })
+);
+
 const categories = [
   { key: 'health-supplements', label: 'Health & Supplements' },
   { key: 'health-beauty',      label: 'Health & Beauty' },
@@ -53,7 +61,7 @@ const stars = (rating: string) => {
       <p class="picks-empty">No picks yet — check back soon.</p>
     ) : (
       <div class="picks-grid" id="picks-grid">
-        {allPicks.map(pick => (
+        {picksRendered.map(({ pick, Content, hasNotes }) => (
           <div class="pick-card" data-cat={pick.data.category ?? ''}>
             <div class="pick-body">
               <div class="pick-meta">
@@ -64,6 +72,14 @@ const stars = (rating: string) => {
               </div>
               <h2 class="pick-name">{pick.data.title}</h2>
               <p class="pick-desc">{pick.data.description}</p>
+              {hasNotes && (
+                <details class="pick-notes">
+                  <summary class="pick-notes-toggle"></summary>
+                  <div class="pick-notes-body">
+                    <Content />
+                  </div>
+                </details>
+              )}
               {pick.data.priceNoted && (
                 <p class="pick-price">${pick.data.priceNoted} when reviewed</p>
               )}
@@ -289,6 +305,31 @@ const stars = (rating: string) => {
     color: var(--clay);
     text-decoration: underline;
   }
+
+  /* ---- Notes (expandable) ---- */
+  .pick-notes {
+    margin: 0;
+  }
+  .pick-notes-toggle {
+    list-style: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: var(--clay);
+    user-select: none;
+  }
+  .pick-notes-toggle::-webkit-details-marker { display: none; }
+  .pick-notes-toggle::after { content: '+ Show more'; }
+  .pick-notes[open] .pick-notes-toggle::after { content: '− Show less'; }
+  .pick-notes-body {
+    padding: 0.6rem 0 0.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .pick-notes-body p { margin: 0 0 0.5rem; }
+  .pick-notes-body p:last-child { margin-bottom: 0; }
   .pick-footer {
     padding: 0.75rem 1.1rem;
     border-top: 1px solid #e8e0d4;
