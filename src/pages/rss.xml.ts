@@ -8,7 +8,7 @@ function toRFC822(dateStr: string): string {
   return `${days[d.getUTCDay()]}, ${String(d.getUTCDate()).padStart(2,'0')} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()} ${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')} +0000`;
 }
 export async function GET() {
-  const channels = ['dispatch', 'lifestyle'] as const;
+  const channels = ['dispatch', 'lifestyle', 'gear', 'table', 'chow', 'transit', 'coord'] as const;
   const allPosts = (
     await Promise.all(
       channels.map(async (channel) => {
@@ -17,11 +17,9 @@ export async function GET() {
       })
     )
   ).flat();
-
   const sorted = allPosts.sort((a, b) =>
     String(b.post.data.date ?? '').localeCompare(String(a.post.data.date ?? ''))
   );
-
   const items = sorted.map(({ post, channel }) => {
     const title = post.data.title;
     const description = post.data.description ?? '';
@@ -38,15 +36,14 @@ export async function GET() {
       <content:encoded><![CDATA[${body}]]></content:encoded>
     </item>`;
   }).join('');
-
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
   xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>OTD Vault — Daily Dispatch</title>
+    <title>OTD Vault — Full Signal</title>
     <link>https://v64otd.com</link>
-    <description>Daily dispatches from Vintage64TX at v64otd.com</description>
+    <description>Every new Dispatch, Lifestyle piece, and review from v64otd.com — the whole feed, unfiltered.</description>
     <language>en-us</language>
     <atom:link href="https://v64otd.com/rss.xml" rel="self" type="application/rss+xml" />
     <lastBuildDate>${toRFC822(new Date().toISOString())}</lastBuildDate>
