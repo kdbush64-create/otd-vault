@@ -8,7 +8,6 @@ interface Props {
   layout?: 'feed' | 'card';
   gallery?: { image: string; alt?: string }[];
 }
-
 const {
   title,
   date,
@@ -18,34 +17,33 @@ const {
   layout = 'card',
   gallery,
 } = Astro.props;
-
 const formattedDate = date
   ? new Date(date).toLocaleDateString('en-US', {
       year: 'numeric', month: 'long', day: 'numeric',
     })
   : null;
-
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch',
   gear: 'Gear',
   table: 'The Table',
   chow: 'The Kitchen',
   transit: 'Travel',
-  coord: 'Travel',
+  coord: 'Getaways',
 };
 const channelLabel = channelLabels[channel] ?? channel;
-
-const accentClass = channel === 'gear' || channel === 'transit' || channel === 'coord'
+const accentClass = channel === 'gear'
   ? 'accent-cedar'
+  : channel === 'transit'
+  ? 'accent-bluebonnet'
+  : channel === 'coord'
+  ? 'accent-thistle'
   : channel === 'table'
   ? 'accent-clay'
   : channel === 'chow'
   ? 'accent-ochre'
   : 'accent-ink';
-
 const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
 ---
-
 {layout === 'feed' ? (
   <a href={href} class={`post-feed-item h-entry ${accentClass}`}>
     {formattedDate && (
@@ -73,7 +71,6 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
     <span class="card-read">Read →</span>
   </a>
 )}
-
 <style>
   /* ── Feed item (dispatch) ── */
   .post-feed-item {
@@ -83,11 +80,9 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
     text-decoration: none;
     color: inherit;
   }
-
   .post-feed-item:last-child {
     border-bottom: none;
   }
-
   /* Thumbnail — only renders when gallery image exists */
   .feed-thumb {
     margin: 0.5rem 0 0.75rem;
@@ -97,14 +92,12 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
     overflow: hidden;
     border-radius: 4px;
   }
-
   .feed-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
-
   /* ── Card layout (review channels) ── */
   .post-card {
     display: flex;
@@ -126,6 +119,8 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
   .accent-clay  { border-top: 3px solid var(--clay);  }
   .accent-ochre { border-top: 3px solid var(--ochre); }
   .accent-ink   { border-top: 3px solid var(--ink);   }
+  .accent-bluebonnet { border-top: 3px solid var(--bluebonnet); }
+  .accent-thistle    { border-top: 3px solid var(--thistle);    }
   .card-meta {
     display: flex;
     align-items: center;
@@ -141,6 +136,8 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
   .accent-clay  .card-channel { color: var(--clay); }
   .accent-ochre .card-channel { color: var(--ochre); }
   .accent-ink   .card-channel { color: var(--ink); }
+  .accent-bluebonnet .card-channel { color: var(--bluebonnet); }
+  .accent-thistle    .card-channel { color: var(--thistle);    }
   .card-date {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.65rem;
