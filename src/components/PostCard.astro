@@ -5,7 +5,7 @@ interface Props {
   description?: string;
   href: string;
   channel?: string;
-  layout?: 'feed' | 'card';
+  layout?: 'feed' | 'card' | 'grid';
   gallery?: { image: string; alt?: string }[];
 }
 const {
@@ -43,8 +43,29 @@ const accentClass = channel === 'gear'
   ? 'accent-ochre'
   : 'accent-ink';
 const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
+const readLabel = channel === 'dispatch' ? 'Read dispatch →' : 'Read the review →';
 ---
-{layout === 'feed' ? (
+{layout === 'grid' ? (
+  <a href={href} class={`post-grid-card h-entry ${accentClass}`}>
+    <div class="grid-thumb">
+      {thumbImage ? (
+        <img src={thumbImage.image} alt={thumbImage.alt ?? ''} loading="lazy" decoding="async" />
+      ) : (
+        <div class="grid-thumb-fallback"></div>
+      )}
+      <span class="grid-badge">{channelLabel}</span>
+    </div>
+    <div class="grid-body">
+      {formattedDate && (
+        <time class="grid-date dt-published" datetime={date}>{formattedDate}</time>
+      )}
+      <h2 class="grid-title p-name">{title}</h2>
+      {description && <p class="grid-desc p-summary">{description}</p>}
+      <span class="grid-read">{readLabel}</span>
+    </div>
+    <data class="u-url" value={`https://v64otd.com${href}`} hidden></data>
+  </a>
+) : layout === 'feed' ? (
   <a href={href} class={`post-feed-item h-entry ${accentClass}`}>
     {formattedDate && (
       <time class="feed-date dt-published" datetime={date}>{formattedDate}</time>
@@ -72,6 +93,97 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
   </a>
 )}
 <style>
+  /* ── Grid card (homepage) ── */
+  .post-grid-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid #d9d0c2;
+    border-radius: 3px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .post-grid-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(43,37,32,.09);
+  }
+  .grid-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .grid-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .grid-thumb-fallback {
+    width: 100%;
+    height: 100%;
+    background: var(--ink);
+  }
+  .grid-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--clay);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .accent-cedar  .grid-badge { background: var(--cedar); }
+  .accent-ochre  .grid-badge { background: var(--ochre); }
+  .accent-clay   .grid-badge { background: var(--clay); }
+  .grid-body {
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.35rem;
+  }
+  .grid-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+  .grid-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    margin: 0;
+  }
+  .grid-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    flex: 1;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .grid-read {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--clay);
+    margin-top: 0.25rem;
+  }
+
   /* ── Feed item (dispatch) ── */
   .post-feed-item {
     display: block;
@@ -83,7 +195,6 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
   .post-feed-item:last-child {
     border-bottom: none;
   }
-  /* Thumbnail — only renders when gallery image exists */
   .feed-thumb {
     margin: 0.5rem 0 0.75rem;
     width: 100%;
@@ -98,6 +209,7 @@ const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
     object-fit: cover;
     display: block;
   }
+
   /* ── Card layout (review channels) ── */
   .post-card {
     display: flex;
