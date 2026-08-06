@@ -257,9 +257,9 @@ if (olderPosts.length > 0) {
   .archive-year {
     list-style: none;
     cursor: pointer;
-    display: flex;
-    justify-content: space-between;
+    display: inline-flex;
     align-items: center;
+    gap: 0.35rem;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
     font-weight: 600;
@@ -273,13 +273,14 @@ if (olderPosts.length > 0) {
     content: '›';
     font-size: 1rem;
     font-weight: 400;
-    color: var(--ink-soft);
+    color: var(--clay);
     display: inline-block;
-    transform: rotate(90deg);
+    transform: rotate(0deg);
     transition: transform 0.2s ease;
+    line-height: 1;
   }
   .archive-year-group[open] > .archive-year::after {
-    transform: rotate(-90deg);
+    transform: rotate(90deg);
   }
   .archive-list {
     list-style: none;
