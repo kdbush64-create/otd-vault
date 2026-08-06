@@ -2,9 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-
 export const prerender = true;
-
 // Gather recent posts from all review channels
 const [gear, table, chow, transit, coord] = await Promise.all([
   getCollection('gear'),
@@ -13,7 +11,6 @@ const [gear, table, chow, transit, coord] = await Promise.all([
   getCollection('transit'),
   getCollection('coord'),
 ]);
-
 const allReviews = [
   ...gear.map(p => ({ ...p, channel: 'gear' })),
   ...table.map(p => ({ ...p, channel: 'table' })),
@@ -23,9 +20,7 @@ const allReviews = [
 ].sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
  .slice(0, 6);
 ---
-
 <BaseLayout title="Reviews & Gear — OTD Vault" description="Hands-on reviews and recommendations. Field tested, no fluff.">
-
   <!-- Hero -->
   <section class="reviews-hero">
     <div class="hero-inner">
@@ -35,11 +30,9 @@ const allReviews = [
       <p class="hero-disclosure">Some posts in this section contain affiliate links — if you buy through them, I may earn a small commission at no extra cost to you.</p>
     </div>
   </section>
-
   <!-- Category Grid -->
   <section class="category-section">
     <div class="category-grid">
-
       <a href="/gear" class="category-card cat-cedar">
         <div class="cat-stamp" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="48" height="48">
@@ -51,7 +44,6 @@ const allReviews = [
         <p class="cat-desc">Tools, tech, and outdoor kit. Tested in the field.</p>
         <span class="cat-link">Browse gear →</span>
       </a>
-
       <a href="/table" class="category-card cat-clay">
         <div class="cat-stamp" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="48" height="48">
@@ -64,7 +56,6 @@ const allReviews = [
         <p class="cat-desc">Restaurant reviews. Texas and beyond.</p>
         <span class="cat-link">Browse restaurants →</span>
       </a>
-
       <a href="/chow" class="category-card cat-ochre">
         <div class="cat-stamp" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="48" height="48">
@@ -77,7 +68,6 @@ const allReviews = [
         <p class="cat-desc">Recipes, techniques, and pantry picks.</p>
         <span class="cat-link">Browse kitchen →</span>
       </a>
-
       <a href="/transit" class="category-card cat-bluebonnet">
         <div class="cat-stamp" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="48" height="48">
@@ -89,7 +79,6 @@ const allReviews = [
         <p class="cat-desc">Road dispatches and local color. Texas first.</p>
         <span class="cat-link">Browse travel →</span>
       </a>
-
       <a href="/coord" class="category-card cat-thistle">
         <div class="cat-stamp" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="48" height="48">
@@ -101,10 +90,8 @@ const allReviews = [
         <p class="cat-desc">Day spas, rentals, and weekend lodging — wherever's worth the drive.</p>
         <span class="cat-link">Browse getaways →</span>
       </a>
-
     </div>
   </section>
-
   <!-- Recently Reviewed -->
   <section class="recent-section">
     <div class="recent-header">
@@ -118,13 +105,13 @@ const allReviews = [
           description={post.data.description}
           href={`/${post.channel}/${post.id.replace(/\.mdoc$/, '')}`}
           channel={post.channel}
+          layout="grid"
+          gallery={post.data.gallery}
         />
       ))}
     </div>
   </section>
-
   </BaseLayout>
-
 <style>
   /* Hero */
   .reviews-hero {
@@ -184,7 +171,6 @@ const allReviews = [
     color: rgba(239,233,220,0.6);
     margin: 0.85rem 0 0;
   }
-
   /* Category grid */
   .category-section {
     max-width: 960px;
@@ -245,16 +231,13 @@ const allReviews = [
     color: var(--clay);
     margin-top: 0.25rem;
   }
-
-  /* Recent */
+  /* Recently Reviewed */
   .recent-section {
     max-width: 960px;
     margin: 0 auto;
     padding: 2rem 1.5rem 3rem;
   }
   .recent-header {
-    border-bottom: 2px solid var(--ink);
-    padding-bottom: 0.5rem;
     margin-bottom: 1.75rem;
   }
   .section-label {
@@ -269,7 +252,6 @@ const allReviews = [
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.25rem;
   }
-
   /* Signup */
   .signup-block {
     background: var(--card-bg);
