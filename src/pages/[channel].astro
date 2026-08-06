@@ -2,18 +2,13 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-
 export const prerender = true;
-
 type Channel = 'dispatch' | 'gear' | 'table' | 'chow' | 'transit' | 'coord' | 'lifestyle';
-
 export async function getStaticPaths() {
   const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord', 'lifestyle'];
   return channels.map(channel => ({ params: { channel } }));
 }
-
 const { channel } = Astro.params as { channel: Channel };
-
 const channelMeta: Record<Channel, { title: string; description: string; eyebrow: string }> = {
   dispatch: {
     title: 'Dispatch Archives — OTD Vault',
@@ -47,17 +42,14 @@ const channelMeta: Record<Channel, { title: string; description: string; eyebrow
   },
   lifestyle: {
     title: 'Lifestyle — OTD Vault',
-    description: 'Life off the clock. Health, travel, pets, and everything that isn\u2019t politics or a product review.',
+    description: 'Life off the clock. Health, travel, pets, and everything that isn’t politics or a product review.',
     eyebrow: 'LIFESTYLE',
   },
 };
-
 const meta = channelMeta[channel];
 const posts = (await getCollection(channel as any))
   .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
-
 const isDispatch = channel === 'dispatch';
-
 const channelHeroImages: Partial<Record<Channel, string>> = {
   dispatch: '/images/archives-hero.jpg',
   gear: '/images/gear-hero.jpg',
@@ -68,10 +60,27 @@ const channelHeroImages: Partial<Record<Channel, string>> = {
   lifestyle: '/images/lifestyle-hero.jpg',
 };
 const heroImage = channelHeroImages[channel];
+
+// Dispatch archive — split recent (card grid) from older (year list)
+const RECENT_COUNT = 12;
+const recentPosts = isDispatch ? posts.slice(0, RECENT_COUNT) : [];
+const olderPosts  = isDispatch ? posts.slice(RECENT_COUNT) : [];
+
+type PostEntry = (typeof posts)[number];
+const olderByYear: { year: number; posts: PostEntry[] }[] = [];
+if (olderPosts.length > 0) {
+  const yearMap: Record<number, PostEntry[]> = {};
+  (olderPosts as PostEntry[]).forEach((post) => {
+    const year = new Date(post.data.date).getFullYear();
+    if (!yearMap[year]) yearMap[year] = [];
+    yearMap[year].push(post);
+  });
+  Object.entries(yearMap)
+    .sort(([a], [b]) => Number(b) - Number(a))
+    .forEach(([year, yPosts]) => olderByYear.push({ year: Number(year), posts: yPosts }));
+}
 ---
-
 <BaseLayout title={meta.title} description={meta.description}>
-
   <!-- Channel Header -->
   <section class={'channel-hero' + (heroImage ? ' has-photo' : '')} style={heroImage ? `--hero-img: url('${heroImage}')` : undefined}>
     <div class="hero-inner">
@@ -93,26 +102,70 @@ const heroImage = channelHeroImages[channel];
 
   <!-- Posts -->
   <section class="posts-section">
-    <div class={isDispatch ? 'feed-list' : 'card-grid'}>
-      {posts.map((post: any) => (
-        <PostCard
-          title={post.data.title}
-          date={post.data.date}
-          description={post.data.description}
-          href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
-          channel={channel}
-          layout={isDispatch ? 'feed' : 'grid'}
-          gallery={post.data.gallery}
-        />
-      ))}
-    </div>
+
+    {/* Dispatch: recent grid cards + older year list */}
+    {isDispatch && (
+      <div class="dispatch-grid">
+        {recentPosts.map((post: any) => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
+            channel={channel}
+            layout="grid"
+            gallery={post.data.gallery}
+          />
+        ))}
+      </div>
+    )}
+
+    {isDispatch && olderByYear.length > 0 && (
+      <div class="archive-older">
+        <p class="archive-heading">OLDER DISPATCHES</p>
+        {olderByYear.map(({ year, posts: yPosts }) => (
+          <div class="archive-year-group">
+            <p class="archive-year">{year}</p>
+            <ul class="archive-list">
+              {yPosts.map((post: any) => (
+                <li class="archive-item">
+                  <a href={`/dispatch/${post.id.replace(/\.mdoc$/, '')}`} class="archive-title">
+                    {post.data.title}
+                  </a>
+                  <time class="archive-date" datetime={post.data.date}>
+                    {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  </time>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {/* All other channels: grid cards with images */}
+    {!isDispatch && (
+      <div class="card-grid">
+        {posts.map((post: any) => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
+            channel={channel}
+            layout="grid"
+            gallery={post.data.gallery}
+          />
+        ))}
+      </div>
+    )}
+
     {posts.length === 0 && (
       <p class="empty-state">Nothing filed yet. Check back soon.</p>
     )}
+
   </section>
-
 </BaseLayout>
-
 <style>
   /* Hero */
   .channel-hero {
@@ -167,26 +220,90 @@ const heroImage = channelHeroImages[channel];
     margin: 0;
   }
 
-  /* Feed layout (dispatch) */
+  /* Section container */
   .posts-section {
     max-width: 720px;
     margin: 0 auto;
     padding: 2.5rem 1.5rem 4rem;
   }
+  .posts-section:has(.card-grid),
+  .posts-section:has(.dispatch-grid) {
+    max-width: 960px;
+  }
+
+  /* Dispatch recent grid */
+  .dispatch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+    margin-bottom: 3rem;
+  }
+
+  /* Older dispatches year list */
+  .archive-older {
+    border-top: 1px solid rgba(43,37,32,0.12);
+    padding-top: 2rem;
+  }
+  .archive-heading {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    margin: 0 0 1.5rem;
+  }
+  .archive-year-group {
+    margin-bottom: 2rem;
+  }
+  .archive-year {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    margin: 0 0 0.6rem;
+  }
+  .archive-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .archive-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid rgba(43,37,32,0.08);
+  }
+  .archive-item:last-child { border-bottom: none; }
+  .archive-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1.4;
+    flex: 1;
+  }
+  .archive-title:hover { color: var(--clay); }
+  .archive-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  /* Feed layout (kept for reference, no longer used for dispatch) */
   .feed-list {
     display: flex;
     flex-direction: column;
   }
 
-  /* Card grid layout (reviews) */
+  /* Card grid layout (non-dispatch channels) */
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.25rem;
-  }
-  /* When grid is used, expand section width */
-  .posts-section:has(.card-grid) {
-    max-width: 960px;
   }
 
   .empty-state {
@@ -195,5 +312,9 @@ const heroImage = channelHeroImages[channel];
     color: rgba(43,37,32,0.45);
     text-align: center;
     padding: 3rem 0;
+  }
+
+  @media (max-width: 640px) {
+    .dispatch-grid { grid-template-columns: 1fr; }
   }
 </style>
