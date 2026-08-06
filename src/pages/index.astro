@@ -3,16 +3,34 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 export const prerender = true;
+
+// Dispatch — 5 most recent
 const allDispatch = await getCollection('dispatch');
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 5);
+
+// Picks teaser — 3 active picks
+const allPicks = await getCollection('picks', ({ data }) => data.active !== false);
+const featuredPicks = allPicks.slice(0, 3);
+
+// From the Reviews — 1 gear + 1 from lifestyle-type collections
+const gearPosts = (await getCollection('gear'))
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+const gearPost = gearPosts[0] ?? null;
+
+const otherReviews = [
+  ...(await getCollection('table')),
+  ...(await getCollection('coord')),
+  ...(await getCollection('transit')),
+  ...(await getCollection('chow')),
+  ...(await getCollection('lifestyle' as any)),
+].sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+const otherPost = otherReviews[0] ?? null;
 ---
 <BaseLayout title="OTD Vault — The Ledger Doesn't Lie" description="Old Texas Dude. Dispatch from the margins. Field-tested reviews.">
-
   <!-- Bridgy Fed federation link -->
   <a rel="me" href="https://web.brid.gy/r/https://v64otd.com/" hidden></a>
-
   <!-- Bridgy Fed / Mastodon h-card -->
   <span class="h-card" hidden>
     <a class="u-url p-name" rel="me" href="https://v64otd.com/">OTD Vault</a>
@@ -29,33 +47,176 @@ const posts = allDispatch
     </div>
   </section>
 
-  <!-- Dispatch Feed -->
+  <!-- PICKS TEASER -->
+  {featuredPicks.length > 0 && (
+    <section class="picks-teaser">
+      <div class="picks-teaser-inner">
+        <div class="section-header">
+          <p class="section-label">OTD PICKS — STUFF I ACTUALLY USE</p>
+          <a href="/picks" class="section-link">See all picks →</a>
+        </div>
+        <div class="picks-teaser-grid">
+          {featuredPicks.map(pick => (
+            <a
+              href={pick.data.affiliateUrl}
+              class="picks-teaser-card"
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+            >
+              <span class="teaser-retailer">{pick.data.retailer ?? 'Amazon'}</span>
+              <p class="teaser-name">{pick.data.title}</p>
+              <p class="teaser-desc">{pick.data.description}</p>
+              <span class="teaser-shop">Shop →</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- RECENT DISPATCHES -->
   <section class="dispatch-feed">
-    <div class="feed-header">
-      <h2 class="feed-label">RECENT DISPATCHES</h2>
-    </div>
-    <div class="feed-list h-feed">
-      {posts.map(post => (
-        <PostCard
-          title={post.data.title}
-          date={post.data.date}
-          description={post.data.description}
-          href={`/dispatch/${post.id.replace(/\.mdoc$/, '')}`}
-          channel="dispatch"
-          layout="feed"
-          gallery={post.data.gallery}
-        />
-      ))}
-    </div>
-    <div class="feed-footer">
-      <a href="/dispatch" class="btn-outline">Full dispatch archive →</a>
+    <div class="feed-inner">
+      <div class="section-header">
+        <p class="section-label">RECENT DISPATCHES</p>
+      </div>
+      <div class="dispatch-grid">
+        {posts.map(post => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            href={`/dispatch/${post.id.replace(/\.mdoc$/, '')}`}
+            channel="dispatch"
+            layout="grid"
+            gallery={post.data.gallery}
+          />
+        ))}
+      </div>
+      <div class="feed-footer">
+        <a href="/dispatch" class="btn-outline">Full dispatch archive →</a>
+      </div>
     </div>
   </section>
 
- </BaseLayout>
+  <!-- NEWSLETTER CTA -->
+  <section class="newsletter-cta">
+    <p class="nl-eyebrow">MONTHLY NEWSLETTER</p>
+    <h2 class="nl-title">Stay in the ledger.</h2>
+    <p class="nl-sub">One dispatch per month. No noise. Unsubscribe any time.</p>
+    <form id="page-signup-form" class="nl-form">
+      <input
+        type="email"
+        name="email"
+        placeholder="your@email.com"
+        required
+        class="nl-input"
+      />
+      <button type="submit" class="nl-btn">Subscribe</button>
+    </form>
+    <p id="page-signup-note" class="nl-note">Monthly. No spam. Unsubscribe any time.</p>
+  </section>
+
+  <!-- FROM THE REVIEWS -->
+  {(gearPost || otherPost) && (
+    <section class="reviews-section">
+      <div class="reviews-inner">
+        <div class="section-header">
+          <p class="section-label">FROM THE REVIEWS</p>
+        </div>
+        <div class="reviews-grid">
+          {gearPost && (
+            <PostCard
+              title={gearPost.data.title}
+              date={gearPost.data.date}
+              description={gearPost.data.description}
+              href={`/gear/${gearPost.id.replace(/\.mdoc$/, '')}`}
+              channel="gear"
+              layout="grid"
+              gallery={gearPost.data.gallery}
+            />
+          )}
+          {otherPost && (
+            <PostCard
+              title={otherPost.data.title}
+              date={otherPost.data.date}
+              description={otherPost.data.description}
+              href={`/${otherPost.collection}/${otherPost.id.replace(/\.mdoc$/, '')}`}
+              channel={otherPost.collection}
+              layout="grid"
+              gallery={otherPost.data.gallery}
+            />
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('page-signup-form');
+    var note = document.getElementById('page-signup-note');
+    if (!form) return;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('button');
+      btn.disabled = true;
+      btn.textContent = 'Subscribing...';
+      var email = form.querySelector('input[name="email"]').value;
+      try {
+        var res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email }),
+        });
+        if (res.ok) {
+          note.textContent = "You're on the list.";
+          note.style.color = '#6B7A5E';
+          form.reset();
+        } else {
+          note.textContent = 'Something went wrong. Try again.';
+          note.style.color = '#B5482E';
+        }
+      } catch {
+        note.textContent = 'Network error. Try again.';
+        note.style.color = '#B5482E';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+      }
+    });
+  })();
+</script>
 
 <style>
-  /* Hero */
+  /* ── Shared ── */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .section-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--clay);
+    text-decoration: none;
+  }
+  .section-link:hover { text-decoration: underline; }
+
+  /* ── Hero ── */
   .dispatch-hero {
     position: relative;
     background-image: url('/images/FTW_interchange.jpg');
@@ -108,31 +269,98 @@ const posts = allDispatch
     margin-inline: auto;
   }
 
-  /* Feed */
-  .dispatch-feed {
-    max-width: 720px;
+  /* ── Picks Teaser ── */
+  .picks-teaser {
+    background: var(--card-bg);
+    border-bottom: 1px solid #d9d0c2;
+  }
+  .picks-teaser-inner {
+    max-width: 960px;
     margin: 0 auto;
-    padding: 3rem 1.5rem;
+    padding: 2rem 1.5rem;
   }
-  .feed-header {
-    border-bottom: 2px solid var(--ink);
-    padding-bottom: 0.5rem;
-    margin-bottom: 2rem;
+  .picks-teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
   }
-  .feed-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
+  .picks-teaser-card {
+    background: var(--bg-limestone);
+    border: 1px solid #d9d0c2;
+    border-radius: 3px;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
     color: var(--ink);
-    margin: 0;
-  }
-  .feed-list {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0.35rem;
+    transition: border-color 0.15s;
+  }
+  .picks-teaser-card:hover { border-color: var(--clay); }
+  .teaser-retailer {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .teaser-name {
+    font-family: 'Fraunces', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.25;
+    margin: 0;
+  }
+  .teaser-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    flex: 1;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .teaser-shop {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--clay);
+    margin-top: 0.15rem;
+  }
+
+  /* ── Dispatch Grid ── */
+  .dispatch-feed {
+    background: var(--bg-limestone);
+  }
+  .feed-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+  .dispatch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+  /* 5th card spans full width if it's the odd last child */
+  .dispatch-grid :global(.post-grid-card:last-child:nth-child(odd)) {
+    grid-column: 1 / -1;
+  }
+  /* When spanning full width, switch to horizontal layout */
+  .dispatch-grid :global(.post-grid-card:last-child:nth-child(odd)) {
+    flex-direction: row;
+  }
+  .dispatch-grid :global(.post-grid-card:last-child:nth-child(odd) .grid-thumb) {
+    width: 240px;
+    flex-shrink: 0;
+    aspect-ratio: unset;
   }
   .feed-footer {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
     text-align: center;
   }
   .btn-outline {
@@ -151,6 +379,101 @@ const posts = allDispatch
     color: #fff;
   }
 
-   
-</style>
+  /* ── Newsletter CTA ── */
+  .newsletter-cta {
+    background: var(--ink);
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+  .nl-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    color: var(--ochre);
+    margin: 0 0 0.75rem;
+  }
+  .nl-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    color: var(--bg-limestone);
+    margin: 0 0 0.6rem;
+  }
+  .nl-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(239,233,220,0.55);
+    margin: 0 0 1.5rem;
+  }
+  .nl-form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nl-input {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1.5px solid rgba(239,233,220,0.2);
+    border-radius: 2px;
+    background: rgba(239,233,220,0.08);
+    color: var(--bg-limestone);
+  }
+  .nl-input::placeholder { color: rgba(239,233,220,0.35); }
+  .nl-input:focus { outline: none; border-color: var(--clay); }
+  .nl-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    background: var(--clay);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .nl-btn:hover { background: var(--clay-dark); }
+  .nl-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: rgba(239,233,220,0.3);
+    margin: 0.6rem 0 0;
+  }
 
+  /* ── From the Reviews ── */
+  .reviews-section {
+    background: var(--bg-limestone);
+  }
+  .reviews-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 3rem;
+  }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    .picks-teaser-grid { grid-template-columns: 1fr; }
+    .dispatch-grid { grid-template-columns: 1fr; }
+    .dispatch-grid :global(.post-grid-card:last-child:nth-child(odd)) {
+      grid-column: auto;
+      flex-direction: column;
+    }
+    .dispatch-grid :global(.post-grid-card:last-child:nth-child(odd) .grid-thumb) {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    .reviews-grid { grid-template-columns: 1fr; }
+  }
+</style>
