@@ -124,8 +124,8 @@ if (olderPosts.length > 0) {
       <div class="archive-older">
         <p class="archive-heading">OLDER DISPATCHES</p>
         {olderByYear.map(({ year, posts: yPosts }) => (
-          <div class="archive-year-group">
-            <p class="archive-year">{year}</p>
+          <details class="archive-year-group">
+            <summary class="archive-year"><span>{year}</span></summary>
             <ul class="archive-list">
               {yPosts.map((post: any) => (
                 <li class="archive-item">
@@ -138,7 +138,7 @@ if (olderPosts.length > 0) {
                 </li>
               ))}
             </ul>
-          </div>
+          </details>
         ))}
       </div>
     )}
@@ -255,12 +255,31 @@ if (olderPosts.length > 0) {
     margin-bottom: 2rem;
   }
   .archive-year {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     color: var(--ink);
     margin: 0 0 0.6rem;
+    user-select: none;
+  }
+  .archive-year::-webkit-details-marker { display: none; }
+  .archive-year::after {
+    content: '›';
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--ink-soft);
+    display: inline-block;
+    transform: rotate(90deg);
+    transition: transform 0.2s ease;
+  }
+  .archive-year-group[open] > .archive-year::after {
+    transform: rotate(-90deg);
   }
   .archive-list {
     list-style: none;
