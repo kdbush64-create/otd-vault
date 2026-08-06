@@ -101,7 +101,8 @@ const heroImage = channelHeroImages[channel];
           description={post.data.description}
           href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
           channel={channel}
-          layout={isDispatch ? 'feed' : 'card'}
+          layout={isDispatch ? 'feed' : 'grid'}
+          gallery={post.data.gallery}
         />
       ))}
     </div>
