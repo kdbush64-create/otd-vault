@@ -123,23 +123,33 @@ if (olderPosts.length > 0) {
     {isDispatch && olderByYear.length > 0 && (
       <div class="archive-older">
         <p class="archive-heading">OLDER DISPATCHES</p>
-        {olderByYear.map(({ year, posts: yPosts }) => (
-          <details class="archive-year-group">
-            <summary class="archive-year"><span>{year}</span></summary>
-            <ul class="archive-list">
-              {yPosts.map((post: any) => (
-                <li class="archive-item">
-                  <a href={`/dispatch/${post.id.replace(/\.mdoc$/, '')}`} class="archive-title">
-                    {post.data.title}
-                  </a>
-                  <time class="archive-date" datetime={post.data.date}>
-                    {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                  </time>
-                </li>
-              ))}
-            </ul>
-          </details>
-        ))}
+        <input
+          type="search"
+          id="dispatch-search"
+          class="archive-search-input"
+          placeholder="Search all dispatches…"
+          autocomplete="off"
+        />
+        <div id="search-results" class="search-results" hidden></div>
+        <div id="year-groups">
+          {olderByYear.map(({ year, posts: yPosts }) => (
+            <details class="archive-year-group">
+              <summary class="archive-year"><span>{year}</span></summary>
+              <ul class="archive-list">
+                {yPosts.map((post: any) => (
+                  <li class="archive-item">
+                    <a href={`/dispatch/${post.id.replace(/\.mdoc$/, '')}`} class="archive-title">
+                      {post.data.title}
+                    </a>
+                    <time class="archive-date" datetime={post.data.date}>
+                      {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </time>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </div>
       </div>
     )}
 
@@ -166,6 +176,77 @@ if (olderPosts.length > 0) {
 
   </section>
 </BaseLayout>
+
+<script is:inline>
+  (function () {
+    var input = document.getElementById('dispatch-search');
+    var resultsEl = document.getElementById('search-results');
+    var yearGroups = document.getElementById('year-groups');
+    if (!input) return;
+
+    var pf = null;
+    var timer = null;
+
+    function loadPagefind() {
+      if (pf) return Promise.resolve(pf);
+      return import('/_pagefind/pagefind.js')
+        .then(function (lib) {
+          return lib.init().then(function () { pf = lib; return pf; });
+        })
+        .catch(function () { return null; });
+    }
+
+    function clearSearch() {
+      if (resultsEl) { resultsEl.hidden = true; resultsEl.innerHTML = ''; }
+      if (yearGroups) yearGroups.style.display = '';
+    }
+
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      var q = this.value.trim();
+      if (!q) { clearSearch(); return; }
+
+      timer = setTimeout(function () {
+        loadPagefind().then(function (lib) {
+          if (!lib) {
+            resultsEl.innerHTML = '<p class="search-empty">Search index not ready — run a production build first.</p>';
+            resultsEl.hidden = false;
+            return;
+          }
+          return lib.search(q).then(function (search) {
+            if (yearGroups) yearGroups.style.display = 'none';
+
+            var hits = (search.results || []).filter(function (r) {
+              return r.url && r.url.indexOf('/dispatch/') !== -1;
+            }).slice(0, 20);
+
+            if (hits.length === 0) {
+              resultsEl.innerHTML = '<p class="search-empty">No dispatches matched “' + q + '”.</p>';
+              resultsEl.hidden = false;
+              return;
+            }
+
+            Promise.all(hits.map(function (r) { return r.data(); })).then(function (items) {
+              resultsEl.innerHTML = items.map(function (r) {
+                var title = (r.meta && r.meta.title) ? r.meta.title : 'Dispatch';
+                return '<a href="' + r.url + '" class="search-result-item">'
+                  + '<span class="search-result-title">' + title + '</span>'
+                  + '<span class="search-result-excerpt">' + r.excerpt + '</span>'
+                  + '</a>';
+              }).join('');
+              resultsEl.hidden = false;
+            });
+          });
+        });
+      }, 300);
+    });
+
+    input.addEventListener('search', function () {
+      if (!this.value) clearSearch();
+    });
+  })();
+</script>
+
 <style>
   /* Hero */
   .channel-hero {
@@ -237,6 +318,66 @@ if (olderPosts.length > 0) {
     grid-template-columns: 1fr 1fr;
     gap: 1.1rem;
     margin-bottom: 3rem;
+  }
+
+  /* Dispatch search */
+  .archive-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    padding: 0.55rem 0.85rem;
+    border: 1.5px solid rgba(43,37,32,0.18);
+    border-radius: 2px;
+    background: #fff;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+  .archive-search-input:focus {
+    outline: none;
+    border-color: var(--clay);
+  }
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+  }
+  .search-result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(43,37,32,0.08);
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .search-result-item:last-child { border-bottom: none; }
+  .search-result-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    transition: color 0.15s;
+  }
+  .search-result-item:hover .search-result-title { color: var(--clay); }
+  .search-result-excerpt {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .search-result-excerpt mark {
+    background: rgba(181,72,46,0.12);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+  .search-empty {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    padding: 0.5rem 0;
   }
 
   /* Older dispatches year list */
