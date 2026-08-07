@@ -189,7 +189,7 @@ if (olderPosts.length > 0) {
 
     function loadPagefind() {
       if (pf) return Promise.resolve(pf);
-      return import('/_pagefind/pagefind.js')
+      return import('/pagefind/pagefind.js')
         .then(function (lib) {
           return lib.init().then(function () { pf = lib; return pf; });
         })
