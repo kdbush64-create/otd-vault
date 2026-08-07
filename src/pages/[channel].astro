@@ -214,17 +214,16 @@ if (olderPosts.length > 0) {
             return;
           }
           return lib.search(q).then(function (search) {
-            if (yearGroups) yearGroups.style.display = 'none';
-
-            var hits = (search.results || []).filter(function (r) {
-              return r.url && r.url.indexOf('/dispatch/') !== -1;
-            }).slice(0, 20);
+            var hits = (search.results || []).slice(0, 20);
 
             if (hits.length === 0) {
-              resultsEl.innerHTML = '<p class="search-empty">No dispatches matched “' + q + '”.</p>';
+              resultsEl.innerHTML = '<p class=”search-empty”>No results matched “' + q + '”.</p>';
               resultsEl.hidden = false;
+              if (yearGroups) yearGroups.style.display = '';
               return;
             }
+
+            if (yearGroups) yearGroups.style.display = 'none';
 
             Promise.all(hits.map(function (r) { return r.data(); })).then(function (items) {
               resultsEl.innerHTML = items.map(function (r) {
