@@ -43,6 +43,7 @@ const channelMap: Record<string, string> = {
 };
 ---
 <BaseLayout title={`#${tag} | v64otd.com`} description={`Posts tagged ${tag} on v64otd.com`}>
+  <div data-pagefind-ignore>
   <nav style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
     <a href="/" style="color:var(--accent); text-decoration:none; font-size:0.85rem;">&laquo; Home</a>
   </nav>
@@ -67,4 +68,5 @@ const channelMap: Record<string, string> = {
       </div>
     </section>
   </div>
+</div>
 </BaseLayout>
