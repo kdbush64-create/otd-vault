@@ -2,22 +2,21 @@
 import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
   isArticle?: boolean;
+  hideNewsletterStrip?: boolean;
 }
-
-const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = false } = Astro.props;
+const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = false, hideNewsletterStrip = false } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="p:domain_verify" content="9e9d6f38b0df6e7e33aad4ef50bc1747"/>    
+    <meta name="p:domain_verify" content="9e9d6f38b0df6e7e33aad4ef50bc1747"/>
 <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-BHFJD28SFL"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
@@ -25,7 +24,6 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = 
       gtag('js', new Date());
       gtag('config', 'G-BHFJD28SFL');
     </script>
-
     <!-- Pinterest Tag -->
     <script>
       !function(e){if(!window.pintrk){window.pintrk = function () {
@@ -42,7 +40,6 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = 
         src="https://ct.pinterest.com/v3/?event=init&tid=2614359457769&pd[em]=<hashed_email_address>&noscript=1" />
     </noscript>
     <!-- end Pinterest Tag -->
-
     <SEO title={title} description={description} ogImage={ogImage} isArticle={isArticle} />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="icon" type="image/svg+xml" href="/favicon-v64otd-seal_1.svg" />
@@ -60,6 +57,6 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = 
     <main data-pagefind-body>
       <slot />
     </main>
-    <Footer />
+    <Footer hideNewsletterStrip={hideNewsletterStrip} />
   </body>
 </html>
