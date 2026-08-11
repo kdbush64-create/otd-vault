@@ -1,26 +1,30 @@
 ---
+interface Props { hideNewsletterStrip?: boolean; }
+const { hideNewsletterStrip = false } = Astro.props;
 ---
 <footer>
   <div style="max-width:1080px; margin:0 auto;">
-    <!-- Newsletter signup strip -->
-    <div style="border-bottom:1px solid var(--border); padding-bottom:20px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-      <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft); font-weight:700;">
-        Sign up for Old Texas Dude's monthly newsletter
-      </span>
-      <div>
-        <form id="footer-signup-form" style="display:flex; gap:8px; flex-wrap:wrap;">
-          <input type="email" name="email" placeholder="your@email.com" required
-            style="font-family:'Inter',sans-serif; font-size:13px; padding:7px 12px; border:1.5px solid var(--border); border-radius:2px; background:#fff; color:var(--ink); min-width:200px;" />
-          <button type="submit"
-            style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1px; background:var(--clay); color:#fff; border:none; padding:7px 16px; border-radius:2px; cursor:pointer; white-space:nowrap;">
-            Subscribe
-          </button>
-        </form>
-        <p id="footer-signup-note" style="font-family:'Inter',sans-serif; font-size:11px; color:rgba(43,37,32,0.45); margin:6px 0 0; text-align:right;">
-          Monthly. No spam. Unsubscribe any time.
-        </p>
+    {!hideNewsletterStrip && (
+      <!-- Newsletter signup strip -->
+      <div style="border-bottom:1px solid var(--border); padding-bottom:20px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft); font-weight:700;">
+          Sign up for Old Texas Dude's monthly newsletter
+        </span>
+        <div>
+          <form id="footer-signup-form" style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="email" name="email" placeholder="your@email.com" required
+              style="font-family:'Inter',sans-serif; font-size:13px; padding:7px 12px; border:1.5px solid var(--border); border-radius:2px; background:#fff; color:var(--ink); min-width:200px;" />
+            <button type="submit"
+              style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1px; background:var(--clay); color:#fff; border:none; padding:7px 16px; border-radius:2px; cursor:pointer; white-space:nowrap;">
+              Subscribe
+            </button>
+          </form>
+          <p id="footer-signup-note" style="font-family:'Inter',sans-serif; font-size:11px; color:rgba(43,37,32,0.45); margin:6px 0 0; text-align:right;">
+            Monthly. No spam. Unsubscribe any time.
+          </p>
+        </div>
       </div>
-    </div>
+    )}
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:24px; margin-bottom:28px;">
       <div>
         <a href="/" style="font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--ink); text-decoration:none; display:block; margin-bottom:8px;">
