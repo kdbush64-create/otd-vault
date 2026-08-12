@@ -7,20 +7,18 @@ try { entry = await getEntry('pages', 'the-man'); } catch (_) {}
 let Content: any = null;
 if (entry) { const r = await entry.render(); Content = r.Content; }
 ---
-
 <BaseLayout title="About | OTD Vault" description="About Vintage64TX and v64otd.com">
-
+  <!-- Hero -->
+  <section class="about-hero">
+    <div class="about-hero-inner">
+      <p class="hero-eyebrow">OLD TEXAS DUDE</p>
+      <h1 class="hero-title">The Operator.</h1>
+    </div>
+  </section>
   <div class="about-page">
-
     <nav class="about-breadcrumb">
       <a href="/">← Home</a>
     </nav>
-
-    <header class="about-header">
-      <p class="about-eyebrow">THE OPERATOR</p>
-      <h1 class="about-title">About: Old Texas Dude</h1>
-    </header>
-
     <figure class="about-portrait">
       <img
         src="/images/profile/v64otd-mastodon-avatar.jpg"
@@ -29,20 +27,16 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
       />
       <figcaption class="about-portrait-caption">I-35 South. Fort Worth. The brisket was cold. The dispatch was not.</figcaption>
     </figure>
-
     <div class="about-storefront">
       <a href="https://amzn.to/4vDY4A2" target="_blank" rel="noopener sponsored" class="storefront-link">
         🛒 Shop my Amazon picks →
       </a>
       <p class="storefront-disclosure">As an Amazon Associate, I earn from qualifying purchases.</p>
     </div>
-
     <div class="about-body">
       {Content ? <Content /> : <p>About page coming soon.</p>}
     </div>
-
     <hr class="about-rule" />
-
     <!-- Channel grid -->
     <section class="channels-section">
       <h2 class="channels-heading">What's in the Vault</h2>
@@ -84,9 +78,7 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
         </a>
       </div>
     </section>
-
     <hr class="about-rule" />
-
     <section class="contact-section">
       <h2 class="contact-heading">Contact the Operator</h2>
       <form id="contact-form" class="contact-form">
@@ -120,21 +112,53 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
         <div id="form-status" class="form-status" style="display:none;"></div>
       </form>
     </section>
-
   </div>
-
 </BaseLayout>
-
 <style>
-.about-portrait { margin: 0 0 2rem; }
+  /* ── Hero ── */
+  .about-hero {
+    background:
+      linear-gradient(to bottom, rgba(20,16,12,0.68) 0%, rgba(20,16,12,0.55) 55%, rgba(20,16,12,0.78) 100%),
+      url('/images/FTW_interchange.jpg') center 40% / cover no-repeat;
+    padding: 5.5rem 1.5rem 4.5rem;
+    text-align: center;
+  }
+  .about-hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--ochre);
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--bg-limestone);
+  }
+  /* ── Page ── */
+  .about-page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .about-breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 2rem; }
+  .about-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
+  .about-breadcrumb a:hover { color: var(--clay); }
+  /* ── Portrait (shrunk) ── */
+  .about-portrait { margin: 0 0 2rem; display: flex; align-items: flex-start; gap: 1.25rem; flex-wrap: wrap; }
   .about-portrait-img {
-    width: 100%;
-    height: auto;
-    max-height: 480px;
+    width: 130px;
+    height: 130px;
     object-fit: cover;
     object-position: center top;
-    border-radius: 4px;
+    border-radius: 50%;
     display: block;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
   }
   .about-portrait-caption {
     font-family: 'IBM Plex Mono', monospace;
@@ -143,7 +167,9 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     color: rgba(43,37,32,0.5);
     margin-top: 0.5rem;
     display: block;
+    align-self: flex-end;
   }
+  /* ── Storefront ── */
   .about-storefront {
     margin: 0 0 2rem;
     padding: 0.9rem 1.1rem;
@@ -165,20 +191,14 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     color: rgba(43,37,32,0.5);
     margin: 0.4rem 0 0;
   }
-.about-page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-  .about-breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 2rem; }
-  .about-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
-  .about-breadcrumb a:hover { color: var(--clay); }
-  .about-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--cedar); text-transform: uppercase; margin: 0 0 0.5rem; }
-  .about-title { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; color: var(--ink); margin: 0 0 2rem; line-height: 1.15; }
+  /* ── Body ── */
   .about-body { font-family: 'Inter', sans-serif; font-size: 1.02rem; line-height: 1.75; color: var(--ink); }
   .about-body :global(p) { margin: 0 0 1.25em; }
   .about-body :global(h2) { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600; margin: 2rem 0 0.5rem; color: var(--ink); }
   .about-body :global(strong) { font-weight: 600; }
   .about-body :global(a) { color: var(--clay); text-underline-offset: 3px; }
   .about-rule { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
-
-  /* Channel grid */
+  /* ── Channel grid ── */
   .channels-section { margin-bottom: 0.5rem; }
   .channels-heading { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); margin: 0 0 1.25rem; }
   .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
@@ -193,8 +213,7 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   .ch-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; color: var(--ink); margin: 0; }
   .ch-desc { font-family: 'Inter', sans-serif; font-size: 0.82rem; color: rgba(43,37,32,0.65); line-height: 1.5; margin: 0; flex: 1; }
   .ch-link { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--clay); margin-top: 0.35rem; }
-
-  /* Contact form */
+  /* ── Contact form ── */
   .contact-heading { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); margin: 0 0 1.5rem; }
   .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
   .form-row { display: flex; gap: 1rem; flex-wrap: wrap; }
@@ -214,7 +233,6 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   .form-status.success { color: var(--cedar); border-color: var(--cedar); }
   .form-status.error { color: var(--clay); border-color: var(--clay); }
 </style>
-
 <script>
   const form       = document.getElementById('contact-form') as HTMLFormElement;
   const submitBtn  = document.getElementById('submit-btn')   as HTMLButtonElement;
@@ -225,7 +243,6 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   const lastName   = document.getElementById('lastName')     as HTMLInputElement;
   const email      = document.getElementById('email')        as HTMLInputElement;
   const message    = document.getElementById('message')      as HTMLTextAreaElement;
-
   document.querySelectorAll('[data-for]').forEach(counter => {
     const fieldId = (counter as HTMLElement).dataset.for!;
     const field = document.getElementById(fieldId) as HTMLInputElement;
