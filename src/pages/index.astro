@@ -379,72 +379,92 @@ const otherPost = otherReviews[0] ?? null;
   }
 
   /* ── Newsletter CTA ── */
-  .newsletter-cta {
-    background: var(--ink);
-    padding: 3rem 1.5rem;
-    text-align: center;
-  }
-  .nl-eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.14em;
-    color: var(--ochre);
-    margin: 0 0 0.75rem;
-  }
-  .nl-title {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 600;
-    color: var(--bg-limestone);
-    margin: 0 0 0.6rem;
-  }
-  .nl-sub {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    color: rgba(239,233,220,0.55);
-    margin: 0 0 1.5rem;
-  }
-  .nl-form {
-    display: flex;
-    gap: 0.5rem;
-    max-width: 400px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .nl-input {
-    flex: 1;
-    min-width: 200px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    padding: 8px 12px;
-    border: 1.5px solid rgba(239,233,220,0.2);
-    border-radius: 2px;
-    background: rgba(239,233,220,0.08);
-    color: var(--bg-limestone);
-  }
-  .nl-input::placeholder { color: rgba(239,233,220,0.35); }
-  .nl-input:focus { outline: none; border-color: var(--clay); }
-  .nl-btn {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1px;
-    background: var(--clay);
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 2px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-  }
-  .nl-btn:hover { background: var(--clay-dark); }
-  .nl-note {
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    color: rgba(239,233,220,0.3);
-    margin: 0.6rem 0 0;
-  }
+.newsletter-cta {
+  position: relative;
+  background: var(--ink);
+  background-image: url('/images/ledger_pic.jpg');
+  background-size: cover;
+  background-position: center 35%;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+.newsletter-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(20,16,12,0.82) 0%,
+    rgba(20,16,12,0.90) 100%
+  );
+}
+.nl-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.nl-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: var(--ochre);
+  margin: 0 0 0.75rem;
+}
+.nl-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--bg-limestone);
+  margin: 0 0 0.6rem;
+}
+.nl-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(239,233,220,0.55);
+  margin: 0 0 1.5rem;
+}
+.nl-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.nl-input {
+  flex: 1;
+  min-width: 200px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 8px 12px;
+  border: 1.5px solid rgba(239,233,220,0.2);
+  border-radius: 2px;
+  background: rgba(239,233,220,0.08);
+  color: var(--bg-limestone);
+}
+.nl-input::placeholder { color: rgba(239,233,220,0.35); }
+.nl-input:focus { outline: none; border-color: var(--clay); }
+.nl-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  background: var(--clay);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.nl-btn:hover { background: var(--clay-dark); }
+.nl-note {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: rgba(239,233,220,0.3);
+  margin: 0.6rem 0 0;
+}
 
   /* ── From the Reviews ── */
   .reviews-section {
