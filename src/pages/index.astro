@@ -3,22 +3,18 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 export const prerender = true;
-
 // Dispatch — 5 most recent
 const allDispatch = await getCollection('dispatch');
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 5);
-
 // Picks teaser — 3 active picks
 const allPicks = await getCollection('picks', ({ data }) => data.active !== false);
 const featuredPicks = allPicks.slice(0, 3);
-
 // From the Reviews — 1 gear + 1 from lifestyle-type collections
 const gearPosts = (await getCollection('gear'))
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 const gearPost = gearPosts[0] ?? null;
-
 const otherReviews = [
   ...(await getCollection('table')),
   ...(await getCollection('coord')),
@@ -37,7 +33,6 @@ const otherPost = otherReviews[0] ?? null;
     <img class="u-photo" src="https://v64otd.com/images/profile/v64otd-mastodon-avatar.jpg" alt="" />
     <img class="u-featured" src="https://v64otd.com/images/FTW_interchange.jpg" alt="" />
   </span>
-
   <!-- Hero -->
   <section class="dispatch-hero">
     <div class="hero-inner">
@@ -46,7 +41,6 @@ const otherPost = otherReviews[0] ?? null;
       <p class="hero-sub">Plain-spoken coverage of money, power, and the people who take your tax dollars. No agenda but the truth.</p>
     </div>
   </section>
-
   <!-- PICKS TEASER -->
   {featuredPicks.length > 0 && (
     <section class="picks-teaser">
@@ -73,7 +67,6 @@ const otherPost = otherReviews[0] ?? null;
       </div>
     </section>
   )}
-
   <!-- RECENT DISPATCHES -->
   <section class="dispatch-feed">
     <div class="feed-inner">
@@ -98,25 +91,25 @@ const otherPost = otherReviews[0] ?? null;
       </div>
     </div>
   </section>
-
   <!-- NEWSLETTER CTA -->
   <section class="newsletter-cta">
-    <p class="nl-eyebrow">MONTHLY NEWSLETTER</p>
-    <h2 class="nl-title">Stay in the ledger.</h2>
-    <p class="nl-sub">One dispatch per month. No noise. Unsubscribe any time.</p>
-    <form id="page-signup-form" class="nl-form">
-      <input
-        type="email"
-        name="email"
-        placeholder="your@email.com"
-        required
-        class="nl-input"
-      />
-      <button type="submit" class="nl-btn">Subscribe</button>
-    </form>
-    <p id="page-signup-note" class="nl-note">Monthly. No spam. Unsubscribe any time.</p>
+    <div class="nl-inner">
+      <p class="nl-eyebrow">MONTHLY NEWSLETTER</p>
+      <h2 class="nl-title">Stay in the ledger.</h2>
+      <p class="nl-sub">One dispatch per month. No noise. Unsubscribe any time.</p>
+      <form id="page-signup-form" class="nl-form">
+        <input
+          type="email"
+          name="email"
+          placeholder="your@email.com"
+          required
+          class="nl-input"
+        />
+        <button type="submit" class="nl-btn">Subscribe</button>
+      </form>
+      <p id="page-signup-note" class="nl-note">Monthly. No spam. Unsubscribe any time.</p>
+    </div>
   </section>
-
   <!-- FROM THE REVIEWS -->
   {(gearPost || otherPost) && (
     <section class="reviews-section">
@@ -151,9 +144,7 @@ const otherPost = otherReviews[0] ?? null;
       </div>
     </section>
   )}
-
 </BaseLayout>
-
 <script is:inline>
   (function () {
     var form = document.getElementById('page-signup-form');
@@ -189,7 +180,6 @@ const otherPost = otherReviews[0] ?? null;
     });
   })();
 </script>
-
 <style>
   /* ── Shared ── */
   .section-header {
@@ -214,7 +204,6 @@ const otherPost = otherReviews[0] ?? null;
     text-decoration: none;
   }
   .section-link:hover { text-decoration: underline; }
-
   /* ── Hero ── */
   .dispatch-hero {
     position: relative;
@@ -267,7 +256,6 @@ const otherPost = otherReviews[0] ?? null;
     max-width: 540px;
     margin-inline: auto;
   }
-
   /* ── Picks Teaser ── */
   .picks-teaser {
     background: var(--card-bg);
@@ -330,7 +318,6 @@ const otherPost = otherReviews[0] ?? null;
     color: var(--clay);
     margin-top: 0.15rem;
   }
-
   /* ── Dispatch Grid ── */
   .dispatch-feed {
     background: var(--bg-limestone);
@@ -377,95 +364,79 @@ const otherPost = otherReviews[0] ?? null;
     background: var(--clay);
     color: #fff;
   }
-
   /* ── Newsletter CTA ── */
-.newsletter-cta {
-  position: relative;
-  background: var(--ink);
-  background-image: url('/images/ledger_pic.jpg');
-  background-size: cover;
-  background-position: center 35%;
-  padding: 4rem 1.5rem;
-  text-align: center;
-}
-.newsletter-cta::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(20,16,12,0.82) 0%,
-    rgba(20,16,12,0.90) 100%
-  );
-}
-.nl-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 500px;
-  margin: 0 auto;
-}
-.nl-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-  color: var(--ochre);
-  margin: 0 0 0.75rem;
-}
-.nl-title {
-  font-family: 'Fraunces', serif;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 600;
-  color: var(--bg-limestone);
-  margin: 0 0 0.6rem;
-}
-.nl-sub {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  color: rgba(239,233,220,0.55);
-  margin: 0 0 1.5rem;
-}
-.nl-form {
-  display: flex;
-  gap: 0.5rem;
-  max-width: 400px;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.nl-input {
-  flex: 1;
-  min-width: 200px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  padding: 8px 12px;
-  border: 1.5px solid rgba(239,233,220,0.2);
-  border-radius: 2px;
-  background: rgba(239,233,220,0.08);
-  color: var(--bg-limestone);
-}
-.nl-input::placeholder { color: rgba(239,233,220,0.35); }
-.nl-input:focus { outline: none; border-color: var(--clay); }
-.nl-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 1px;
-  background: var(--clay);
-  color: #fff;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 2px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.15s;
-}
-.nl-btn:hover { background: var(--clay-dark); }
-.nl-note {
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  color: rgba(239,233,220,0.3);
-  margin: 0.6rem 0 0;
-}
-
+  .newsletter-cta {
+    background:
+      linear-gradient(rgba(20,16,12,0.78), rgba(20,16,12,0.85)),
+      url('/images/ledger_pic.jpg') center 35% / cover no-repeat;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+  .nl-inner {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .nl-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    color: var(--ochre);
+    margin: 0 0 0.75rem;
+  }
+  .nl-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    color: var(--bg-limestone);
+    margin: 0 0 0.6rem;
+  }
+  .nl-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(239,233,220,0.55);
+    margin: 0 0 1.5rem;
+  }
+  .nl-form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nl-input {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1.5px solid rgba(239,233,220,0.2);
+    border-radius: 2px;
+    background: rgba(239,233,220,0.08);
+    color: var(--bg-limestone);
+  }
+  .nl-input::placeholder { color: rgba(239,233,220,0.35); }
+  .nl-input:focus { outline: none; border-color: var(--clay); }
+  .nl-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    background: var(--clay);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .nl-btn:hover { background: var(--clay-dark); }
+  .nl-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: rgba(239,233,220,0.3);
+    margin: 0.6rem 0 0;
+  }
   /* ── From the Reviews ── */
   .reviews-section {
     background: var(--bg-limestone);
@@ -480,7 +451,6 @@ const otherPost = otherReviews[0] ?? null;
     grid-template-columns: 1fr 1fr;
     gap: 1.1rem;
   }
-
   /* ── Mobile ── */
   @media (max-width: 640px) {
     .picks-teaser-grid { grid-template-columns: 1fr; }
