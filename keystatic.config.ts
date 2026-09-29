@@ -57,6 +57,10 @@ const postFields = {
     label: 'Signoff Line (optional)',
     description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN’T. Leave blank to skip entirely.',
   }),
+  downloadUrl: fields.url({
+    label: 'Download URL (PDF)',
+    description: 'Optional — publicly hosted PDF link. A download button will appear on the dispatch page.',
+  }),
 };
 
 // Price now lives per-link, not as a single article-level field — supports multi-product articles
