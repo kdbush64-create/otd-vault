@@ -1,0 +1,220 @@
+---
+export const prerender = true;
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Links | OTD Vault — Old Texas Dude"
+  description="All the places you can find Old Texas Dude — dispatches, essays, social, and more."
+>
+  <style>
+    .links-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+    }
+    .links-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .links-eyebrow {
+      color: #B5482E;
+      font-size: 0.68rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-family: 'Georgia', serif;
+      margin-bottom: 8px;
+    }
+    .links-title {
+      color: #2B2520;
+      font-family: 'Fraunces', 'Georgia', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+    .links-tagline {
+      color: #5C4A3A;
+      font-size: 0.88rem;
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+    }
+    .links-rule {
+      border: none;
+      border-top: 2px solid #B5482E;
+      margin: 24px auto 36px;
+      width: 48px;
+    }
+    .links-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    /* Featured link — inverted clay */
+    .link-card-featured {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      background: #B5482E;
+      color: #EFE9DC;
+      text-decoration: none;
+      min-height: 64px;
+      transition: background 0.15s ease;
+    }
+    .link-card-featured:hover {
+      background: #9A3A24;
+    }
+    .link-card-featured .lc-title {
+      font-family: 'Fraunces', 'Georgia', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #EFE9DC;
+    }
+    .link-card-featured .lc-sub {
+      font-size: 0.72rem;
+      color: rgba(239,233,220,0.75);
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+    /* Standard link cards */
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 22px;
+      background: #fff;
+      border: 1px solid #DDD5C4;
+      color: #2B2520;
+      text-decoration: none;
+      min-height: 56px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .link-card:hover {
+      border-color: #B5482E;
+      background: #FAF7F2;
+    }
+    .link-card .lc-title {
+      font-family: 'Fraunces', 'Georgia', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2B2520;
+    }
+    .link-card .lc-sub {
+      font-size: 0.72rem;
+      color: #8A7060;
+      margin-top: 2px;
+    }
+    .link-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      width: 28px;
+      text-align: center;
+    }
+    .links-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 6px 0;
+    }
+    .links-divider-line {
+      flex: 1;
+      height: 1px;
+      background: #DDD5C4;
+    }
+    .links-divider-label {
+      color: #B5482E;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-family: Georgia, serif;
+    }
+    .links-footer {
+      text-align: center;
+      color: #A0907E;
+      font-size: 0.7rem;
+      font-family: Georgia, serif;
+      margin-top: 40px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+  </style>
+
+  <div class="links-wrap">
+
+    <div class="links-header">
+      <p class="links-eyebrow">Old Texas Dude</p>
+      <h1 class="links-title">OTD Vault</h1>
+      <hr class="links-rule" />
+      <p class="links-tagline">Plain-spoken coverage of money, power,<br/>and the people who take your tax dollars.</p>
+    </div>
+
+    <nav class="links-nav">
+
+      <a href="https://v64otd.com" class="link-card-featured">
+        <span class="link-icon">⌂</span>
+        <div>
+          <div class="lc-title">OTD Vault — The Main Site</div>
+          <div class="lc-sub">v64otd.com &mdash; The Ledger Doesn't Lie</div>
+        </div>
+      </a>
+
+      <a href="https://substack.com/@v64otd" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="link-icon">📬</span>
+        <div>
+          <div class="lc-title">Substack</div>
+          <div class="lc-sub">Monthly Dispatch</div>
+        </div>
+      </a>
+
+      <a href="https://www.threads.com/@old_texas_dude" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="link-icon">🧵</span>
+        <div>
+          <div class="lc-title">Threads</div>
+          <div class="lc-sub">@old_texas_dude</div>
+        </div>
+      </a>
+
+      <a href="https://www.reddit.com/user/V64OTD/" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="link-icon">🤖</span>
+        <div>
+          <div class="lc-title">Reddit</div>
+          <div class="lc-sub">u/V64OTD</div>
+        </div>
+      </a>
+
+      <a href="https://www.pinterest.com/V64OTD/" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="link-icon">📌</span>
+        <div>
+          <div class="lc-title">Pinterest</div>
+          <div class="lc-sub">V64OTD</div>
+        </div>
+      </a>
+
+      <div class="links-divider">
+        <div class="links-divider-line"></div>
+        <span class="links-divider-label">Shop</span>
+        <div class="links-divider-line"></div>
+      </div>
+
+      <a href="https://amzn.to/4vDY4A2" target="_blank" rel="noopener noreferrer nofollow" class="link-card">
+        <span class="link-icon">🛒</span>
+        <div>
+          <div class="lc-title">Amazon Storefront</div>
+          <div class="lc-sub">Stuff I Actually Use</div>
+        </div>
+      </a>
+
+      <a href="https://vintage64tx.com" target="_blank" rel="noopener noreferrer" class="link-card">
+        <span class="link-icon">🖥️</span>
+        <div>
+          <div class="lc-title">Vintage64TX</div>
+          <div class="lc-sub">IT Restoration — Fort Worth</div>
+        </div>
+      </a>
+
+    </nav>
+
+    <p class="links-footer">v64otd.com &mdash; The Ledger Doesn't Lie</p>
+
+  </div>
+</BaseLayout>
