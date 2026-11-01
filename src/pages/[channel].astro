@@ -42,7 +42,7 @@ const channelMeta: Record<Channel, { title: string; description: string; eyebrow
   },
   lifestyle: {
     title: 'My Ledger — OTD Vault',
-    description: 'Life off the clock. Health, travel, pets, and everything that isn’t politics or a product review.',
+    description: 'Life off the clock. Health, travel, pets, and everything that isn't politics or a product review.',
     eyebrow: 'MY LEDGER',
   },
 };
@@ -50,6 +50,7 @@ const meta = channelMeta[channel];
 const posts = (await getCollection(channel as any))
   .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 const isDispatch = channel === 'dispatch';
+const isLifestyle = channel === 'lifestyle';
 const channelHeroImages: Partial<Record<Channel, string>> = {
   dispatch: '/images/archives-hero.jpg',
   gear: '/images/gear-hero.jpg',
@@ -79,6 +80,41 @@ if (olderPosts.length > 0) {
     .sort(([a], [b]) => Number(b) - Number(a))
     .forEach(([year, yPosts]) => olderByYear.push({ year: Number(year), posts: yPosts }));
 }
+
+// Lifestyle — build series shelf + filter chapter posts from main grid
+type SeriesEntry = {
+  slug: string;
+  title: string;
+  chapterCount: number;
+  latestDate: string;
+};
+const seriesMap = new Map<string, SeriesEntry>();
+const standalonePosts: PostEntry[] = [];
+
+if (isLifestyle) {
+  (posts as PostEntry[]).forEach((post: any) => {
+    const s = post.data.series;
+    if (s) {
+      if (!seriesMap.has(s)) {
+        seriesMap.set(s, {
+          slug: s,
+          title: post.data.seriesTitle ?? s,
+          chapterCount: 0,
+          latestDate: post.data.date,
+        });
+      }
+      const entry = seriesMap.get(s)!;
+      entry.chapterCount += 1;
+      // posts are sorted newest-first, so the first time we see a slug it's already the latest
+    } else {
+      standalonePosts.push(post);
+    }
+  });
+}
+
+const seriesList = [...seriesMap.values()];
+// For channels other than lifestyle, show all posts in the grid
+const gridPosts = isLifestyle ? standalonePosts : posts;
 ---
 <BaseLayout title={meta.title} description={meta.description}>
   <!-- Channel Header -->
@@ -102,6 +138,27 @@ if (olderPosts.length > 0) {
 
   <!-- Posts -->
   <section class="posts-section">
+
+    {/* Lifestyle: series shelf */}
+    {isLifestyle && seriesList.length > 0 && (
+      <div class="series-shelf">
+        <p class="shelf-label">Series</p>
+        <div class="series-grid">
+          {seriesList.map((s) => (
+            <a href={`/lifestyle/series/${s.slug}`} class="series-card">
+              <div class="series-card-header">
+                <div class="series-count-block">
+                  <span class="series-count">{s.chapterCount}</span>
+                  <span class="series-count-label">chapters</span>
+                </div>
+                <h2 class="series-card-title">{s.title}</h2>
+              </div>
+              <p class="series-card-cta">Read the series →</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
 
     {/* Dispatch: recent grid cards + older year list */}
     {isDispatch && (
@@ -153,10 +210,10 @@ if (olderPosts.length > 0) {
       </div>
     )}
 
-    {/* All other channels: grid cards with images */}
-    {!isDispatch && (
+    {/* All other channels (including lifestyle standalones): grid cards with images */}
+    {!isDispatch && gridPosts.length > 0 && (
       <div class="card-grid">
-        {posts.map((post: any) => (
+        {(gridPosts as any[]).map((post: any) => (
           <PostCard
             title={post.data.title}
             date={post.data.date}
@@ -217,7 +274,7 @@ if (olderPosts.length > 0) {
             var hits = (search.results || []).slice(0, 20);
 
             if (hits.length === 0) {
-              resultsEl.innerHTML = '<p class=”search-empty”>No results matched “' + q + '”.</p>';
+              resultsEl.innerHTML = '<p class="search-empty">No results matched "' + q + '".</p>';
               resultsEl.hidden = false;
               if (yearGroups) yearGroups.style.display = '';
               return;
@@ -307,6 +364,105 @@ if (olderPosts.length > 0) {
   .posts-section:has(.card-grid),
   .posts-section:has(.dispatch-grid) {
     max-width: 960px;
+  }
+
+  /* ── Series shelf (lifestyle only) ── */
+  .series-shelf {
+    margin-bottom: 2.5rem;
+  }
+  .shelf-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--clay);
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .shelf-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(43,37,32,0.12);
+  }
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .series-card {
+    border: 1.5px solid rgba(43,37,32,0.14);
+    border-radius: 3px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .series-card:hover {
+    border-color: var(--clay);
+    box-shadow: 0 3px 14px rgba(43,37,32,0.08);
+  }
+  .series-card-header {
+    background: rgba(43,37,32,0.04);
+    border-bottom: 1px solid rgba(43,37,32,0.1);
+    padding: 1rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .series-count-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 2.5rem;
+  }
+  .series-count {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--clay);
+    line-height: 1;
+  }
+  .series-count-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(43,37,32,0.4);
+    margin-top: 0.1rem;
+  }
+  .series-card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .series-card-cta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--clay);
+    padding: 0.75rem 1.1rem;
+    margin: 0;
+  }
+
+  /* Posts section label (standalone posts under series shelf) */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .series-shelf + .card-grid {
+    border-top: 1px solid rgba(43,37,32,0.1);
+    padding-top: 2rem;
+    margin-top: 0.5rem;
   }
 
   /* Dispatch recent grid */
@@ -457,13 +613,6 @@ if (olderPosts.length > 0) {
     flex-direction: column;
   }
 
-  /* Card grid layout (non-dispatch channels) */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.25rem;
-  }
-
   .empty-state {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.85rem;
@@ -474,5 +623,6 @@ if (olderPosts.length > 0) {
 
   @media (max-width: 640px) {
     .dispatch-grid { grid-template-columns: 1fr; }
+    .series-grid { grid-template-columns: 1fr; }
   }
 </style>
