@@ -13,7 +13,7 @@ const channelMap: Record<string, string> = {
   table: 'THE TABLE',
   chow: 'THE KITCHEN',
   xposts: 'X_POSTS',
-  substack: 'SUBSTACK FEED',
+  lifestyle: 'MY LEDGER',
 };
 const channelDescMap: Record<string, string> = {
   chow: 'A curation of some of my favorite recipes.',
@@ -21,14 +21,13 @@ const channelDescMap: Record<string, string> = {
 const activeChannel = title.toLowerCase();
 const displayLabel = channelMap[activeChannel] ?? title.toUpperCase();
 const channelDesc = channelDescMap[activeChannel] ?? null;
-const navChannels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'] as const;
+const navChannels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'lifestyle'] as const;
 ---
 <BaseLayout title={`${displayLabel} | OTD Vault`} description={description}>
   <nav class="secondary-filters" style="margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
     {navChannels.map(ch => (
       <a href={`/${ch}`} class="submit-btn" style={`text-decoration:none;${activeChannel === ch ? ' border-color:var(--accent); color:var(--accent); background:rgba(0,255,65,0.08);' : ''}`}>{channelMap[ch]}</a>
     ))}
-    <a href="/substack" class="submit-btn" style={`text-decoration:none;${activeChannel === 'substack' ? ' border-color:var(--accent); color:var(--accent); background:rgba(0,255,65,0.08);' : ''}`}>SUBSTACK FEED</a>
   </nav>
   <div class="vault-layout">
     <section style="width: 100%;">
