@@ -65,7 +65,7 @@ const isLifestyle = channel === 'lifestyle';
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
   chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
-  lifestyle: 'Lifestyle',
+  lifestyle: 'My Ledger',
 };
 const channelLabel = channelLabels[channel] ?? channel;
 const channelHref = isDispatch ? '/dispatch' : isLifestyle ? '/lifestyle' : '/reviews';
@@ -116,7 +116,7 @@ const ogImageAbsolute = heroImage
     <nav class="post-breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
       <span aria-hidden="true">›</span>
-      <a href={channelHref}>{isDispatch ? 'Dispatch' : isLifestyle ? 'Lifestyle' : 'Reviews'}</a>
+      <a href={channelHref}>{isDispatch ? 'Dispatch' : isLifestyle ? 'My Ledger' : 'Reviews'}</a>
       {!isDispatch && !isLifestyle && (
               <>
           <span aria-hidden="true">›</span>
