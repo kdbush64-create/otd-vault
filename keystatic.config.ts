@@ -163,6 +163,18 @@ const travelFields = {
 const lifestyleFields = {
   ...affiliateFields,
   affiliateLinks: affiliateLinksField('Add a link for anything mentioned worth pointing readers toward — no pressure to link everything.'),
+  series: fields.text({
+    label: 'Series (optional)',
+    description: 'Slug for grouping articles — e.g. adrenal-journey. Must match exactly across all articles in the series.',
+  }),
+  seriesOrder: fields.integer({
+    label: 'Series Order (optional)',
+    description: 'Position in series — 1, 2, 3... Leave blank if not part of a series.',
+  }),
+  seriesTitle: fields.text({
+    label: 'Series Display Name (optional)',
+    description: 'Human-readable name shown on the series page — e.g. My Adrenal Tumor Journey. Only needs to be set on one article; use the same value on all.',
+  }),
   signoff: fields.text({
     label: 'Signoff Line (optional)',
     description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN’T. Leave blank to skip entirely.',
