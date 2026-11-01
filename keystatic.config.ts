@@ -231,7 +231,7 @@ export default config({
     navigation: {
       Dispatch: ['dispatch'],
       'Reviews & Gear': ['gear', 'table', 'chow', 'transit', 'coord'],
-      Lifestyle: ['lifestyle'],
+      'My Ledger': ['lifestyle'],
       Picks: ['picks'],
       Site: ['pages'],
       Other: ['xposts'],
@@ -244,7 +244,7 @@ export default config({
     chow:      collection({ label: 'The Kitchen',         slugField: 'title', path: 'src/content/chow/*',      format: { frontmatter: 'yaml', contentField: 'content' }, schema: chowFields }),
     transit:   collection({ label: 'Travel — Road Trip',  slugField: 'title', path: 'src/content/transit/*',   format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
     coord:     collection({ label: 'Getaways',            slugField: 'title', path: 'src/content/coord/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
-    lifestyle: collection({ label: 'Lifestyle',           slugField: 'title', path: 'src/content/lifestyle/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: lifestyleFields }),
+    lifestyle: collection({ label: 'My Ledger',           slugField: 'title', path: 'src/content/lifestyle/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: lifestyleFields }),
     picks:     collection({ label: 'Picks',               slugField: 'title', path: 'src/content/picks/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: picksFields }),
     xposts:    collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
