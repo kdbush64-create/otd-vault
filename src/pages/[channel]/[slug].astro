@@ -54,6 +54,9 @@ const bestSeason       = 'bestSeason'       in data ? data.bestSeason       : un
 const recommendedStay  = 'recommendedStay'  in data ? data.recommendedStay  : undefined;
 const pairWith         = 'pairWith'         in data ? data.pairWith         : undefined;
 const downloadUrl      = 'downloadUrl'      in data ? data.downloadUrl      : undefined;
+const series        = 'series'        in data ? data.series        : undefined;
+const seriesOrder   = 'seriesOrder'   in data ? data.seriesOrder   : undefined;
+const seriesTitle   = 'seriesTitle'   in data ? data.seriesTitle   : undefined;
 ---
 <PostLayout
   title={data.title}
@@ -93,6 +96,9 @@ const downloadUrl      = 'downloadUrl'      in data ? data.downloadUrl      : un
   bestSeason={bestSeason}
   recommendedStay={recommendedStay}
   pairWith={pairWith}
+  series={series}
+  seriesOrder={seriesOrder}
+  seriesTitle={seriesTitle}
 >
   <Content />
 </PostLayout>
