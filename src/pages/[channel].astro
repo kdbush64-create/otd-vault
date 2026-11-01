@@ -91,7 +91,7 @@ if (olderPosts.length > 0) {
          channel === 'table' ? 'The Table' :
          channel === 'chow' ? 'The Kitchen' :
          channel === 'transit' ? 'Travel' :
-         channel === 'lifestyle' ? 'Lifestyle' :
+         channel === 'lifestyle' ? 'My Ledger' :
          'Getaways'}
       </h1>
       {isDispatch && (
@@ -112,7 +112,7 @@ if (olderPosts.length > 0) {
             date={post.data.date}
             description={post.data.description}
             href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
-            channel={channel}
+            channel={meta.eyebrow}
             layout="grid"
             gallery={post.data.gallery}
           />
@@ -162,7 +162,7 @@ if (olderPosts.length > 0) {
             date={post.data.date}
             description={post.data.description}
             href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
-            channel={channel}
+            channel={meta.eyebrow}
             layout="grid"
             gallery={post.data.gallery}
           />
