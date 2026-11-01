@@ -1,0 +1,91 @@
+---
+export const prerender = true;
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('lifestyle');
+  const seriesSlugs = [...new Set(posts.map(p => p.data.series).filter(Boolean))];
+  return seriesSlugs.map(series => ({ params: { series } }));
+}
+
+const { series } = Astro.params;
+const allPosts = await getCollection('lifestyle');
+const seriesPosts = allPosts
+  .filter(p => p.data.series === series)
+  .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
+
+const seriesTitle = seriesPosts[0]?.data.seriesTitle ?? series;
+---
+<BaseLayout title={`${seriesTitle} — OTD Vault`} description={`All chapters of ${seriesTitle}`}>
+  <div class="series-index">
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">›</span>
+      <a href="/lifestyle">My Ledger</a>
+      <span aria-hidden="true">›</span>
+      <span>{seriesTitle}</span>
+    </nav>
+    <header class="series-header">
+      <p class="series-eyebrow">SERIES</p>
+      <h1 class="series-title">{seriesTitle}</h1>
+      <p class="series-count">{seriesPosts.length} chapters</p>
+    </header>
+    <ol class="series-list">
+      {seriesPosts.map(post => (
+        <li class="series-item">
+          <a href={`/lifestyle/${post.slug}`} class="series-item-link">
+            <span class="chapter-num">Chapter {post.data.seriesOrder}</span>
+            <span class="chapter-title">{post.data.title}</span>
+            {post.data.date && (
+              <span class="chapter-date">
+                {new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </span>
+            )}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</BaseLayout>
+<style>
+  .series-index { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.06em; color: rgba(43,37,32,0.55);
+    display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--clay); }
+  .series-eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.14em; color: var(--cedar); text-transform: uppercase; margin: 0 0 0.5rem;
+  }
+  .series-title {
+    font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 700; line-height: 1.15; color: var(--ink); margin: 0 0 0.5rem;
+  }
+  .series-count {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    color: rgba(43,37,32,0.4); letter-spacing: 0.08em; margin: 0 0 2.5rem;
+  }
+  .series-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .series-item-link {
+    display: flex; flex-direction: column; gap: 0.15rem;
+    background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 3px;
+    padding: 1rem 1.25rem; text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .series-item-link:hover { border-color: var(--cedar); background: rgba(107,122,94,0.06); }
+  .chapter-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.12em; color: var(--cedar); text-transform: uppercase;
+  }
+  .chapter-title {
+    font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink);
+  }
+  .chapter-date {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    color: rgba(43,37,32,0.4); letter-spacing: 0.04em;
+  }
+</style>
