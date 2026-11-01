@@ -8,10 +8,15 @@ const allDispatch = await getCollection('dispatch');
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 5);
-// Picks teaser — 3 active picks
-const allPicks = await getCollection('picks', ({ data }) => data.active !== false);
+// Picks teaser — 3 most recent 5-star picks
+const allPicks = await getCollection('picks', ({ data }) => data.active !== false && data.rating === '5');
 const featuredPicks = allPicks.slice(0, 3);
-// From the Reviews — 1 gear + 1 from lifestyle-type collections
+// My Ledger — 2 most recent lifestyle posts
+const allLifestyle = await getCollection('lifestyle' as any);
+const ledgerPosts = allLifestyle
+  .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .slice(0, 2);
+// From the Reviews — 1 gear + 1 from other review collections
 const gearPosts = (await getCollection('gear'))
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 const gearPost = gearPosts[0] ?? null;
@@ -20,7 +25,6 @@ const otherReviews = [
   ...(await getCollection('coord')),
   ...(await getCollection('transit')),
   ...(await getCollection('chow')),
-  ...(await getCollection('lifestyle' as any)),
 ].sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 const otherPost = otherReviews[0] ?? null;
 ---
@@ -41,33 +45,7 @@ const otherPost = otherReviews[0] ?? null;
       <p class="hero-sub">Plain-spoken coverage of money, power, and the people who take your tax dollars. No agenda but the truth.</p>
     </div>
   </section>
-  <!-- PICKS TEASER -->
-  {featuredPicks.length > 0 && (
-    <section class="picks-teaser">
-      <div class="picks-teaser-inner">
-        <div class="section-header">
-          <p class="section-label">OTD PICKS — STUFF I ACTUALLY USE</p>
-          <a href="/picks" class="section-link">See all picks →</a>
-        </div>
-        <div class="picks-teaser-grid">
-          {featuredPicks.map(pick => (
-            <a
-              href={pick.data.affiliateUrl}
-              class="picks-teaser-card"
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-            >
-              <span class="teaser-retailer">{pick.data.retailer ?? 'Amazon'}</span>
-              <p class="teaser-name">{pick.data.title}</p>
-              <p class="teaser-desc">{pick.data.description}</p>
-              <span class="teaser-shop">Shop →</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
-  <!-- RECENT DISPATCHES -->
+  <!-- 1. RECENT DISPATCHES -->
   <section class="dispatch-feed">
     <div class="feed-inner">
       <div class="section-header">
@@ -91,6 +69,30 @@ const otherPost = otherReviews[0] ?? null;
       </div>
     </div>
   </section>
+  <!-- 2. MY LEDGER -->
+  {ledgerPosts.length > 0 && (
+    <section class="reviews-section">
+      <div class="reviews-inner">
+        <div class="section-header">
+          <p class="section-label">FROM MY LEDGER</p>
+          <a href="/lifestyle" class="section-link">All entries →</a>
+        </div>
+        <div class="reviews-grid">
+          {ledgerPosts.map((post: any) => (
+            <PostCard
+              title={post.data.title}
+              date={post.data.date}
+              description={post.data.description}
+              href={`/lifestyle/${post.id.replace(/\.mdoc$/, '')}`}
+              channel="lifestyle"
+              layout="grid"
+              gallery={post.data.gallery}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
   <!-- NEWSLETTER CTA -->
   <section class="newsletter-cta">
     <div class="nl-inner">
@@ -110,7 +112,7 @@ const otherPost = otherReviews[0] ?? null;
       <p id="page-signup-note" class="nl-note">Monthly. No spam. Unsubscribe any time.</p>
     </div>
   </section>
-  <!-- FROM THE REVIEWS -->
+  <!-- 3. FROM THE REVIEWS -->
   {(gearPost || otherPost) && (
     <section class="reviews-section">
       <div class="reviews-inner">
@@ -140,6 +142,32 @@ const otherPost = otherReviews[0] ?? null;
               gallery={otherPost.data.gallery}
             />
           )}
+        </div>
+      </div>
+    </section>
+  )}
+  <!-- 4. OTD PICKS -->
+  {featuredPicks.length > 0 && (
+    <section class="picks-teaser">
+      <div class="picks-teaser-inner">
+        <div class="section-header">
+          <p class="section-label">OTD PICKS — STUFF I ACTUALLY USE</p>
+          <a href="/picks" class="section-link">See all picks →</a>
+        </div>
+        <div class="picks-teaser-grid">
+          {featuredPicks.map(pick => (
+            <a
+              href={pick.data.affiliateUrl}
+              class="picks-teaser-card"
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+            >
+              <span class="teaser-retailer">{pick.data.retailer ?? 'Amazon'}</span>
+              <p class="teaser-name">{pick.data.title}</p>
+              <p class="teaser-desc">{pick.data.description}</p>
+              <span class="teaser-shop">Shop →</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -437,7 +465,7 @@ const otherPost = otherReviews[0] ?? null;
     color: rgba(239,233,220,0.3);
     margin: 0.6rem 0 0;
   }
-  /* ── From the Reviews ── */
+  /* ── From the Reviews / My Ledger ── */
   .reviews-section {
     background: var(--bg-limestone);
   }
