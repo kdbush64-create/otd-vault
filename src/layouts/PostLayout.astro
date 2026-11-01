@@ -13,6 +13,9 @@ interface Props {
   affiliateLinks?: { label: string; url: string; priceNoted?: string }[];
   callToAction?: string[];
   signoff?: string;
+  series?: string;
+  seriesOrder?: number;
+  seriesTitle?: string;
   address?: string;
   website?: string;
   foodType?: string;
@@ -43,7 +46,7 @@ interface Props {
 }
 const {
   title, date, description, tags, channel = 'dispatch',
-  image, gallery, rating, cost, affiliateLinks, callToAction, signoff,
+  image, gallery, rating, cost, affiliateLinks, callToAction, signoff, series, seriesOrder, seriesTitle,
   address, website,
   foodType, whatYouOrdered, serviceQuality, ambiance, bestFor, wouldReturn,
   manufacturerUrl, useCase, pros, cons, buildQuality, timeFieldTested, wouldBuyAgain,
@@ -363,7 +366,23 @@ const ogImageAbsolute = heroImage
     {isDispatch && (
       <p class="dispatch-tagline">Add v64otd.com to your daily reading list — the ledger doesn't lie.</p>
     )}
-    <!-- Article Body -->
+    <!-- Series Nav -->
+    {series && seriesOrder && seriesTitle && (
+      <div class="series-nav">
+        <p class="series-label">
+          <span class="series-eyebrow">SERIES</span>
+          <a href={`/lifestyle/series/${series}`} class="series-title-link">{seriesTitle}</a>
+        </p>
+        <p class="series-part">Part {seriesOrder} of the series</p>
+        <div class="series-chapter-links">
+          {seriesOrder > 1 && (
+            <a href={`/lifestyle/${series}-chapter-${seriesOrder - 1}`} class="series-prev">← Chapter {seriesOrder - 1}</a>
+          )}
+          {/* next link — only shows if a next chapter exists; Astro can't know at render time, so we use a JS-free sentinel approach: always render it and let 404 handle it gracefully, OR we skip it here and add it once you have all chapters */}
+        </div>
+      </div>
+    )}    
+<!-- Article Body -->
     <div class="post-body e-content prose"><slot /></div>
     <!-- Dispatch: Call to Action block -->
     {isDispatch && callToAction && callToAction.length > 0 && (
@@ -654,6 +673,33 @@ const ogImageAbsolute = heroImage
   .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
   .tag-chip { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; background: rgba(107,122,94,0.12); color: var(--cedar); padding: 0.3rem 0.7rem; border-radius: 20px; text-decoration: none; transition: background 0.15s, color 0.15s; }
   .tag-chip:hover { background: var(--cedar); color: #fff; }
+  /* Series nav */
+  .series-nav {
+    background: var(--card-bg); border: 1.5px solid var(--border);
+    border-left: 4px solid var(--cedar); border-radius: 3px;
+    padding: 1rem 1.25rem; margin: 0 0 2rem;
+  }
+  .series-eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.14em; color: var(--cedar); text-transform: uppercase;
+    margin-right: 0.5rem;
+  }
+  .series-label { margin: 0 0 0.2rem; display: flex; align-items: baseline; gap: 0.25rem; flex-wrap: wrap; }
+  .series-title-link {
+    font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600;
+    color: var(--ink); text-decoration: none;
+  }
+  .series-title-link:hover { color: var(--cedar); }
+  .series-part {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    color: rgba(43,37,32,0.45); letter-spacing: 0.06em; margin: 0 0 0.75rem;
+  }
+  .series-chapter-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .series-prev, .series-next {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    color: var(--cedar); text-decoration: none; letter-spacing: 0.04em;
+  }
+  .series-prev:hover, .series-next:hover { text-decoration: underline; }
 </style>
 <script is:inline>
   (function () {
