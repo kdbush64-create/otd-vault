@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 const { channel } = Astro.params as { channel: Channel };
 const channelMeta: Record<Channel, { title: string; description: string; eyebrow: string }> = {
   dispatch: {
-    title: 'Dispatch Archives — OTD Vault',
+    title: 'Dispatches — OTD Vault',
     description: 'Every dispatch. Plain-spoken coverage of money, power, and accountability.',
     eyebrow: 'INDEPENDENT DISPATCH',
   },
@@ -122,7 +122,7 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
     <div class="hero-inner">
       <p class="hero-eyebrow">{meta.eyebrow}</p>
       <h1 class="hero-title">
-        {channel === 'dispatch' ? 'Dispatch Archives' :
+        {channel === 'dispatch' ? 'Dispatches' :
          channel === 'gear' ? 'Gear' :
          channel === 'table' ? 'The Table' :
          channel === 'chow' ? 'The Kitchen' :
