@@ -92,6 +92,13 @@ const affiliateFields = {
   affiliate: fields.checkbox({ label: 'Contains affiliate links', defaultValue: false }),
 };
 
+
+const draftField = fields.checkbox({
+  label: 'Draft (hide from site)',
+  description: 'Checked = saved but not published. Uncheck and save to publish.',
+  defaultValue: false,
+});
+
 const locationFields = {
   ...postFields,
   address: fields.text({ label: 'Address' }),
@@ -161,6 +168,7 @@ const travelFields = {
 
 // ---- Lifestyle (narrative content — health, travel essays, pets, etc.) ----
 const lifestyleFields = {
+  draft: draftField,
   ...affiliateFields,
   affiliateLinks: affiliateLinksField('Add a link for anything mentioned worth pointing readers toward — no pressure to link everything.'),
   series: fields.text({
@@ -238,7 +246,7 @@ export default config({
     },
   },
   collections: {
-    dispatch:  collection({ label: 'Dispatch',            slugField: 'title', path: 'src/content/dispatch/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: postFields }),
+    dispatch:  collection({ label: 'Dispatch',            slugField: 'title', path: 'src/content/dispatch/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: { draft: draftField, ...postFields } }),
     gear:      collection({ label: 'Gear',                slugField: 'title', path: 'src/content/gear/*',      format: { frontmatter: 'yaml', contentField: 'content' }, schema: gearFields }),
     table:     collection({ label: 'The Table',           slugField: 'title', path: 'src/content/table/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: tableFields }),
     chow:      collection({ label: 'The Kitchen',         slugField: 'title', path: 'src/content/chow/*',      format: { frontmatter: 'yaml', contentField: 'content' }, schema: chowFields }),
