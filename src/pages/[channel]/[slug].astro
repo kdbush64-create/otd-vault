@@ -6,7 +6,7 @@ export async function getStaticPaths() {
   const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord', 'lifestyle'];
   const paths = [];
   for (const channel of channels) {
-    const entries = await getCollection(channel as any);
+    const entries = await getCollection(channel as any, ({ data }: any) => !data.draft);
     for (const entry of entries) {
       paths.push({ params: { channel, slug: entry.id.replace(/\.mdoc$/, '') }, props: { entry, channel } });
     }
