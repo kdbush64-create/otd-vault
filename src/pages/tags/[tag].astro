@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   const tagMap: Record<string, { title: string; slug: string; channel: string; date?: string }[]> = {};
 
   for (const channel of channels) {
-    const posts = await getCollection(channel);
+    const posts = await getCollection(channel, ({ data }: any) => !data.draft);
     for (const post of posts) {
       const raw = 'tags' in post.data && post.data.tags
   ? (Array.isArray(post.data.tags)
