@@ -28,7 +28,7 @@ export const GET: APIRoute = async () => {
   const postUrls: { url: string; date: string }[] = [];
   for (const channel of channels) {
     try {
-      const entries = await getCollection(channel as any);
+      const entries = await getCollection(channel as any, ({ data }: any) => !data.draft);
       for (const entry of entries) {
         postUrls.push({
           url: `/${channel}/${entry.id.replace(/\.mdoc$/, '')}`,
