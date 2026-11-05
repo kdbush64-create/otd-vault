@@ -8,6 +8,7 @@ const postSchema = z.object({
   gallery: z.array(z.object({ image: z.string(), caption: z.string().max(500).optional() })).max(10).optional(),
   image: z.string().optional(),
   signoff: z.string().optional(),
+  draft: z.boolean().optional(),
   callToAction: z.string().optional(),
   affiliateLinks: z.array(z.object({
     label: z.string(),
