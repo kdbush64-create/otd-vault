@@ -12,7 +12,7 @@ export async function GET() {
   const allPosts = (
     await Promise.all(
       channels.map(async (channel) => {
-        const entries = await getCollection(channel as any);
+        const entries = await getCollection(channel as any, ({ data }: any) => !data.draft);
         return entries.map((post) => ({ post, channel }));
       })
     )
