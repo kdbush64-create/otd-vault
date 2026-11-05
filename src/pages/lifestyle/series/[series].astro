@@ -16,6 +16,9 @@ const seriesPosts = allPosts
   .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
 
 const seriesTitle = seriesPosts[0]?.data.seriesTitle ?? series;
+const imagePost = seriesPosts.find(p => p.data.seriesImage);
+const seriesImage = imagePost?.data.seriesImage;
+const seriesImageCaption = imagePost?.data.seriesImageCaption;
 ---
 <BaseLayout title={`${seriesTitle} — OTD Vault`} description={`All chapters of ${seriesTitle}`}>
   <div class="series-index">
@@ -30,7 +33,13 @@ const seriesTitle = seriesPosts[0]?.data.seriesTitle ?? series;
       <p class="series-eyebrow">SERIES</p>
       <h1 class="series-title">{seriesTitle}</h1>
       <p class="series-count">{seriesPosts.length} chapters</p>
-    </header>
+        </header>
+    {seriesImage && (
+      <figure class="series-banner">
+        <img src={seriesImage} alt={seriesImageCaption || seriesTitle} />
+        {seriesImageCaption && <figcaption>{seriesImageCaption}</figcaption>}
+      </figure>
+    )}
     <ol class="series-list">
       {seriesPosts.map(post => (
         <li class="series-item">
@@ -69,7 +78,16 @@ const seriesTitle = seriesPosts[0]?.data.seriesTitle ?? series;
     font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
     color: rgba(43,37,32,0.4); letter-spacing: 0.08em; margin: 0 0 2.5rem;
   }
-  .series-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+    .series-banner { margin: -1rem 0 2.5rem; }
+  .series-banner img {
+    display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+    border: 1.5px solid var(--border); border-radius: 3px;
+  }
+  .series-banner figcaption {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.04em; color: rgba(43,37,32,0.5); margin-top: 0.5rem;
+  }
+    .series-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
   .series-item-link {
     display: flex; flex-direction: column; gap: 0.15rem;
     background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 3px;
