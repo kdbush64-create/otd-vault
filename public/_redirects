@@ -4,3 +4,6 @@
 
 # Substack redirect
 /substack  https://v64otd.substack.com  302
+
+/lifestyle/the-faction-files-part-3-the-machine/  /lifestyle/faction-files-part-3-the-machine/  301
+
