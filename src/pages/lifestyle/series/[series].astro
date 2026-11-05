@@ -20,7 +20,11 @@ const imagePost = seriesPosts.find(p => p.data.seriesImage);
 const seriesImage = imagePost?.data.seriesImage;
 const seriesImageCaption = imagePost?.data.seriesImageCaption;
 ---
-<BaseLayout title={`${seriesTitle} — OTD Vault`} description={`All chapters of ${seriesTitle}`}>
+<BaseLayout
+  title={`${seriesTitle} — OTD Vault`}
+  description={`All chapters of ${seriesTitle}`}
+  ogImage={seriesImage ? `https://v64otd.com${seriesImage}` : undefined}
+>
   <div class="series-index">
     <nav class="breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
