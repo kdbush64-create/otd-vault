@@ -47,7 +47,7 @@ const channelMeta: Record<Channel, { title: string; description: string; eyebrow
   },
 };
 const meta = channelMeta[channel];
-const posts = (await getCollection(channel as any))
+const posts = (await getCollection(channel as any, ({ data }: any) => !data.draft))
   .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 const isDispatch = channel === 'dispatch';
 const isLifestyle = channel === 'lifestyle';
