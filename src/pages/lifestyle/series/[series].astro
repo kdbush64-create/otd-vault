@@ -4,13 +4,13 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('lifestyle');
+    const posts = await getCollection('lifestyle', ({ data }: any) => !data.draft);
   const seriesSlugs = [...new Set(posts.map(p => p.data.series).filter(Boolean))];
   return seriesSlugs.map(series => ({ params: { series } }));
 }
 
 const { series } = Astro.params;
-const allPosts = await getCollection('lifestyle');
+const allPosts = await getCollection('lifestyle', ({ data }: any) => !data.draft);
 const seriesPosts = allPosts
   .filter(p => p.data.series === series)
   .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
