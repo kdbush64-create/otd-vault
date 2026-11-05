@@ -183,6 +183,16 @@ const lifestyleFields = {
     label: 'Series Display Name (optional)',
     description: 'Human-readable name shown on the series page — e.g. My Adrenal Tumor Journey. Only needs to be set on one article; use the same value on all.',
   }),
+    seriesImage: fields.image({
+    label: 'Series Image (optional)',
+    description: 'Picture shown on the series page between the title and the chapter list. Set it on Chapter 1 only.',
+    directory: 'public/images/series',
+    publicPath: '/images/series/',
+  }),
+  seriesImageCaption: fields.text({
+    label: 'Series Image Caption (optional)',
+    description: 'Title, artist, year and source. Example: "The County Election," George Caleb Bingham, 1852. Library of Congress.',
+  }),
   signoff: fields.text({
     label: 'Signoff Line (optional)',
     description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN’T. Leave blank to skip entirely.',
