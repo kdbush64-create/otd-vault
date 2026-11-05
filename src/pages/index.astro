@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 export const prerender = true;
 // Dispatch — 5 most recent
-const allDispatch = await getCollection('dispatch');
+const allDispatch = await getCollection('dispatch', ({ data }: any) => !data.draft);
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 5);
@@ -12,7 +12,7 @@ const posts = allDispatch
 const allPicks = await getCollection('picks', ({ data }) => data.active !== false && data.rating === '5');
 const featuredPicks = allPicks.slice(0, 3);
 // My Ledger — 2 most recent lifestyle posts
-const allLifestyle = await getCollection('lifestyle' as any);
+const allLifestyle = await getCollection('lifestyle' as any, ({ data }: any) => !data.draft);
 const ledgerPosts = allLifestyle
   .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 2);
