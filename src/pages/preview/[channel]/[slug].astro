@@ -1,0 +1,34 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../../../layouts/PostLayout.astro';
+export const prerender = true;
+
+// Builds a page ONLY for articles marked Draft, at /preview/<section>/<slug>/
+export async function getStaticPaths() {
+  const channels = ['dispatch', 'lifestyle'];
+  const paths = [];
+  for (const channel of channels) {
+    const drafts = await getCollection(channel as any, ({ data }: any) => data.draft === true);
+    for (const entry of drafts) {
+      paths.push({ params: { channel, slug: entry.id.replace(/\.mdoc$/, '') }, props: { entry, channel } });
+    }
+  }
+  return paths;
+}
+
+const { channel, entry } = Astro.props as { channel: string; entry: any };
+const { Content } = await render(entry);
+const data = entry.data;
+---
+<PostLayout {...data} channel={channel}>
+  <div class="draft-banner">DRAFT PREVIEW · Not published · Uncheck Draft in Keystatic to publish</div>
+  <Content />
+</PostLayout>
+
+<style>
+  .draft-banner {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 0.08em;
+    background: #b5482e; color: #fff; padding: 0.6rem 1rem; border-radius: 3px;
+    margin: 0 0 1.5rem; text-align: center;
+  }
+</style>
