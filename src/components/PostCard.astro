@@ -24,6 +24,7 @@ const formattedDate = date
   : null;
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch',
+  lifestyle: 'My Ledger',
   gear: 'Gear',
   table: 'The Table',
   chow: 'The Kitchen',
@@ -43,7 +44,9 @@ const accentClass = channel === 'gear'
   ? 'accent-ochre'
   : 'accent-ink';
 const thumbImage = gallery && gallery.length > 0 ? gallery[0] : null;
-const readLabel = channel === 'dispatch' ? 'Read dispatch →' : 'Read the review →';
+const readLabel = channel === 'dispatch' ? 'Read dispatch →'
+  : (channel === 'lifestyle' || channel === 'MY LEDGER') ? 'Read the entry →'
+  : 'Read the review →';
 ---
 {layout === 'grid' ? (
   <a href={href} class={`post-grid-card h-entry ${accentClass}`}>
