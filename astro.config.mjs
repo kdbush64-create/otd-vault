@@ -13,9 +13,10 @@ export default defineConfig({
     markdoc(),
     keystatic(),
     sitemap({
-      filter: (page) =>
-        !page.includes('/xposts/') &&
-        !page.includes('/pages/00-the-man/'),
+  filter: (page) =>
+    !page.includes('/xposts/') &&
+    !page.includes('/pages/00-the-man/') &&
+    !page.includes('/preview/'),
     }),
   ],
   site: 'https://v64otd.com',
