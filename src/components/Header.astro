@@ -4,7 +4,7 @@ const isDispatch = pathname === '/dispatch' || pathname.startsWith('/dispatch/')
 const isReviews = ['/reviews','/gear','/table','/chow','/transit','/coord'].some(
   p => pathname === p || pathname.startsWith(p + '/')
 );
-const isLifestyle = pathname === '/lifestyle' || pathname.startsWith('/lifestyle/');
+const isLifestyle = pathname === '/ledger' || pathname.startsWith('/ledger/');
 const isAbout = pathname === '/about' || pathname.startsWith('/about/');
 const isPicks = pathname === '/picks' || pathname.startsWith('/picks/');
 ---
@@ -13,7 +13,7 @@ const isPicks = pathname === '/picks' || pathname.startsWith('/picks/');
     <a class="brand" href="/">OTD <span>VAULT</span></a>
     <nav>
       <a href="/dispatch" class={isDispatch ? 'active' : ''}>DISPATCHES</a>      
-      <a href="/lifestyle" class={isLifestyle ? 'active' : ''}>MY LEDGER</a>      
+      <a href="/ledger" class={isLifestyle ? 'active' : ''}>MY LEDGER</a>      
       <a href="/reviews" class={isReviews ? 'active' : ''}>REVIEWS</a>
       <a href="/picks" class={isPicks ? 'active' : ''}>PICKS</a>
       <a href="/about" class={isAbout ? 'active' : ''}>ABOUT OTD</a>

@@ -5,5 +5,7 @@
 # Substack redirect
 /substack  https://v64otd.substack.com  302
 
-/lifestyle/the-faction-files-part-3-the-machine/  /lifestyle/faction-files-part-3-the-machine/  301
-/lifestyle/election-day-parasite-host-two-party-system/  /lifestyle/faction-files-part-1-the-parasite-and-the-host/  301
+/lifestyle/the-faction-files-part-3-the-machine/  /ledger/faction-files-part-3-the-machine/  301
+/lifestyle/election-day-parasite-host-two-party-system/  /ledger/faction-files-part-1-the-parasite-and-the-host/  301
+/lifestyle  /ledger  301
+/lifestyle/*  /ledger/:splat  301

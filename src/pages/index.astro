@@ -75,7 +75,7 @@ const otherPost = otherReviews[0] ?? null;
       <div class="reviews-inner">
         <div class="section-header">
           <p class="section-label">FROM MY LEDGER</p>
-          <a href="/lifestyle" class="section-link">All entries →</a>
+          <a href="/ledger" class="section-link">All entries →</a>
         </div>
         <div class="reviews-grid">
           {ledgerPosts.map((post: any) => (
@@ -83,7 +83,7 @@ const otherPost = otherReviews[0] ?? null;
               title={post.data.title}
               date={post.data.date}
               description={post.data.description}
-              href={`/lifestyle/${post.id.replace(/\.mdoc$/, '')}`}
+              href={`/ledger/${post.id.replace(/\.mdoc$/, '')}`}
               channel="lifestyle"
               layout="grid"
               gallery={post.data.gallery}

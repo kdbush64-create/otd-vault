@@ -6,9 +6,10 @@ export const prerender = true;
 type Channel = 'dispatch' | 'gear' | 'table' | 'chow' | 'transit' | 'coord' | 'lifestyle';
 export async function getStaticPaths() {
   const channels = ['dispatch', 'gear', 'table', 'chow', 'transit', 'coord', 'lifestyle'];
-  return channels.map(channel => ({ params: { channel } }));
+  return channels.map(channel => ({ params: { channel: channel === 'lifestyle' ? 'ledger' : channel }, props: { channel } }));
 }
-const { channel } = Astro.params as { channel: Channel };
+const { channel } = Astro.props as { channel: Channel };
+const seg = channel === 'lifestyle' ? 'ledger' : channel;
 const channelMeta: Record<Channel, { title: string; description: string; eyebrow: string }> = {
   dispatch: {
     title: 'Dispatches — OTD Vault',
@@ -145,7 +146,7 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
         <p class="shelf-label">Series</p>
         <div class="series-grid">
           {seriesList.map((s) => (
-            <a href={`/lifestyle/series/${s.slug}`} class="series-card">
+            <a href={`/ledger/series/${s.slug}`} class="series-card">
               <div class="series-card-header">
                 <div class="series-count-block">
                   <span class="series-count">{s.chapterCount}</span>
@@ -168,7 +169,7 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
             title={post.data.title}
             date={post.data.date}
             description={post.data.description}
-            href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
+            href={`/${seg}/${post.id.replace(/\.mdoc$/, '')}`}
             channel={meta.eyebrow}
             layout="grid"
             gallery={post.data.gallery}
@@ -218,7 +219,7 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
             title={post.data.title}
             date={post.data.date}
             description={post.data.description}
-            href={`/${channel}/${post.id.replace(/\.mdoc$/, '')}`}
+            href={`/${seg}/${post.id.replace(/\.mdoc$/, '')}`}
             channel={meta.eyebrow}
             layout="grid"
             gallery={post.data.gallery}

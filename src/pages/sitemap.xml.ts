@@ -12,7 +12,7 @@ const staticPages = [
   { url: '/chow',     changefreq: 'weekly',  priority: '0.7' },
   { url: '/transit',  changefreq: 'weekly',  priority: '0.7' },
   { url: '/coord',    changefreq: 'weekly',  priority: '0.7' },
-  { url: '/lifestyle', changefreq: 'weekly',  priority: '0.7' },
+  { url: '/ledger', changefreq: 'weekly',  priority: '0.7' },
   { url: '/about',    changefreq: 'monthly', priority: '0.5' },
 ];
 function toIsoDate(dateStr: string): string {
@@ -31,7 +31,7 @@ export const GET: APIRoute = async () => {
       const entries = await getCollection(channel as any, ({ data }: any) => !data.draft);
       for (const entry of entries) {
         postUrls.push({
-          url: `/${channel}/${entry.id.replace(/\.mdoc$/, '')}`,
+          url: `/${channel === 'lifestyle' ? 'ledger' : channel}/${entry.id.replace(/\.mdoc$/, '')}`,
           date: toIsoDate(entry.data.date),
         });
       }

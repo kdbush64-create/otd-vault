@@ -29,7 +29,7 @@ const seriesImageCaption = imagePost?.data.seriesImageCaption;
     <nav class="breadcrumb" aria-label="breadcrumb">
       <a href="/">Home</a>
       <span aria-hidden="true">›</span>
-      <a href="/lifestyle">My Ledger</a>
+      <a href="/ledger">My Ledger</a>
       <span aria-hidden="true">›</span>
       <span>{seriesTitle}</span>
     </nav>
@@ -47,7 +47,7 @@ const seriesImageCaption = imagePost?.data.seriesImageCaption;
     <ol class="series-list">
       {seriesPosts.map(post => (
         <li class="series-item">
-          <a href={`/lifestyle/${post.slug}`} class="series-item-link">
+          <a href={`/ledger/${post.slug}`} class="series-item-link">
             <span class="chapter-num">Chapter {post.data.seriesOrder}</span>
             <span class="chapter-title">{post.data.title}</span>
             {post.data.date && (

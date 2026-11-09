@@ -23,7 +23,7 @@ export async function GET() {
   const items = sorted.map(({ post, channel }) => {
     const title = post.data.title;
     const description = post.data.description ?? '';
-    const url = `https://v64otd.com/${channel}/${post.slug}/`;
+    const url = `https://v64otd.com/${channel === 'lifestyle' ? 'ledger' : channel}/${post.slug}/`;
     const pubDate = toRFC822(String(post.data.date ?? ''));
     const body = post.body ?? '';
     return `

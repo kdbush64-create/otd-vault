@@ -71,7 +71,7 @@ const channelLabels: Record<string, string> = {
   lifestyle: 'My Ledger',
 };
 const channelLabel = channelLabels[channel] ?? channel;
-const channelHref = isDispatch ? '/dispatch' : isLifestyle ? '/lifestyle' : '/reviews';
+const channelHref = isDispatch ? '/dispatch' : isLifestyle ? '/ledger' : '/reviews';
 // Use first gallery image as hero for reviews if no standalone image
 const heroImage = image ?? (gallery && gallery.length > 0 ? gallery[0].image : undefined);
 const remainingGallery = image
@@ -371,12 +371,12 @@ const ogImageAbsolute = heroImage
       <div class="series-nav">
         <p class="series-label">
           <span class="series-eyebrow">SERIES</span>
-          <a href={`/lifestyle/series/${series}`} class="series-title-link">{seriesTitle}</a>
+          <a href={`/ledger/series/${series}`} class="series-title-link">{seriesTitle}</a>
         </p>
         <p class="series-part">Part {seriesOrder} of the series</p>
         <div class="series-chapter-links">
           {seriesOrder > 1 && (
-            <a href={`/lifestyle/${series}-chapter-${seriesOrder - 1}`} class="series-prev">← Chapter {seriesOrder - 1}</a>
+            <a href={`/ledger/${series}-chapter-${seriesOrder - 1}`} class="series-prev">← Chapter {seriesOrder - 1}</a>
           )}
           {/* next link — only shows if a next chapter exists; Astro can't know at render time, so we use a JS-free sentinel approach: always render it and let 404 handle it gracefully, OR we skip it here and add it once you have all chapters */}
         </div>
