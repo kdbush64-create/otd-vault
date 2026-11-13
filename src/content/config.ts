@@ -76,6 +76,20 @@ const picksSchema = z.object({
   active: z.boolean().optional(),
 });
 
+const lifestyleSchema = postSchema.extend({
+  affiliate: z.boolean().optional(),
+  affiliateLinks: z.array(z.object({
+    label: z.string(),
+    url: z.string(),
+    priceNoted: z.string().optional(),
+  })).optional(),
+  series: z.string().nullable().optional(),
+  seriesOrder: z.number().nullable().optional(),
+  seriesTitle: z.string().nullable().optional(),
+  seriesImage: z.string().nullable().optional(),
+  seriesImageCaption: z.string().nullable().optional(),
+});
+
 const xpostSchema = z.object({
   title: z.string(),
   date: z.coerce.string(),
@@ -98,4 +112,5 @@ export const collections = {
   picks:    defineCollection({ schema: picksSchema }),
   xposts:   defineCollection({ schema: xpostSchema }),
   pages:    defineCollection({ schema: pageSchema }),
+  lifestyle: defineCollection({ schema: lifestyleSchema }),
 };
