@@ -52,7 +52,10 @@ const postFields = {
     }),
     { label: 'Gallery', itemLabel: (props) => props.fields.caption.value || 'Image', validation: { length: { max: 30 } } }
   ),
-  content: fields.markdoc({ label: 'Content' }),
+    content: fields.markdoc({
+    label: 'Content',
+    options: { image: { directory: 'public/images/posts', publicPath: '/images/posts/' } },
+  }),
   signoff: fields.text({
     label: 'Signoff Line (optional)',
     description: 'e.g. V64OTD // THE FILE GETS CLOSED. THE DAMAGE DOESN’T. Leave blank to skip entirely.',
