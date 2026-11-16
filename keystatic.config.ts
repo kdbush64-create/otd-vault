@@ -48,8 +48,8 @@ const postFields = {
   gallery: fields.array(
     fields.object({
       image: fields.image({ label: 'Image', directory: 'public/images/posts', publicPath: '/images/posts/' }),
-      caption: fields.text({ label: 'Caption', description: 'Optional — up to 200 characters', validation: { length: { max: 200 } } }),
-    }),
+      caption: fields.text({ label: 'Caption', description: 'Optional — up to 220 characters', validation: { length: { max: 220 } } }),
+      alt: fields.text({ label: 'Alt text', description: 'Describe the image for screen readers and search engines. Up to 250 characters.', validation: { length: { max: 250 } } }),    }),
     { label: 'Gallery', itemLabel: (props) => props.fields.caption.value || 'Image', validation: { length: { max: 30 } } }
   ),
     content: fields.markdoc({
