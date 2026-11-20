@@ -259,13 +259,13 @@ export default config({
     },
   },
   collections: {
-    dispatch:  collection({ label: 'Dispatch',            slugField: 'title', path: 'src/content/dispatch/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: { draft: draftField, ...postFields } }),
+    dispatch:  collection({ label: 'Dispatch', columns: ['title', 'date'], slugField: 'title', path: 'src/content/dispatch/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: { draft: draftField, ...postFields } }),
     gear:      collection({ label: 'Gear',                slugField: 'title', path: 'src/content/gear/*',      format: { frontmatter: 'yaml', contentField: 'content' }, schema: gearFields }),
     table:     collection({ label: 'The Table',           slugField: 'title', path: 'src/content/table/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: tableFields }),
     chow:      collection({ label: 'The Kitchen',         slugField: 'title', path: 'src/content/chow/*',      format: { frontmatter: 'yaml', contentField: 'content' }, schema: chowFields }),
     transit:   collection({ label: 'Travel — Road Trip',  slugField: 'title', path: 'src/content/transit/*',   format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
     coord:     collection({ label: 'Getaways',            slugField: 'title', path: 'src/content/coord/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
-    lifestyle: collection({ label: 'My Ledger',           slugField: 'title', path: 'src/content/lifestyle/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: lifestyleFields }),
+    lifestyle: collection({ label: 'My Ledger', columns: ['title', 'date'], slugField: 'title', path: 'src/content/lifestyle/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: lifestyleFields }),
     picks:     collection({ label: 'Picks',               slugField: 'title', path: 'src/content/picks/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: picksFields }),
     xposts:    collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
