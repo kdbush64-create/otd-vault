@@ -170,7 +170,7 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
             date={post.data.date}
             description={post.data.description}
             href={`/${seg}/${post.id.replace(/\.mdoc$/, '')}`}
-            channel={meta.eyebrow}
+            channel={channel}
             layout="grid"
             gallery={post.data.gallery}
           />
