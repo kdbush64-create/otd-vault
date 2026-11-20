@@ -96,6 +96,7 @@ const { hideNewsletterStrip = false } = Astro.props;
           body: JSON.stringify({ email: email }),
         });
         if (res.ok) {
+          if (typeof gtag === 'function') gtag('event', 'sign_up', { method: 'newsletter', form_location: 'footer' });
           note.textContent = "You're on the list.";
           note.style.color = '#6B7A5E';
           form.reset();

@@ -60,6 +60,7 @@ export const prerender = true;
           body: JSON.stringify({ email: email }),
         });
         if (res.ok) {
+          if (typeof gtag === 'function') gtag('event', 'sign_up', { method: 'newsletter', form_location: 'newsletter_page' });
           note.textContent = "You're on the list. Watch for the first dispatch.";
           note.style.color = 'var(--cedar)';
           form.style.display = 'none';
