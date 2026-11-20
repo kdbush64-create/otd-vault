@@ -767,6 +767,12 @@ const ogImageAbsolute = heroImage
       var confirm = document.getElementById(confirmId);
       if (!btn) return;
       btn.addEventListener('click', function () {
+        if (typeof gtag === 'function') gtag('event', 'share', {
+          method: navigator.share ? 'share_menu' : 'copy_link',
+          content_type: 'article',
+          item_id: window.location.pathname,
+          button_location: btnId === 'share-btn' ? 'top' : 'bottom',
+        });
         var shareData = { title: document.title, url: window.location.href };
         if (navigator.share) {
           navigator.share(shareData).catch(function () {});

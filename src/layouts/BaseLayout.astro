@@ -23,6 +23,21 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = 
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-BHFJD28SFL');
+      // Count clicks on affiliate links (rel="sponsored" or Amazon links) as affiliate_click
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a) return;
+        var host = '';
+        try { host = new URL(a.href, location.href).hostname; } catch (err) { return; }
+        var rel = (a.getAttribute('rel') || '').toLowerCase();
+        var isAffiliate = rel.indexOf('sponsored') !== -1 || /(^|\.)(amazon\.com|amzn\.to|link\.amazon)$/.test(host);
+        if (!isAffiliate) return;
+        gtag('event', 'affiliate_click', {
+          link_url: a.href,
+          link_domain: host,
+          link_text: (a.textContent || '').trim().slice(0, 100),
+        });
+      }, true);
     </script>
     <!-- Pinterest Tag -->
     <script>
