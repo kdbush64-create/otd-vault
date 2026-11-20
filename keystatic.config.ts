@@ -175,17 +175,14 @@ const lifestyleFields = {
   ...affiliateFields,
   affiliateLinks: affiliateLinksField('Add a link for anything mentioned worth pointing readers toward — no pressure to link everything.'),
     series: fields.select({
-    label: 'series (optional)',
-    description: 'pick the series this article belongs to. to start a new series, add it to this list in keystatic.config.ts first.',
-    options: [
-      { label: 'not part of a series', value: '' },
-      { label: 'my adrenal tumor journey', value: 'adrenal-journey' },
-      { label: 'the faction files', value: 'faction-files' },
-    ],
-    defaultvalue: '',
-  }),.text({
     label: 'Series (optional)',
-    description: 'Slug for grouping articles — e.g. adrenal-journey. Must match exactly across all articles in the series.',
+    description: 'Pick the series this article belongs to. To start a new series, add it to this list in keystatic.config.ts first.',
+    options: [
+      { label: 'Not part of a series', value: '' },
+      { label: 'My Adrenal Tumor Journey', value: 'adrenal-journey' },
+      { label: 'The Faction Files', value: 'faction-files' },
+    ],
+    defaultValue: '',
   }),
   seriesOrder: fields.integer({
     label: 'Series Order (optional)',
