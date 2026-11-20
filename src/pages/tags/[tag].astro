@@ -4,8 +4,9 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow'] as const;
+  const channels = ['dispatch', 'transit', 'gear', 'coord', 'table', 'chow', 'lifestyle'] as const;
   const tagMap: Record<string, { title: string; slug: string; channel: string; date?: string }[]> = {};
+  const tagNames: Record<string, string> = {};
 
   for (const channel of channels) {
     const posts = await getCollection(channel, ({ data }: any) => !data.draft);
@@ -16,8 +17,11 @@ export async function getStaticPaths() {
       : String(post.data.tags))
   : '';
       const tags = raw.trim().split(/\s+/).filter(Boolean);
-      for (const tag of tags) {
+      for (const name of tags) {
+        const tag = name.toLowerCase();
+        if (!tagNames[tag]) tagNames[tag] = name;
         if (!tagMap[tag]) tagMap[tag] = [];
+        if (tagMap[tag].some((p) => p.slug === post.slug && p.channel === channel)) continue;
         tagMap[tag].push({
           title: post.data.title,
           slug: post.slug,
@@ -30,7 +34,7 @@ export async function getStaticPaths() {
 
   return Object.entries(tagMap).map(([tag, posts]) => ({
     params: { tag },
-    props: { posts, tag },
+    props: { posts, tag: tagNames[tag] },
   }));
 }
 
@@ -39,8 +43,9 @@ posts.sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
 
 const channelMap: Record<string, string> = {
   dispatch: 'DISPATCH', transit: 'TRANSIT', gear: 'GEAR',
-  coord: 'COORD', table: 'TABLE', chow: 'CHOW',
+  coord: 'COORD', table: 'TABLE', chow: 'CHOW', lifestyle: 'MY LEDGER',
 };
+const channelPath: Record<string, string> = { lifestyle: 'ledger' };
 ---
 <BaseLayout title={`#${tag} | v64otd.com`} description={`Posts tagged ${tag} on v64otd.com`}>
   <div data-pagefind-ignore>
@@ -56,7 +61,7 @@ const channelMap: Record<string, string> = {
           <div style="border-bottom: 1px dashed var(--border); padding-bottom: 16px;">
             <span style="color:var(--secondary); font-size:0.72rem; letter-spacing:1px;">[{channelMap[post.channel] ?? post.channel.toUpperCase()}]</span>
             <div>
-              <a href={`/${post.channel}/${post.slug}`} style="color:var(--accent); text-decoration:none; font-size:0.95rem;">{post.title}</a>
+              <a href={`/${channelPath[post.channel] ?? post.channel}/${post.slug}/`} style="color:var(--accent); text-decoration:none; font-size:0.95rem;">{post.title}</a>
             </div>
             {post.date && (
               <time style="color:var(--secondary); font-size:0.75rem; opacity:0.7;">
