@@ -174,15 +174,10 @@ const lifestyleFields = {
   draft: draftField,
   ...affiliateFields,
   affiliateLinks: affiliateLinksField('Add a link for anything mentioned worth pointing readers toward — no pressure to link everything.'),
-    series: fields.select({
+  series: fields.relationship({
     label: 'Series (optional)',
-    description: 'Pick the series this article belongs to. To start a new series, add it to this list in keystatic.config.ts first.',
-    options: [
-      { label: 'Not part of a series', value: '' },
-      { label: 'My Adrenal Tumor Journey', value: 'adrenal-journey' },
-      { label: 'The Faction Files', value: 'faction-files' },
-    ],
-    defaultValue: '',
+    description: 'Pick a series, or leave empty if this article is not part of one. To start a new series, create it under Series in the sidebar first.',
+    collection: 'series',
   }),
   seriesOrder: fields.integer({
     label: 'Series Order (optional)',
@@ -258,7 +253,7 @@ export default config({
     navigation: {
       Dispatch: ['dispatch'],
       'Reviews & Gear': ['gear', 'table', 'chow', 'transit', 'coord'],
-      'My Ledger': ['lifestyle'],
+      'My Ledger': ['lifestyle', 'series'],
       Picks: ['picks'],
       Site: ['pages'],
       Other: ['xposts'],
@@ -272,6 +267,15 @@ export default config({
     transit:   collection({ label: 'Travel — Road Trip',  slugField: 'title', path: 'src/content/transit/*',   format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
     coord:     collection({ label: 'Getaways',            slugField: 'title', path: 'src/content/coord/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: travelFields }),
     lifestyle: collection({ label: 'My Ledger', columns: ['title', 'date'], slugField: 'title', path: 'src/content/lifestyle/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: lifestyleFields }),
+    series: collection({
+      label: 'Series',
+      slugField: 'name',
+      path: 'src/data/series/*',
+      format: { data: 'yaml' },
+      schema: {
+        name: fields.slug({ name: { label: 'Series Name', description: 'The address slug is made from this, e.g. Texas Water Wars becomes texas-water-wars.' } }),
+      },
+    }),
     picks:     collection({ label: 'Picks',               slugField: 'title', path: 'src/content/picks/*',     format: { frontmatter: 'yaml', contentField: 'content' }, schema: picksFields }),
     xposts:    collection({ label: 'X Posts',  slugField: 'title', path: 'src/content/xposts/*',  format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
