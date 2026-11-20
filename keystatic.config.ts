@@ -33,9 +33,9 @@ const categoryOptions = [
 
 const postFields = {
   title: fields.slug({ name: { label: 'Title' } }),
-  date: fields.text({
+    date: fields.datetime({
     label: 'Date & Time',
-    description: 'Format: YYYY-MM-DDTHH:MM (e.g. 2026-05-18T14:30)',
+    description: 'Pick the publish date and time.',
     validation: { isRequired: true },
   }),
   description: fields.text({
@@ -174,7 +174,16 @@ const lifestyleFields = {
   draft: draftField,
   ...affiliateFields,
   affiliateLinks: affiliateLinksField('Add a link for anything mentioned worth pointing readers toward — no pressure to link everything.'),
-  series: fields.text({
+    series: fields.select({
+    label: 'series (optional)',
+    description: 'pick the series this article belongs to. to start a new series, add it to this list in keystatic.config.ts first.',
+    options: [
+      { label: 'not part of a series', value: '' },
+      { label: 'my adrenal tumor journey', value: 'adrenal-journey' },
+      { label: 'the faction files', value: 'faction-files' },
+    ],
+    defaultvalue: '',
+  }),.text({
     label: 'Series (optional)',
     description: 'Slug for grouping articles — e.g. adrenal-journey. Must match exactly across all articles in the series.',
   }),
