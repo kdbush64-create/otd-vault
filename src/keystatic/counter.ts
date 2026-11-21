@@ -14,10 +14,10 @@ function countOf(value: unknown): number {
 function Counter({ value, min, max, recommendMax }: Limits & { value: unknown }) {
   const n = countOf(value);
   let text = `${n} characters`;
-  let color = '#6b6b6b';
+  let color = 'inherit';
   if (max !== undefined) {
     text = `${n} / ${max}`;
-    if (n > max) { color = '#c0392b'; text += ` — ${n - max} over the limit`; }
+    if (n > max) { color = '#e5534b'; text += ` — ${n - max} over the limit`; }
     else if (min !== undefined && n > 0 && n < min) { color = '#b26a00'; text += ` — ${min - n} more needed (minimum ${min})`; }
   } else if (recommendMax !== undefined) {
     const prefix = value && typeof value === 'object' ? 'Title: ' : '';
@@ -26,7 +26,7 @@ function Counter({ value, min, max, recommendMax }: Limits & { value: unknown })
   }
   return h('div', {
     'aria-live': 'polite',
-    style: { fontSize: '12px', marginTop: '6px', color, fontVariantNumeric: 'tabular-nums', fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' },
+    style: { fontSize: '12px', marginTop: '6px', color, opacity: color === 'inherit' ? 0.75 : 1, fontVariantNumeric: 'tabular-nums', fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' },
   }, text);
 }
 
