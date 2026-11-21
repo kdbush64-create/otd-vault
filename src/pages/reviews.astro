@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import ReviewNav from '../components/ReviewNav.astro';
 export const prerender = true;
 // Gather recent posts from all review channels
 const [gear, table, chow, transit, coord] = await Promise.all([
