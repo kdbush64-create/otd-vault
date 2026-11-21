@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import ReviewNav from '../components/ReviewNav.astro';
 export const prerender = true;
 type Channel = 'dispatch' | 'gear' | 'table' | 'chow' | 'transit' | 'coord' | 'lifestyle';
 export async function getStaticPaths() {
@@ -136,6 +137,10 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
       )}
     </div>
   </section>
+
+  {['gear', 'table', 'chow', 'transit', 'coord'].includes(channel) && (
+    <ReviewNav current={channel as any} />
+  )}
 
   <!-- Posts -->
   <section class="posts-section">

@@ -1,0 +1,84 @@
+---
+// Breadcrumb on the Reviews page; breadcrumb + category switcher on every review category page.
+import { getCollection } from 'astro:content';
+
+interface Props { current: 'all' | 'gear' | 'table' | 'chow' | 'transit' | 'coord'; }
+const { current } = Astro.props;
+
+const cats = [
+  { key: 'gear',    label: 'Gear',        href: '/gear',    color: 'var(--cedar)' },
+  { key: 'table',   label: 'The Table',   href: '/table',   color: 'var(--clay)' },
+  { key: 'chow',    label: 'The Kitchen', href: '/chow',    color: 'var(--ochre)' },
+  { key: 'transit', label: 'Travel',      href: '/transit', color: 'var(--bluebonnet)' },
+  { key: 'coord',   label: 'Getaways',    href: '/coord',   color: 'var(--thistle)' },
+] as const;
+
+// Hide categories with no published reviews yet (unless you're on that page)
+const counts = Object.fromEntries(await Promise.all(cats.map(async (c) => {
+  const posts = await getCollection(c.key as any, ({ data }: any) => !data.draft);
+  return [c.key, posts.length];
+})));
+const shown = cats.filter((c) => counts[c.key] > 0 || c.key === current);
+const currentCat = cats.find((c) => c.key === current);
+---
+<nav class="review-nav" aria-label="Reviews navigation">
+  <ol class="rn-crumbs">
+    <li><a href="/">Home</a></li>
+    {currentCat ? (
+      <>
+        <li aria-hidden="true">›</li>
+        <li><a href="/reviews">Reviews</a></li>
+        <li aria-hidden="true">›</li>
+        <li><span aria-current="page">{currentCat.label}</span></li>
+      </>
+    ) : (
+      <>
+        <li aria-hidden="true">›</li>
+        <li><span aria-current="page">Reviews</span></li>
+      </>
+    )}
+  </ol>
+  {current !== 'all' && (
+  <ul class="rn-pills">
+    <li>
+      <a href="/reviews" class={'rn-pill' + (current === 'all' ? ' is-current' : '')}
+         style="--pill: var(--ink)" aria-current={current === 'all' ? 'page' : undefined}>All Reviews</a>
+    </li>
+    {shown.map((c) => (
+      <li>
+        <a href={c.href} class={'rn-pill' + (current === c.key ? ' is-current' : '')}
+           style={`--pill: ${c.color}`} aria-current={current === c.key ? 'page' : undefined}>{c.label}</a>
+      </li>
+    ))}
+  </ul>
+  )}
+</nav>
+
+<style>
+  .review-nav { display: block; max-width: 960px; margin: 0 auto; padding: 1.5rem 1.5rem 0; }
+  .rn-crumbs {
+    list-style: none; margin: 0 0 1rem; padding: 0;
+    display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em;
+    color: rgba(43,37,32,0.55);
+  }
+  .rn-crumbs a { color: rgba(43,37,32,0.55); text-decoration: none; padding: 0; font-size: inherit; letter-spacing: inherit; }
+  .rn-crumbs a:hover { color: var(--clay); background: none; }
+  .rn-crumbs [aria-current] { color: var(--ink); }
+  .rn-pills {
+    list-style: none; margin: 0; padding: 0 0 0.25rem;
+    display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rn-pills::-webkit-scrollbar { display: none; }
+  .rn-pill {
+    display: inline-block; white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none;
+    padding: 0.45rem 0.9rem; border-radius: 999px;
+    border: 1.5px solid var(--pill); color: var(--pill); background: transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+  .rn-pill:hover { background: color-mix(in srgb, var(--pill) 12%, transparent); }
+  .rn-pill.is-current { background: var(--pill); color: #fff; }
+</style>

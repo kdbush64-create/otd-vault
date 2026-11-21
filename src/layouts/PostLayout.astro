@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import PostCard from '../components/PostCard.astro';
 interface Props {
   title: string;
   date?: string;
@@ -75,7 +76,7 @@ const isReview = ['gear', 'table', 'chow', 'transit', 'coord'].includes(channel)
 const isLifestyle = channel === 'lifestyle';
 const channelLabels: Record<string, string> = {
   dispatch: 'Dispatch', gear: 'Gear', table: 'The Table',
-  chow: 'The Kitchen', transit: 'Travel', coord: 'Travel',
+  chow: 'The Kitchen', transit: 'Travel', coord: 'Getaways',
   lifestyle: 'My Ledger',
 };
 const channelLabel = channelLabels[channel] ?? channel;
@@ -103,6 +104,14 @@ const ratingStars = ratingNum > 0
 const ratingDisplay = ratingNum > 0 ? `${ratingStars} ${ratingNum}/5` : '';
 // Permalink for u-url (Bridgy Fed requires absolute self-link)
 const permalink = Astro.url.href;
+// "More in <category>": up to 3 other reviews from the same category, newest first
+const currentSlug = Astro.url.pathname.split('/').filter(Boolean).pop();
+const moreInCategory = isReview
+  ? (await getCollection(channel as any, ({ data }: any) => !data.draft))
+      .filter((p: any) => p.id.replace(/\.mdoc$/, '') !== currentSlug)
+      .sort((a: any, b: any) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+      .slice(0, 3)
+  : [];
 // Always produce an absolute URL for og:image (Mastodon/X/Bridgy Fed require absolute URLs)
 const ogImageAbsolute = heroImage
   ? (heroImage.startsWith('http') ? heroImage : 'https://v64otd.com' + heroImage)
@@ -135,6 +144,8 @@ const ogImageAbsolute = heroImage
           <a href={'/' + channel}>{channelLabel}</a>
         </>
       )}
+      <span aria-hidden="true">›</span>
+      <span class="crumb-current" aria-current="page" title={title}>{title}</span>
     </nav>
     <!-- Share bar -->
     <div class="share-bar">
@@ -456,6 +467,28 @@ const ogImageAbsolute = heroImage
       </button>
       <span class="share-confirm" id="share-confirm-bottom" aria-live="polite"></span>
     </div>
+    <!-- More in this category -->
+    {moreInCategory.length > 0 && (
+      <section class="more-in" aria-label={`More in ${channelLabel}`}>
+        <div class="more-in-head">
+          <p class="more-in-label">More in {channelLabel}</p>
+          <a href={'/' + channel} class="more-in-all">All {channelLabel} →</a>
+        </div>
+        <div class="more-in-grid">
+          {moreInCategory.map((p: any) => (
+            <PostCard
+              title={p.data.title}
+              date={p.data.date}
+              description={p.data.description}
+              href={`/${channel}/${p.id.replace(/\.mdoc$/, '')}`}
+              channel={channel}
+              layout="grid"
+              gallery={p.data.gallery}
+            />
+          ))}
+        </div>
+      </section>
+    )}
     <!-- Bridgy Fed microformat hooks -->
     <a href={permalink} class="u-url" hidden></a>
     <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
@@ -469,8 +502,22 @@ const ogImageAbsolute = heroImage
     color: rgba(43,37,32,0.55); margin-bottom: 1.75rem;
     display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
   }
-  .post-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; }
-  .post-breadcrumb a:hover { color: var(--clay); }
+  .post-breadcrumb a { color: rgba(43,37,32,0.55); text-decoration: none; flex: none; padding: 0; font-size: inherit; letter-spacing: inherit; }
+  .post-breadcrumb > span[aria-hidden] { flex: none; }
+  .post-breadcrumb { flex-wrap: nowrap; }
+  .crumb-current {
+    color: rgba(43,37,32,0.8); min-width: 0; flex: 0 1 auto;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .more-in { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .more-in-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; gap: 1rem; }
+  .more-in-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); margin: 0;
+  }
+  .more-in-all { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--clay); text-decoration: none; }
+  .more-in-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .post-breadcrumb a:hover { color: var(--clay); background: none; }
   .post-header { margin-bottom: 1.5rem; }
   .post-title {
     font-family: 'Fraunces', serif;

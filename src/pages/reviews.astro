@@ -19,6 +19,8 @@ const allReviews = [
   ...coord.map(p => ({ ...p, channel: 'coord' })),
 ].sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
  .slice(0, 6);
+const travelReady = transit.some((p: any) => !p.data.draft);
+const TravelTag = travelReady ? 'a' : 'div';
 ---
 <BaseLayout title="Reviews — OTD Vault" description="Hands-on reviews and recommendations. Field tested, no fluff.">
   <!-- Hero -->
@@ -30,6 +32,7 @@ const allReviews = [
       <p class="hero-disclosure">Some posts in this section contain affiliate links — if you buy through them, I may earn a small commission at no extra cost to you.</p>
     </div>
   </section>
+  <ReviewNav current="all" />
   <!-- Category Grid -->
   <section class="category-section">
     <div class="category-grid">
@@ -68,7 +71,7 @@ const allReviews = [
         <p class="cat-desc">Recipes, techniques, and pantry picks.</p>
         <span class="cat-link">Browse kitchen →</span>
       </a>
-      <a href="/transit" class="category-card cat-bluebonnet">
+      <TravelTag href={travelReady ? '/transit' : undefined} class={'category-card cat-bluebonnet' + (travelReady ? '' : ' is-soon')}>
         <div class="cat-stamp" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="48" height="48">
             <circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -77,8 +80,8 @@ const allReviews = [
         </div>
         <h2 class="cat-title">Travel</h2>
         <p class="cat-desc">Road dispatches and local color. Texas first.</p>
-        <span class="cat-link">Browse travel →</span>
-      </a>
+        <span class="cat-link">{travelReady ? 'Browse travel →' : 'Coming soon'}</span>
+      </TravelTag>
       <a href="/coord" class="category-card cat-thistle">
         <div class="cat-stamp" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="48" height="48">
@@ -324,4 +327,7 @@ const allReviews = [
   }
   .signup-note.success { color: var(--cedar); }
   .signup-note.error   { color: var(--clay);  }
+  .category-card.is-soon { opacity: 0.7; cursor: default; }
+  .category-card.is-soon:hover { transform: none; box-shadow: none; }
+  .category-card.is-soon .cat-link { color: rgba(43,37,32,0.5); }
 </style>
