@@ -1,4 +1,5 @@
 import { config, fields, collection } from '@keystatic/core';
+import { withCounter } from './src/keystatic/counter';
 
 const ratingOptions = [
   { label: '— not rated —', value: '' },
@@ -32,24 +33,24 @@ const categoryOptions = [
 ];
 
 const postFields = {
-  title: fields.slug({ name: { label: 'Title' } }),
+  title: withCounter(fields.slug({ name: { label: 'Title' } }), { recommendMax: 70 }),
     date: fields.datetime({
     label: 'Date & Time',
     description: 'Pick the publish date and time.',
     validation: { isRequired: true },
   }),
-  description: fields.text({
+  description: withCounter(fields.text({
     label: 'Description for SEO',
     multiline: true,
     description: 'SEO only — not shown on page. 150–160 chars, plain text, no quotes or markdown.',
     validation: { isRequired: true, length: { min: 50, max: 160 } },
-  }),
+  }), { min: 50, max: 160 }),
   tags: fields.text({ label: 'Tags', description: 'Space-separated keywords, e.g. texas food bbq' }),
   gallery: fields.array(
     fields.object({
       image: fields.image({ label: 'Image', directory: 'public/images/posts', publicPath: '/images/posts/' }),
-      caption: fields.text({ label: 'Caption', description: 'Optional — up to 220 characters', validation: { length: { max: 220 } } }),
-      alt: fields.text({ label: 'Alt text', description: 'Describe the image for screen readers and search engines. Up to 250 characters.', validation: { length: { max: 250 } } }),    }),
+      caption: withCounter(fields.text({ label: 'Caption', description: 'Optional — up to 220 characters', validation: { length: { max: 220 } } }), { max: 220 }),
+      alt: withCounter(fields.text({ label: 'Alt text', description: 'Describe the image for screen readers and search engines. Up to 250 characters.', validation: { length: { max: 250 } } }), { max: 250 }),    }),
     { label: 'Gallery', itemLabel: (props) => props.fields.caption.value || 'Image', validation: { length: { max: 30 } } }
   ),
     content: fields.markdoc({
@@ -130,7 +131,7 @@ const gearFields = {
 // ---- The Table (restaurants) ----
 const tableFields = {
   ...locationFields,
-  foodType: fields.text({ label: 'Food Type', description: 'e.g. BBQ, Italian, Tex-Mex (50 chars max)', validation: { length: { max: 50 } } }),
+  foodType: withCounter(fields.text({ label: 'Food Type', description: 'e.g. BBQ, Italian, Tex-Mex (50 chars max)', validation: { length: { max: 50 } } }), { max: 50 }),
   whatYouOrdered: fields.text({ label: 'What You Ordered', multiline: true, description: 'Name actual dishes — “the food was good” tells a reader nothing they can act on.' }),
   serviceQuality: fields.text({ label: 'Service Quality', description: 'A specific moment (fast refill, forgotten order) beats “service was fine.”' }),
   ambiance: fields.text({ label: 'Ambiance / Atmosphere', description: 'Noise, lighting, crowd — the things that decide if it’s date-night or quick-lunch.' }),
@@ -286,12 +287,12 @@ export default config({
     }}),
     pages: collection({ label: 'Pages', slugField: 'title', path: 'src/content/pages/*', format: { frontmatter: 'yaml', contentField: 'content' }, schema: {
       title: fields.slug({ name: { label: 'Title' } }),
-      description: fields.text({
+      description: withCounter(fields.text({
         label: 'Description for SEO',
         multiline: true,
         description: 'SEO only — not shown on page. 150–160 chars, plain text, no quotes or markdown.',
         validation: { isRequired: true, length: { min: 50, max: 160 } },
-      }),
+      }), { min: 50, max: 160 }),
       content: fields.markdoc({ label: 'Content' }),
     }}),
   },
