@@ -46,6 +46,9 @@ const gearSchema = postSchema.extend({
   timeFieldTested: z.string().optional(),
   bestFor: z.string().optional(),
   wouldBuyAgain: z.string().optional(),
+  addToPicks: z.boolean().optional(),
+  picksCategory: z.string().optional(),
+  picksBlurb: z.string().optional(),
 });
 
 const affiliateSchema = postSchema.extend({
