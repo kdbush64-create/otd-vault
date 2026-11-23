@@ -30,6 +30,7 @@ const categoryOptions = [
   { label: 'Tools & Hardware', value: 'tools-hardware' },
   { label: 'Home & Appliances', value: 'home-appliances' },
   { label: 'Everyday Gear', value: 'everyday-gear' },
+  { label: 'Tech & Security', value: 'tech-security' },
 ];
 
 const postFields = {
@@ -126,6 +127,13 @@ const gearFields = {
   bestFor: fields.text({ label: 'Best For / Not For', description: 'Who should buy this — and who should skip it for something else?' }),
   wouldBuyAgain: fields.select({ label: 'Would You Buy It Again?', description: 'The simplest honest test there is.', options: yesNoOptions, defaultValue: '' }),
   affiliateLinks: affiliateLinksField('Add a link for every product named above, including any paired item.'),
+  addToPicks: fields.checkbox({
+    label: 'Add to OTD Picks',
+    description: 'Shows this review on the Picks page. Name, rating and review link come from this review. The Shop button uses the first Affiliate Link, or the Website / Product Page URL if there is none.',
+    defaultValue: false,
+  }),
+  picksCategory: fields.select({ label: 'Picks Category', description: 'Which filter it appears under on the Picks page.', options: categoryOptions, defaultValue: '' }),
+  picksBlurb: fields.text({ label: 'Picks Blurb (optional)', multiline: true, description: 'One or two sentences for the Picks card. Leave blank to use the Description.' }),
 };
 
 // ---- The Table (restaurants) ----
