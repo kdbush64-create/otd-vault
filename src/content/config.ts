@@ -46,6 +46,7 @@ const gearSchema = postSchema.extend({
   timeFieldTested: z.string().optional(),
   bestFor: z.string().optional(),
   wouldBuyAgain: z.string().optional(),
+  rating: z.string().optional(),
   addToPicks: z.boolean().optional(),
   picksCategory: z.string().optional(),
   picksBlurb: z.string().optional(),
@@ -57,6 +58,7 @@ const affiliateSchema = postSchema.extend({
 
 const chowSchema = postSchema.extend({
   affiliate: z.boolean().optional(),
+  rating: z.string().optional(),
   prepTime: z.string().optional(),
   cookTime: z.string().optional(),
   totalTime: z.string().optional(),
@@ -107,7 +109,7 @@ const pageSchema = z.object({
 
 export const collections = {
   dispatch: defineCollection({ schema: postSchema }),
-  transit:  defineCollection({ schema: postSchema }),
+  transit:  defineCollection({ schema: locationSchema }),
   gear:     defineCollection({ schema: gearSchema }),
   coord:    defineCollection({ schema: locationSchema }),
   table:    defineCollection({ schema: tableSchema }),
