@@ -9,7 +9,7 @@ const { title, description = 'v64otd.com — Vintage64TX', ogImage, isArticle = 
 const siteTitle = title.includes('v64otd') ? title : `${title} | v64otd.com`;
 const rawPath = Astro.url.pathname;
 const canonicalURL = new URL(rawPath.endsWith('/') ? rawPath : rawPath + '/', Astro.site ?? 'https://v64otd.com');
-const defaultOgImage = 'https://v64otd.com/images/FTW_interchange.jpg';
+const defaultOgImage = 'https://v64otd.com/images/ledger_pic.jpg';
 const resolvedOgImage = ogImage
   ? (ogImage.startsWith('http') ? ogImage : `https://v64otd.com${ogImage}`)
   : defaultOgImage;
@@ -24,7 +24,7 @@ const resolvedOgImage = ogImage
 <meta property="og:image" content={resolvedOgImage} />
 <meta property="og:site_name" content="v64otd.com" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@Vintage64TX" />
+<meta name="twitter:site" content="@v64OTD" />
 <meta name="twitter:title" content={siteTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={resolvedOgImage} />
