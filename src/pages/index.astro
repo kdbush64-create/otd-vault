@@ -35,7 +35,7 @@ const otherPost = otherReviews[0] ?? null;
   <span class="h-card" hidden>
     <a class="u-url p-name" rel="me" href="https://v64otd.com/">OTD Vault</a>
     <img class="u-photo" src="https://v64otd.com/images/profile/v64otd-mastodon-avatar.jpg" alt="" />
-    <img class="u-featured" src="https://v64otd.com/images/ledger_pic.jpg" alt="" />
+    <img class="u-featured" src="https://v64otd.com/images/main-street-1905-hero.jpg" alt="" />
   </span>
   <!-- Hero -->
   <section class="dispatch-hero">
@@ -236,9 +236,9 @@ const otherPost = otherReviews[0] ?? null;
   /* ── Hero ── */
   .dispatch-hero {
     position: relative;
-    background-image: url('/images/ledger_pic.jpg');
+    background-image: url('/images/main-street-1905-hero.jpg');
     background-size: cover;
-    background-position: center 40%;
+    background-position: center; min-height: 560px; display: flex; align-items: center; justify-content: center;
     color: var(--bg-limestone);
     padding: 6rem 1.5rem 5rem;
     text-align: center;
@@ -249,9 +249,9 @@ const otherPost = otherReviews[0] ?? null;
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(20,16,12,0.72) 0%,
-      rgba(20,16,12,0.58) 60%,
-      rgba(20,16,12,0.78) 100%
+      rgba(20,16,12,0.15) 0%,
+      rgba(20,16,12,0.55) 45%, rgba(20,16,12,0.55) 65%,
+      rgba(20,16,12,0.15) 100%
     );
   }
   .hero-inner {
@@ -481,7 +481,7 @@ const otherPost = otherReviews[0] ?? null;
     gap: 1.1rem;
   }
   /* ── Mobile ── */
-  @media (max-width: 640px) {
+  @media (max-width: 640px) { .dispatch-hero { min-height: 420px; }
     .picks-teaser-grid { grid-template-columns: 1fr; }
     .dispatch-grid { grid-template-columns: 1fr; }
     .dispatch-grid :global(.post-grid-card:last-child:nth-child(odd)) {
