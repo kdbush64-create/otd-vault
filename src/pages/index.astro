@@ -2,14 +2,15 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import { getAllPicks } from '../components/picks';
 export const prerender = true;
 // Dispatch — 5 most recent
 const allDispatch = await getCollection('dispatch', ({ data }: any) => !data.draft);
 const posts = allDispatch
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
   .slice(0, 5);
-// Picks teaser — 3 most recent 5-star picks
-const allPicks = await getCollection('picks', ({ data }) => data.active !== false && data.rating === '5');
+// Picks teaser — 3 most recent 5-star picks (reviews marked "Add to OTD Picks" come first, newest first)
+const allPicks = (await getAllPicks()).filter((p) => p.rating === '5');
 const featuredPicks = allPicks.slice(0, 3);
 // My Ledger — 2 most recent lifestyle posts
 const allLifestyle = await getCollection('lifestyle' as any, ({ data }: any) => !data.draft);
@@ -156,14 +157,14 @@ const otherPost = otherReviews[0] ?? null;
         <div class="picks-teaser-grid">
           {featuredPicks.map(pick => (
             <a
-              href={pick.data.affiliateUrl}
+              href={pick.shopUrl}
               class="picks-teaser-card"
               target="_blank"
               rel="noopener noreferrer sponsored"
             >
-              <span class="teaser-retailer">{pick.data.retailer ?? 'Amazon'}</span>
-              <p class="teaser-name">{pick.data.title}</p>
-              <p class="teaser-desc">{pick.data.description}</p>
+              <span class="teaser-retailer">{pick.retailer}</span>
+              <p class="teaser-name">{pick.title}</p>
+              <p class="teaser-desc">{pick.description}</p>
               <span class="teaser-shop">Shop →</span>
             </a>
           ))}

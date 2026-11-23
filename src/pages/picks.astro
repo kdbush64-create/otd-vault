@@ -1,15 +1,16 @@
 ---
-import { getCollection } from 'astro:content';
+import { getAllPicks } from '../components/picks';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 export const prerender = true;
 
-const allPicks = await getCollection('picks', ({ data }) => data.active !== false);
+const allPicks = await getAllPicks();
 
 const picksRendered = await Promise.all(
   allPicks.map(async (pick) => {
-    const { Content } = await pick.render();
-    const hasNotes = pick.body != null && pick.body.trim().length > 0;
+    if (!pick.entry) return { pick, Content: null, hasNotes: false };
+    const { Content } = await pick.entry.render();
+    const hasNotes = pick.entry.body != null && pick.entry.body.trim().length > 0;
     return { pick, Content, hasNotes };
   })
 );
@@ -21,6 +22,7 @@ const categories = [
   { key: 'tools-hardware',     label: 'Tools & Hardware' },
   { key: 'home-appliances',    label: 'Home & Appliances' },
   { key: 'everyday-gear',      label: 'Everyday Gear' },
+  { key: 'tech-security',      label: 'Tech & Security' },
 ];
 
 const stars = (rating: string) => {
@@ -62,17 +64,17 @@ const stars = (rating: string) => {
     ) : (
       <div class="picks-grid" id="picks-grid">
         {picksRendered.map(({ pick, Content, hasNotes }) => (
-          <div class="pick-card" data-cat={pick.data.category ?? ''}>
+          <div class="pick-card" data-cat={pick.category}>
             <div class="pick-body">
               <div class="pick-meta">
-                <span class="pick-retailer">{pick.data.retailer ?? 'Amazon'}</span>
-                {pick.data.rating && pick.data.rating !== '' && (
-                  <span class="pick-stars">{stars(pick.data.rating)}</span>
+                <span class="pick-retailer">{pick.retailer}</span>
+                {pick.rating && (
+                  <span class="pick-stars">{stars(pick.rating)}</span>
                 )}
               </div>
-              <h2 class="pick-name">{pick.data.title}</h2>
-              <p class="pick-desc">{pick.data.description}</p>
-              {hasNotes && (
+              <h2 class="pick-name">{pick.title}</h2>
+              <p class="pick-desc">{pick.description}</p>
+              {hasNotes && Content && (
                 <details class="pick-notes">
                   <summary class="pick-notes-toggle"></summary>
                   <div class="pick-notes-body">
@@ -80,21 +82,21 @@ const stars = (rating: string) => {
                   </div>
                 </details>
               )}
-              {pick.data.priceNoted && (
-                <p class="pick-price">${pick.data.priceNoted} when reviewed</p>
+              {pick.priceNoted && (
+                <p class="pick-price">${pick.priceNoted.replace(/^\$/, '')} when reviewed</p>
               )}
-              {pick.data.reviewLink && (
-                <a href={pick.data.reviewLink} class="pick-review-link">→ Read the full review</a>
+              {pick.reviewLink && (
+                <a href={pick.reviewLink} class="pick-review-link">→ Read the full review</a>
               )}
             </div>
             <div class="pick-footer">
               <a
-                href={pick.data.affiliateUrl}
+                href={pick.shopUrl}
                 class="shop-btn"
                 target="_blank"
                 rel="noopener noreferrer sponsored"
               >
-                Shop on {pick.data.retailer ?? 'Amazon'}
+                Shop on {pick.retailer}
               </a>
             </div>
           </div>
