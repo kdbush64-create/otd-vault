@@ -7,12 +7,13 @@ try { entry = await getEntry('pages', 'the-man'); } catch (_) {}
 let Content: any = null;
 if (entry) { const r = await entry.render(); Content = r.Content; }
 ---
-<BaseLayout title="About | OTD Vault" description="About Vintage64TX and v64otd.com">
+<BaseLayout title="About | OTD Vault" description="Who writes v64otd.com, how each Dispatch is sourced, and how the site is funded.">
   <!-- Hero -->
   <section class="about-hero">
     <div class="about-hero-inner">
-      <p class="hero-eyebrow">OLD TEXAS DUDE</p>
-      <h1 class="hero-title">The Operator.</h1>
+      <p class="hero-eyebrow">ABOUT // OLD TEXAS DUDE</p>
+      <h1 class="hero-title">Who's Behind the Ledger</h1>
+      <p class="hero-sub">One writer in North Fort Worth. No party, no sponsor, and no editor but the public record.</p>
     </div>
   </section>
   <div class="about-page">
@@ -21,66 +22,87 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     </nav>
     <figure class="about-portrait">
       <img
-        src="/images/profile/v64otd-mastodon-avatar.jpg"
-        alt="Old Texas Dude — I-35 South, Fort Worth"
+        src="/images/profile/otd-headshot.jpg"
+        alt="DeWayne, the writer behind v64otd.com, in a black tuxedo and bow tie"
         class="about-portrait-img"
       />
-      <figcaption class="about-portrait-caption">I-35 South. Fort Worth. The brisket was cold. The dispatch was not.</figcaption>
+      <figcaption class="about-portrait-caption">North Fort Worth, Texas.</figcaption>
     </figure>
-    <div class="about-storefront">
-      <a href="https://amzn.to/4vDY4A2" target="_blank" rel="noopener sponsored" class="storefront-link">
-        🛒 Shop my Amazon picks →
-      </a>
-      <p class="storefront-disclosure">As an Amazon Associate, I earn from qualifying purchases.</p>
-    </div>
+    <section class="about-support" aria-label="Support the work">
+      <p class="support-label">Support the Work</p>
+      <div class="support-card">
+        <img src="/images/profile/x39-logo.jpg" alt="LifeWave X39 logo" class="support-logo support-logo-img" width="64" height="64" />
+        <div>
+          <a href="https://lifewave.com/4229387" target="_blank" rel="noopener sponsored" class="storefront-link">LifeWave X39: my brand-partner store →</a>
+          <p class="support-text">Questions before you buy? Email <a href="mailto:x39@v64otd.com">x39@v64otd.com</a>, and talk to your doctor first.</p>
+          <p class="storefront-disclosure">I'm an Independent LifeWave Brand Partner (#4229387) and earn a commission on orders through my store. LifeWave products have not been evaluated by the FDA and are not intended to diagnose, treat, cure or prevent any disease.</p>
+        </div>
+      </div>
+      <div class="support-card">
+        <span class="support-logo support-logo-amz" aria-hidden="true">🛒</span>
+        <div>
+          <a href="https://amzn.to/4vDY4A2" target="_blank" rel="noopener sponsored" class="storefront-link">Shop my Amazon picks →</a>
+          <p class="support-text">25% of everything I earn through Amazon Associates goes to Masonic Children &amp; Family Services of Texas.</p>
+          <p class="storefront-disclosure">As an Amazon Associate, I earn from qualifying purchases.</p>
+        </div>
+      </div>
+      <div class="support-card">
+        <span class="support-logo support-logo-ss" aria-hidden="true">SURF<br />SHARK</span>
+        <div>
+          <a href="https://surfshark.club/friend/43u5XLAw" target="_blank" rel="noopener sponsored" class="storefront-link">Surfshark VPN &amp; Antivirus →</a>
+          <p class="support-text">What I use to keep my browsing private from ISPs and data brokers.</p>
+          <p class="storefront-disclosure">Referral link. If you sign up through it, you and I both may receive a referral reward.</p>
+        </div>
+      </div>
+    </section>
     <div class="about-body">
       {Content ? <Content /> : <p>About page coming soon.</p>}
     </div>
     <hr class="about-rule" />
     <!-- Channel grid -->
     <section class="channels-section">
-      <h2 class="channels-heading">What's in the Vault</h2>
+      <h2 class="channels-heading">What's on the Site</h2>
       <div class="channels-grid">
         <a href="/dispatch" class="channel-card ch-ink">
           <h3 class="ch-title">Dispatch</h3>
-          <p class="ch-desc">Long-form essays, cultural analysis, and the occasional thing that will make someone on the internet angry. If you read one channel, read this one.</p>
+          <p class="ch-desc">Investigations into money, lobbying and legislation, sourced to the public record. Both parties included.</p>
           <span class="ch-link">Browse dispatches →</span>
         </a>
         <a href="/ledger" class="channel-card ch-ink">
           <h3 class="ch-title">My Ledger</h3>
-          <p class="ch-desc">Personal essays, not exposés. The stuff that doesn't need three sources and a fact-check — just something true, and something worth saying about it.</p>
+          <p class="ch-desc">Personal essays, including my own medical story. Labeled as personal, not reporting.</p>
           <span class="ch-link">Browse My Ledger →</span>
         </a>
         <a href="/gear" class="channel-card ch-cedar">
           <h3 class="ch-title">Gear</h3>
-          <p class="ch-desc">Tools, tech, and equipment worth owning. Not sponsored. Not curated for a demographic. Just things that work.</p>
+          <p class="ch-desc">Tools and tech I've used, tested hands-on. Affiliate links disclosed.</p>
           <span class="ch-link">Browse gear →</span>
         </a>
         <a href="/table" class="channel-card ch-clay">
           <h3 class="ch-title">The Table</h3>
-          <p class="ch-desc">Food culture and restaurant reviews. Brisket is taken seriously here. Fusion tacos are evaluated on a case-by-case basis.</p>
+          <p class="ch-desc">Restaurant reviews from DFW and wherever the road goes, judged honestly.</p>
           <span class="ch-link">Browse restaurants →</span>
         </a>
         <a href="/chow" class="channel-card ch-ochre">
           <h3 class="ch-title">The Kitchen</h3>
-          <p class="ch-desc">Recipes. Real ones. The kind that work in a home kitchen without a culinary degree or a Vitamix.</p>
+          <p class="ch-desc">Recipes tested in a home kitchen and written so they work in yours.</p>
           <span class="ch-link">Browse kitchen →</span>
         </a>
         <a href="/transit" class="channel-card ch-bluebonnet">
           <h3 class="ch-title">Travel</h3>
-          <p class="ch-desc">Roads, routes, road trips, and the American habit of going somewhere to figure out what you think.</p>
+          <p class="ch-desc">Roads, routes and road trips, with practical notes for the next person.</p>
           <span class="ch-link">Browse travel →</span>
         </a>
         <a href="/coord" class="channel-card ch-thistle">
           <h3 class="ch-title">Getaways</h3>
-          <p class="ch-desc">Places. Fort Worth, DFW, Texas, and points beyond. Honest assessments from someone who has eaten bad barbecue in too many states to stay quiet.</p>
+          <p class="ch-desc">Fort Worth, Texas and beyond: places worth the trip, and the ones that aren't.</p>
           <span class="ch-link">Browse getaways →</span>
         </a>
       </div>
     </section>
     <hr class="about-rule" />
     <section class="contact-section">
-      <h2 class="contact-heading">Contact the Operator</h2>
+      <h2 class="contact-heading">Contact</h2>
       <form id="contact-form" class="contact-form">
         <div class="form-row">
           <div class="form-field">
@@ -118,8 +140,8 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   /* ── Hero ── */
   .about-hero {
     background:
-      linear-gradient(to bottom, rgba(20,16,12,0.68) 0%, rgba(20,16,12,0.55) 55%, rgba(20,16,12,0.78) 100%),
-      url('/images/FTW_interchange.jpg') center 40% / cover no-repeat;
+      linear-gradient(to bottom, rgba(20,16,12,0.55) 0%, rgba(20,16,12,0.45) 50%, rgba(20,16,12,0.6) 100%),
+      url('/images/main-street-1905-hero.jpg') center 72% / cover no-repeat;
     padding: 5.5rem 1.5rem 4.5rem;
     text-align: center;
   }
@@ -142,6 +164,14 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     line-height: 1.1;
     margin: 0;
     color: var(--bg-limestone);
+  }
+  .hero-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: rgba(239,233,220,0.88);
+    max-width: 560px;
+    margin: 0.9rem auto 0;
   }
   /* ── Page ── */
   .about-page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
@@ -169,13 +199,45 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     display: block;
     align-self: flex-end;
   }
-  /* ── Storefront ── */
-  .about-storefront {
-    margin: 0 0 2rem;
+  /* ── Support the Work ── */
+  .about-support { margin: 0 0 2rem; }
+  .support-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(43,37,32,0.55);
+    margin: 0 0 0.6rem;
+  }
+  .support-card {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin: 0 0 0.75rem;
     padding: 0.9rem 1.1rem;
     background: var(--card-bg);
     border: 1.5px solid var(--border);
     border-radius: 4px;
+  }
+  .support-logo {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .support-logo-img { object-fit: contain; background: #fff; border: 1px solid var(--border); padding: 4px; box-sizing: border-box; }
+  .support-logo-amz { font-size: 1.8rem; background: rgba(43,37,32,0.06); }
+  .support-logo-ss {
+    background: #123c3a;
+    color: #5fd3c4;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    text-align: center;
   }
   .storefront-link {
     font-family: 'IBM Plex Mono', monospace;
@@ -185,11 +247,20 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     display: inline-block;
   }
   .storefront-link:hover { opacity: 0.8; }
+  .support-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: rgba(43,37,32,0.75);
+    margin: 0.3rem 0 0;
+  }
+  .support-text a { color: var(--clay); }
   .storefront-disclosure {
     font-family: 'Inter', sans-serif;
     font-size: 0.72rem;
+    line-height: 1.5;
     color: rgba(43,37,32,0.5);
-    margin: 0.4rem 0 0;
+    margin: 0.3rem 0 0;
   }
   /* ── Body ── */
   .about-body { font-family: 'Inter', sans-serif; font-size: 1.02rem; line-height: 1.75; color: var(--ink); }
