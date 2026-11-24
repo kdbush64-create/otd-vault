@@ -63,6 +63,12 @@ const channelHeroImages: Partial<Record<Channel, string>> = {
   lifestyle: '/images/lifestyle-hero.jpg',
 };
 const heroImage = channelHeroImages[channel];
+// Photo credits for hero images that need one (shown small in the hero's bottom-right corner)
+const U = '?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText';
+const channelHeroCredits: Partial<Record<Channel, { name: string; profile: string; photo: string }>> = {
+  transit: { name: 'Rana Sawalha', profile: `https://unsplash.com/@ranasawalha${U}`, photo: `https://unsplash.com/photos/W_-6PWGbYaU${U}` },
+};
+const heroCredit = channelHeroCredits[channel];
 
 // Dispatch archive — split recent (card grid) from older (year list)
 const RECENT_COUNT = 12;
@@ -136,6 +142,9 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
         <p class="hero-sub">Every dispatch. The file gets closed. The damage doesn't.</p>
       )}
     </div>
+    {heroCredit && (
+      <p class="hero-credit">Photo: <a href={heroCredit.profile} target="_blank" rel="noopener">{heroCredit.name}</a> / <a href={heroCredit.photo} target="_blank" rel="noopener">Unsplash</a></p>
+    )}
   </section>
 
   {['gear', 'table', 'chow', 'transit', 'coord'].includes(channel) && (
@@ -337,6 +346,19 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
     position: relative;
     z-index: 1;
   }
+  .hero-credit {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.6rem;
+    z-index: 1;
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    color: rgba(239,233,220,0.55);
+  }
+  .hero-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .hero-credit a:hover { color: rgba(239,233,220,0.85); }
   .hero-inner { max-width: 640px; margin: 0 auto; }
   .hero-eyebrow {
     font-family: 'IBM Plex Mono', monospace;
