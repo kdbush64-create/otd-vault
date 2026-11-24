@@ -86,7 +86,7 @@ const stars = (rating: string) => {
                 <p class="pick-price">${pick.priceNoted.replace(/^\$/, '')} when reviewed</p>
               )}
               {pick.reviewLink && (
-                <a href={pick.reviewLink} class="pick-review-link">→ Read the full review</a>
+                <a href={pick.reviewLink} class="pick-review-link">{pick.isReview ? '→ Read the full review' : '→ Read why I use it'}</a>
               )}
             </div>
             <div class="pick-footer">
