@@ -66,6 +66,7 @@ const heroImage = channelHeroImages[channel];
 // Photo credits for hero images that need one (shown small in the hero's bottom-right corner)
 const U = '?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText';
 const channelHeroCredits: Partial<Record<Channel, { name: string; profile: string; photo: string }>> = {
+  gear: { name: 'Annie Spratt', profile: `https://unsplash.com/@anniespratt${U}`, photo: `https://unsplash.com/photos/black-and-brown-leather-boots-on-brown-wooden-shelf-NreHYNQiUXs${U}` },
   transit: { name: 'Rana Sawalha', profile: `https://unsplash.com/@ranasawalha${U}`, photo: `https://unsplash.com/photos/W_-6PWGbYaU${U}` },
 };
 const heroCredit = channelHeroCredits[channel];
