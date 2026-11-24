@@ -237,6 +237,7 @@ const otherPost = otherReviews[0] ?? null;
   /* ── Hero ── */
   .dispatch-hero {
     position: relative;
+    overflow: hidden;
     background-image: url('/images/main-street-1905-hero.jpg');
     background-size: cover;
     background-position: center; min-height: 560px; display: flex; align-items: center; justify-content: center;
@@ -273,11 +274,21 @@ const otherPost = otherReviews[0] ?? null;
     max-width: 680px;
     margin: 0 auto;
   }
+  .hero-inner::before {
+    content: '';
+    position: absolute;
+    inset: -2.5rem -6rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(20,16,12,0.82) 0%, rgba(20,16,12,0.6) 55%, rgba(20,16,12,0) 100%);
+  }
   .hero-eyebrow {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
     letter-spacing: 0.14em;
-    color: var(--ochre);
+    color: #f3d28c;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.85);
     margin: 0 0 1rem;
     text-transform: uppercase;
   }

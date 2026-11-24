@@ -141,6 +141,7 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
   /* ── Hero ── */
   .about-hero {
     position: relative;
+    overflow: hidden;
     background:
       linear-gradient(to bottom, rgba(20,16,12,0.55) 0%, rgba(20,16,12,0.45) 50%, rgba(20,16,12,0.6) 100%),
       url('/images/main-street-1905-hero.jpg') center 72% / cover no-repeat;
@@ -160,14 +161,26 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
     text-shadow: 0 1px 3px rgba(0,0,0,0.9);
   }
   .about-hero-inner {
+    position: relative;
+    z-index: 1;
     max-width: 680px;
     margin: 0 auto;
   }
+  .about-hero-inner::before {
+    content: '';
+    position: absolute;
+    inset: -2.5rem -6rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(20,16,12,0.82) 0%, rgba(20,16,12,0.6) 55%, rgba(20,16,12,0) 100%);
+  }
   .hero-eyebrow {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
     letter-spacing: 0.14em;
-    color: var(--ochre);
+    color: #f3d28c;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.85);
     margin: 0 0 1rem;
     text-transform: uppercase;
   }
