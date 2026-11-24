@@ -44,6 +44,7 @@ const stars = (rating: string) => {
     <p class="hero-sub">No sponsored placements. No brand deals. Products I've bought, tested, and kept — organized so you can find what you need.</p>
     <p class="hero-disclosure">Links marked Shop are affiliate links. You pay the same price; I earn a small commission that helps keep the lights on. — DeWayne</p>
   </div>
+  <p class="hero-credit">Photo: <a href="https://unsplash.com/@phife?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener">Ph B</a> / <a href="https://unsplash.com/photos/grocery-cart-photo-d3KvEnG1TL8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener">Unsplash</a></p>
 </section>
 
 <!-- Picks -->
@@ -155,6 +156,19 @@ const stars = (rating: string) => {
       rgba(20,16,12,0.72) 100%
     );
   }
+  .hero-credit {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.6rem;
+    z-index: 1;
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    color: rgba(239,233,220,0.55);
+  }
+  .hero-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .hero-credit a:hover { color: rgba(239,233,220,0.85); }
   .hero-inner {
     position: relative;
     z-index: 1;
