@@ -169,11 +169,20 @@ const stars = (rating: string) => {
   }
   .hero-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
   .hero-credit a:hover { color: rgba(239,233,220,0.85); }
+  .picks-hero { overflow: hidden; }
   .hero-inner {
     position: relative;
     z-index: 1;
     max-width: 620px;
     margin: 0 auto;
+  }
+  .hero-inner::before {
+    content: '';
+    position: absolute;
+    inset: -2.5rem -6rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(20,16,12,0.82) 0%, rgba(20,16,12,0.6) 55%, rgba(20,16,12,0) 100%);
   }
   .hero-eyebrow {
     font-family: 'IBM Plex Mono', monospace;

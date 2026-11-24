@@ -32,6 +32,7 @@ const TravelTag = travelReady ? 'a' : 'div';
       <p class="hero-sub">Gear, food, travel, and kitchen. Every review is personal experience — the stamp only goes on things I've actually used.</p>
       <p class="hero-disclosure">Some posts in this section contain affiliate links — if you buy through them, I may earn a small commission at no extra cost to you.</p>
     </div>
+    <p class="hero-credit">Photo: <a href="https://unsplash.com/@mcpyx?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener">James McDonnell</a> / <a href="https://unsplash.com/photos/black-and-white-street-storefronts-at-night-i-D3hJtz4rE?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener">Unsplash</a></p>
   </section>
   <ReviewNav current="all" />
   <!-- Category Grid -->
@@ -138,10 +139,32 @@ const TravelTag = travelReady ? 'a' : 'div';
     rgba(20,16,12,0.68) 100%
   );
 }
+.reviews-hero { overflow: hidden; }
 .hero-inner {
   position: relative;
   z-index: 1;
 }
+.hero-inner::before {
+  content: '';
+  position: absolute;
+  inset: -2.5rem -6rem;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(20,16,12,0.82) 0%, rgba(20,16,12,0.6) 55%, rgba(20,16,12,0) 100%);
+}
+.hero-credit {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.6rem;
+  z-index: 1;
+  margin: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: rgba(239,233,220,0.55);
+}
+.hero-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.hero-credit a:hover { color: rgba(239,233,220,0.85); }
   .hero-inner {
     max-width: 620px;
     margin: 0 auto;
