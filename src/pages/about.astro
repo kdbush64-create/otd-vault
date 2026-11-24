@@ -15,6 +15,7 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
       <h1 class="hero-title">Who's Behind the Ledger</h1>
       <p class="hero-sub">One writer in North Fort Worth. No party, no sponsor, and no editor but the public record.</p>
     </div>
+    <p class="hero-credit">Main Street, Fort Worth, 1905. The Rotograph Co., public domain.</p>
   </section>
   <div class="about-page">
     <nav class="about-breadcrumb">
@@ -139,11 +140,24 @@ if (entry) { const r = await entry.render(); Content = r.Content; }
 <style>
   /* ── Hero ── */
   .about-hero {
+    position: relative;
     background:
       linear-gradient(to bottom, rgba(20,16,12,0.55) 0%, rgba(20,16,12,0.45) 50%, rgba(20,16,12,0.6) 100%),
       url('/images/main-street-1905-hero.jpg') center 72% / cover no-repeat;
     padding: 5.5rem 1.5rem 4.5rem;
     text-align: center;
+  }
+  .hero-credit {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.6rem;
+    z-index: 1;
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    color: rgba(239,233,220,0.8);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
   }
   .about-hero-inner {
     max-width: 680px;

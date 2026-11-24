@@ -44,6 +44,7 @@ const otherPost = otherReviews[0] ?? null;
       <h1 class="hero-title">The ledger doesn't lie.</h1>
       <p class="hero-sub">Plain-spoken coverage of money, power, and the people who take your tax dollars. No agenda but the truth.</p>
     </div>
+    <p class="hero-credit">Main Street, Fort Worth, 1905. The Rotograph Co., public domain.</p>
   </section>
   <!-- 1. RECENT DISPATCHES -->
   <section class="dispatch-feed">
@@ -242,6 +243,18 @@ const otherPost = otherReviews[0] ?? null;
     color: var(--bg-limestone);
     padding: 6rem 1.5rem 5rem;
     text-align: center;
+  }
+  .hero-credit {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.6rem;
+    z-index: 1;
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    color: rgba(239,233,220,0.8);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
   }
   .dispatch-hero::before {
     content: '';
