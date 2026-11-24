@@ -13,14 +13,27 @@ export interface PickItem {
   rating?: string;
   priceNoted?: string;
   date?: string;
+  isReview?: boolean; // true when the link goes to an actual review, not an essay
   entry?: any; // the original Picks entry, so its notes can still render
 }
+
+// The same product can be linked many ways. Full Amazon links carry the product ID
+// (e.g. /dp/B0CYDQVKX2), so match on that; anything else must match exactly.
+export function productKey(url: string): string {
+  if (!url) return '';
+  const asin = url.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+  if (asin) return `amazon:${asin[1].toUpperCase()}`;
+  return url.trim().replace(/\/+$/, '').toLowerCase();
+}
+
+const REVIEW_CHANNELS = ['/gear/', '/table/', '/chow/', '/transit/', '/coord/'];
+const isReviewPath = (path?: string) => !!path && REVIEW_CHANNELS.some((c) => path.startsWith(c));
 
 // Turn a shop link into a retailer name: amzn.to -> Amazon, surfshark.club -> Surfshark, anything else -> its address
 export function retailerFromUrl(url: string): string {
   try {
     const host = new URL(url).hostname.replace(/^www\./, '').toLowerCase();
-    if (host === 'amzn.to' || host.startsWith('amazon.')) return 'Amazon';
+    if (host === 'amzn.to' || host === 'link.amazon' || host.startsWith('amazon.') || host.endsWith('.amazon')) return 'Amazon';
     // Brands whose referral links use a different domain than their name
     const known: Record<string, string> = { surfshark: 'Surfshark', lifewave: 'LifeWave' };
     const base = host.split('.').slice(-2, -1)[0] || host;
@@ -44,11 +57,9 @@ export async function getAllPicks(): Promise<PickItem[]> {
     reviewLink: p.data.reviewLink || undefined,
     rating: p.data.rating || undefined,
     priceNoted: p.data.priceNoted || undefined,
+    isReview: isReviewPath(p.data.reviewLink),
     entry: p,
   }));
-
-  // A review already linked from a hand-made Pick shows only once
-  const linked = new Set(manualItems.map((m) => (m.reviewLink ?? '').replace(/\/+$/, '')));
 
   const gear = await getCollection('gear', ({ data }: any) => data.addToPicks === true && !data.draft);
   const reviewItems: PickItem[] = gear
@@ -69,11 +80,17 @@ export async function getAllPicks(): Promise<PickItem[]> {
         rating: g.data.rating || undefined,
         priceNoted: first?.priceNoted || undefined,
         date: g.data.date,
+        isReview: true,
       } as PickItem;
     })
-    .filter((r: PickItem) => r.shopUrl && !linked.has(r.reviewLink!))
+    .filter((r: PickItem) => r.shopUrl)
     .sort((a: PickItem, b: PickItem) => new Date(b.date!).valueOf() - new Date(a.date!).valueOf());
 
+  // A product shows once. If a checked review and a hand-made Pick share the same shop link
+  // (or the same Amazon product ID), the review's card wins.
+  const reviewedProducts = new Set(reviewItems.map((r) => productKey(r.shopUrl)));
+  const remainingManual = manualItems.filter((m) => !reviewedProducts.has(productKey(m.shopUrl)));
+
   // Newest reviewed picks first, then the hand-made Picks in their usual order
-  return [...reviewItems, ...manualItems];
+  return [...reviewItems, ...remainingManual];
 }
