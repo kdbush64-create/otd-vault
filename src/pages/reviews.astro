@@ -139,7 +139,13 @@ const TravelTag = travelReady ? 'a' : 'div';
     rgba(20,16,12,0.68) 100%
   );
 }
-.reviews-hero { overflow: hidden; }
+.reviews-hero {
+  overflow: hidden;
+  min-height: 358px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .hero-inner {
   position: relative;
   z-index: 1;

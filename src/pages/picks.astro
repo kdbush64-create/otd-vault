@@ -169,7 +169,13 @@ const stars = (rating: string) => {
   }
   .hero-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
   .hero-credit a:hover { color: rgba(239,233,220,0.85); }
-  .picks-hero { overflow: hidden; }
+  .picks-hero {
+    overflow: hidden;
+    min-height: 358px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   .hero-inner {
     position: relative;
     z-index: 1;

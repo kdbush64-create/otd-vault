@@ -348,7 +348,13 @@ const gridPosts = isLifestyle ? standalonePosts : posts;
       rgba(20,16,12,0.75) 100%
     );
   }
-  .channel-hero.has-photo { overflow: hidden; }
+  .channel-hero.has-photo {
+    overflow: hidden;
+    min-height: 358px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   .channel-hero.has-photo .hero-inner {
     position: relative;
     z-index: 1;
